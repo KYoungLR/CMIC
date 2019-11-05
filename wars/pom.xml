@@ -7,12 +7,12 @@
 >
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>liferay.workspace1</groupId>
-		<artifactId>liferay-workspace1</artifactId>
+		<groupId>liferay.workspace</groupId>
+		<artifactId>liferay-workspace</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>liferay-workspace1-wars</artifactId>
-	<name>liferay-workspace1 Wars</name>
+	<artifactId>liferay-workspace-wars</artifactId>
+	<name>liferay-workspace Wars</name>
 	<packaging>pom</packaging>
 </project>

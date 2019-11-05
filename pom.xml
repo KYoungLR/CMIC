@@ -6,11 +6,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>liferay.workspace1</groupId>
-	<artifactId>liferay-workspace1</artifactId>
+	<groupId>liferay.workspace</groupId>
+	<artifactId>liferay-workspace</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0</version>
-	<name>liferay-workspace1</name>
+	<name>liferay-workspace</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<liferay.workspace.bundle.url>https://releases-cdn.liferay.com/portal/7.2.0-ga1/liferay-ce-portal-tomcat-7.2.0-ga1-20190531153709761.tar.gz</liferay.workspace.bundle.url>

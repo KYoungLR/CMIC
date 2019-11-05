@@ -7,12 +7,12 @@
 >
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>liferay.workspace1</groupId>
-		<artifactId>liferay-workspace1</artifactId>
+		<groupId>liferay.workspace</groupId>
+		<artifactId>liferay-workspace</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>liferay-workspace1-themes</artifactId>
-	<name>liferay-workspace1 Themes</name>
+	<artifactId>liferay-workspace-themes</artifactId>
+	<name>liferay-workspace Themes</name>
 	<packaging>pom</packaging>
 </project>
