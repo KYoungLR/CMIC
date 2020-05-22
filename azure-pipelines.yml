@@ -7,7 +7,9 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+#  vmImage: 'ubuntu-latest'
+  name: Liferay Dev
+  vmImage: win-lr-t-01-145
 
 steps:
 - task: Gradle@2
