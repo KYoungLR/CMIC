@@ -35,4 +35,3 @@ steps:
   inputs:
     ArtifactName: 'CMICPortal.zip'
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-
