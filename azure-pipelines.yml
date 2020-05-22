@@ -8,7 +8,7 @@ trigger:
 
 pool:
 #  vmImage: 'ubuntu-latest'
-  name: Liferay Dev
+  name: DevOps
   vmImage: win-lr-t-01-145
 
 steps:
