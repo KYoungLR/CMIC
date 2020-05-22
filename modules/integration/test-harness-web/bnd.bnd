@@ -1,6 +1,5 @@
 Bundle-Name: CMIC Test Harness Web
 Bundle-SymbolicName: com.cmic.test.harness.web
 Bundle-Version: 1.0.0
-Export-Package: com.cmic.test.harness.web.constants
 Web-ContextPath: /test-harness
 -includeresource: META-INF/resources=build/node/packageRunBuild/resources
