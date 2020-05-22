@@ -8,7 +8,7 @@ trigger:
 
 pool:
 #  vmImage: 'ubuntu-latest'
-  name: DevOps
+  name: win-lr-t-01-145
   vmImage: win-lr-t-01-145
 
 steps:
