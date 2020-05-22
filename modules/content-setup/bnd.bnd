@@ -1,3 +1,3 @@
-Bundle-Name: content-setup
-Bundle-SymbolicName: content.setup
+Bundle-Name: CMIC Content Setup
+Bundle-SymbolicName: com.churchmutual.content.setup
 Bundle-Version: 1.0.0
