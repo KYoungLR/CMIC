@@ -28,14 +28,26 @@ $dark: $black;
 
 // Body
 
+$body-color: $black;
+
 
 // Links
 
 
 // Typography
 
+$text-muted: $gray-700;
+
 
 // Tables
+
+$table-border-width: 0;
+
+$table-head-color: $body-color;
+
+$table-list-border-y-width: 0;
+$table-list-border-x-width: 0;
+$table-list-border-radius: 0;
 
 
 // Buttons + Forms
@@ -68,7 +80,7 @@ $breadcrumb-padding-x: 0;
 $breadcrumb-bg: transparent;
 
 $breadcrumb-divider-color: $gray-700;
-$breadcrumb-active-color: $black;
+$breadcrumb-active-color: $body-color;
 $breadcrumb-active-font-weight: 800;
 
 $breadcrumb-link-color: $gray-700;
