@@ -1,6 +1,6 @@
-package com.cmic.test.harness.api;
+package com.churchmutual.test.harness.api;
 
-import com.cmic.test.harness.model.HarnessDescriptor;
+import com.churchmutual.test.harness.model.HarnessDescriptor;
 
 import java.util.List;
 

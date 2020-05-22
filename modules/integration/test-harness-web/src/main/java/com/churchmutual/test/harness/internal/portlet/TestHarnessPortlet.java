@@ -1,6 +1,6 @@
-package com.cmic.test.harness.internal.portlet;
+package com.churchmutual.test.harness.internal.portlet;
 
-import com.cmic.test.harness.constants.TestHarnessPortletKeys;
+import com.churchmutual.test.harness.constants.TestHarnessPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 

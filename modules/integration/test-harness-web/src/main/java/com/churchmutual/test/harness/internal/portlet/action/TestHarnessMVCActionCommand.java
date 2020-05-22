@@ -1,8 +1,8 @@
-package com.cmic.test.harness.internal.portlet.action;
+package com.churchmutual.test.harness.internal.portlet.action;
 
-import com.cmic.test.harness.api.TestHarnessInvoker;
-import com.cmic.test.harness.constants.TestHarnessPortletKeys;
-import com.cmic.test.harness.helper.TestHarnessHelper;
+import com.churchmutual.test.harness.api.TestHarnessInvoker;
+import com.churchmutual.test.harness.constants.TestHarnessPortletKeys;
+import com.churchmutual.test.harness.helper.TestHarnessHelper;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationRegistry;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;

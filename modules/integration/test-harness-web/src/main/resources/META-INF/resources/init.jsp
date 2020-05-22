@@ -9,8 +9,8 @@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.cmic.test.harness.constants.TestHarnessConstants" %><%@
-page import="com.cmic.test.harness.internal.portlet.action.TestHarnessMVCActionCommand" %>
+<%@ page import="com.churchmutual.test.harness.constants.TestHarnessConstants" %><%@
+page import="com.churchmutual.test.harness.internal.portlet.action.TestHarnessMVCActionCommand" %>
 
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 

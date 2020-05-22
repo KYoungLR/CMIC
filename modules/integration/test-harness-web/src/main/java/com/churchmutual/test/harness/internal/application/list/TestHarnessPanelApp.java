@@ -1,6 +1,6 @@
-package com.cmic.test.harness.internal.application.list;
+package com.churchmutual.test.harness.internal.application.list;
 
-import com.cmic.test.harness.constants.TestHarnessPortletKeys;
+import com.churchmutual.test.harness.constants.TestHarnessPortletKeys;
 
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.application.list.PanelApp;

@@ -1,6 +1,6 @@
-package com.cmic.test.harness.internal.portlet.render;
+package com.churchmutual.test.harness.internal.portlet.render;
 
-import com.cmic.test.harness.constants.TestHarnessPortletKeys;
+import com.churchmutual.test.harness.constants.TestHarnessPortletKeys;
 
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;

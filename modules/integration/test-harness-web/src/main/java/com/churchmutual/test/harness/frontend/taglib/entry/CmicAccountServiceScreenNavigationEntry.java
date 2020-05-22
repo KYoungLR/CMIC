@@ -1,7 +1,7 @@
-package com.cmic.test.harness.frontend.taglib.entry;
+package com.churchmutual.test.harness.frontend.taglib.entry;
 
-import com.cmic.test.harness.constants.TestHarnessConstants;
-import com.cmic.test.harness.model.HarnessDescriptor;
+import com.churchmutual.test.harness.constants.TestHarnessConstants;
+import com.churchmutual.test.harness.model.HarnessDescriptor;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
@@ -33,7 +33,7 @@ public class CmicAccountServiceScreenNavigationEntry
 
 	@Override
 	public String getCategoryKey() {
-		return TestHarnessConstants.CATEGORY_KEY_CMIC;
+		return TestHarnessConstants.CATEGORY_KEY_CHURCH_MUTUAL;
 	}
 
 	@Override

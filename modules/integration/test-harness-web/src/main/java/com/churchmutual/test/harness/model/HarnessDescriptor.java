@@ -1,4 +1,4 @@
-package com.cmic.test.harness.model;
+package com.churchmutual.test.harness.model;
 
 import com.liferay.portal.kernel.util.Http;
 

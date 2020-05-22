@@ -1,7 +1,7 @@
-package com.cmic.test.harness.helper;
+package com.churchmutual.test.harness.helper;
 
-import com.cmic.test.harness.api.TestHarnessInvoker;
-import com.cmic.test.harness.constants.TestHarnessConstants;
+import com.churchmutual.test.harness.api.TestHarnessInvoker;
+import com.churchmutual.test.harness.constants.TestHarnessConstants;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationCategory;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;

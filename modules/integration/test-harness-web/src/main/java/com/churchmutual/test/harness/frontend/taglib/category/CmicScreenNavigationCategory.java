@@ -1,6 +1,6 @@
-package com.cmic.test.harness.frontend.taglib.category;
+package com.churchmutual.test.harness.frontend.taglib.category;
 
-import com.cmic.test.harness.constants.TestHarnessConstants;
+import com.churchmutual.test.harness.constants.TestHarnessConstants;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationCategory;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -21,12 +21,12 @@ public class CmicScreenNavigationCategory
 
 	@Override
 	public String getCategoryKey() {
-		return TestHarnessConstants.CATEGORY_KEY_CMIC;
+		return TestHarnessConstants.CATEGORY_KEY_CHURCH_MUTUAL;
 	}
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(locale, TestHarnessConstants.CATEGORY_KEY_CMIC);
+		return LanguageUtil.get(locale, TestHarnessConstants.CATEGORY_KEY_CHURCH_MUTUAL);
 	}
 
 	@Override
