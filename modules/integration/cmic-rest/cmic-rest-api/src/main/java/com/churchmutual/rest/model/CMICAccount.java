@@ -1,4 +1,4 @@
-package com.cmic.rest.model;
+package com.churchmutual.rest.model;
 
 /**
  * @author Kayleen Lim
