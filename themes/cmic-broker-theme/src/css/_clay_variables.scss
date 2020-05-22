@@ -33,6 +33,11 @@ $body-color: $black;
 
 // Links
 
+$link-color: $body-color;
+$link-decoration: underline;
+$link-hover-color: $link-color;
+$link-hover-decoration: none;
+
 
 // Typography
 
@@ -48,6 +53,15 @@ $table-head-color: $body-color;
 $table-list-border-y-width: 0;
 $table-list-border-x-width: 0;
 $table-list-border-radius: 0;
+
+$table-list-head-link: (
+	text-decoration: none
+);
+$table-list-title-link: (
+	color: $link-color,
+	hover-color: $link-color,
+);
+
 
 
 // Buttons + Forms
@@ -84,6 +98,7 @@ $breadcrumb-active-color: $body-color;
 $breadcrumb-active-font-weight: 800;
 
 $breadcrumb-link-color: $gray-700;
-$breadcrumb-link-hover-color: $breadcrumb-link-color;
+$breadcrumb-link-hover-color: darken($breadcrumb-link-color, 15%);
+$breadcrumb-link-text-decoration: none;
 
 $breadcrumb-divider-svg-icon-height: .4em;
