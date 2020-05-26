@@ -1,11 +1,6 @@
-package com.churchmutual.commons.constants;
+package com.churchmutual.content.setup.upgrade.constants;
 
 public class ContentSetupKeys {
-
-	public static final String COL_ID_COLUMN_1 = "column-1";
-
-	public static final String LAYOUT_1_COLUMN = "1_column";
-
 	public static final String LAYOUT_FURL_BROKER_ACCOUNT_DETAILS = "/account-details";
 
 	public static final String LAYOUT_FURL_BROKER_ACCOUNTS = "/accounts";

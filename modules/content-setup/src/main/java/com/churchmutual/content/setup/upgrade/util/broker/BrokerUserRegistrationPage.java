@@ -1,8 +1,8 @@
 package com.churchmutual.content.setup.upgrade.util.broker;
 
-import com.churchmutual.commons.constants.ContentSetupKeys;
 import com.churchmutual.commons.util.LayoutConfig;
 import com.churchmutual.commons.util.LayoutHelper;
+import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
 
 public class BrokerUserRegistrationPage {
 

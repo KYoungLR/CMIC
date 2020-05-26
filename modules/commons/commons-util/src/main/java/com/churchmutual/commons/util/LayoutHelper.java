@@ -1,11 +1,10 @@
 package com.churchmutual.commons.util;
 
-import com.churchmutual.commons.constants.ContentSetupKeys;
+import com.churchmutual.commons.constants.LayoutConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutTypePortlet;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
@@ -39,7 +38,7 @@ public class LayoutHelper {
 		throws PortalException {
 
 		return addLayout(userId, groupId, parentLayoutId, name, title, true,
-			hidden, friendlyURL, LayoutConstants.TYPE_PORTLET);
+			hidden, friendlyURL, com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
 	}
 
 	public static Layout addLayout(
@@ -48,7 +47,7 @@ public class LayoutHelper {
 
 		return addLayout(userId, groupId, layoutConfig.getParentLayoutId(), layoutConfig.getName(),
 			layoutConfig.getName(), layoutConfig.isPrivatePage(), layoutConfig.isHiddenPage(),
-			layoutConfig.getFriendlyURL(), LayoutConstants.TYPE_PORTLET);
+			layoutConfig.getFriendlyURL(), com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
 	}
 
 	/**
@@ -100,9 +99,9 @@ public class LayoutHelper {
 
 		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layout.getLayoutType();
 
-		layoutTypePortlet.setLayoutTemplateId(userId, ContentSetupKeys.LAYOUT_1_COLUMN);
+		layoutTypePortlet.setLayoutTemplateId(userId, LayoutConstants.LAYOUT_1_COLUMN);
 
-		layoutTypePortlet.addPortletId(userId, portletKey, ContentSetupKeys.COL_ID_COLUMN_1, -1);
+		layoutTypePortlet.addPortletId(userId, portletKey, LayoutConstants.COL_ID_COLUMN_1, -1);
 
 		return LayoutLocalServiceUtil.updateLayout(
 			groupId, layout.isPrivateLayout(), layout.getLayoutId(), layout.getTypeSettings());
@@ -117,10 +116,10 @@ public class LayoutHelper {
 
 		LayoutTypePortlet autoLayoutTypePortlet = (LayoutTypePortlet)autoLayout.getLayoutType();
 
-		autoLayoutTypePortlet.setLayoutTemplateId(userId, ContentSetupKeys.LAYOUT_1_COLUMN);
+		autoLayoutTypePortlet.setLayoutTemplateId(userId, LayoutConstants.LAYOUT_1_COLUMN);
 
 		for (int i = 0; i < portletKeys.length; i++) {
-			autoLayoutTypePortlet.addPortletId(userId, portletKeys[i], ContentSetupKeys.COL_ID_COLUMN_1, i);
+			autoLayoutTypePortlet.addPortletId(userId, portletKeys[i], LayoutConstants.COL_ID_COLUMN_1, i);
 		}
 
 		LayoutLocalServiceUtil.updateLayout(

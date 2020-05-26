@@ -1,6 +1,6 @@
 package com.churchmutual.content.setup.upgrade.util.common;
 
-import com.churchmutual.commons.constants.ContentSetupKeys;
+import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
