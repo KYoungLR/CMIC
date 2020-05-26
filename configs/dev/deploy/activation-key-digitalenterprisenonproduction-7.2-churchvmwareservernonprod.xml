@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<license>
+	<account-name>CMIC - Customer Portal and Websites</account-name>
+	<owner>Church VM Ware Server - Non-Prod 1</owner>
+	<description>Church VM Ware Server - Non-Prod 1</description>
+	<product-name>Digital Enterprise Non-Production</product-name>
+	<product-version>7.2</product-version>
+	<license-name>Digital Enterprise Non-Production</license-name>
+	<license-type>production</license-type>
+	<license-version>6</license-version>
+	<start-date>Sunday, December 29, 2019 12:00:00 AM GMT</start-date>
+	<expiration-date>Tuesday, December 5, 2119 12:00:00 AM GMT</expiration-date>
+	<max-servers>1</max-servers>
+	<instance-size>Sizing 1</instance-size>
+	<host-names>
+		<host-name>win-lr-t-01-145</host-name>
+	</host-names>
+	<ip-addresses>
+		<ip-address>172.16.145.6</ip-address>
+	</ip-addresses>
+	<mac-addresses/>
+	<key>7c55509ddd4aeb368830510859a4f543d61d6b7ff7650e15c2ffaa6c036fd37359c905d405cdda6f932759d8935db9a592173d8c0f85fdd58c1835941635618327df2e016535dacefb990e23944d6274ba7d11feae7f9ff7172a338e5e5e8af81f891f59cdb6ef9c6bbe3885b619ce1e13c53209cfbb5861cfef25e5b8e701fd26756a7c</key>
+</license>

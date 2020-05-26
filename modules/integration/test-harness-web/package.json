@@ -1,0 +1,14 @@
+{
+	"dependencies": {
+		"metal-component": "^2.16.8"
+	},
+	"description": "Test Harness",
+	"devDependencies": {
+		"liferay-npm-scripts": "^29.0.0"
+	},
+	"name": "test-harness",
+	"scripts": {
+		"build": "liferay-npm-scripts build"
+	},
+	"version": "1.0.0"
+}

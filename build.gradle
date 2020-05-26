@@ -33,7 +33,7 @@ configure(subprojects.findAll { !it.subprojects }) {
                 instruction "-fixupmessages", "annotations are deprecated"
             }
 
-            if (project.path.contains(":test:") || project.path.contains("-test") || project.path.contains("test-")) {
+            if (project.path.contains(":test:") || project.path.contains("-test")) {
                 deploy {
                     enabled = false
                 }
