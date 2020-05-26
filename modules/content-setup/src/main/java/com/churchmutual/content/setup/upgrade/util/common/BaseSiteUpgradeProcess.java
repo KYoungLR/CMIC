@@ -6,12 +6,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.LayoutSet;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.LayoutSetLocalServiceUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-import com.liferay.portal.kernel.service.VirtualHostLocalServiceUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.service.VirtualHostLocalService;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.TreeMapBuilder;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -20,6 +22,23 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
+
+	public BaseSiteUpgradeProcess(
+		GroupLocalService groupLocalService,
+		LayoutSetLocalService layoutSetLocalService,
+		PermissionCheckerFactory permissionCheckerFactory, Portal portal,
+		RoleLocalService roleLocalService, UserLocalService userLocalService,
+		VirtualHostLocalService virtualHostLocalService) {
+
+		super(
+			permissionCheckerFactory, portal, roleLocalService,
+			userLocalService);
+
+		this.groupLocalService = groupLocalService;
+		this.layoutSetLocalService = layoutSetLocalService;
+		this.userLocalService = userLocalService;
+		this.virtualHostLocalService = virtualHostLocalService;
+	}
 
 	protected long addPortalSite(long companyId, String name, String friendlyURL) throws PortalException {
 		return addPortalSite(companyId, name, friendlyURL, GroupConstants.TYPE_SITE_PRIVATE);
@@ -36,7 +55,7 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		// Update site theme
 
-		LayoutSetLocalServiceUtil.updateLookAndFeel(groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
+		layoutSetLocalService.updateLookAndFeel(groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
 
 		return groupId;
 	}
@@ -44,13 +63,13 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 	protected void updateVirtualHost(long companyId, long groupId, String hostname, boolean privateLayout)
 		throws PortalException {
 
-		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(groupId, privateLayout);
+		LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(groupId, privateLayout);
 
-		if (Validator.isNotNull(VirtualHostLocalServiceUtil.fetchVirtualHost(hostname))) {
+		if (Validator.isNotNull(virtualHostLocalService.fetchVirtualHost(hostname))) {
 			return;
 		}
 
-		VirtualHostLocalServiceUtil.updateVirtualHosts(
+		virtualHostLocalService.updateVirtualHosts(
 			companyId, layoutSet.getLayoutSetId(),
 			TreeMapBuilder.put(hostname, StringPool.BLANK).build());
 	}
@@ -62,14 +81,14 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		Map<Locale, String> nameMap = new HashMap<>();
 
-		nameMap.put(LocaleUtil.getDefault(), name);
+		nameMap.put(Locale.getDefault(), name);
 
 		Map<Locale, String> descriptionMap = new HashMap<>();
 
-		descriptionMap.put(LocaleUtil.getDefault(), description);
+		descriptionMap.put(Locale.getDefault(), description);
 
-		Group group = GroupLocalServiceUtil.addGroup(
-			UserLocalServiceUtil.getDefaultUserId(companyId), GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0,
+		Group group = groupLocalService.addGroup(
+			userLocalService.getDefaultUserId(companyId), GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0,
 			nameMap, descriptionMap, type, true, GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION,
 			friendlyURL, true, true, serviceContext);
 
@@ -80,9 +99,14 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(companyId);
-		serviceContext.setUserId(UserLocalServiceUtil.getDefaultUserId(companyId));
+		serviceContext.setUserId(userLocalService.getDefaultUserId(companyId));
 
 		return serviceContext;
 	}
+
+	protected GroupLocalService groupLocalService;
+	protected LayoutSetLocalService layoutSetLocalService;
+	protected UserLocalService userLocalService;
+	protected VirtualHostLocalService virtualHostLocalService;
 
 }
