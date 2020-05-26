@@ -1,6 +1,7 @@
 package com.churchmutual.commons.util;
 
 import com.churchmutual.commons.constants.LayoutConstants;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -20,6 +21,37 @@ import javax.portlet.ReadOnlyException;
  */
 public class LayoutHelper {
 
+	public static Layout addLayout(long userId, long groupId, LayoutConfig layoutConfig) throws PortalException {
+		return addLayout(
+			userId, groupId, layoutConfig.getParentLayoutId(), layoutConfig.getName(), layoutConfig.getName(),
+			layoutConfig.isPrivatePage(), layoutConfig.isHiddenPage(), layoutConfig.getFriendlyURL(),
+			com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
+	}
+
+	/**
+	 *
+	 * @param userId
+	 * @param groupId
+	 * @param parentLayoutId
+	 * @param name
+	 * @param title
+	 * @param hidden
+	 * @param friendlyURL
+	 * @return
+	 * @throws PortalException
+	 */
+	public static Layout addLayout(
+			long userId, long groupId, long parentLayoutId, String name, String title, boolean privateLayout,
+			boolean hidden, String friendlyURL, String type)
+		throws PortalException {
+
+		String description = null;
+
+		return LayoutLocalServiceUtil.addLayout(
+			userId, groupId, privateLayout, parentLayoutId, name, title, description, type, hidden, friendlyURL,
+			getDefaultServiceContext());
+	}
+
 	/**
 	 *
 	 * @param userId
@@ -37,41 +69,9 @@ public class LayoutHelper {
 			String friendlyURL)
 		throws PortalException {
 
-		return addLayout(userId, groupId, parentLayoutId, name, title, true,
-			hidden, friendlyURL, com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
-	}
-
-	public static Layout addLayout(
-			long userId, long groupId, LayoutConfig layoutConfig)
-		throws PortalException {
-
-		return addLayout(userId, groupId, layoutConfig.getParentLayoutId(), layoutConfig.getName(),
-			layoutConfig.getName(), layoutConfig.isPrivatePage(), layoutConfig.isHiddenPage(),
-			layoutConfig.getFriendlyURL(), com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
-	}
-
-	/**
-	 *
-	 * @param userId
-	 * @param groupId
-	 * @param parentLayoutId
-	 * @param name
-	 * @param title
-	 * @param hidden
-	 * @param friendlyURL
-	 * @return
-	 * @throws PortalException
-	 */
-	public static Layout addLayout(
-			long userId, long groupId, long parentLayoutId, String name, String title,
-			boolean privateLayout, boolean hidden, String friendlyURL, String type)
-		throws PortalException {
-
-		String description = null;
-
-		return LayoutLocalServiceUtil.addLayout(
-			userId, groupId, privateLayout, parentLayoutId, name, title, description, type, hidden, friendlyURL,
-			getDefaultServiceContext());
+		return addLayout(
+			userId, groupId, parentLayoutId, name, title, true, hidden, friendlyURL,
+			com.liferay.portal.kernel.model.LayoutConstants.TYPE_PORTLET);
 	}
 
 	/**
@@ -85,11 +85,13 @@ public class LayoutHelper {
 	 *            The fourth config is hidden or not.
 	 * @throws PortalException
 	 */
-	public static Layout addLayoutWithPortlet(long userId, long groupId, LayoutConfig layoutConfig)
+	public static Layout addLayoutWithPortlet(
+			long userId, long groupId, LayoutConfig layoutConfig)
 		throws PortalException {
 
 		String name = layoutConfig.getName();
-		String portletKey = CollectionsUtil.getOnlyOne(layoutConfig.getPortletsKeys());
+		String portletKey = CollectionsUtil.getOnlyOne(
+			layoutConfig.getPortletsKeys());
 
 		Layout layout = addLayout(userId, groupId, layoutConfig);
 
@@ -97,49 +99,62 @@ public class LayoutHelper {
 			_log.info(String.format("Created a layout with name: %s", name));
 		}
 
-		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layout.getLayoutType();
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
 
-		layoutTypePortlet.setLayoutTemplateId(userId, LayoutConstants.LAYOUT_1_COLUMN);
+		layoutTypePortlet.setLayoutTemplateId(
+			userId, LayoutConstants.LAYOUT_1_COLUMN);
 
-		layoutTypePortlet.addPortletId(userId, portletKey, LayoutConstants.COL_ID_COLUMN_1, -1);
+		layoutTypePortlet.addPortletId(
+			userId, portletKey, LayoutConstants.COL_ID_COLUMN_1, -1);
 
 		return LayoutLocalServiceUtil.updateLayout(
-			groupId, layout.isPrivateLayout(), layout.getLayoutId(), layout.getTypeSettings());
+			groupId, layout.isPrivateLayout(), layout.getLayoutId(),
+			layout.getTypeSettings());
 	}
 
 	public static Layout addLayoutWithPortlets(
-			long userId, long groupId, long parentLayoutId, String name, String title, String friendlyURL,
-			boolean hidden, String[] portletKeys)
+			long userId, long groupId, long parentLayoutId, String name,
+			String title, String friendlyURL, boolean hidden,
+			String[] portletKeys)
 		throws PortalException {
 
-		Layout autoLayout = addLayout(userId, groupId, parentLayoutId, name, title, hidden, friendlyURL);
+		Layout autoLayout = addLayout(
+			userId, groupId, parentLayoutId, name, title, hidden, friendlyURL);
 
-		LayoutTypePortlet autoLayoutTypePortlet = (LayoutTypePortlet)autoLayout.getLayoutType();
+		LayoutTypePortlet autoLayoutTypePortlet =
+			(LayoutTypePortlet)autoLayout.getLayoutType();
 
-		autoLayoutTypePortlet.setLayoutTemplateId(userId, LayoutConstants.LAYOUT_1_COLUMN);
+		autoLayoutTypePortlet.setLayoutTemplateId(
+			userId, LayoutConstants.LAYOUT_1_COLUMN);
 
 		for (int i = 0; i < portletKeys.length; i++) {
-			autoLayoutTypePortlet.addPortletId(userId, portletKeys[i], LayoutConstants.COL_ID_COLUMN_1, i);
+			autoLayoutTypePortlet.addPortletId(
+				userId, portletKeys[i], LayoutConstants.COL_ID_COLUMN_1, i);
 		}
 
 		LayoutLocalServiceUtil.updateLayout(
-			autoLayout.getGroupId(), autoLayout.isPrivateLayout(), autoLayout.getLayoutId(),
-			autoLayout.getTypeSettings());
+			autoLayout.getGroupId(), autoLayout.isPrivateLayout(),
+			autoLayout.getLayoutId(), autoLayout.getTypeSettings());
 
 		return autoLayout;
 	}
 
 	public static String addPortletAndPortletPreference(
-			long companyId, long userId, Layout layout, LayoutTypePortlet layoutTypePortlet, String portletKey,
+			long companyId, long userId, Layout layout,
+			LayoutTypePortlet layoutTypePortlet, String portletKey,
 			String columnId, int columnPos, String prefName, String prefValue)
 		throws Exception {
 
 		long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
 		int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
 
-		String portletId = layoutTypePortlet.addPortletId(userId, portletKey, columnId, columnPos);
+		String portletId = layoutTypePortlet.addPortletId(
+			userId, portletKey, columnId, columnPos);
 
-		savePortletPreference(companyId, ownerId, ownerType, layout, portletId, prefName, prefValue);
+		savePortletPreference(
+			companyId, ownerId, ownerType, layout, portletId, prefName,
+			prefValue);
 
 		return portletId;
 	}
@@ -149,12 +164,13 @@ public class LayoutHelper {
 	}
 
 	public static void savePortletPreference(
-			long companyId, long ownerId, int ownerType, Layout layout, String portletId, String prefName,
-			String prefValue)
+			long companyId, long ownerId, int ownerType, Layout layout,
+			String portletId, String prefName, String prefValue)
 		throws ReadOnlyException {
 
-		PortletPreferences portletPrefs = PortletPreferencesLocalServiceUtil.getStrictPreferences(
-			companyId, ownerId, ownerType, layout.getPlid(), portletId);
+		PortletPreferences portletPrefs =
+			PortletPreferencesLocalServiceUtil.getStrictPreferences(
+				companyId, ownerId, ownerType, layout.getPlid(), portletId);
 
 		portletPrefs.setValue(prefName, prefValue);
 
@@ -162,7 +178,9 @@ public class LayoutHelper {
 			ownerId, ownerType, layout.getPlid(), portletId, portletPrefs);
 	}
 
-	private static ServiceContext getDefaultServiceContext() throws PortalException {
+	private static ServiceContext getDefaultServiceContext()
+		throws PortalException {
+
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(PortalUtil.getDefaultCompanyId());

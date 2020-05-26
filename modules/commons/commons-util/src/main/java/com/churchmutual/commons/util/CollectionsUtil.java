@@ -12,9 +12,8 @@ public class CollectionsUtil {
 		if (ListUtil.isEmpty(list)) {
 			return null;
 		}
-		else {
-			return list.get(0);
-		}
+
+		return list.get(0);
 	}
 
 	public static <T> T getOnlyOne(List<T> list) {
@@ -28,11 +27,12 @@ public class CollectionsUtil {
 			return list.get(0);
 		}
 
-		throw new IllegalArgumentException("Expected one element but was " + list.size());
+		throw new IllegalArgumentException(
+			"Expected one element but was " + list.size());
 	}
 
 	public static boolean isEmpty(Collection<?> collection) {
-		if (collection == null || collection.isEmpty()) {
+		if ((collection == null) || collection.isEmpty()) {
 			return true;
 		}
 
@@ -43,7 +43,9 @@ public class CollectionsUtil {
 		return !isEmpty(collection);
 	}
 
-	public static boolean listsHaveElementsInCommon(List<Long> list1, List<Long> list2) {
+	public static boolean listsHaveElementsInCommon(
+		List<Long> list1, List<Long> list2) {
+
 		if ((list1 == null) || (list2 == null)) {
 			return false;
 		}
