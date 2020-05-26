@@ -12,7 +12,7 @@ $gray-900: #3d393a;
 $black: #231f20;
 
 $blue: #106581;
-$red: #dd1c2e;
+$red: #ed1c2e;
 $green: #568110;
 $orange: #e37d00;
 
@@ -24,6 +24,12 @@ $warning: #b95000;
 $danger: #da0b1d;
 $light: $gray-100;
 $dark: $black;
+
+$primary-d1: darken(desaturate($primary, 6.40), 5.49); // #d41929
+$primary-d2: darken(desaturate($primary, 6.46), 11.18); // #ba1624
+
+$secondary-d1: darken(desaturate(adjust-hue($secondary, 1), 0.08), 9.41); // #575d66
+$secondary-d2: darken(saturate($secondary, 0.43), 18.63); // #41464d
 
 
 // Body
@@ -39,8 +45,16 @@ $link-hover-color: $link-color;
 $link-hover-decoration: none;
 
 
+// Components
+
+$border-radius: .25rem;
+$border-radius-lg: $border-radius;
+$border-radius-sm: $border-radius;
+
+
 // Typography
 
+$font-size-base: 1rem;
 $text-muted: $gray-700;
 
 
@@ -66,8 +80,65 @@ $table-list-title-link: (
 
 // Buttons + Forms
 
+$input-btn-focus-width: .1rem;
+/*$input-btn-padding-y: .4375rem;
+$input-btn-focus-width: .1rem;
+
+$input-btn-padding-y-sm: .2rem;
+$input-btn-padding-x-sm: .75rem;
+$input-btn-font-size-sm: $font-size-base;
+
+$input-btn-padding-y-lg: .7rem;
+$input-btn-font-size-lg: $font-size-base;*/
+
 
 // Buttons
+
+$btn-padding-y: .61rem;
+$btn-padding-x: .75rem;
+$btn-font-size: .8125rem;
+
+$btn-padding-y-sm: .35rem;
+$btn-padding-x-sm: $btn-padding-x;
+$btn-font-size-sm: $btn-font-size;
+
+$btn-padding-y-lg: .85rem;
+$btn-padding-x-lg: 1rem;
+$btn-font-size-lg: $btn-font-size;
+
+$btn-font-weight: 700;
+$btn-disabled-opacity: .68;
+
+
+$btn-outline-primary: () !default;
+$btn-outline-primary: map-merge(
+	(
+		hover-bg: transparent,
+		hover-color: $primary-d1,
+		hover-border-color: $primary-d1,
+		focus-bg: transparent,
+		active-bg: transparent,
+		active-color: $primary-d2,
+		active-border-color: $primary-d2,
+	),
+	$btn-outline-primary
+);
+
+$btn-outline-secondary: () !default;
+$btn-outline-secondary: map-merge(
+	(
+		border-color: $secondary,
+		hover-bg: transparent,
+		hover-border-color: $secondary-d1,
+		hover-color: $secondary-d1,
+		focus-bg: transparent,
+		focus-border-color: $secondary,
+		active-bg: transparent,
+		active-border-color: $secondary-d2,
+		active-color: $secondary-d2,
+	),
+	$btn-outline-secondary
+);
 
 
 // Forms
