@@ -26,6 +26,13 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'distBundleZip'
 
+- task: CmdLine@2
+  inputs:
+    displayName: Rename s.zip to CMICPortal.zip
+    script: 'ren s.zip CMICPortal.zip'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/build'
+    failOnStderr: true
+
 - task: CopyFiles@2
   displayName: 'Copy Files to artifact staging directory'
   inputs:
