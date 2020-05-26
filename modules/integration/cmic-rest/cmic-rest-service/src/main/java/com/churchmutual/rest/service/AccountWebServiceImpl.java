@@ -72,7 +72,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 		CMICAddress address = new CMICAddress();
 
-		address.setAddressLine1("ACTUAL");
+		address.setCity("ACTUAL");
 
 		return address;
 	}
