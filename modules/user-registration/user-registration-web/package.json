@@ -1,5 +1,5 @@
 {
-	"name": "user-registration-web",
+	"name": "com.churchmutual.user.registration.web",
 	"version": "1.0.0",
 	"description": "User Registration Web",
 	"devDependencies": {
@@ -29,7 +29,7 @@
 		"com.liferay.portlet.display-category": "category.broker",
 		"com.liferay.portlet.header-portlet-css": "/css/styles.css",
 		"com.liferay.portlet.instanceable": true,
-		"javax.portlet.name": "userregistrationweb",
+		"javax.portlet.name": "com_churchmutual_user_registration_web_portlet_UserRegistrationWebPortlet",
 		"javax.portlet.security-role-ref": "power-user,user",
 		"javax.portlet.resource-bundle": "content.Language"
 	},

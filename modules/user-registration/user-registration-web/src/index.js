@@ -1,4 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 
+import UserRegistration from './UserRegistration';
 
 /**
  * This is the main entry point of the portlet.
@@ -10,5 +13,13 @@
  * @return {void}
  */
 export default function main({portletNamespace, contextPath, portletElementId}) {
-    
+    ReactDOM.render(
+      <UserRegistration
+        portletNamespace={portletNamespace}
+        contextPath={contextPath}
+        portletElementId={portletElementId}
+
+      />,
+      document.getElementById(portletElementId)
+    );
 }
