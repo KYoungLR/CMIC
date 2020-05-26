@@ -10,8 +10,10 @@ pool:
 #  vmImage: 'ubuntu-latest'
   name: win-lr-t-01-145
   vmImage: win-lr-t-01-145
+  # Rich Note: ADO can't connect to this agent, but Agent Pools can.
 #  name: DevOps
 #  vmImage: MC21PWIN337
+   # Rich Note: Build works on this one.
 
 steps:
 - task: Gradle@2
