@@ -22,7 +22,7 @@ $secondary: #6d7580;
 $success: #287d3c;
 $info: #1f45cd;
 $warning: #ca9714;
-$danger: #aa620b;
+$danger: #da620b;
 $light: $gray-100;
 $dark: $black;
 
@@ -32,6 +32,10 @@ $primary-d2: darken(desaturate($primary, 6.46), 11.18); // #ba1624
 $secondary-d1: darken(desaturate(adjust-hue($secondary, 1), 0.08), 9.41); // #575d66
 $secondary-d2: darken(saturate($secondary, 0.43), 18.63); // #41464d
 
+$success-l4: lighten(desaturate(adjust-hue(#287d3c, -2), 27.71), 63.53); // #f2f7f3
+$info-l4: lighten(desaturate(adjust-hue(#1f45cd, 2), 7.06), 49.02); // #ebeefb
+$warning-l4: lighten(desaturate(adjust-hue($warning, 1), 16.76), 51.96); // #fbf7ec
+$danger-l4: lighten(desaturate($danger, 20.39), 51.18); // #fcf4ee;
 
 // Body
 
@@ -169,6 +173,14 @@ $compat-form_validation: false;
 $form-feedback-margin-top: 0;
 $form-feedback-font-size: .875rem;
 
+$form-feedback-success-bg: $success-l4;
+$form-feedback-warning-bg: $warning-l4;
+$form-feedback-danger-bg: $danger-l4;
+
+$input-success-label-color: $success;
+$input-warning-label-color: $warning;
+$input-danger-label-color: $danger;
+
 
 // Pagination
 
@@ -180,6 +192,40 @@ $form-feedback-font-size: .875rem;
 
 
 // Alerts
+
+$alert-font-size: .875rem;
+
+$alert-lead-font-size: $alert-font-size;
+$alert-lead-font-weight: 600;
+
+$alert-link-decoration: underline;
+$alert-link-hover-decoration: none;
+
+$alert-indicator-font-size: $alert-font-size;
+
+$alert-success-bg: $success-l4;
+$alert-success-color: $success;
+$alert-success-border-color: $alert-success-color;
+$alert-success-close-color: $alert-success-color;
+$alert-success-link-color: $alert-success-color;
+
+$alert-info-bg: $info-l4;
+$alert-info-color: $info;
+$alert-info-border-color: $alert-info-color;
+$alert-info-close-color: $alert-info-color;
+$alert-info-link-color: $alert-info-color;
+
+$alert-warning-bg: $warning-l4;
+$alert-warning-color: $warning;
+$alert-warning-border-color: $alert-warning-color;
+$alert-warning-close-color: $alert-warning-color;
+$alert-warning-link-color: $alert-warning-color;
+
+$alert-danger-bg: $danger-l4;
+$alert-danger-color: $danger;
+$alert-danger-border-color: $alert-danger-color;
+$alert-danger-close-color: $alert-danger-color;
+$alert-danger-link-color: $alert-danger-color;
 
 
 // Breadcrumb
