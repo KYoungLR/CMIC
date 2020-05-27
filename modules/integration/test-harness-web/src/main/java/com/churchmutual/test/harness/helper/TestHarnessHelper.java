@@ -27,49 +27,36 @@ import org.osgi.service.component.annotations.Reference;
 public class TestHarnessHelper {
 
 	public TestHarnessInvoker getTestHarnessInvoker(PortletRequest request) {
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 
-		String screenNavigationCategoryKey = ParamUtil.getString(
-			request, "screenNavigationCategoryKey");
+		String screenNavigationCategoryKey = ParamUtil.getString(request, "screenNavigationCategoryKey");
 
-		String screenNavigationEntryKey = ParamUtil.getString(
-			request, "screenNavigationEntryKey");
+		String screenNavigationEntryKey = ParamUtil.getString(request, "screenNavigationEntryKey");
 
 		List<ScreenNavigationCategory> screenNavigationCategories =
 			_screenNavigationRegistry.getScreenNavigationCategories(
-				TestHarnessConstants.SCREEN_NAVIGATION_KEY,
-				themeDisplay.getUser(), null);
+				TestHarnessConstants.SCREEN_NAVIGATION_KEY, themeDisplay.getUser(), null);
 
-		Stream<ScreenNavigationCategory> screenNavigationCategoryStream =
-			screenNavigationCategories.stream();
+		Stream<ScreenNavigationCategory> screenNavigationCategoryStream = screenNavigationCategories.stream();
 
-		Optional<ScreenNavigationCategory> screenNavigationCategoryOptional =
-			screenNavigationCategoryStream.filter(
-				screenNavigationCategory -> StringUtil.equals(
-					screenNavigationCategoryKey,
-					screenNavigationCategory.getCategoryKey())
-			).findFirst();
+		Optional<ScreenNavigationCategory> screenNavigationCategoryOptional = screenNavigationCategoryStream.filter(
+			screenNavigationCategory -> StringUtil.equals(
+				screenNavigationCategoryKey, screenNavigationCategory.getCategoryKey())
+		).findFirst();
 
 		if (screenNavigationCategoryOptional.isPresent()) {
-			List<ScreenNavigationEntry> screenNavigationEntries =
-				_screenNavigationRegistry.getScreenNavigationEntries(
-					screenNavigationCategoryOptional.get(),
-					themeDisplay.getUser(), null);
+			List<ScreenNavigationEntry> screenNavigationEntries = _screenNavigationRegistry.getScreenNavigationEntries(
+				screenNavigationCategoryOptional.get(), themeDisplay.getUser(), null);
 
-			Stream<ScreenNavigationEntry> screenNavigationEntryStream =
-				screenNavigationEntries.stream();
+			Stream<ScreenNavigationEntry> screenNavigationEntryStream = screenNavigationEntries.stream();
 
-			Optional<ScreenNavigationEntry> screenNavigationEntryOptional =
-				screenNavigationEntryStream.filter(
-					screenNavigationEntry -> StringUtil.equals(
-						screenNavigationEntryKey,
-						screenNavigationEntry.getEntryKey())
-				).findFirst();
+			Optional<ScreenNavigationEntry> screenNavigationEntryOptional = screenNavigationEntryStream.filter(
+				screenNavigationEntry -> StringUtil.equals(
+					screenNavigationEntryKey, screenNavigationEntry.getEntryKey())
+			).findFirst();
 
 			if (screenNavigationEntryOptional.isPresent()) {
-				ScreenNavigationEntry screenNavigationEntry =
-					screenNavigationEntryOptional.get();
+				ScreenNavigationEntry screenNavigationEntry = screenNavigationEntryOptional.get();
 
 				return (TestHarnessInvoker)screenNavigationEntry;
 			}

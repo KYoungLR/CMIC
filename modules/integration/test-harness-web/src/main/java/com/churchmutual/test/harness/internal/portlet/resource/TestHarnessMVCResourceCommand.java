@@ -21,27 +21,20 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {
-		"javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS,
-		"mvc.command.name=/invoke"
-	},
+	property = {"javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS, "mvc.command.name=/invoke"},
 	service = MVCResourceCommand.class
 )
 public class TestHarnessMVCResourceCommand extends BaseMVCResourceCommand {
 
 	@Override
-	protected void doServeResource(
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		TestHarnessInvoker invoker = _testHarnessHelper.getTestHarnessInvoker(
-			resourceRequest);
+		TestHarnessInvoker invoker = _testHarnessHelper.getTestHarnessInvoker(resourceRequest);
 
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
-			invoker.invoke(resourceRequest));
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(invoker.invoke(resourceRequest));
 
-		JSONPortletResponseUtil.writeJSON(
-			resourceRequest, resourceResponse, jsonArray);
+		JSONPortletResponseUtil.writeJSON(resourceRequest, resourceResponse, jsonArray);
 	}
 
 	@Reference

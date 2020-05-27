@@ -9,9 +9,7 @@ import java.util.List;
  */
 public class HarnessDescriptor {
 
-	public HarnessDescriptor(
-		String description, String endpoint, Http.Method method) {
-
+	public HarnessDescriptor(String description, String endpoint, Http.Method method) {
 		_description = description;
 		_endpoint = endpoint;
 		_method = method;
@@ -39,10 +37,7 @@ public class HarnessDescriptor {
 
 	public static class Parameter {
 
-		public Parameter(
-			String description, String name, boolean required,
-			Object sampleValue, String type) {
-
+		public Parameter(String description, String name, boolean required, Object sampleValue, String type) {
 			_description = description;
 			_name = name;
 			_required = required;
@@ -50,9 +45,7 @@ public class HarnessDescriptor {
 			_type = type;
 		}
 
-		public Parameter(
-			String description, String name, boolean required, String type) {
-
+		public Parameter(String description, String name, boolean required, String type) {
 			_description = description;
 			_name = name;
 			_required = required;

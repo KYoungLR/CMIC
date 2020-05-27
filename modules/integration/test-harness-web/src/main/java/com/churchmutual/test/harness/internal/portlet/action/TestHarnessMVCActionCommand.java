@@ -30,12 +30,8 @@ public class TestHarnessMVCActionCommand extends BaseMVCActionCommand {
 	public static final String MVC_COMMAND_NAME = "invoke";
 
 	@Override
-	protected void doProcessAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
-
-		TestHarnessInvoker invoker = _testHarnessHelper.getTestHarnessInvoker(
-			actionRequest);
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		TestHarnessInvoker invoker = _testHarnessHelper.getTestHarnessInvoker(actionRequest);
 
 		String response = invoker.invoke(actionRequest);
 

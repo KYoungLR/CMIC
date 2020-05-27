@@ -23,40 +23,30 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class BaseTestHarnessScreenNavigationEntry
 	implements ScreenNavigationEntry<HarnessDescriptor>, TestHarnessInvoker {
 
-	public void doRender(
-		HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse) {
+	public void doRender(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 	}
 
 	public abstract JSPRenderer getJSPRenderer();
 
 	@Override
-	public void render(
-			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse)
+	public void render(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
 		throws IOException {
 
 		doRender(httpServletRequest, httpServletResponse);
 
-		httpServletRequest.setAttribute(
-			"screenNavigationCategoryKey", getCategoryKey());
+		httpServletRequest.setAttribute("screenNavigationCategoryKey", getCategoryKey());
 
-		httpServletRequest.setAttribute(
-			"screenNavigationEntryKey", getEntryKey());
+		httpServletRequest.setAttribute("screenNavigationEntryKey", getEntryKey());
 
-		httpServletRequest.setAttribute(
-			"harnessDescriptors", getHarnessDescriptors());
+		httpServletRequest.setAttribute("harnessDescriptors", getHarnessDescriptors());
 
-		getJSPRenderer().renderJSP(
-			httpServletRequest, httpServletResponse, "/api/view.jsp");
+		getJSPRenderer().renderJSP(httpServletRequest, httpServletResponse, "/api/view.jsp");
 	}
 
 	protected ResourceBundle getResourceBundle(Locale locale) {
-		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-			"content.Language", locale, getClass());
+		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle("content.Language", locale, getClass());
 
-		return new AggregateResourceBundle(
-			resourceBundle, PortalUtil.getResourceBundle(locale));
+		return new AggregateResourceBundle(resourceBundle, PortalUtil.getResourceBundle(locale));
 	}
 
 }

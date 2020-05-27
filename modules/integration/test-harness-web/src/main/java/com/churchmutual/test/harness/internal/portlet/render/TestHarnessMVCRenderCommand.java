@@ -18,23 +18,17 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS,
-		"mvc.command.name=/", "mvc.command.name=/view"
+		"javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS, "mvc.command.name=/", "mvc.command.name=/view"
 	},
 	service = MVCRenderCommand.class
 )
 public class TestHarnessMVCRenderCommand implements MVCRenderCommand {
 
 	@Override
-	public String render(
-			RenderRequest renderRequest, RenderResponse renderResponse)
-		throws PortletException {
+	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+		String resolvedModuleName = _npmResolver.resolveModuleName("test-harness/js/TestHarness.es");
 
-		String resolvedModuleName = _npmResolver.resolveModuleName(
-			"test-harness/js/TestHarness.es");
-
-		renderRequest.setAttribute(
-			"resolvedModuleName", resolvedModuleName + " as TestHarness");
+		renderRequest.setAttribute("resolvedModuleName", resolvedModuleName + " as TestHarness");
 
 		return "/view.jsp";
 	}

@@ -13,8 +13,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Eric Chin
  */
 @Component(
-	immediate = true, property = "screen.navigation.category.order:Integer=10",
-	service = ScreenNavigationCategory.class
+	immediate = true, property = "screen.navigation.category.order:Integer=10", service = ScreenNavigationCategory.class
 )
 public class CmicScreenNavigationCategory implements ScreenNavigationCategory {
 
@@ -25,8 +24,7 @@ public class CmicScreenNavigationCategory implements ScreenNavigationCategory {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(
-			locale, TestHarnessConstants.CATEGORY_KEY_CHURCH_MUTUAL);
+		return LanguageUtil.get(locale, TestHarnessConstants.CATEGORY_KEY_CHURCH_MUTUAL);
 	}
 
 	@Override

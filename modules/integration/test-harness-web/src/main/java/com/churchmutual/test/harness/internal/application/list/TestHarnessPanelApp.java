@@ -15,10 +15,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {
-		"panel.app.order:Integer=1",
-		"panel.category.key=" + PanelCategoryKeys.CONTROL_PANEL_CONFIGURATION
-	},
+	property = {"panel.app.order:Integer=1", "panel.category.key=" + PanelCategoryKeys.CONTROL_PANEL_CONFIGURATION},
 	service = PanelApp.class
 )
 public class TestHarnessPanelApp extends BasePanelApp {
@@ -29,10 +26,7 @@ public class TestHarnessPanelApp extends BasePanelApp {
 	}
 
 	@Override
-	@Reference(
-		target = "(javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS + ")",
-		unbind = "-"
-	)
+	@Reference(target = "(javax.portlet.name=" + TestHarnessPortletKeys.TEST_HARNESS + ")", unbind = "-")
 	public void setPortlet(Portlet portlet) {
 		super.setPortlet(portlet);
 	}
