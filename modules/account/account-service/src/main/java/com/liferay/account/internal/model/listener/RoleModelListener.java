@@ -14,11 +14,11 @@
 
 package com.liferay.account.internal.model.listener;
 
+import com.churchmutual.commons.enums.BusinessRole;
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.model.AccountRole;
 import com.liferay.account.service.AccountRoleLocalService;
 import com.liferay.counter.kernel.service.CounterLocalService;
-import com.liferay.gs.raylife.core.constants.enums.BusinessRole;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;

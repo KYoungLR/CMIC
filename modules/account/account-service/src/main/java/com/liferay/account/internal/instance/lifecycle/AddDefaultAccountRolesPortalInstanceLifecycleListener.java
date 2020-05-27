@@ -1,5 +1,6 @@
 package com.liferay.account.internal.instance.lifecycle;
 
+import com.churchmutual.commons.enums.BusinessRole;
 import com.liferay.account.constants.AccountActionKeys;
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.model.AccountEntry;
