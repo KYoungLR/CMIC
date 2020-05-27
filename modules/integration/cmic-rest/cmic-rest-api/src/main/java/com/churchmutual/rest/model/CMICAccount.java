@@ -1,9 +1,14 @@
 package com.churchmutual.rest.model;
 
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONSerializer;
+
 /**
  * @author Kayleen Lim
  */
-public class CMICAccount {
+public class CMICAccount extends CMICObject {
 
 	public String getAccountName() {
 		return _accountName;

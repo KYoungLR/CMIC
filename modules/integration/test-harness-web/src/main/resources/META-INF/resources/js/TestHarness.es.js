@@ -6,6 +6,7 @@ class TestHarness extends Component {
 		super();
 
 		this._attachListeners(selector);
+		this._attachRepeatableFieldListeners(selector);
 	}
 
 	_attachListeners(selector) {
@@ -27,11 +28,50 @@ class TestHarness extends Component {
 					let responseContainer = container.querySelector('#response');
 
 					if (responseContainer) {
-						responseContainer.innerText = JSON.stringify(data, undefined, 4);
+						responseContainer.innerHTML = JSON.stringify(data, undefined, 4);
 					}
 				}).then(() => {
 					currentTarget.innerText = 'Invoke';
 				});
+			});
+		}
+	}
+
+	_attachRepeatableFieldListeners(selector) {
+		let container = document.querySelector(selector);
+
+		let removeButtons = container.querySelectorAll('.remove-item');
+
+		for (let i = 0; i < removeButtons.length; i++) {
+			let removeButton = removeButtons[i];
+
+			removeButton.addEventListener('click', event => {
+				let currentTarget = event.currentTarget;
+
+				removeButton.closest(".row").remove();
+			});
+		}
+
+		let addButtons = container.querySelectorAll('.add-item');
+
+		for (let i = 0; i < addButtons.length; i++) {
+			let addButton = addButtons[i];
+
+			addButton.addEventListener('click', event => {
+				let currentTarget = event.currentTarget;
+				let arrayField = currentTarget.parentElement;
+				let templateRow = arrayField.querySelector('.template-row');
+				let newRow = templateRow.cloneNode(true);
+				newRow.classList.remove(...["d-none", "template-row"]);
+				let removeButton = newRow.querySelector('.remove-item');
+
+				removeButton.addEventListener('click', event => {
+					let currentTarget = event.currentTarget;
+
+					removeButton.closest(".row").remove();
+				});
+
+				arrayField.insertBefore(newRow, currentTarget);
 			});
 		}
 	}
