@@ -91,6 +91,9 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		layoutSetLocalService.updateLookAndFeel(
 			groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
 
+		layoutSetLocalService.updateLookAndFeel(
+			groupId, false, themeId, StringPool.BLANK, StringPool.BLANK);
+
 		return groupId;
 	}
 
