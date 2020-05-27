@@ -1,0 +1,6 @@
+Bundle-Name: CMIC Commons Util
+Bundle-SymbolicName: com.churchmutual.commons.util
+Bundle-Version: 1.0.0
+Export-Package:\
+com.churchmutual.commons.constants,\
+com.churchmutual.commons.util

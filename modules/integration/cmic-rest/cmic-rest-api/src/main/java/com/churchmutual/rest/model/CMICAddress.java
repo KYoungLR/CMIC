@@ -5,32 +5,50 @@ package com.churchmutual.rest.model;
  */
 public class CMICAddress {
 
-	public String getAddressLine1() {
-		return _addressLine1;
+	public String getCity() {
+		return _city;
 	}
 
-	public String getAddressLine2() {
-		return _addressLine2;
+	public String getState() {
+		return _state;
 	}
 
-	public String getAddressType() {
-		return _addressType;
+	public String getStreet() {
+		return _street;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		_addressLine1 = addressLine1;
+	public String getStreetName() {
+		return _streetName;
 	}
 
-	public void setAddressLine2(String addressLine2) {
-		_addressLine2 = addressLine2;
+	public String getZipCode() {
+		return _zipCode;
 	}
 
-	public void setAddressType(String addressType) {
-		_addressType = addressType;
+	public void setCity(String city) {
+		_city = city;
 	}
 
-	private String _addressLine1;
-	private String _addressLine2;
-	private String _addressType;
+	public void setState(String state) {
+		_state = state;
+	}
+
+	public void setStreet(String street) {
+		_street = street;
+	}
+
+	public void setStreetName(String streetName) {
+		_streetName = streetName;
+	}
+
+	public void setZipCode(String zipCode) {
+		_zipCode = zipCode;
+	}
+
+	private String _city;
+	private String _state;
+	private String _street;
+	private String _streetName;
+	private String _zipCode;
 
 }
