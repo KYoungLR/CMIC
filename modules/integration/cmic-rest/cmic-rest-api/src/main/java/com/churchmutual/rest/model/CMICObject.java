@@ -7,19 +7,19 @@ import com.liferay.portal.kernel.json.JSONSerializer;
 
 public abstract class CMICObject {
 
-	public String toString() {
-		JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
-
-		return jsonSerializer.serialize(this);
-	}
-
 	public JSONObject toJSONObject() {
 		try {
 			return JSONFactoryUtil.createJSONObject(this.toString());
 		}
-		catch (JSONException jsone){
+		catch (JSONException jsone) {
 			return JSONFactoryUtil.createJSONObject();
 		}
+	}
+
+	public String toString() {
+		JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
+
+		return jsonSerializer.serialize(this);
 	}
 
 }
