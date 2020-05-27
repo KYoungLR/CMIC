@@ -1,0 +1,10 @@
+.form-group {
+
+	&:not(.form-inline) label {
+		margin: 0 0 0 .75rem;
+		padding: 0 .25rem;
+		position: absolute;
+		background-color: $white;
+		transform: translateY(-50%);
+	}
+}
