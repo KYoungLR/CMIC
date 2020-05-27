@@ -1,7 +1,7 @@
 package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.AccountWebService;
-import com.churchmutual.rest.configuration.MockWebServiceConfiguration;
+import com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICAccount;
 import com.churchmutual.rest.model.CMICAddress;
 import com.churchmutual.rest.service.mock.MockAccountWebServiceClient;
@@ -21,14 +21,14 @@ import org.osgi.service.component.annotations.Reference;
  * @author Kayleen Lim
  */
 @Component(
-	configurationPid = "com.churchmutual.rest.configuration.MockWebServiceConfiguration",
+	configurationPid = "com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration",
 	immediate = true, service = AccountWebService.class
 )
 public class AccountWebServiceImpl implements AccountWebService {
 
 	@Override
 	public CMICAccount getAccounts(String accountNumber) {
-		if (_mockWebServiceConfiguration.enableMockGetAccounts()) {
+		if (_mockAccountWebServiceConfiguration.enableMockGetAccounts()) {
 			return _mockAccountWebServiceClient.getAccounts(accountNumber);
 		}
 
@@ -45,7 +45,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	public List<CMICAccount> getAccountsSearchByProducer(
 		String[] producerCode) {
 
-		if (_mockWebServiceConfiguration.
+		if (_mockAccountWebServiceConfiguration.
 				enableMockGetAccountsSearchByProducer()) {
 
 			return _mockAccountWebServiceClient.getAccountsSearchByProducer(
@@ -63,7 +63,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 	@Override
 	public CMICAddress getAddressAccount(String accountNumber) {
-		if (_mockWebServiceConfiguration.enableMockGetAddressAccount()) {
+		if (_mockAccountWebServiceConfiguration.enableMockGetAddressAccount()) {
 			return _mockAccountWebServiceClient.getAddressAccount(
 				accountNumber);
 		}
@@ -80,13 +80,13 @@ public class AccountWebServiceImpl implements AccountWebService {
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
-		_mockWebServiceConfiguration = ConfigurableUtil.createConfigurable(
-			MockWebServiceConfiguration.class, properties);
+		_mockAccountWebServiceConfiguration = ConfigurableUtil.createConfigurable(
+			MockAccountWebServiceConfiguration.class, properties);
 	}
 
 	@Reference
 	private MockAccountWebServiceClient _mockAccountWebServiceClient;
 
-	private MockWebServiceConfiguration _mockWebServiceConfiguration;
+	private MockAccountWebServiceConfiguration _mockAccountWebServiceConfiguration;
 
 }
