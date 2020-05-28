@@ -5,11 +5,14 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONSerializer;
 
+/**
+ * @author Kayleen Lim
+ */
 public abstract class CMICObject {
 
 	public JSONObject toJSONObject() {
 		try {
-			return JSONFactoryUtil.createJSONObject(this.toString());
+			return JSONFactoryUtil.createJSONObject(toString());
 		}
 		catch (JSONException jsone) {
 			return JSONFactoryUtil.createJSONObject();

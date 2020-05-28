@@ -36,31 +36,31 @@ public class CMICUser extends CMICObject {
 	}
 
 	public void setId(int id) {
-		this._id = id;
+		_id = id;
 	}
 
 	public void setRegistrationCode(String registrationCode) {
-		this._registrationCode = registrationCode;
+		_registrationCode = registrationCode;
 	}
 
 	public void setRegistrationExpirationDate(String registrationExpirationDate) {
-		this._registrationExpirationDate = registrationExpirationDate;
+		_registrationExpirationDate = registrationExpirationDate;
 	}
 
 	public void setUserRelations(List<CMICUserRelation> userRelations) {
-		this._userRelations = userRelations;
+		_userRelations = userRelations;
 	}
 
 	public void setUserRole(String userRole) {
-		this._userRole = userRole;
+		_userRole = userRole;
 	}
 
 	public void setUserStatusText(String userStatusText) {
-		this._userStatusText = userStatusText;
+		_userStatusText = userStatusText;
 	}
 
 	public void setUuid(String uuid) {
-		this._uuid = uuid;
+		_uuid = uuid;
 	}
 
 	private int _id;
