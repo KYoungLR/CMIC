@@ -1,10 +1,5 @@
 package com.churchmutual.rest.model;
 
-import com.liferay.portal.kernel.json.JSONException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONSerializer;
-
 /**
  * @author Kayleen Lim
  */

@@ -55,7 +55,7 @@
 					<c:choose>
 						<c:when test="${fn:contains(parameter.type, '[]')}">
 							<div class="array-field">
-								<div class="row template-row d-none">
+								<div class="d-none row template-row">
 									<div class="col-9">
 										<aui:input
 											label=""
@@ -96,7 +96,7 @@
 									</div>
 								</c:forEach>
 
-								<button class="btn btn-default add-item" type="button"><liferay-ui:message key="add-item" /></button>
+								<button class="add-item btn btn-default" type="button"><liferay-ui:message key="add-item" /></button>
 							</div>
 						</c:when>
 						<c:when test="${fn:contains(parameter.type, 'String')}">
@@ -122,7 +122,7 @@
 			</portlet:resourceURL>
 
 			<aui:button-row>
-				<aui:button cssClass="js-invoke btn-info" data-url="${invokeURL}" value="invoke" />
+				<aui:button cssClass="btn-info js-invoke" data-url="${invokeURL}" value="invoke" />
 			</aui:button-row>
 		</liferay-ui:panel>
 	</c:forEach>

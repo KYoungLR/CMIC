@@ -5,7 +5,6 @@ package com.churchmutual.test.harness.constants;
  */
 public class TestHarnessPortletKeys {
 
-	public static final String TEST_HARNESS =
-		"com_churchmutual_test_harness_TestHarnessPortlet";
+	public static final String TEST_HARNESS = "com_churchmutual_test_harness_TestHarnessPortlet";
 
 }

@@ -1,8 +1,5 @@
 package com.churchmutual.rest.model;
 
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONSerializer;
-
 /**
  * @author Kayleen Lim
  */
