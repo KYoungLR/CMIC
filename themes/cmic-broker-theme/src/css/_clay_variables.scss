@@ -152,6 +152,21 @@ $btn-font-size-lg: $btn-font-size;
 $btn-font-weight: $font-weight-bold;
 $btn-disabled-opacity: .68;
 
+$btn-primary: () !default;
+$btn-primary: map-merge((
+	hover-bg: $primary-d1,
+	hover-border-color: $primary-d1,
+	active-bg: $primary-d2,
+	active-border-color: $primary-d2
+), $btn-primary);
+
+$btn-secondary: () !default;
+$btn-secondary: map-merge((
+	hover-bg: $secondary-d1,
+	hover-border-color: $secondary-d1,
+	active-border-color: $secondary-d2,
+	active-bg: $secondary-d2
+), $btn-secondary);
 
 $btn-outline-primary: () !default;
 $btn-outline-primary: map-merge(
