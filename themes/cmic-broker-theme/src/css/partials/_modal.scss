@@ -1,0 +1,12 @@
+.modal-content {
+	box-shadow: $modal-content-box-shadow-xs;
+
+	@include media-breakpoint-up(sm) {
+		box-shadow: $modal-content-box-shadow-sm-up;
+	}
+}
+
+.modal-footer {
+	margin-left: $modal-footer-margin-x;
+	margin-right: $modal-footer-margin-x;
+}
