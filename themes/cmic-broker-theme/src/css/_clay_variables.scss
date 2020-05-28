@@ -75,6 +75,7 @@ $font-family-sans-serif: "Avenir", -apple-system, BlinkMacSystemFont, "Segoe UI"
 
 $font-size-base: 1rem;
 
+$font-weight-semi-bold: 600;
 $font-weight-bold: 800;
 $font-weight-bolder: 900;
 
@@ -134,7 +135,7 @@ $btn-padding-y-lg: .85rem;
 $btn-padding-x-lg: 1rem;
 $btn-font-size-lg: $btn-font-size;
 
-$btn-font-weight: 700;
+$btn-font-weight: $font-weight-bold;
 $btn-disabled-opacity: .68;
 
 
@@ -216,6 +217,24 @@ $input-danger-label-color: $danger;
 
 // Cards
 
+$card-border-color: transparent;
+$card-box-shadow: map-get($elevation, 3);
+
+$card-title: () !default;
+$card-title: map-merge((
+	font-weight: $font-weight-bold,
+	margin-bottom: .25rem
+), $card-title);
+
+$card-subtitle: () !default;
+$card-subtitle: map-merge((
+	color: $gray-700,
+	font-size: 0.75rem,
+	font-weight: $font-weight-bold,
+	text-transform: uppercase,
+	margin-bottom: .25rem
+), $card-subtitle);
+
 
 // Badges
 
@@ -234,7 +253,7 @@ $modal-header-padding-x: 1.5rem;
 $modal-footer-padding-x: 0;
 $modal-footer-margin-x: 1.5rem;
 
-$modal-title-font-weight: 900;
+$modal-title-font-weight: $font-weight-bolder;
 
 
 // Alerts
@@ -242,7 +261,7 @@ $modal-title-font-weight: 900;
 $alert-font-size: .875rem;
 
 $alert-lead-font-size: $alert-font-size;
-$alert-lead-font-weight: 600;
+$alert-lead-font-weight: $font-weight-semi-bold;
 
 $alert-link-decoration: underline;
 $alert-link-hover-decoration: none;
@@ -281,7 +300,7 @@ $breadcrumb-bg: transparent;
 
 $breadcrumb-divider-color: $gray-700;
 $breadcrumb-active-color: $body-color;
-$breadcrumb-active-font-weight: 800;
+$breadcrumb-active-font-weight: $font-weight-bold;
 
 $breadcrumb-link-color: $gray-700;
 $breadcrumb-link-hover-color: darken($breadcrumb-link-color, 15%);
