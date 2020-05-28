@@ -1,8 +1,13 @@
 package com.churchmutual.rest.service.mock;
 
 import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.service.MockResponseReaderUtil;
+
+import com.liferay.portal.kernel.json.JSONDeserializer;
+import com.liferay.portal.kernel.json.JSONFactory;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Kayleen Lim
@@ -11,41 +16,36 @@ import org.osgi.service.component.annotations.Component;
 public class MockPortalUserWebServiceClient {
 
 	public boolean isUserRegistered(String uuid) {
-
-		//TODO CMIC-176
-
 		return true;
 	}
 
 	public boolean isUserValid(String agentNumber, String divisionNumber, String registrationCode, String uuid) {
-
-		//TODO CMIC-176
-
 		return true;
 	}
 
 	public CMICUser validateUser(String registrationCode) {
+		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUser.json";
 
-		//TODO CMIC-176
+		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		CMICUser user = new CMICUser();
+		JSONDeserializer<CMICUser> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		user.setId(123);
-		user.setRegistrationCode("MOCK");
-
-		return user;
+		return jsonDeserializer.deserialize(fileContent, CMICUser.class);
 	}
 
 	public CMICUser validateUserRegistration(String registrationCode) {
+		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUserRegistration.json";
 
-		//TODO CMIC-176
+		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		CMICUser user = new CMICUser();
+		JSONDeserializer<CMICUser> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		user.setId(123);
-		user.setRegistrationCode("MOCK");
-
-		return user;
+		return jsonDeserializer.deserialize(fileContent, CMICUser.class);
 	}
+
+	private static final String _PORTAL_USER_WEB_SERVICE_DIR = "portal-user-web-service/";
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 }
