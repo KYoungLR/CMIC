@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ public class CmicAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 		HarnessDescriptor.Parameter producerCode = new HarnessDescriptor.Parameter(
 			"producerCode", "producerCode", true, new String[] {"03254", "03253"}, "String[]");
 
-		getAccountsByProducerCodesDescriptor.setParameters(ListUtil.fromArray(producerCode));
+		getAccountsByProducerCodesDescriptor.addParameter(producerCode);
 
 		harnessDescriptors.add(getAccountsByProducerCodesDescriptor);
 
@@ -64,14 +63,14 @@ public class CmicAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 		HarnessDescriptor.Parameter accountNumber = new HarnessDescriptor.Parameter(
 			"accountNumber ", "accountNumber ", true, "00000015", String.class.getName());
 
-		getAccountByAccountNumberDescriptor.setParameters(ListUtil.fromArray(accountNumber));
+		getAccountByAccountNumberDescriptor.addParameter(accountNumber);
 
 		harnessDescriptors.add(getAccountByAccountNumberDescriptor);
 
 		HarnessDescriptor getAddressAccountDescriptor = new HarnessDescriptor(
 			"Get an active account address for a specified account number", _GET_ADDRESS_ACCOUNT, Http.Method.GET);
 
-		getAddressAccountDescriptor.setParameters(ListUtil.fromArray(accountNumber));
+		getAddressAccountDescriptor.addParameter(accountNumber);
 
 		harnessDescriptors.add(getAddressAccountDescriptor);
 

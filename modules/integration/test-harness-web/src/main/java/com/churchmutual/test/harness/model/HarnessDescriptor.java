@@ -2,6 +2,7 @@ package com.churchmutual.test.harness.model;
 
 import com.liferay.portal.kernel.util.Http;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,11 @@ public class HarnessDescriptor {
 		_description = description;
 		_endpoint = endpoint;
 		_method = method;
+		_parameters = new ArrayList<>();
+	}
+
+	public void addParameter(Parameter parameter) {
+		_parameters.add(parameter);
 	}
 
 	public String getDescription() {

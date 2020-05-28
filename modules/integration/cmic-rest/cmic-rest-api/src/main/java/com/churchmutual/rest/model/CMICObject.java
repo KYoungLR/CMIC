@@ -22,7 +22,7 @@ public abstract class CMICObject {
 	public String toString() {
 		JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
 
-		return jsonSerializer.serialize(this);
+		return jsonSerializer.serializeDeep(this);
 	}
 
 }
