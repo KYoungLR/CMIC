@@ -282,6 +282,19 @@ $sticker-user-icon: map-merge((
 // Badges
 
 
+// Labels
+
+$label-text-transform: uppercase;
+
+$label-lg: () !default;
+$label-lg: map-merge((
+	font-size: .75rem,
+	padding-x: 0.65rem,
+	padding-y: 0.325rem,
+	text-transform: null
+), $label-lg);
+
+
 // Modals
 
 $modal-inner-padding: 1.5rem;
