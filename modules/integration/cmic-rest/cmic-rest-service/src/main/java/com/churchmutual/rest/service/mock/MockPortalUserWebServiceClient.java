@@ -1,6 +1,7 @@
 package com.churchmutual.rest.service.mock;
 
 import com.churchmutual.rest.model.CMICUser;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -46,4 +47,5 @@ public class MockPortalUserWebServiceClient {
 
 		return user;
 	}
+
 }

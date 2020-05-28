@@ -14,10 +14,7 @@ import java.io.InputStream;
 public class MockResponseReaderUtil {
 
 	public static String readFile(String fileName) {
-		try (InputStream stream =
-				MockResponseReaderUtil.class.getResourceAsStream(
-					_MOCK_RESPONSE_DIR + fileName)) {
-
+		try (InputStream stream = MockResponseReaderUtil.class.getResourceAsStream(_MOCK_RESPONSE_DIR + fileName)) {
 			return StringUtil.read(stream);
 		}
 		catch (IOException ioe) {
@@ -31,7 +28,6 @@ public class MockResponseReaderUtil {
 
 	private static final String _MOCK_RESPONSE_DIR = "/mock-response/";
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		MockResponseReaderUtil.class);
+	private static final Log _log = LogFactoryUtil.getLog(MockResponseReaderUtil.class);
 
 }

@@ -21,8 +21,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Kayleen Lim
  */
 @Component(
-	configurationPid = "com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration",
-	immediate = true, service = AccountWebService.class
+	configurationPid = "com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration", immediate = true,
+	service = AccountWebService.class
 )
 public class AccountWebServiceImpl implements AccountWebService {
 
@@ -42,14 +42,9 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	@Override
-	public List<CMICAccount> getAccountsSearchByProducer(
-		String[] producerCode) {
-
-		if (_mockAccountWebServiceConfiguration.
-				enableMockGetAccountsSearchByProducer()) {
-
-			return _mockAccountWebServiceClient.getAccountsSearchByProducer(
-				producerCode);
+	public List<CMICAccount> getAccountsSearchByProducer(String[] producerCode) {
+		if (_mockAccountWebServiceConfiguration.enableMockGetAccountsSearchByProducer()) {
+			return _mockAccountWebServiceClient.getAccountsSearchByProducer(producerCode);
 		}
 
 		//TODO CMIC-146
@@ -64,8 +59,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	@Override
 	public CMICAddress getAddressAccount(String accountNumber) {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAddressAccount()) {
-			return _mockAccountWebServiceClient.getAddressAccount(
-				accountNumber);
+			return _mockAccountWebServiceClient.getAddressAccount(accountNumber);
 		}
 
 		//TODO CMIC-146

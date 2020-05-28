@@ -1,10 +1,7 @@
 package com.churchmutual.rest.service;
 
-import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration;
 import com.churchmutual.rest.configuration.MockPortalUserWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICAccount;
 import com.churchmutual.rest.model.CMICUser;
 import com.churchmutual.rest.service.mock.MockPortalUserWebServiceClient;
 

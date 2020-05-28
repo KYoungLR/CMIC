@@ -14,13 +14,21 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 public interface MockAccountWebServiceConfiguration {
 
-	@Meta.AD(deflt = "true", description = "Enable mock for Account Service method /v1/accounts/{accountNumber}", required = false)
+	@Meta.AD(
+		deflt = "true", description = "Enable mock for Account Service method /v1/accounts/{accountNumber}",
+		required = false
+	)
 	public boolean enableMockGetAccounts();
 
-	@Meta.AD(deflt = "true", description = "Enable mock for Account Service method /v1/accounts/search/by-producer", required = false)
+	@Meta.AD(
+		deflt = "true", description = "Enable mock for Account Service method /v1/accounts/search/by-producer",
+		required = false
+	)
 	public boolean enableMockGetAccountsSearchByProducer();
 
-	@Meta.AD(deflt = "true", description = "Enable mock for Account Service method /v1/addresses/account", required = false)
+	@Meta.AD(
+		deflt = "true", description = "Enable mock for Account Service method /v1/addresses/account", required = false
+	)
 	public boolean enableMockGetAddressAccount();
 
 }

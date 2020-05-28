@@ -24,25 +24,19 @@ public class MockAccountWebServiceClient {
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAccount> jsonDeserializer =
-			_jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAccount> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
 		return jsonDeserializer.deserialize(fileContent, CMICAccount.class);
 	}
 
-	public List<CMICAccount> getAccountsSearchByProducer(
-		String[] producerCode) {
-
-		String fileName =
-			_ACCOUNT_WEB_SERVICE_DIR + "getAccountsSearchByProducer.json";
+	public List<CMICAccount> getAccountsSearchByProducer(String[] producerCode) {
+		String fileName = _ACCOUNT_WEB_SERVICE_DIR + "getAccountsSearchByProducer.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAccount[]> jsonDeserializer =
-			_jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAccount[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICAccount[] cmicAccounts = jsonDeserializer.deserialize(
-			fileContent, CMICAccount[].class);
+		CMICAccount[] cmicAccounts = jsonDeserializer.deserialize(fileContent, CMICAccount[].class);
 
 		return ListUtil.fromArray(cmicAccounts);
 	}
@@ -52,14 +46,12 @@ public class MockAccountWebServiceClient {
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAddress> jsonDeserializer =
-			_jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAddress> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
 		return jsonDeserializer.deserialize(fileContent, CMICAddress.class);
 	}
 
-	private static final String _ACCOUNT_WEB_SERVICE_DIR =
-		"account-web-service/";
+	private static final String _ACCOUNT_WEB_SERVICE_DIR = "account-web-service/";
 
 	@Reference
 	private JSONFactory _jsonFactory;
