@@ -49,6 +49,18 @@ $link-decoration: underline;
 $link-hover-color: $link-color;
 $link-hover-decoration: none;
 
+$link-action: () !default;
+$link-action: map-merge((
+	color: $primary,
+	hover-color: $primary-d1,
+	text-decoration: none,
+	hover-text-decoration: underline,
+	text-transform: uppercase,
+	font-size: .815rem,
+	font-weight: 900,
+	letter-spacing: .065rem
+), $link-action);
+
 
 // Components
 

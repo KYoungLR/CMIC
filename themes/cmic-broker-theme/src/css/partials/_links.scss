@@ -1,0 +1,4 @@
+.link-action {
+	letter-spacing: map-get($link-action, letter-spacing);
+	@include clay-link($link-action);
+}
