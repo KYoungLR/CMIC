@@ -1,5 +1,9 @@
 <%@ include file="/init.jsp" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+
 <label for="response">
 	<liferay-ui:message key="response" />
 </label>
@@ -107,6 +111,26 @@
 								type="text"
 								value="${parameter.sampleValue}"
 							/>
+						</c:when>
+						<c:when test="${fn:contains(parameter.type, 'Boolean')}">
+							<aui:input
+								checked="${parameter.sampleValue}"
+								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
+								name="${parameter.name}"
+								required="${parameter.required}"
+								type="checkbox"
+							/>
+						</c:when>
+						<c:when test="${fn:contains(parameter.type, 'Long')}">
+							<aui:input
+								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
+								name="${parameter.name}"
+								required="${parameter.required}"
+								type="text"
+								value="${parameter.sampleValue}"
+							>
+								<aui:validator name="number" />
+							</aui:input>
 						</c:when>
 					</c:choose>
 				</c:forEach>
