@@ -15,7 +15,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true, property = "screen.navigation.category.order:Integer=10", service = ScreenNavigationCategory.class
 )
-public class CmicScreenNavigationCategory implements ScreenNavigationCategory {
+public class CMICScreenNavigationCategory implements ScreenNavigationCategory {
 
 	@Override
 	public String getCategoryKey() {
