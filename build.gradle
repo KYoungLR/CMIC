@@ -8,7 +8,7 @@ configure(subprojects.findAll { !it.subprojects }) {
                 compileOnly group: "com.liferay", name: "com.liferay.osgi.util"
                 compileOnly group: "com.liferay", name: "com.liferay.petra.function"
                 compileOnly group: "com.liferay", name: "com.liferay.petra.lang"
-                compileOnly group: "com.liferay", name: "com.liferay.petra.sql.dsl.api", version: "1.0.0"
+                compileOnly group: "com.liferay", name: "com.liferay.petra.sql.dsl.api", version: "1.0.2"
                 compileOnly group: "com.liferay", name: "com.liferay.petra.string"
                 compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
                 compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib"
