@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true, property = "screen.navigation.entry.order:Integer=20", service = ScreenNavigationEntry.class
 )
-public class CmicPortalUserServiceScreenNavigationEntry extends BaseTestHarnessScreenNavigationEntry {
+public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessScreenNavigationEntry {
 
 	@Override
 	public String getCategoryKey() {

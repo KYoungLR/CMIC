@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true, property = "screen.navigation.entry.order:Integer=10", service = ScreenNavigationEntry.class
 )
-public class CmicAccountServiceScreenNavigationEntry extends BaseTestHarnessScreenNavigationEntry {
+public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScreenNavigationEntry {
 
 	@Override
 	public String getCategoryKey() {
