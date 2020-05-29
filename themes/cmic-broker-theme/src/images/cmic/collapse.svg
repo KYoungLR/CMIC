@@ -4,7 +4,7 @@
 	</g>
 	<defs>
 		<clipPath id="collapse-clip-1">
-			<path transform="rotate(45 17 .03)" fill="#fff" d="M17 .029h24v24H17z"/>
+			<path transform="rotate(45 17 .03)" fill="#fff" d="M17 .029h24v24H17z"></path>
 		</clipPath>
 	</defs>
 </svg>
