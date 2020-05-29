@@ -140,6 +140,25 @@ public class LayoutHelper {
 		return autoLayout;
 	}
 
+	public static Layout addLayoutWith2Columns(
+			long userId, long groupId, LayoutConfig layoutConfig, String templateId,
+			String[] portletKeysCol1, String[] portletKeysCol2)
+		throws PortalException {
+
+		Layout layout = addLayout(userId, groupId, layoutConfig);
+
+		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layout.getLayoutType();
+
+		layoutTypePortlet.setLayoutTemplateId(userId, templateId);
+
+		layoutTypePortlet.addPortletIds(userId, portletKeysCol1, LayoutConstants.COL_ID_COLUMN_1, true);
+
+		layoutTypePortlet.addPortletIds(userId, portletKeysCol2, LayoutConstants.COL_ID_COLUMN_2, true);
+
+		return LayoutLocalServiceUtil.updateLayout(
+			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(), layout.getTypeSettings());
+	}
+
 	public static String addPortletAndPortletPreference(
 			long companyId, long userId, Layout layout,
 			LayoutTypePortlet layoutTypePortlet, String portletKey,
