@@ -15,6 +15,14 @@
 				</layout-template>
 			</custom>
 		</layout-templates>
+		<layout-templates>
+			<custom>
+				<layout-template id="cmic_2_columns_75_25" name="CMIC 2 Columns 75 25">
+					<template-path>/layoutftl/custom/cmic_2_columns_75_25.ftl</template-path>
+					<thumbnail-path>/layoutftl/custom/cmic_2_columns_75_25.png</thumbnail-path>
+				</layout-template>
+			</custom>
+		</layout-templates>
 		<portlet-decorator id="barebone" name="Barebone">
 			<portlet-decorator-css-class>portlet-barebone</portlet-decorator-css-class>
 		</portlet-decorator>
