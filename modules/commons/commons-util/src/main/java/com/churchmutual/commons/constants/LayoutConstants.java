@@ -10,4 +10,6 @@ public class LayoutConstants {
 
 	public static final String LAYOUT_2_COLUMNS_66_33 = "cmic_2_columns_66_33";
 
+	public static final String LAYOUT_2_COLUMNS_75_25 = "cmic_2_columns_75_25";
+
 }
