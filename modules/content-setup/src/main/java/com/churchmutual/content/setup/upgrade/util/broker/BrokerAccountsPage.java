@@ -16,9 +16,14 @@ public class BrokerAccountsPage {
 			"Accounts"
 		).setFriendlyURL(
 			ContentSetupKeys.LAYOUT_FURL_BROKER_ACCOUNTS
+		).addPortletKey(
+			_ACCOUNT_LIST_WEB_PORTLET
 		);
 
 		LayoutHelper.addLayout(userId, groupId, layoutConfig);
 	}
+
+	private static final String _ACCOUNT_LIST_WEB_PORTLET =
+		"com_churchmutual_account_list_web_portlet_AccountListWebPortlet";
 
 }

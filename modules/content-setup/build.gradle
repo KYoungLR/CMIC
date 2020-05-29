@@ -1,5 +1,6 @@
 dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.portal.upgrade.api"
+	compileOnly project(":modules:account:account-api")
 	compileOnly project(":modules:commons:commons-util")
 	compileOnly project(":modules:user-registration:user-registration-api")
 }
