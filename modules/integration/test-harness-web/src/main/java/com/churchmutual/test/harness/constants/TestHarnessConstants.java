@@ -9,6 +9,8 @@ public class TestHarnessConstants {
 
 	public static final String ENTRY_KEY_ACCOUNT_SERVICE = "ACCOUNT_SERVICE";
 
+	public static final String ENTRY_KEY_POLICY_DOCUMENT_SERVICE = "POLICY_DOCUMENT_SERVICE";
+
 	public static final String ENTRY_KEY_PORTAL_USER_SERVICE = "PORTAL_USER_SERVICE";
 
 	public static final String ENTRY_KEY_PRODUCER_SERVICE = "PRODUCER_SERVICE";

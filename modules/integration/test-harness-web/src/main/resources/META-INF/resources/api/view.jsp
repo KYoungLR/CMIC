@@ -109,13 +109,11 @@
 							/>
 						</c:when>
 						<c:when test="${fn:contains(parameter.type, 'Boolean')}">
-							<aui:input
-								checked="${parameter.sampleValue}"
-								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
-								name="${parameter.name}"
-								required="${parameter.required}"
-								type="checkbox"
-							/>
+							<aui:select label="${parameter.name}: ${parameter.type} / ${parameter.description}" name="${parameter.name}" required="${parameter.required}">
+								<aui:option label="" value="" />
+								<aui:option label="true" selected="${parameter.sampleValue eq true}" value="true" />
+								<aui:option label="false" selected="${parameter.sampleValue eq false}" value="false" />
+							</aui:select>
 						</c:when>
 						<c:when test="${fn:contains(parameter.type, 'Long') or fn:contains(parameter.type, 'Integer')}">
 							<aui:input
