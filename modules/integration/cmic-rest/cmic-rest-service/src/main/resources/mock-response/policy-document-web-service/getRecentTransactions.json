@@ -1,0 +1,11 @@
+{
+	"accountNumber": "string",
+	"bytes": "string",
+	"comment": "string",
+	"itemId": "string",
+	"name": "string",
+	"policyNumber": "string",
+	"policyType": "string",
+	"sequenceNumber": "string",
+	"url": "string"
+}
