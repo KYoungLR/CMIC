@@ -1,7 +1,7 @@
 {
-	"name": "com.churchmutual.account.producer.dashboard.web",
+	"name": "com.churchmutual.contact.producer.dashboard.web",
 	"version": "1.0.0",
-	"description": "CMIC Account Producer Dashboard Web",
+	"description": "CMIC Contact Producer Dashboard Web",
 	"devDependencies": {
 		"liferay-npm-bundler": "^2.18.5",
 		"liferay-npm-build-support": "^2.18.5",
@@ -28,7 +28,7 @@
 		"com.liferay.portlet.display-category": "category.churchmutual",
 		"com.liferay.portlet.header-portlet-css": "/css/styles.css",
 		"com.liferay.portlet.instanceable": true,
-		"javax.portlet.name": "com_churchmutual_account_producer_dashboard_web_portlet_AccountProducerDashboardWebPortlet",
+		"javax.portlet.name": "com_churchmutual_contact_producer_dashboard_web_portlet_ContactProducerDashboardWebPortlet",
 		"javax.portlet.security-role-ref": "power-user,user",
 		"javax.portlet.resource-bundle": "content.Language"
 	},

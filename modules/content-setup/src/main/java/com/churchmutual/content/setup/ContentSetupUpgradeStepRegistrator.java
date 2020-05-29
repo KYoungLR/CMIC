@@ -2,7 +2,7 @@ package com.churchmutual.content.setup;
 
 import com.churchmutual.content.setup.upgrade.util.v1_0_0.AddBrokerSiteUpgradeProcess;
 
-import com.churchmutual.user.registration.constants.UserRegistrationConstants;
+import com.churchmutual.user.registration.constants.UserRegistrationPortletKeys;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -45,7 +45,7 @@ public class ContentSetupUpgradeStepRegistrator
 	@Reference
 	protected Portal portal;
 
-	@Reference(target = "(javax.portlet.name=" + UserRegistrationConstants.USER_REGISTRATION_WEB + ")")
+	@Reference(target = "(javax.portlet.name=" + UserRegistrationPortletKeys.USER_REGISTRATION_WEB + ")")
 	protected Portlet userRegistrationWebPortlet;
 
 	@Reference
