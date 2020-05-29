@@ -1,9 +1,5 @@
 <%@ include file="/init.jsp" %>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
-
 <label for="response">
 	<liferay-ui:message key="response" />
 </label>
@@ -121,7 +117,7 @@
 								type="checkbox"
 							/>
 						</c:when>
-						<c:when test="${fn:contains(parameter.type, 'Long')}">
+						<c:when test="${fn:contains(parameter.type, 'Long') or fn:contains(parameter.type, 'Integer')}">
 							<aui:input
 								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
 								name="${parameter.name}"
