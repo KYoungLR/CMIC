@@ -55,7 +55,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 			"sequenceNumber", "sequenceNumber", true, 1, Integer.class.getName()
 		);
 
-		getTransactionDescriptor.setParameters(ListUtil.fromArray(combinedPolicyNumber, sequenceNumber));
+		getTransactionDescriptor.addQueryParameters(combinedPolicyNumber, sequenceNumber);
 
 		HarnessDescriptor getTransactionAccountSummaryByAccountsDescriptor = new HarnessDescriptor(
 			"Get a summary of all transactions grouped by account number on each account specified",
@@ -64,12 +64,12 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		HarnessDescriptor.Parameter accountNumberArray = new HarnessDescriptor.Parameter(
 			"accountNumber", "accountNumber", true, new String[] {"0000015", "0017522"}, "String[]");
 
-		getTransactionAccountSummaryByAccountsDescriptor.addParameter(accountNumberArray);
+		getTransactionAccountSummaryByAccountsDescriptor.addQueryParameters(accountNumberArray);
 
 		HarnessDescriptor getTransactionOnPolicyDescriptor = new HarnessDescriptor(
 			"Get all transactions on a policy", _GET_TRANSACTION_ON_POLICY_ENDPOINT, Http.Method.GET);
 
-		getTransactionOnPolicyDescriptor.addParameter(combinedPolicyNumber);
+		getTransactionOnPolicyDescriptor.addQueryParameters(combinedPolicyNumber);
 
 		HarnessDescriptor getTransactionPolicySummaryByPoliciesDescriptor = new HarnessDescriptor(
 			"Get a summary of all transactions grouped by policy number on each policy specified",
@@ -79,7 +79,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		HarnessDescriptor.Parameter combinedPolicyArrayNumber = new HarnessDescriptor.Parameter(
 			"combinedPolicyNumber", "combinedPolicyNumber", true, new String[] {"0000015 06-008765", "0000015 07-000054"}, "String[]");
 
-		getTransactionPolicySummaryByPoliciesDescriptor.addParameter(combinedPolicyArrayNumber);
+		getTransactionPolicySummaryByPoliciesDescriptor.addQueryParameters(combinedPolicyArrayNumber);
 
 		HarnessDescriptor getTransactionPolicySummaryOnAccountDescriptor = new HarnessDescriptor(
 			"Get a summary of all transactions grouped by policy number for each policy on an account",
@@ -89,7 +89,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		HarnessDescriptor.Parameter accountNumber = new HarnessDescriptor.Parameter(
 			"accountNumber", "accountNumber", true, "0000015", String.class.getName());
 
-		getTransactionPolicySummaryOnAccountDescriptor.addParameter(accountNumber);
+		getTransactionPolicySummaryOnAccountDescriptor.addQueryParameters(accountNumber);
 
 		return ListUtil.fromArray(
 			getTransactionDescriptor, getTransactionAccountSummaryByAccountsDescriptor,

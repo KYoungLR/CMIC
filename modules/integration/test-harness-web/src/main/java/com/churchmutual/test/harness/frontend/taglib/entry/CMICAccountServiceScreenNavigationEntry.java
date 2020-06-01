@@ -52,7 +52,7 @@ public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 		HarnessDescriptor.Parameter producerCode = new HarnessDescriptor.Parameter(
 			"producerCode", "producerCode", true, new String[] {"03254", "03253"}, "String[]");
 
-		getAccountsByProducerCodesDescriptor.addParameter(producerCode);
+		getAccountsByProducerCodesDescriptor.addQueryParameters(producerCode);
 
 		harnessDescriptors.add(getAccountsByProducerCodesDescriptor);
 
@@ -63,14 +63,14 @@ public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 		HarnessDescriptor.Parameter accountNumber = new HarnessDescriptor.Parameter(
 			"accountNumber ", "accountNumber ", true, "00000015", String.class.getName());
 
-		getAccountByAccountNumberDescriptor.addParameter(accountNumber);
+		getAccountByAccountNumberDescriptor.addPathParameters(accountNumber);
 
 		harnessDescriptors.add(getAccountByAccountNumberDescriptor);
 
 		HarnessDescriptor getAddressAccountDescriptor = new HarnessDescriptor(
 			"Get an active account address for a specified account number", _GET_ADDRESS_ACCOUNT, Http.Method.GET);
 
-		getAddressAccountDescriptor.addParameter(accountNumber);
+		getAddressAccountDescriptor.addQueryParameters(accountNumber);
 
 		harnessDescriptors.add(getAddressAccountDescriptor);
 

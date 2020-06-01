@@ -1,6 +1,7 @@
 package com.churchmutual.test.harness.model;
 
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,22 @@ public class HarnessDescriptor {
 		_description = description;
 		_endpoint = endpoint;
 		_method = method;
-		_parameters = new ArrayList<>();
+		_bodyParameters = new ArrayList<>();
+		_pathParameters = new ArrayList<>();
+		_queryParameters = new ArrayList<>();
+
 	}
 
-	public void addParameter(Parameter parameter) {
-		_parameters.add(parameter);
+	public void addBodyParameters(Parameter... parameters) {
+		_bodyParameters.addAll(ListUtil.fromArray(parameters));
+	}
+
+	public void addPathParameters(Parameter... parameters) {
+		_pathParameters.addAll(ListUtil.fromArray(parameters));
+	}
+
+	public void addQueryParameters(Parameter... parameters) {
+		_queryParameters.addAll(ListUtil.fromArray(parameters));
 	}
 
 	public String getDescription() {
@@ -33,12 +45,28 @@ public class HarnessDescriptor {
 		return _method;
 	}
 
-	public List<Parameter> getParameters() {
-		return _parameters;
+	public List<Parameter> getBodyParameters() {
+		return _bodyParameters;
 	}
 
-	public void setParameters(List<Parameter> parameters) {
-		_parameters = parameters;
+	public void setBodyParameters(List<Parameter> parameters) {
+		_bodyParameters = parameters;
+	}
+
+	public List<Parameter> getPathParameters() {
+		return _pathParameters;
+	}
+
+	public void setPathParameters(List<Parameter> parameters) {
+		_pathParameters = parameters;
+	}
+
+	public List<Parameter> getQueryParameters() {
+		return _queryParameters;
+	}
+
+	public void setQueryParameters(List<Parameter> parameters) {
+		_queryParameters = parameters;
 	}
 
 	public static class Parameter {
@@ -86,9 +114,11 @@ public class HarnessDescriptor {
 
 	}
 
+	private List<Parameter> _bodyParameters;
 	private String _description;
 	private String _endpoint;
 	private Http.Method _method;
-	private List<Parameter> _parameters;
+	private List<Parameter> _pathParameters;
+	private List<Parameter> _queryParameters;
 
 }

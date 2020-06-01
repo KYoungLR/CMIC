@@ -46,89 +46,38 @@
 				<strong><liferay-ui:message key="method-description" />:</strong> ${harnessDescriptor.description}
 			</div>
 
-			<div>
-				<strong><liferay-ui:message key="parameters" />:</strong>
-			</div>
+			<c:if test="${harnessDescriptor.pathParameters.size() > 0}">
+				<div>
+					<strong><liferay-ui:message key="path-parameters" />:</strong>
+				</div>
 
-			<div>
-				<c:forEach items="${harnessDescriptor.parameters}" var="parameter">
-					<c:choose>
-						<c:when test="${fn:contains(parameter.type, '[]')}">
-							<div class="array-field">
-								<div class="d-none row template-row">
-									<div class="col-9">
-										<aui:input
-											label=""
-											name="${parameter.name}"
-											required="${parameter.required}"
-											type="text"
-										/>
-									</div>
+				<div>
+					<c:set value="${harnessDescriptor.pathParameters}" var="parameters" />
+					<%@ include file="/api/parameters.jspf" %>
+				</div>
+			</c:if>
 
-									<div class="col-3">
-										<button class="btn btn-default remove-item" type="button"><liferay-ui:message key="remove" /></button>
-									</div>
-								</div>
+			<c:if test="${harnessDescriptor.queryParameters.size() > 0}">
+				<div>
+					<strong><liferay-ui:message key="query-parameters" />:</strong>
+				</div>
 
-								<c:forEach items="${parameter.sampleValue}" var="sampleValue" varStatus="loop">
-									<c:set value="${parameter.name}: ${parameter.type} / ${parameter.description}" var="label" />
+				<div>
+					<c:set value="${harnessDescriptor.queryParameters}" var="parameters" />
+					<%@ include file="/api/parameters.jspf" %>
+				</div>
+			</c:if>
 
-									<c:if test="${loop.index > 0}">
-										<c:set value="" var="label" />
-									</c:if>
+			<c:if test="${harnessDescriptor.bodyParameters.size() > 0}">
+				<div>
+					<strong><liferay-ui:message key="body-parameters" />:</strong>
+				</div>
 
-									<div class="row">
-										<div class="col-9">
-											<aui:input
-												label="${label}"
-												name="${parameter.name}"
-												required="${parameter.required}"
-												type="text"
-												value="${sampleValue}"
-											/>
-										</div>
-
-										<div class="col-3">
-											<c:if test="${loop.index > 0}">
-												<button class="btn btn-default remove-item" type="button"><liferay-ui:message key="remove" /></button>
-											</c:if>
-										</div>
-									</div>
-								</c:forEach>
-
-								<button class="add-item btn btn-default" type="button"><liferay-ui:message key="add-item" /></button>
-							</div>
-						</c:when>
-						<c:when test="${fn:contains(parameter.type, 'String')}">
-							<aui:input
-								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
-								name="${parameter.name}"
-								required="${parameter.required}"
-								type="text"
-								value="${parameter.sampleValue}"
-							/>
-						</c:when>
-						<c:when test="${fn:contains(parameter.type, 'Boolean')}">
-							<aui:select label="${parameter.name}: ${parameter.type} / ${parameter.description}" name="${parameter.name}" required="${parameter.required}">
-								<aui:option label="" value="" />
-								<aui:option label="true" selected="${parameter.sampleValue eq true}" value="true" />
-								<aui:option label="false" selected="${parameter.sampleValue eq false}" value="false" />
-							</aui:select>
-						</c:when>
-						<c:when test="${fn:contains(parameter.type, 'Long') or fn:contains(parameter.type, 'Integer')}">
-							<aui:input
-								label="${parameter.name}: ${parameter.type} / ${parameter.description}"
-								name="${parameter.name}"
-								required="${parameter.required}"
-								type="text"
-								value="${parameter.sampleValue}"
-							>
-								<aui:validator name="number" />
-							</aui:input>
-						</c:when>
-					</c:choose>
-				</c:forEach>
-			</div>
+				<div>
+					<c:set value="${harnessDescriptor.bodyParameters}" var="parameters" />
+					<%@ include file="/api/parameters.jspf" %>
+				</div>
+			</c:if>
 
 			<aui:input name="screenNavigationCategoryKey" type="hidden" value="${screenNavigationCategoryKey}" />
 			<aui:input name="screenNavigationEntryKey" type="hidden" value="${screenNavigationEntryKey}" />

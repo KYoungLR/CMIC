@@ -49,7 +49,7 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 		HarnessDescriptor.Parameter uuid = new HarnessDescriptor.Parameter(
 			"uuid", "uuid", true, "e7575932-9235-4829-8399-88d08d4c7542", "String");
 
-		isUserRegisteredDescriptor.addParameter(uuid);
+		isUserRegisteredDescriptor.addQueryParameters(uuid);
 
 		HarnessDescriptor isUserValidDescriptor = new HarnessDescriptor(
 			"Find out if Producer is registered based on combination of division, agent, UUID and registrationCode",
@@ -64,18 +64,18 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 		HarnessDescriptor.Parameter registrationCode = new HarnessDescriptor.Parameter(
 			"registrationCode", "registrationCode", true, "Kjh9vTJB", "String");
 
-		isUserValidDescriptor.setParameters(ListUtil.fromArray(agentNumber, divisionNumber, registrationCode, uuid));
+		isUserValidDescriptor.addQueryParameters(agentNumber, divisionNumber, registrationCode, uuid);
 
 		HarnessDescriptor validateUserDescriptor = new HarnessDescriptor(
 			"validate a User with registration code", _VALIDATE_USER_ENDPOINT, Http.Method.POST);
 
-		validateUserDescriptor.addParameter(registrationCode);
+		validateUserDescriptor.addQueryParameters(registrationCode);
 
 		HarnessDescriptor validateUserRegistrationDescriptor = new HarnessDescriptor(
 			"validate a user exists with a registration code, meaning if registration code look up returns a user object",
 			_VALIDATE_USER_REGISTRATION_ENDPOINT, Http.Method.POST);
 
-		validateUserRegistrationDescriptor.addParameter(registrationCode);
+		validateUserRegistrationDescriptor.addQueryParameters(registrationCode);
 
 		return ListUtil.fromArray(
 			isUserRegisteredDescriptor, isUserValidDescriptor, validateUserDescriptor,

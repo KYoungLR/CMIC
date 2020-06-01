@@ -49,14 +49,14 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 		HarnessDescriptor.Parameter producerId = new HarnessDescriptor.Parameter(
 			"producerId", "producerId", true, 4498L, Long.class.getName());
 
-		getContactsDescriptor.addParameter(producerId);
+		getContactsDescriptor.addQueryParameters(producerId);
 
 		HarnessDescriptor getProducerByIdDescriptor = new HarnessDescriptor(
 			"Get a producer by its id.", _GET_PRODUCER_BY_ID_ENDPOINT, Http.Method.GET);
 
 		HarnessDescriptor.Parameter id = new HarnessDescriptor.Parameter("id", "id", true, 4498L, Long.class.getName());
 
-		getProducerByIdDescriptor.addParameter(id);
+		getProducerByIdDescriptor.addPathParameters(id);
 
 		HarnessDescriptor getProducersDescriptor = new HarnessDescriptor(
 			"Get a list of producers optionally filtered by any combination of division, agent, name, and whether or " +
@@ -75,7 +75,7 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 		HarnessDescriptor.Parameter payOutOfCdms = new HarnessDescriptor.Parameter(
 			"payOutOfCdms", "payOutOfCdms", false, false, Boolean.class.getName());
 
-		getProducersDescriptor.setParameters(ListUtil.fromArray(agent, division, name, payOutOfCdms));
+		getProducersDescriptor.addQueryParameters(agent, division, name, payOutOfCdms);
 
 		return ListUtil.fromArray(getContactsDescriptor, getProducerByIdDescriptor, getProducersDescriptor);
 	}
