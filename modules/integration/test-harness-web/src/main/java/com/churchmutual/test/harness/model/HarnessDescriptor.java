@@ -1,9 +1,9 @@
 package com.churchmutual.test.harness.model;
 
 import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,19 +18,22 @@ public class HarnessDescriptor {
 		_bodyParameters = new ArrayList<>();
 		_pathParameters = new ArrayList<>();
 		_queryParameters = new ArrayList<>();
-
 	}
 
 	public void addBodyParameters(Parameter... parameters) {
-		_bodyParameters.addAll(ListUtil.fromArray(parameters));
+		Collections.addAll(_bodyParameters, parameters);
 	}
 
 	public void addPathParameters(Parameter... parameters) {
-		_pathParameters.addAll(ListUtil.fromArray(parameters));
+		Collections.addAll(_pathParameters, parameters);
 	}
 
 	public void addQueryParameters(Parameter... parameters) {
-		_queryParameters.addAll(ListUtil.fromArray(parameters));
+		Collections.addAll(_queryParameters, parameters);
+	}
+
+	public List<Parameter> getBodyParameters() {
+		return _bodyParameters;
 	}
 
 	public String getDescription() {
@@ -45,24 +48,20 @@ public class HarnessDescriptor {
 		return _method;
 	}
 
-	public List<Parameter> getBodyParameters() {
-		return _bodyParameters;
+	public List<Parameter> getPathParameters() {
+		return _pathParameters;
+	}
+
+	public List<Parameter> getQueryParameters() {
+		return _queryParameters;
 	}
 
 	public void setBodyParameters(List<Parameter> parameters) {
 		_bodyParameters = parameters;
 	}
 
-	public List<Parameter> getPathParameters() {
-		return _pathParameters;
-	}
-
 	public void setPathParameters(List<Parameter> parameters) {
 		_pathParameters = parameters;
-	}
-
-	public List<Parameter> getQueryParameters() {
-		return _queryParameters;
 	}
 
 	public void setQueryParameters(List<Parameter> parameters) {

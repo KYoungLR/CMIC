@@ -72,7 +72,8 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 		validateUserDescriptor.addQueryParameters(registrationCode);
 
 		HarnessDescriptor validateUserRegistrationDescriptor = new HarnessDescriptor(
-			"validate a user exists with a registration code, meaning if registration code look up returns a user object",
+			"validate a user exists with a registration code, meaning if registration code look up returns a user " +
+				"object",
 			_VALIDATE_USER_REGISTRATION_ENDPOINT, Http.Method.POST);
 
 		validateUserRegistrationDescriptor.addQueryParameters(registrationCode);

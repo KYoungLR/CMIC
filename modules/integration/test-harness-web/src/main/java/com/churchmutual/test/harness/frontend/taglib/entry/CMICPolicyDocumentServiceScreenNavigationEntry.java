@@ -56,14 +56,12 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 		HarnessDescriptor getRecentTransactionsDescriptor = new HarnessDescriptor(
 			"Download transaction document", _GET_RECENT_TRANSACTIONS_ENDPOINT, Http.Method.POST);
 
-		getRecentTransactionsDescriptor.addQueryParameters(
-			accountNum, includeBytes, policyNum, policyType);
+		getRecentTransactionsDescriptor.addQueryParameters(accountNum, includeBytes, policyNum, policyType);
 
 		HarnessDescriptor getTransactionsDescriptor = new HarnessDescriptor(
 			"Download transaction document", _GET_TRANSACTIONS_ENDPOINT, Http.Method.POST);
 
-		getTransactionsDescriptor.addQueryParameters(
-			accountNum, includeBytes, policyNum, policyType, sequenceNum);
+		getTransactionsDescriptor.addQueryParameters(accountNum, includeBytes, policyNum, policyType, sequenceNum);
 
 		return ListUtil.fromArray(getRecentTransactionsDescriptor, getTransactionsDescriptor);
 	}

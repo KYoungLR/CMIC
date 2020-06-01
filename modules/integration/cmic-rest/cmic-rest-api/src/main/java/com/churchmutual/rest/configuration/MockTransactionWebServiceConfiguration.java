@@ -27,15 +27,15 @@ public interface MockTransactionWebServiceConfiguration {
 	public boolean enableMockGetTransactionAccountSummaryByAccounts();
 
 	@Meta.AD(
-			deflt = "true", description = "Enable mock for Transaction Service method /v1/transactions/on-policy",
-			required = false
+		deflt = "true", description = "Enable mock for Transaction Service method /v1/transactions/on-policy",
+		required = false
 	)
 	public boolean enableMockGetTransactionOnPolicy();
 
 	@Meta.AD(
-			deflt = "true",
-			description = "Enable mock for Transaction Service method /v1/transaction-policy-summary/policies",
-			required = false
+		deflt = "true",
+		description = "Enable mock for Transaction Service method /v1/transaction-policy-summary/policies",
+		required = false
 	)
 	public boolean enableMockGetTransactionPolicySummaryByPolicies();
 

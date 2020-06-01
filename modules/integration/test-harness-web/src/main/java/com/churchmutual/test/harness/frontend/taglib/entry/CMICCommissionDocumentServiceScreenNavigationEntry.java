@@ -1,13 +1,11 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
-import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.CommissionDocumentWebService;
-import com.churchmutual.rest.model.CMICAccount;
-import com.churchmutual.rest.model.CMICAddress;
 import com.churchmutual.rest.model.CMICCommissionDocument;
 import com.churchmutual.rest.model.CMICFile;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
+
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -16,13 +14,14 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
-import javax.portlet.PortletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.portlet.PortletRequest;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Kayleen Lim
@@ -44,13 +43,12 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 
 	@Override
 	public List<HarnessDescriptor> getHarnessDescriptors() {
-
 		HarnessDescriptor downloadDocumentsDescriptor = new HarnessDescriptor(
 			"Download for document", _DOWNLOAD_DOCUMENTS_ENDPOINT, Http.Method.POST);
 
 		HarnessDescriptor.Parameter ids = new HarnessDescriptor.Parameter(
 			"ids", "ids", true,
-			new String [] {
+			new String[] {
 				"92 3 ICM8 ICMDEVDB12 ProducerStmt59 26 A1001001A17B23B31738D0009718 A17B23B31738D000971 14 1285"
 			},
 			"String[]");
@@ -63,8 +61,7 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 		downloadDocumentsDescriptor.addQueryParameters(includeBytes);
 
 		HarnessDescriptor searchDocumentsDescriptor = new HarnessDescriptor(
-			"Search for document", _SEARCH_DOCUMENTS_ENDPOINT, Http.Method.GET
-		);
+			"Search for document", _SEARCH_DOCUMENTS_ENDPOINT, Http.Method.GET);
 
 		HarnessDescriptor.Parameter agentNumber = new HarnessDescriptor.Parameter(
 			"agentNumber", "agentNumber", true, "638", "String");
@@ -118,7 +115,7 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 		}
 		else if (_SEARCH_DOCUMENTS_ENDPOINT.equals(endpoint)) {
 			String agentNumber = ParamUtil.getString(portletRequest, "agentNumber");
-			String divisionNumber =ParamUtil.getString(portletRequest, "divisionNumber");
+			String divisionNumber = ParamUtil.getString(portletRequest, "divisionNumber");
 			String documentType = ParamUtil.getString(portletRequest, "documentType");
 			String maximumStatementDate = ParamUtil.getString(portletRequest, "maximumStatementDate");
 			String minimumStatementDate = ParamUtil.getString(portletRequest, "minimumStatementDate");

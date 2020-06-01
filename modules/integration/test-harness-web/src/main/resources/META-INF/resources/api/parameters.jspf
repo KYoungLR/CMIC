@@ -5,10 +5,10 @@
 				<div class="d-none row template-row">
 					<div class="col-9">
 						<aui:input
-								label=""
-								name="${parameter.name}"
-								required="${parameter.required}"
-								type="text"
+							label=""
+							name="${parameter.name}"
+							required="${parameter.required}"
+							type="text"
 						/>
 					</div>
 
@@ -27,11 +27,11 @@
 					<div class="row">
 						<div class="col-9">
 							<aui:input
-									label="${label}"
-									name="${parameter.name}"
-									required="${parameter.required}"
-									type="text"
-									value="${sampleValue}"
+								label="${label}"
+								name="${parameter.name}"
+								required="${parameter.required}"
+								type="text"
+								value="${sampleValue}"
 							/>
 						</div>
 
@@ -48,11 +48,11 @@
 		</c:when>
 		<c:when test="${fn:contains(parameter.type, 'String')}">
 			<aui:input
-					label="${parameter.name}: ${parameter.type} / ${parameter.description}"
-					name="${parameter.name}"
-					required="${parameter.required}"
-					type="text"
-					value="${parameter.sampleValue}"
+				label="${parameter.name}: ${parameter.type} / ${parameter.description}"
+				name="${parameter.name}"
+				required="${parameter.required}"
+				type="text"
+				value="${parameter.sampleValue}"
 			/>
 		</c:when>
 		<c:when test="${fn:contains(parameter.type, 'Boolean')}">
@@ -64,11 +64,11 @@
 		</c:when>
 		<c:when test="${fn:contains(parameter.type, 'Long') or fn:contains(parameter.type, 'Integer')}">
 			<aui:input
-					label="${parameter.name}: ${parameter.type} / ${parameter.description}"
-					name="${parameter.name}"
-					required="${parameter.required}"
-					type="text"
-					value="${parameter.sampleValue}"
+				label="${parameter.name}: ${parameter.type} / ${parameter.description}"
+				name="${parameter.name}"
+				required="${parameter.required}"
+				type="text"
+				value="${parameter.sampleValue}"
 			>
 				<aui:validator name="number" />
 			</aui:input>

@@ -4,7 +4,6 @@ import com.churchmutual.rest.model.CMICCommissionDocument;
 import com.churchmutual.rest.model.CMICFile;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -14,6 +13,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class MockCommissionDocumentWebServiceClient {
 
 				CMICFile[] files = jsonDeserializer.deserialize(fileArray, CMICFile[].class);
 
-				allFiles.addAll(ListUtil.fromArray(files));
+				Collections.addAll(allFiles, files);
 			}
 		}
 		catch (JSONException jsone) {
@@ -77,8 +77,9 @@ public class MockCommissionDocumentWebServiceClient {
 
 	private static final String _COMMISSION_DOCUMENT_WEB_SERVICE_DIR = "commission-document-web-service/";
 
+	private static final Log _log = LogFactoryUtil.getLog(MockCommissionDocumentWebServiceClient.class);
+
 	@Reference
 	private JSONFactory _jsonFactory;
 
-	private static final Log _log = LogFactoryUtil.getLog(MockCommissionDocumentWebServiceClient.class);
 }

@@ -45,15 +45,13 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 	@Override
 	public List<HarnessDescriptor> getHarnessDescriptors() {
 		HarnessDescriptor getTransactionDescriptor = new HarnessDescriptor(
-			"Get a specific transaction on a policy", _GET_TRANSACTION_ENDPOINT, Http.Method.GET
-		);
+			"Get a specific transaction on a policy", _GET_TRANSACTION_ENDPOINT, Http.Method.GET);
 
 		HarnessDescriptor.Parameter combinedPolicyNumber = new HarnessDescriptor.Parameter(
 			"combinedPolicyNumber", "combinedPolicyNumber", true, "0000015 06-008765", String.class.getName());
 
 		HarnessDescriptor.Parameter sequenceNumber = new HarnessDescriptor.Parameter(
-			"sequenceNumber", "sequenceNumber", true, 1, Integer.class.getName()
-		);
+			"sequenceNumber", "sequenceNumber", true, 1, Integer.class.getName());
 
 		getTransactionDescriptor.addQueryParameters(combinedPolicyNumber, sequenceNumber);
 
@@ -73,18 +71,17 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 
 		HarnessDescriptor getTransactionPolicySummaryByPoliciesDescriptor = new HarnessDescriptor(
 			"Get a summary of all transactions grouped by policy number on each policy specified",
-			_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_ENDPOINT, Http.Method.GET
-		);
+			_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_ENDPOINT, Http.Method.GET);
 
 		HarnessDescriptor.Parameter combinedPolicyArrayNumber = new HarnessDescriptor.Parameter(
-			"combinedPolicyNumber", "combinedPolicyNumber", true, new String[] {"0000015 06-008765", "0000015 07-000054"}, "String[]");
+			"combinedPolicyNumber", "combinedPolicyNumber", true,
+			new String[] {"0000015 06-008765", "0000015 07-000054"}, "String[]");
 
 		getTransactionPolicySummaryByPoliciesDescriptor.addQueryParameters(combinedPolicyArrayNumber);
 
 		HarnessDescriptor getTransactionPolicySummaryOnAccountDescriptor = new HarnessDescriptor(
 			"Get a summary of all transactions grouped by policy number for each policy on an account",
-			_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_ENDPOINT, Http.Method.GET
-		);
+			_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_ENDPOINT, Http.Method.GET);
 
 		HarnessDescriptor.Parameter accountNumber = new HarnessDescriptor.Parameter(
 			"accountNumber", "accountNumber", true, "0000015", String.class.getName());
@@ -94,8 +91,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		return ListUtil.fromArray(
 			getTransactionDescriptor, getTransactionAccountSummaryByAccountsDescriptor,
 			getTransactionOnPolicyDescriptor, getTransactionPolicySummaryByPoliciesDescriptor,
-			getTransactionPolicySummaryOnAccountDescriptor
-		);
+			getTransactionPolicySummaryOnAccountDescriptor);
 	}
 
 	@Override
@@ -139,11 +135,9 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		else if (_GET_TRANSACTION_ON_POLICY_ENDPOINT.equals(endpoint)) {
 			String combinedPolicyNumber = ParamUtil.getString(portletRequest, "combinedPolicyNumber");
 
-			List<CMICTransaction> transactions =
-				_transactionWebService.getTransactionOnPolicy(combinedPolicyNumber);
+			List<CMICTransaction> transactions = _transactionWebService.getTransactionOnPolicy(combinedPolicyNumber);
 
-			transactions.forEach(
-				transaction -> response.put(transaction.toJSONObject()));
+			transactions.forEach(transaction -> response.put(transaction.toJSONObject()));
 		}
 		else if (_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_ENDPOINT.equals(endpoint)) {
 			String[] combinedPolicyNumber = ParamUtil.getStringValues(portletRequest, "combinedPolicyNumber");
@@ -167,10 +161,10 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		return response.toString();
 	}
 
-	private static final String _GET_TRANSACTION_ENDPOINT = "/v1/transactions";
-
 	private static final String _GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS_ENDPOINT =
 		"/v1/transaction-account-summary/accounts";
+
+	private static final String _GET_TRANSACTION_ENDPOINT = "/v1/transactions";
 
 	private static final String _GET_TRANSACTION_ON_POLICY_ENDPOINT = "/v1/transactions/on-policy";
 
