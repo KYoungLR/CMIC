@@ -60,11 +60,20 @@ public class ContentSetupUpgradeStepRegistrator
 	@Reference(target = "(javax.portlet.name=com_churchmutual_loss_run_report_web_portlet_LossRunReportWebPortlet)")
 	protected Portlet lossRunReportWebPortlet;
 
+	@Reference(target = "(javax.portlet.name=com_churchmutual_organization_profile_web_portlet_OrganizationProfileWebPortlet)")
+	protected Portlet organizationProfileWebPortlet;
+
 	@Reference(target = "(javax.portlet.name=com_churchmutual_policy_list_web_portlet_PolicyListWebPortlet)")
 	protected Portlet policyListWebPortlet;
 
+	@Reference(target = "(javax.portlet.name=com_churchmutual_profile_web_portlet_ProfileWebPortlet)")
+	protected Portlet profileWebPortlet;
+
 	@Reference(target = "(javax.portlet.name=com_churchmutual_self_provisioning_invite_insured_web_portlet_SelfProvisioningInviteInsuredWebPortlet)")
 	protected Portlet selfProvisioningInviteInsuredWebPortlet;
+
+	@Reference(target = "(javax.portlet.name=com_churchmutual_self_provisioning_web_portlet_SelfProvisioningWebPortlet)")
+	protected Portlet selfProvisioningWebPortlet;
 
 	@Reference(target = "(javax.portlet.name=com_churchmutual_transaction_list_web_portlet_TransactionListWebPortlet)")
 	protected Portlet transactionListWebPortlet;

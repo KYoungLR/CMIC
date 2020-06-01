@@ -5,6 +5,7 @@ import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerContactsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerDashboardPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerPolicyDetailsPage;
+import com.churchmutual.content.setup.upgrade.util.broker.BrokerProfilePage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerResourcesPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerUserRegistrationPage;
 import com.churchmutual.content.setup.upgrade.util.common.BaseSiteUpgradeProcess;
@@ -58,6 +59,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		BrokerPolicyDetailsPage.addPage(companyId, userId, groupId);
 		BrokerResourcesPage.addPage(companyId, userId, groupId);
 		BrokerContactsPage.addPage(companyId, userId, groupId);
+		BrokerProfilePage.addPage(companyId, userId, groupId);
 	}
 
 	private void _addPublicPages(long companyId, long userId, long groupId) throws Exception {

@@ -15,6 +15,8 @@ public class ContentSetupKeys {
 
 	public static final String LAYOUT_FURL_BROKER_POLICY_DETAILS = "/policy-details";
 
+	public static final String LAYOUT_FURL_BROKER_PROFILE = "/profile";
+
 	public static final String LAYOUT_FURL_BROKER_RESOURCES = "/resources";
 
 	public static final String LAYOUT_FURL_BROKER_USER_REGISTRATION = "/user-registration";
