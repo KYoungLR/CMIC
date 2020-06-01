@@ -11,11 +11,15 @@ import com.churchmutual.user.registration.constants.UserRegistrationPortletKeys;
 public class BrokerUserRegistrationPage {
 
 	public static void addPage(long companyId, long userId, long groupId) throws Exception {
-		LayoutConfig layoutConfig = new LayoutConfig()
-			.setName("User Registration")
-			.setFriendlyURL(ContentSetupKeys.LAYOUT_FURL_BROKER_USER_REGISTRATION)
-			.addPortletKey(UserRegistrationPortletKeys.USER_REGISTRATION_WEB)
-			.setPrivatePage(false);
+		LayoutConfig layoutConfig = new LayoutConfig().setName(
+			"User Registration"
+		).setFriendlyURL(
+			ContentSetupKeys.LAYOUT_FURL_BROKER_USER_REGISTRATION
+		).addPortletKey(
+			UserRegistrationPortletKeys.USER_REGISTRATION_WEB
+		).setPrivatePage(
+			false
+		);
 
 		LayoutHelper.addLayoutWithPortlet(userId, groupId, layoutConfig);
 	}

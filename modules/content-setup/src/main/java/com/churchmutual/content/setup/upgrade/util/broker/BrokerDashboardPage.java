@@ -17,7 +17,9 @@ public class BrokerDashboardPage {
 			ContentSetupKeys.LAYOUT_FURL_BROKER_DASHBOARD
 		);
 
-		LayoutHelper.addLayoutWith2Columns(userId, groupId, layoutConfig, LayoutConstants.LAYOUT_2_COLUMNS_66_33, _PORTLETS_COLUMN_1, _PORTLETS_COLUMN_2);
+		LayoutHelper.addLayoutWith2Columns(
+			userId, groupId, layoutConfig, LayoutConstants.LAYOUT_2_COLUMNS_66_33, _PORTLETS_COLUMN_1,
+			_PORTLETS_COLUMN_2);
 	}
 
 	private static final String[] _PORTLETS_COLUMN_1 = {

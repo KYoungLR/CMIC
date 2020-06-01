@@ -28,15 +28,11 @@ import java.util.Map;
 public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 	public BaseSiteUpgradeProcess(
-		GroupLocalService groupLocalService,
-		LayoutSetLocalService layoutSetLocalService,
-		PermissionCheckerFactory permissionCheckerFactory, Portal portal,
-		RoleLocalService roleLocalService, UserLocalService userLocalService,
-		VirtualHostLocalService virtualHostLocalService) {
+		GroupLocalService groupLocalService, LayoutSetLocalService layoutSetLocalService,
+		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
+		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
 
-		super(
-			permissionCheckerFactory, portal, roleLocalService,
-			userLocalService);
+		super(permissionCheckerFactory, portal, roleLocalService, userLocalService);
 
 		this.groupLocalService = groupLocalService;
 		this.layoutSetLocalService = layoutSetLocalService;
@@ -44,9 +40,7 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		this.virtualHostLocalService = virtualHostLocalService;
 	}
 
-	protected Group addGroup(
-			long companyId, String name, String description, int type,
-			String friendlyURL)
+	protected Group addGroup(long companyId, String name, String description, int type, String friendlyURL)
 		throws PortalException {
 
 		ServiceContext serviceContext = getDefaultServiceContext(companyId);
@@ -60,27 +54,17 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		descriptionMap.put(Locale.getDefault(), description);
 
 		return groupLocalService.addGroup(
-			userLocalService.getDefaultUserId(companyId),
-			GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0, nameMap,
-			descriptionMap, type, true,
-			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, friendlyURL, true,
-			true, serviceContext);
+			userLocalService.getDefaultUserId(companyId), GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0, nameMap,
+			descriptionMap, type, true, GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, friendlyURL, true, true,
+			serviceContext);
 	}
 
-	protected long addPortalSite(
-			long companyId, String name, String friendlyURL)
-		throws PortalException {
-
-		return addPortalSite(
-			companyId, name, friendlyURL, GroupConstants.TYPE_SITE_PRIVATE);
+	protected long addPortalSite(long companyId, String name, String friendlyURL) throws PortalException {
+		return addPortalSite(companyId, name, friendlyURL, GroupConstants.TYPE_SITE_PRIVATE);
 	}
 
-	protected long addPortalSite(
-			long companyId, String name, String friendlyURL, int siteType)
-		throws PortalException {
-
-		Group group = addGroup(
-			companyId, name, StringPool.BLANK, siteType, friendlyURL);
+	protected long addPortalSite(long companyId, String name, String friendlyURL, int siteType) throws PortalException {
+		Group group = addGroup(companyId, name, StringPool.BLANK, siteType, friendlyURL);
 
 		long groupId = group.getGroupId();
 
@@ -88,18 +72,14 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		// Update site theme
 
-		layoutSetLocalService.updateLookAndFeel(
-			groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
+		layoutSetLocalService.updateLookAndFeel(groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
 
-		layoutSetLocalService.updateLookAndFeel(
-			groupId, false, themeId, StringPool.BLANK, StringPool.BLANK);
+		layoutSetLocalService.updateLookAndFeel(groupId, false, themeId, StringPool.BLANK, StringPool.BLANK);
 
 		return groupId;
 	}
 
-	protected ServiceContext getDefaultServiceContext(long companyId)
-		throws PortalException {
-
+	protected ServiceContext getDefaultServiceContext(long companyId) throws PortalException {
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(companyId);
@@ -108,17 +88,12 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		return serviceContext;
 	}
 
-	protected void updateVirtualHost(
-			long companyId, long groupId, String hostname,
-			boolean privateLayout)
+	protected void updateVirtualHost(long companyId, long groupId, String hostname, boolean privateLayout)
 		throws PortalException {
 
-		LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(
-			groupId, privateLayout);
+		LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(groupId, privateLayout);
 
-		if (Validator.isNotNull(
-				virtualHostLocalService.fetchVirtualHost(hostname))) {
-
+		if (Validator.isNotNull(virtualHostLocalService.fetchVirtualHost(hostname))) {
 			return;
 		}
 

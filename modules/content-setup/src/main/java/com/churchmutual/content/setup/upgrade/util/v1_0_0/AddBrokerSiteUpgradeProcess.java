@@ -23,16 +23,13 @@ import com.liferay.portal.kernel.util.Portal;
 public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 	public AddBrokerSiteUpgradeProcess(
-		GroupLocalService groupLocalService,
-		LayoutSetLocalService layoutSetLocalService,
-		PermissionCheckerFactory permissionCheckerFactory, Portal portal,
-		RoleLocalService roleLocalService, UserLocalService userLocalService,
-		VirtualHostLocalService virtualHostLocalService) {
+		GroupLocalService groupLocalService, LayoutSetLocalService layoutSetLocalService,
+		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
+		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
 
 		super(
-			groupLocalService, layoutSetLocalService, permissionCheckerFactory,
-			portal, roleLocalService, userLocalService,
-			virtualHostLocalService);
+			groupLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
+			userLocalService, virtualHostLocalService);
 
 		this.portal = portal;
 		this.userLocalService = userLocalService;
@@ -42,8 +39,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 	protected void doUpgradeAsAdmin() throws Exception {
 		long companyId = portal.getDefaultCompanyId();
 
-		long brokerPortalGroupId = addPortalSite(
-			companyId, "Broker", "/broker");
+		long brokerPortalGroupId = addPortalSite(companyId, "Broker", "/broker");
 
 		long userId = userLocalService.getDefaultUserId(companyId);
 
@@ -55,9 +51,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 	protected Portal portal;
 	protected UserLocalService userLocalService;
 
-	private void _addPrivatePages(long companyId, long userId, long groupId)
-		throws Exception {
-
+	private void _addPrivatePages(long companyId, long userId, long groupId) throws Exception {
 		BrokerDashboardPage.addPage(companyId, userId, groupId);
 		BrokerAccountsPage.addPage(companyId, userId, groupId);
 		BrokerAccountDetailsPage.addPage(companyId, userId, groupId);
@@ -66,9 +60,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		BrokerContactsPage.addPage(companyId, userId, groupId);
 	}
 
-	private void _addPublicPages(long companyId, long userId, long groupId)
-		throws Exception {
-
+	private void _addPublicPages(long companyId, long userId, long groupId) throws Exception {
 		BrokerUserRegistrationPage.addPage(companyId, userId, groupId);
 	}
 

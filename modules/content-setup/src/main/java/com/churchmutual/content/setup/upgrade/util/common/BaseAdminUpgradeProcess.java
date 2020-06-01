@@ -15,8 +15,8 @@ import com.liferay.portal.kernel.util.Portal;
 public abstract class BaseAdminUpgradeProcess extends UpgradeProcess {
 
 	public BaseAdminUpgradeProcess(
-		PermissionCheckerFactory permissionCheckerFactory, Portal portal,
-		RoleLocalService roleLocalService, UserLocalService userLocalService) {
+		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
+		UserLocalService userLocalService) {
 
 		this.permissionCheckerFactory = permissionCheckerFactory;
 		this.portal = portal;
@@ -26,15 +26,13 @@ public abstract class BaseAdminUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		PermissionChecker originalPermissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+		PermissionChecker originalPermissionChecker = PermissionThreadLocal.getPermissionChecker();
 		String originalName = PrincipalThreadLocal.getName();
 
 		try {
 			long companyId = portal.getDefaultCompanyId();
 
-			Role adminRole = roleLocalService.getRole(
-				companyId, RoleConstants.ADMINISTRATOR);
+			Role adminRole = roleLocalService.getRole(companyId, RoleConstants.ADMINISTRATOR);
 
 			User adminUser = userLocalService.getRoleUsers(
 				adminRole.getRoleId()
@@ -44,8 +42,7 @@ public abstract class BaseAdminUpgradeProcess extends UpgradeProcess {
 
 			PrincipalThreadLocal.setName(adminUser.getUserId());
 
-			PermissionChecker adminPermissionChecker =
-				permissionCheckerFactory.create(adminUser);
+			PermissionChecker adminPermissionChecker = permissionCheckerFactory.create(adminUser);
 
 			PermissionThreadLocal.setPermissionChecker(adminPermissionChecker);
 
@@ -53,8 +50,7 @@ public abstract class BaseAdminUpgradeProcess extends UpgradeProcess {
 		}
 		finally {
 			PrincipalThreadLocal.setName(originalName);
-			PermissionThreadLocal.setPermissionChecker(
-				originalPermissionChecker);
+			PermissionThreadLocal.setPermissionChecker(originalPermissionChecker);
 		}
 	}
 

@@ -9,9 +9,7 @@ import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
  */
 public class BrokerResourcesPage {
 
-	public static void addPage(long companyId, long userId, long groupId)
-		throws Exception {
-
+	public static void addPage(long companyId, long userId, long groupId) throws Exception {
 		LayoutConfig layoutConfig = new LayoutConfig().setName(
 			"Resources"
 		).setFriendlyURL(
