@@ -14,9 +14,14 @@ public class BrokerContactsPage {
 			"Contacts"
 		).setFriendlyURL(
 			ContentSetupKeys.LAYOUT_FURL_BROKER_CONTACTS
+		).addPortletKey(
+			_CONTACT_PRODUCER_LIST_WEB_PORTLET
 		);
 
-		LayoutHelper.addLayout(userId, groupId, layoutConfig);
+		LayoutHelper.addLayoutWithPortlet(userId, groupId, layoutConfig);
 	}
+
+	private static final String _CONTACT_PRODUCER_LIST_WEB_PORTLET =
+		"com_churchmutual_contact_producer_list_web_portlet_ContactProducerListWebPortlet";
 
 }
