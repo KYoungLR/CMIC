@@ -20,7 +20,7 @@ public class BrokerAccountsPage {
 			_ACCOUNT_LIST_WEB_PORTLET
 		);
 
-		LayoutHelper.addLayout(userId, groupId, layoutConfig);
+		LayoutHelper.addLayoutWithPortlet(userId, groupId, layoutConfig);
 	}
 
 	private static final String _ACCOUNT_LIST_WEB_PORTLET =
