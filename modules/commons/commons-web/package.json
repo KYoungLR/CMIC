@@ -1,7 +1,7 @@
 {
-	"name": "commons-web",
+	"name": "com.churchmutual.commons.web",
 	"version": "1.0.0",
-	"description": "Common React Components",
+	"description": "CMIC Common React Components",
 	"devDependencies": {
 		"@babel/cli": "^7.8.4",
 		"@babel/core": "^7.9.6",
@@ -44,5 +44,5 @@
 		"javax.portlet.resource-bundle": "content.Language"
 	},
 	"main": "index.js",
-	"author": "Luiz Marins"
+	"author": "Kevin Young"
 }
