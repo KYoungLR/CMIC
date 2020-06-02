@@ -3,7 +3,7 @@ package com.churchmutual.content.setup.upgrade.util.broker;
 import com.churchmutual.commons.constants.LayoutConstants;
 import com.churchmutual.commons.util.LayoutConfig;
 import com.churchmutual.commons.util.LayoutHelper;
-import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
+import com.churchmutual.commons.constants.LayoutURLKeyConstants;
 
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
@@ -18,7 +18,7 @@ public class BrokerAccountDetailsPage {
 		long parentLayoutId = 0;
 
 		Layout applicationListLayout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
-			groupId, true, ContentSetupKeys.LAYOUT_FURL_BROKER_ACCOUNTS);
+			groupId, true, LayoutURLKeyConstants.LAYOUT_FURL_BROKER_ACCOUNTS);
 
 		if (Validator.isNotNull(applicationListLayout)) {
 			parentLayoutId = applicationListLayout.getLayoutId();
@@ -29,7 +29,7 @@ public class BrokerAccountDetailsPage {
 		).setParentLayoutId(
 			parentLayoutId
 		).setFriendlyURL(
-			ContentSetupKeys.LAYOUT_FURL_BROKER_ACCOUNT_DETAILS
+			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_ACCOUNT_DETAILS
 		);
 
 		LayoutHelper.addLayoutWith2Columns(

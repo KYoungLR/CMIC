@@ -1,9 +1,9 @@
-package com.churchmutual.content.setup.upgrade.constants;
+package com.churchmutual.commons.constants;
 
 /**
  * @author Matthew Chan
  */
-public class ContentSetupKeys {
+public class LayoutURLKeyConstants {
 
 	public static final String LAYOUT_FURL_BROKER_ACCOUNT_DETAILS = "/account-details";
 
@@ -20,6 +20,8 @@ public class ContentSetupKeys {
 	public static final String LAYOUT_FURL_BROKER_RESOURCES = "/resources";
 
 	public static final String LAYOUT_FURL_BROKER_USER_REGISTRATION = "/user-registration";
+
+	public static final String LAYOUT_FURL_INSURED_USER_REGISTRATION = "/user-registration";
 
 	public static final String THEME_ID_CMIC_BROKER = "cmicbrokertheme_WAR_cmicbrokertheme";
 

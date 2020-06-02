@@ -3,7 +3,7 @@ package com.churchmutual.content.setup.upgrade.util.broker;
 import com.churchmutual.commons.constants.LayoutConstants;
 import com.churchmutual.commons.util.LayoutConfig;
 import com.churchmutual.commons.util.LayoutHelper;
-import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
+import com.churchmutual.commons.constants.LayoutURLKeyConstants;
 
 public class BrokerProfilePage {
 
@@ -11,7 +11,7 @@ public class BrokerProfilePage {
 		LayoutConfig layoutConfig = new LayoutConfig().setName(
 			"Profile"
 		).setFriendlyURL(
-			ContentSetupKeys.LAYOUT_FURL_BROKER_PROFILE
+			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_PROFILE
 		).setHiddenPage(true);
 
 		LayoutHelper.addLayoutWith2Columns(

@@ -1,0 +1,4 @@
+Bundle-Name: CMIC Account Permissions
+Bundle-SymbolicName: com.churchmutual.account.permissions
+Bundle-Version: 1.0.0
+Export-Package: com.churchmutual.account.permissions

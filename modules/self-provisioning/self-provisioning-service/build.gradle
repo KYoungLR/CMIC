@@ -1,0 +1,25 @@
+dependencies {
+	compileOnly group: "com.liferay", name: "com.liferay.journal.api"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.aop.api"
+	compileOnly group: "javax.mail", name: "mail"
+	compileOnly group: "org.osgi", name: "org.osgi.core"
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+
+	compileOnly project(":modules:account:account-api")
+	compileOnly project(":modules:commons:commons-util")
+	compileOnly project(":modules:self-provisioning:self-provisioning-api")
+
+	testCompile group: "com.liferay", name: "com.liferay.dynamic.data.mapping.api"
+	testCompile group: "com.liferay", name: "com.liferay.journal.api"
+	testCompile group: "com.liferay", name: "com.liferay.petra.lang"
+	testCompile group: "com.liferay", name: "com.liferay.petra.string"
+	testCompile group: "javax.mail", name: "mail"
+	testCompile group: "javax.servlet", name: "javax.servlet-api"
+	testCompile group: "org.mockito", name: "mockito-core", version: "3.3.3"
+	testCompile group: "org.hamcrest", name: "hamcrest", version: "2.2"
+	testCompile group: "org.powermock", name: "powermock-module-junit4", version: "2.0.2"
+	testCompile group: "org.powermock", name: "powermock-api-mockito2", version: "2.0.2"
+
+	testCompile project(":modules:commons:commons-util")
+	testCompile project(":modules:self-provisioning:self-provisioning-api")
+}

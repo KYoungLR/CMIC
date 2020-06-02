@@ -3,7 +3,7 @@ package com.churchmutual.content.setup.upgrade.util.broker;
 import com.churchmutual.commons.constants.LayoutConstants;
 import com.churchmutual.commons.util.LayoutConfig;
 import com.churchmutual.commons.util.LayoutHelper;
-import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
+import com.churchmutual.commons.constants.LayoutURLKeyConstants;
 
 /**
  * @author Matthew Chan
@@ -14,7 +14,7 @@ public class BrokerDashboardPage {
 		LayoutConfig layoutConfig = new LayoutConfig().setName(
 			"Dashboard"
 		).setFriendlyURL(
-			ContentSetupKeys.LAYOUT_FURL_BROKER_DASHBOARD
+			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_DASHBOARD
 		);
 
 		LayoutHelper.addLayoutWith2Columns(

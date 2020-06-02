@@ -1,0 +1,8 @@
+Bundle-Name: CMIC Self Provisioning API
+Bundle-SymbolicName: com.churchmutual.self.provisioning.api
+Bundle-Version: 1.0.0
+Export-Package: \
+    com.churchmutual.self.provisioning.api,\
+    com.churchmutual.self.provisioning.api.dto,\
+    com.churchmutual.self.provisioning.api.mail,\
+    com.churchmutual.self.provisioning.constants

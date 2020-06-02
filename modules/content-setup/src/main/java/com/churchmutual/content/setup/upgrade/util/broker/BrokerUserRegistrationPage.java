@@ -2,7 +2,7 @@ package com.churchmutual.content.setup.upgrade.util.broker;
 
 import com.churchmutual.commons.util.LayoutConfig;
 import com.churchmutual.commons.util.LayoutHelper;
-import com.churchmutual.content.setup.upgrade.constants.ContentSetupKeys;
+import com.churchmutual.commons.constants.LayoutURLKeyConstants;
 import com.churchmutual.user.registration.constants.UserRegistrationPortletKeys;
 
 /**
@@ -14,7 +14,7 @@ public class BrokerUserRegistrationPage {
 		LayoutConfig layoutConfig = new LayoutConfig().setName(
 			"User Registration"
 		).setFriendlyURL(
-			ContentSetupKeys.LAYOUT_FURL_BROKER_USER_REGISTRATION
+			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_USER_REGISTRATION
 		).addPortletKey(
 			UserRegistrationPortletKeys.USER_REGISTRATION_WEB
 		).setPrivatePage(
