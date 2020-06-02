@@ -9,7 +9,6 @@
 		"@babel/preset-env": "^7.9.6",
 		"@babel/preset-react": "^7.9.4",
 		"copy-webpack-plugin": "4.6.0",
-		"dxp-cloud-local-npm-scripts": "file:../../dxp-cloud-local-npm-scripts",
 		"jest": "^26.0.1",
 		"liferay-npm-build-support": "^2.18.2",
 		"liferay-npm-bundler": "^2.18.2",
@@ -30,7 +29,7 @@
 	"scripts": {
 		"build": "babel --source-maps -d build src --ignore '**/__tests__/**' && npm run copy-assets && liferay-npm-bundler",
 		"copy-assets": "lnbs-copy-assets",
-		"deploy": "npm run build && deploy-dxp-cloud-local",
+		"deploy": "npm run build && lnbs-deploy",
 		"translate": "lnbs-translate",
 		"start": "lnbs-start",
 		"test": "jest"
