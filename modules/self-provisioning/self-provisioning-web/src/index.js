@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import SelfProvisioning from './SelfProvisioning';
-import {ChangesTrackerProvider} from 'commons-web';
+import {ChangesTrackerProvider} from 'com.churchmutual.commons.web';
 
 /**
  * This is the main entry point of the portlet.

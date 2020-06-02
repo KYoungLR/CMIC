@@ -1,9 +1,9 @@
 import React from 'react';
-import ClayButton from "@clayui/button";
-import InviteMembers from "./InviteMembers";
 import UserList from "./UserList";
-import {Toast} from "commons-web";
-import {ChangesFeedback, ChangesTrackerContext} from 'commons-web';
+import InviteMembers from "./InviteMembers";
+import ClayButton from "@clayui/button";
+import {Toast} from "com.churchmutual.commons.web";
+import {ChangesFeedback, ChangesTrackerContext} from 'com.churchmutual.commons.web';
 
 class SelfProvisioning extends React.Component {
 
@@ -229,7 +229,7 @@ class SelfProvisioning extends React.Component {
         <div>
           <div className="vertical">
             <h1 className="self-provisioning-portlet-title">
-              {Liferay.Language.get('account-users')}
+              {Liferay.Language.get('users')}
 
               {this.editButton()}
               {this.cancelSaveButtons()}

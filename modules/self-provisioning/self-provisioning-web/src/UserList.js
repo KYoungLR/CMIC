@@ -1,9 +1,9 @@
 import React from 'react';
-import ClayButton from "@clayui/button";
 import ClayIcon from '@clayui/icon';
 import ClayTable from "@clayui/table";
 import {RoleSelect} from "./RoleSelect";
-import {Dialog} from 'commons-web';
+import ClayButton from "@clayui/button";
+import {Dialog} from 'com.churchmutual.commons.web';
 
 export default class extends React.Component {
 
@@ -101,7 +101,7 @@ export default class extends React.Component {
     if (!this.props.isEditingUsers || user.removed) {
       return (
         <div>
-          {Liferay.Language.get(user.role)}
+          {this.getLocalization(user.role)}
         </div>
       );
     }
@@ -109,7 +109,7 @@ export default class extends React.Component {
     return (
       <div>
         <RoleSelect
-          value={Liferay.Language.get(user.role)}
+          value={this.getLocalization(user.role)}
           user={user}
           primaryUser={this.state.primaryUser}
           handleFieldChange={(user, fieldValue, isPrimaryUser) =>
@@ -199,6 +199,10 @@ export default class extends React.Component {
     return Liferay.ThemeDisplay.getScopeGroupId();
   }
 
+  getLocalization(key) {
+    return key && key != "" ? Liferay.Language.get(key) : key;
+  }
+
   getUserId() {
     return Liferay.ThemeDisplay.getUserId();
   }
@@ -249,7 +253,7 @@ export default class extends React.Component {
                 {this.roleSelect(this.state.primaryUser)}
               </ClayTable.Cell>
               <ClayTable.Cell>
-                {Liferay.Language.get(this.state.primaryUser.status)}
+                {this.getLocalization(this.state.primaryUser.status)}
               </ClayTable.Cell>
               {this.removeUserButton(this.state.primaryUser)}
             </ClayTable.Row>

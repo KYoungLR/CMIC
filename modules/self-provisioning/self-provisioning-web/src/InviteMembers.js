@@ -1,6 +1,6 @@
 import React from 'react';
 import ClayButton from '@clayui/button';
-import {Input} from "commons-web";
+import {Input} from "com.churchmutual.commons.web";
 
 export default class extends React.Component {
 

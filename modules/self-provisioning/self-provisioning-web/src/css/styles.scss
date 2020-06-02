@@ -1,0 +1,72 @@
+// InviteMembers.js
+
+.invite-members-buttons {
+  align-self: flex-start;
+  margin-bottom: .5rem;
+}
+
+.invite-members-form {
+  flex-grow: 1;
+  margin-right: 1rem;
+
+  .form-group {
+    margin-bottom: .5rem;
+  }
+}
+
+.invite-members-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.invite-members-text {
+  color: #272833;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 140%;
+  margin-bottom: .5rem;
+}
+
+.separate-emails-by-commas {
+  color: #7D7E85;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+// UserList.js
+
+.primary-user-me {
+  opacity: 0.5;
+}
+
+.policy-details-divider {
+  border-top: 1px solid lightgrey;
+  height: 1px;
+  width: 100%;
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.account-user-control-buttons {
+  float: right;
+  margin-top: .5rem;
+}
+
+.add-button {
+  margin-bottom: .5rem
+}
+
+.modal-message {
+  text-align: center;
+}
+
+.table-list tbody tr.changed td {
+  background-color: #FFF4EC;
+}
+
+.table-list tbody tr.removed td {
+  background-color: #FFF4EC;
+  color: #7D7E85;;
+}

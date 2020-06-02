@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
 import {ClaySelect} from '@clayui/form';
-import {Dialog} from 'commons-web';
+import React, {useState} from 'react';
+import {Dialog} from 'com.churchmutual.commons.web';
 
 const RoleSelect = (props) => {
 
