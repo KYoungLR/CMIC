@@ -1,15 +1,11 @@
-#divisionAgentNumber {
-    margin-top: 1.5rem;
-    margin-bottom: 1.75rem;
-}
-
-#registrationCode {
-    margin-top: 2rem;
-}
-
 .registration-code-link {
+    margin-bottom: 2rem;
     margin-top: .5rem;
     margin-left: 1rem;
+}
+
+.registration-help-text {
+    font-size: .9rem;
 }
 
 .user-registration {
