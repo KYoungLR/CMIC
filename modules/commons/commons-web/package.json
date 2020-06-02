@@ -1,0 +1,48 @@
+{
+	"name": "commons-web",
+	"version": "1.0.0",
+	"description": "Common React Components",
+	"devDependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.9.6",
+		"@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/preset-react": "^7.9.4",
+		"copy-webpack-plugin": "4.6.0",
+		"dxp-cloud-local-npm-scripts": "file:../../dxp-cloud-local-npm-scripts",
+		"jest": "^26.0.1",
+		"liferay-npm-build-support": "^2.18.2",
+		"liferay-npm-bundler": "^2.18.2",
+		"webpack": "4.29.6",
+		"webpack-cli": "3.3.0",
+		"webpack-dev-server": "3.2.1"
+	},
+	"dependencies": {
+		"@clayui/alert": "^3.3.0",
+		"@clayui/button": "^3.3.0",
+		"@clayui/form": "^3.6.0",
+		"@clayui/icon": "3.0.4",
+		"@clayui/modal": "^3.4.0",
+		"@clayui/table": "^4.0.0",
+		"react": "16.8.6",
+		"react-dom": "16.8.6"
+	},
+	"scripts": {
+		"build": "babel --source-maps -d build src --ignore '**/__tests__/**' && npm run copy-assets && liferay-npm-bundler",
+		"copy-assets": "lnbs-copy-assets",
+		"deploy": "npm run build && deploy-dxp-cloud-local",
+		"translate": "lnbs-translate",
+		"start": "lnbs-start",
+		"test": "jest"
+	},
+	"portlet": {
+		"com.liferay.portlet.display-category": "category.hidden",
+		"com.liferay.portlet.header-portlet-css": "/css/styles.css",
+		"com.liferay.portlet.instanceable": false,
+		"javax.portlet.name": "commonsweb",
+		"javax.portlet.security-role-ref": "power-user,user",
+		"javax.portlet.resource-bundle": "content.Language"
+	},
+	"main": "index.js",
+	"author": "Luiz Marins"
+}
