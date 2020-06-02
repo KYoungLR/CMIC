@@ -5,6 +5,7 @@ import Typography from './components/typography';
 import Colors from './components/colors';
 import Elevation from './components/elevation';
 import Buttons from './components/buttons';
+import Form from './components/form';
 
 export default class extends React.Component {
 	render() {
@@ -14,6 +15,7 @@ export default class extends React.Component {
 				<Colors />
 				<Elevation />
 				<Buttons />
+				<Form />
 			</React.Fragment>
 		);
 	}	
