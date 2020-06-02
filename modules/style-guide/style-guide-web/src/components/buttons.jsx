@@ -11,73 +11,91 @@ const Buttons = () => {
 			<ClayLayout.SheetSection>
 				<h4 className="sheet-subtitle">Default</h4>
 				<div className="sheet-text">
-					<div className="heading-text">Normal</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary">Primary</ClayButton>
-						<ClayButton displayType="secondary">Secondary</ClayButton>
-						<ClayButton displayType="link">Link</ClayButton>
-					</ClayButton.Group>
+					<ClayLayout.Row>
+						<ClayLayout.Col>
+							<div className="heading-text">Normal</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary">Primary</ClayButton>
+								<ClayButton displayType="secondary">Secondary</ClayButton>
+								<ClayButton displayType="link">Link</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+
+						<ClayLayout.Col>
+							<div className="heading-text">Focus</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" className="focus">Primary</ClayButton>
+								<ClayButton displayType="secondary" className="focus">Secondary</ClayButton>
+								<ClayButton displayType="link" className="focus">Link</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+					</ClayLayout.Row>
 
 					<hr/>
 
-					<div className="heading-text">Focus</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" className="focus">Primary</ClayButton>
-						<ClayButton displayType="secondary" className="focus">Secondary</ClayButton>
-						<ClayButton displayType="link" className="focus">Link</ClayButton>
-					</ClayButton.Group>
+					<ClayLayout.Row>
+						<ClayLayout.Col>
+							<div className="heading-text">Active</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" className="active">Primary</ClayButton>
+								<ClayButton displayType="secondary" className="active">Secondary</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
 
-					<hr/>
-
-					<div className="heading-text">Active</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" className="active">Primary</ClayButton>
-						<ClayButton displayType="secondary" className="active">Secondary</ClayButton>
-					</ClayButton.Group>
-
-					<hr/>
-
-					<div className="heading-text">Disabled</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" disabled>Primary</ClayButton>
-						<ClayButton displayType="secondary" disabled>Secondary</ClayButton>
-						<ClayButton displayType="link" disabled>Link</ClayButton>
-					</ClayButton.Group>
+						<ClayLayout.Col>
+							<div className="heading-text">Disabled</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" disabled>Primary</ClayButton>
+								<ClayButton displayType="secondary" disabled>Secondary</ClayButton>
+								<ClayButton displayType="link" disabled>Link</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+					</ClayLayout.Row>
 				</div>
 			</ClayLayout.SheetSection>
 
 			<ClayLayout.SheetSection>
 				<h4 className="sheet-subtitle">Outline</h4>
 				<div className="sheet-text">
-					<div className="heading-text">Normal</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" outline="true">Primary</ClayButton>
-						<ClayButton displayType="secondary" outline="true">Secondary</ClayButton>
-					</ClayButton.Group>
+					<ClayLayout.Row>
+						<ClayLayout.Col>
+							<div className="heading-text">Normal</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" outline="true">Primary</ClayButton>
+								<ClayButton displayType="secondary" outline="true">Secondary</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+
+						<ClayLayout.Col>
+							<div className="heading-text">Focus</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" outline="true" className="focus">Primary</ClayButton>
+								<ClayButton displayType="secondary" outline="true" className="focus">Secondary</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+					</ClayLayout.Row>
 
 					<hr/>
 
-					<div className="heading-text">Focus</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" outline="true" className="focus">Primary</ClayButton>
-						<ClayButton displayType="secondary" outline="true" className="focus">Secondary</ClayButton>
-					</ClayButton.Group>
+					<ClayLayout.Row>
+						<ClayLayout.Col>
+							<div className="heading-text">Active</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" outline="true" className="active">Primary</ClayButton>
+								<ClayButton displayType="secondary" outline="true" className="active">Secondary</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
 
-					<hr/>
+						<ClayLayout.Col>
+							<div className="heading-text">Disabled</div>
+							<ClayButton.Group spaced>
+								<ClayButton displayType="primary" outline="true" disabled>Primary</ClayButton>
+								<ClayButton displayType="secondary" outline="true" disabled>Secondary</ClayButton>
+							</ClayButton.Group>
+						</ClayLayout.Col>
+					</ClayLayout.Row>
 
-					<div className="heading-text">Active</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" outline="true" className="active">Primary</ClayButton>
-						<ClayButton displayType="secondary" outline="true" className="active">Secondary</ClayButton>
-					</ClayButton.Group>
-
-					<hr/>
-
-					<div className="heading-text">Disabled</div>
-					<ClayButton.Group spaced>
-						<ClayButton displayType="primary" outline="true" disabled>Primary</ClayButton>
-						<ClayButton displayType="secondary" outline="true" disabled>Secondary</ClayButton>
-					</ClayButton.Group>
+							
 				</div>
 			</ClayLayout.SheetSection>
 
