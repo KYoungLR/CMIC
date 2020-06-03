@@ -72,7 +72,7 @@ class SelfProvisioning extends React.Component {
       && !this.state.isEditingUsers
       && (
         <div>
-            <hr className="policy-details-divider"/>
+            <hr className="policy-details-divider mb-3"/>
             <InviteMembers
                 displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
                 displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}

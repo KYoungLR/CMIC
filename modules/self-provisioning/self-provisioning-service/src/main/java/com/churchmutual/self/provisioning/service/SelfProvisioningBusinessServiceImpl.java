@@ -173,7 +173,9 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		if (BusinessUserStatus.INVITED.getMessageKey().equals(
 				getBusinessUserStatus(groupId, invitedUser).getMessageKey())) {
 
-			_sendEmailInvitation(portalGroupId, creatorUserId, invitedUser);
+			// TODO Create CMIC invitation email template
+
+//			_sendEmailInvitation(portalGroupId, creatorUserId, invitedUser);
 		}
 	}
 
