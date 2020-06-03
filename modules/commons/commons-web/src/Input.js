@@ -13,7 +13,7 @@ const Input = (props) => {
 
   let displayError = showErrors && !defaultValue;
 
-  let { label, labelHint, disabled, inputRef, errorMsg, type, required } = props;
+  let { label, labelHint, disabled, inputRef, errorMsg, type, required, placeholder, value } = props;
 
   return (
     <ClayForm.Group className={displayError ? "has-error" : ""} filled={defaultValue ? "true" : null}>
@@ -24,14 +24,16 @@ const Input = (props) => {
       </label>
 
       <ClayInput
-        autocomplete={props.autocomplete ? props.autocomplete : null}
+        autoComplete={props.autocomplete ? props.autocomplete : null}
         disabled={disabled}
         id={fieldName}
         name={fieldName}
+        placeholder={placeholder}
         type={type ? type : "text"}
         defaultValue={defaultValue}
         onChange={(e) => onChange(e)}
         ref={inputRef}
+        value={value}
       />
 
       {displayError  &&

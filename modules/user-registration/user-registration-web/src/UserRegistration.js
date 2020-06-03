@@ -1,15 +1,18 @@
 import ClayButton from "@clayui/button";
-import ClayForm, {ClayInput} from "@clayui/form";
 import React from 'react';
+import {Input} from "com.churchmutual.commons.web";
 
 class UserRegistration extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      businessZipCode: "",
+      divisionAgentNumber: "",
       isFormPage1Submitted: false,
       isDivisionAgentNumberEmpty: true,
-      isRegistrationCodeEmpty: true
+      isRegistrationCodeEmpty: true,
+      registrationCode: "",
     }
 
     this.form1 = React.createRef();
@@ -38,6 +41,12 @@ class UserRegistration extends React.Component {
     this.submitFormPage2();
   }
 
+  setStateField(fieldName, fieldValue) {
+    this.setState(previousState => ({
+      [fieldName]: fieldValue
+    }));
+  }
+
   submitFormPage1() {
     //TODO CMIC-246 handle submit correctly with web services
     this.setState({ isFormPage1Submitted: true });
@@ -47,12 +56,16 @@ class UserRegistration extends React.Component {
     //TODO CMIC-246 handle submit correctly with web services
   }
 
-  validateDivisionAgentNumber(e) {
-    this.setState({ isDivisionAgentNumberEmpty: e.target.value == "" });
+  validateAndSetDivisionAgentNumber(fieldName, fieldValue) {
+    this.setStateField(fieldName, fieldValue);
+
+    this.setState({ isDivisionAgentNumberEmpty: fieldValue == "" });
   };
 
-  validateRegistrationCode(e) {
-    this.setState({ isRegistrationCodeEmpty: e.target.value == "" });
+  validateAndSetRegistrationCode(fieldName, fieldValue) {
+    this.setStateField(fieldName, fieldValue);
+
+    this.setState({ isRegistrationCodeEmpty: fieldValue == "" });
   };
 
   formPage1() {
@@ -62,18 +75,14 @@ class UserRegistration extends React.Component {
     return (
       <div className="user-registration">
         <div className="h2 font-weight-bold pb-4">{Liferay.Language.get("enter-registration-code")}</div>
-        <ClayForm ref={this.form1} onSubmit={(e) => this.onFormPage1Submit(e)}>
-          <ClayForm.Group>
-            <label htmlFor="registrationCode">{Liferay.Language.get("registration-code")}</label>
-            <ClayInput
-              id="registrationCode"
-              name="registrationCode"
-              onChange={(e) => this.validateRegistrationCode(e)}
-              placeholder="Registration Code"
-              type="text"
-              value=""
-            />
-          </ClayForm.Group>
+        <form ref={this.form1} onSubmit={(e) => this.onFormPage1Submit(e)}>
+          <Input
+            fieldName="registrationCode"
+            handleFieldChange={(fieldName, fieldValue) => this.validateAndSetRegistrationCode(fieldName, fieldValue)}
+            label={Liferay.Language.get("registration-code")}
+            placeholder={Liferay.Language.get("registration-code")}
+            value={this.state.registrationCode}
+          />
 
           <div className="registration-code-link">
 
@@ -89,7 +98,7 @@ class UserRegistration extends React.Component {
           <ClayButton disabled={!isSubmitEnabled} displayType="primary" type="submit">
             {Liferay.Language.get("next")}
           </ClayButton>
-        </ClayForm>
+        </form>
       </div>
     );
   }
@@ -99,36 +108,29 @@ class UserRegistration extends React.Component {
     const isSubmitEnabled = !isDivisionAgentNumberEmpty;
 
     return (
-      <div className="user-registration">
+      <div className="user-registration user-registration-2">
         <div className="h2 font-weight-bold pb-4">{Liferay.Language.get("confirm-your-identity")}</div>
-        <ClayForm ref={this.form2} onSubmit={(e) => this.onFormPage2Submit(e)}>
-          <ClayForm.Group>
-            <label htmlFor="divisionAgentNumber">{Liferay.Language.get("division-agent-number")}</label>
-            <ClayInput
-              id="divisionAgentNumber"
-              name="divisionAgentNumber"
-              onChange={(e) => this.validateDivisionAgentNumber(e)}
-              placeholder="Division Agent #"
-              type="text"
-              value=""
-            />
-          </ClayForm.Group>
+        <form ref={this.form2} onSubmit={(e) => this.onFormPage2Submit(e)}>
+          <Input
+            fieldName="divisionAgentNumber"
+            handleFieldChange={(fieldName, fieldValue) => this.validateAndSetDivisionAgentNumber(fieldName, fieldValue)}
+            label={Liferay.Language.get("division-agent-number")}
+            placeholder={Liferay.Language.get("division-agent-number")}
+            value={this.state.divisionAgentNumber}
+          />
 
-          <ClayForm.Group>
-            <label htmlFor="businessZipCode">{Liferay.Language.get("business-zip-code")}</label>
-            <ClayInput
-              id="businessZipCode"
-              name="businessZipCode"
-              placeholder="Business Zip Code"
-              type="text"
-              value=""
-            />
-          </ClayForm.Group>
+          <Input
+            fieldName="businessZipCode"
+            handleFieldChange={(fieldName, fieldValue) => this.setStateField(fieldName, fieldValue)}
+            label={Liferay.Language.get("business-zip-code")}
+            placeholder={Liferay.Language.get("business-zip-code")}
+            value={this.state.businessZipCode}
+          />
 
           <ClayButton disabled={!isSubmitEnabled} displayType="primary" type="submit">
             {Liferay.Language.get("finish")}
           </ClayButton>
-        </ClayForm>
+        </form>
       </div>
     );
   }
