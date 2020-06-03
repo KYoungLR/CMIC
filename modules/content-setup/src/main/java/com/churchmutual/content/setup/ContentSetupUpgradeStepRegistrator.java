@@ -2,6 +2,7 @@ package com.churchmutual.content.setup;
 
 import com.churchmutual.content.setup.upgrade.util.v1_0_0.AddBrokerSiteUpgradeProcess;
 
+import com.churchmutual.content.setup.upgrade.util.v1_0_0.AddRolesUpgradeProcess;
 import com.churchmutual.user.registration.constants.UserRegistrationPortletKeys;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
@@ -30,7 +31,8 @@ public class ContentSetupUpgradeStepRegistrator
 			new AddBrokerSiteUpgradeProcess(
 				groupLocalService, layoutSetLocalService,
 				permissionCheckerFactory, portal, roleLocalService,
-				userLocalService, virtualHostLocalService));
+				userLocalService, virtualHostLocalService),
+			new AddRolesUpgradeProcess());
 	}
 
 	@Reference
