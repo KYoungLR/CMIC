@@ -1,0 +1,32 @@
+// Header
+
+$header-width-lg: 4.5rem;
+$header-height-sm: 4.5rem;
+$header-width-open-lg: 12.5rem;
+$header-padding-x: .5rem;
+$header-padding-y: 1rem;
+$header-bg: $white;
+$header-box-shadow: map-get($elevation, 3);
+
+
+// Navigation
+
+$navigation-height-sm: 4rem;
+$navigation-padding-y: 2.25rem;
+$navigation-bg: $white;
+$navigation-box-shadow: map-get($elevation, 3);
+$navigation-box-shadow-sm: map-get($elevation, 6);
+
+$nav-link-font-size: .875rem;
+$nav-link-font-size-sm: .75rem;
+
+$layout-icon-width: $header-width-lg;
+$layout-icon-height: 2.5rem;
+
+
+// Layout
+
+$wrapper-padding-top: 0;
+
+$content-padding-left-lg: $header-width-lg;
+$content-padding-bottom-sm: $navigation-height-sm;

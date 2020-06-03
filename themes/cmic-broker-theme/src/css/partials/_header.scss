@@ -1,0 +1,31 @@
+#header {
+	display: flex;
+	position: relative;
+	justify-content: space-between;
+	background-color: $header-bg;
+	box-shadow: $header-box-shadow;
+	z-index: 980;
+
+	@include media-breakpoint-down(md) {
+		align-items: center;
+		height: $header-height-sm;
+		padding-left: $header-padding-x;
+		padding-right: $header-padding-x;
+	}
+
+	@include media-breakpoint-up(lg) {
+		width: $header-width-lg;
+		flex-direction: column;
+		padding-top: $header-padding-y;
+		padding-bottom: $header-padding-y;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		transition: width 0.5s ease;
+
+		&:hover {
+			width: $header-width-open-lg;
+		}
+	}
+}
