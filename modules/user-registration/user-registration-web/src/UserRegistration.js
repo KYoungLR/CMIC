@@ -48,12 +48,39 @@ class UserRegistration extends React.Component {
   }
 
   submitFormPage1() {
-    //TODO CMIC-246 handle submit correctly with web services
-    this.setState({ isFormPage1Submitted: true });
+    let data = new FormData(this.form1.current);
+
+    fetch(`/o/user-registration/validate-user-registration/`, {
+      method: 'post',
+      headers: new Headers(),
+      body: data
+    }).then((response) =>  {
+      if (!response.ok) {
+        throw response;
+      }
+
+      this.setState({ isFormPage1Submitted: true });
+    }).catch(
+      //TODO CMIC-247 handle error
+    );
   }
 
   submitFormPage2() {
-    //TODO CMIC-246 handle submit correctly with web services
+    let data = new FormData(this.form2.current);
+
+    fetch(`/o/user-registration/is-user-valid/`, {
+      method: 'post',
+      headers: new Headers(),
+      body: data
+    }).then((response) =>  {
+      if (!response.ok) {
+        throw response;
+      }
+
+      window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
+    }).catch(
+      //TODO CMIC-247 handle error
+    );
   }
 
   validateAndSetDivisionAgentNumber(fieldName, fieldValue) {
