@@ -23,10 +23,6 @@ export default class extends React.Component {
     this.props.onClickCancel();
   }
 
-  getGroupId() {
-    return Liferay.ThemeDisplay.getScopeGroupId();
-  }
-
   getUserId() {
     return Liferay.ThemeDisplay.getUserId();
   }
@@ -50,7 +46,7 @@ export default class extends React.Component {
   submit() {
     let data = JSON.stringify({
       emails: this.state.emails,
-      groupId: this.getGroupId(),
+      groupId: this.props.groupId,
       userId: this.getUserId()
     });
 

@@ -1,3 +1,16 @@
+// SelfProvisioning.js
+.businessSelector {
+  display: flex;
+  margin-top: 2rem;
+  max-width: 25%;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  > .viewing {
+    margin-right: .5rem;
+  }
+}
+
 // InviteMembers.js
 
 .invite-members-buttons {

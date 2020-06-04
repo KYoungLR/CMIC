@@ -24,24 +24,24 @@ export default class extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.updateUserList();
+  updateUserList(businessGroupId) {
+    let groupId = businessGroupId ? businessGroupId : this.props.groupId;
+
+    if (groupId != 0) {
+      this.getPrimaryUser(groupId);
+      this.getRelatedUsersList(groupId);
+    }
   }
 
-  updateUserList() {
-    this.getPrimaryUser();
-    this.getRelatedUsersList();
-  }
-
-  getPrimaryUser() {
-    fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${this.getGroupId()}`)
+  getPrimaryUser(groupId) {
+    fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${groupId}`)
       .then(res => res.json())
       .then(data => this.updatePrimaryUser(data))
       .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-primary-account-user"));
   }
 
-  getRelatedUsersList() {
-    fetch(`/o/self-provisioning/${this.getUserId()}/group/${this.getGroupId()}`)
+  getRelatedUsersList(groupId) {
+    fetch(`/o/self-provisioning/${this.getUserId()}/group/${groupId}`)
       .then(res => res.json())
       .then(data => this.setState({ userList: data }))
       .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-account-users"));
@@ -50,9 +50,13 @@ export default class extends React.Component {
   updatePrimaryUser(user) {
     this.setState({primaryUser: user});
 
+    this.props.setIsAdminOrOwner(this.isAdminOrOwner(user));
+  }
+
+  isAdminOrOwner(user) {
     let primaryUserRole = user.role.toLowerCase();
 
-    this.props.setIsAdminOrOwner(primaryUserRole === "admin" || primaryUserRole === "owner")
+    return primaryUserRole === "admin" || primaryUserRole === "owner";
   }
 
   setNewRole(user, newRole, isPrimaryUser) {
@@ -120,21 +124,23 @@ export default class extends React.Component {
   }
 
   removeUserButton(user) {
-    return this.props.isEditingUsers
-      && this.state.primaryUser.role == "owner"
-      && !this.isPrimaryUser(user)
-      && (
+    if (this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) && !this.isPrimaryUser(user)) {
+      return (
         <ClayTable.Cell>
           <div>
             {!user.removed && (
               <ClayButton monospaced="true" displayType="unstyled" small="true"
-                onClick={() => this.showRemoveUserConfirmationDialog(user)}>
-                  <ClayIcon symbol={"trash"} spritemap={this.getSpritemap()}/>
+                  onClick={() => this.showRemoveUserConfirmationDialog(user)}>
+                <ClayIcon symbol={"trash"} spritemap={this.getSpritemap()}/>
               </ClayButton>
             )}
           </div>
         </ClayTable.Cell>
       );
+    }
+    else if (this.props.isEditingUsers) {
+      return (<ClayTable.Cell />);
+    }
   }
 
   showRemoveUserConfirmationDialog(user) {
@@ -195,10 +201,6 @@ export default class extends React.Component {
     return Liferay.ThemeDisplay.getPathThemeImages() + "/lexicon/icons.svg";
   }
 
-  getGroupId() {
-    return Liferay.ThemeDisplay.getScopeGroupId();
-  }
-
   getLocalization(key) {
     return key && key != "" ? Liferay.Language.get(key) : key;
   }
@@ -233,6 +235,7 @@ export default class extends React.Component {
               <ClayTable.Cell headingCell>
                 {Liferay.Language.get('status')}
               </ClayTable.Cell>
+              {this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) ? <ClayTable.Cell/> : null}
             </ClayTable.Row>
           </ClayTable.Head>
 

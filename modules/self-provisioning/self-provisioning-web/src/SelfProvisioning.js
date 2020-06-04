@@ -4,6 +4,7 @@ import InviteMembers from "./InviteMembers";
 import ClayButton from "@clayui/button";
 import {Toast} from "com.churchmutual.commons.web";
 import {ChangesFeedback, ChangesTrackerContext} from 'com.churchmutual.commons.web';
+import {ClaySelect} from "@clayui/form";
 
 class SelfProvisioning extends React.Component {
 
@@ -15,6 +16,8 @@ class SelfProvisioning extends React.Component {
     super(props);
 
     this.state = {
+      businessesList: [],
+      groupId: 0,
       isAdminOrOwner: false,
       isEditingUsers: false,
       inviteMembersVisible: false,
@@ -30,6 +33,7 @@ class SelfProvisioning extends React.Component {
   }
 
   componentDidMount() {
+    this.getBusinessesList();
     this.getRoleTypes();
   }
 
@@ -42,7 +46,7 @@ class SelfProvisioning extends React.Component {
       let headers = new Headers();
       headers.set("Content-Type", "application/json");
 
-      fetch(`/o/self-provisioning/update-account-members/${this.getCompanyId()}/${this.getUserId()}/${this.getGroupId()}`, {
+      fetch(`/o/self-provisioning/update-account-members/${this.getCompanyId()}/${this.getUserId()}/${this.state.groupId}`, {
           method: 'post',
           headers: headers,
           body: data
@@ -76,6 +80,7 @@ class SelfProvisioning extends React.Component {
             <InviteMembers
                 displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
                 displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
+                groupId={this.state.groupId}
                 updateUserList={() => this.userListRef.updateUserList()}
                 visible={this.state.inviteMembersVisible}
                 onClickCancel={() => this.setState({inviteMembersVisible: false})}
@@ -154,6 +159,35 @@ class SelfProvisioning extends React.Component {
     });
   }
 
+  businessSelect() {
+    if (this.state.isEditingUsers) {
+      let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId)
+      return (
+        <div className="businessSelector">
+          <div className="viewing">{Liferay.Language.get('viewing')}</div>
+          <div>
+            {business.name}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="businessSelector">
+        <div className="viewing">{Liferay.Language.get('viewing')}</div>
+        <ClaySelect onChange={(e) => this.updateBusinessUsers(e.target.value)} value={this.state.groupId}>
+          {this.state.businessesList.map(business => (
+            <ClaySelect.Option
+              key={business.groupId}
+              label={business.name}
+              value={business.groupId}
+            />
+          ))}
+        </ClaySelect>
+      </div>
+    );
+  }
+
   displayErrorMessage(msg) {
     this.setState({
       toast: {
@@ -184,9 +218,24 @@ class SelfProvisioning extends React.Component {
     });
   }
 
+  getBusinessesList() {
+    fetch(`/o/self-provisioning/businesses/${this.getUserId()}`)
+      .then(res => res.json())
+      .then(data => {
+        let businesses = data;
+        this.setState({businessesList: businesses});
+
+        if (businesses != null && businesses.length != 0) {
+          let groupId = businesses[0].groupId;
+          this.setState({groupId: groupId});
+          this.userListRef.updateUserList(groupId);
+        }
+      })
+      .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-user-businesses"))
+  }
 
   getRoleTypes() {
-    fetch(`/o/self-provisioning/roleTypes/${this.getUserId()}/group/${this.getGroupId()}`)
+    fetch(`/o/self-provisioning/roleTypes/${this.getUserId()}/group/${this.state.groupId}`)
       .then(res => res.json())
       .then(data => this.setState({ roleTypes: data }))
       .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-account-roles"));
@@ -216,12 +265,26 @@ class SelfProvisioning extends React.Component {
     return Liferay.ThemeDisplay.getCompanyId();
   }
 
-  getGroupId() {
-    return Liferay.ThemeDisplay.getScopeGroupId();
-  }
-
   getUserId() {
     return Liferay.ThemeDisplay.getUserId();
+  }
+
+  updateBusinessUsers(groupId) {
+    this.setState({
+      groupId: groupId,
+      isAdminOrOwner: false,
+      isEditingUsers: false,
+      inviteMembersVisible: false,
+      membersToBeRemoved: [],
+      toast:  {
+        displayType: "",
+        message: "",
+        title: "",
+      },
+      updatedUserRoles: []
+    });
+
+    this.userListRef.updateUserList(groupId);
   }
 
   render() {
@@ -235,6 +298,8 @@ class SelfProvisioning extends React.Component {
               {this.cancelSaveButtons()}
             </h1>
 
+            {this.businessSelect()}
+
             <div>
               <UserList
                 addMemberToBeRemoved={(user) => this.addMemberToBeRemoved(user)}
@@ -242,6 +307,7 @@ class SelfProvisioning extends React.Component {
                 displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
                 displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
                 isEditingUsers={this.state.isEditingUsers}
+                groupId={this.state.groupId}
                 ref={(userListRef) => this.userListRef = userListRef}
                 setIsAdminOrOwner={(isAdminOrOwner) => this.setState({isAdminOrOwner: isAdminOrOwner})}
               />
