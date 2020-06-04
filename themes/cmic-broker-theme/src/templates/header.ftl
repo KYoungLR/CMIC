@@ -1,37 +1,41 @@
 <header id="header" role="banner">
-	<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
-		<img alt="${logo_description}" height="56" src="${site_logo}" />
+	<#if has_navigation && is_setup_complete>
+		<button class="btn btn-sm link-action d-none d-md-block d-lg-none js-navigation-toggler">
+			<@liferay.language key="menu" />
+		</button>
+	</#if>
+
+	<a class="${logo_css_class}" href="${site_default_url}">
+		<svg>
+			<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#logo" />
+		</svg>
 	</a>
 	
 	<#if has_navigation && is_setup_complete>
 		<#include "${full_templates_path}/navigation.ftl" />
 	</#if>
 
-	<#if !is_signed_in>
-		<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}" id="sign-in" rel="nofollow">${sign_in_text}</a>
-	<#else>
-		<span>User</span>
-	</#if>
-</header>
-
-<#--<div id="heading">
-	<div aria-level="1" class="site-title" role="heading">
-		<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
-			<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
-		</a>
-
-		<#if show_site_name>
-			<span class="site-name" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
-				${site_name}
+	<div class="nav-user-bar">
+		<#if !is_signed_in>
+			<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}" class="text-center" rel="nofollow" title="${sign_in_text}">
+				<svg class="lexicon-icon lexicon-icon-sign-in">
+					<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#sign-in" />
+				</svg>
+			</a>
+		<#else>
+			<div class="user-notification">
+				<a href="javascript:;">
+					<svg class="lexicon-icon lexicon-icon-bell-on">
+						<use xlink:href="${themeDisplay.getPathThemeImages()}/clay/icons.svg#bell-on" />
+					</svg>
+					<#--<span class="badge badge-danger">
+						<span class="badge-item badge-item-expand">${notifications_count!0}</span>
+					</span>-->
+				</a>
+			</div>
+			<div class="user-personal-bar">
+				<@liferay.user_personal_bar />
 			</span>
 		</#if>
 	</div>
-</div>
-
-<#if !is_signed_in>
-	<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}" id="sign-in" rel="nofollow">${sign_in_text}</a>
-</#if>
-
-<#if has_navigation && is_setup_complete>
-	<#include "${full_templates_path}/navigation.ftl" />
-</#if>-->
+</header>

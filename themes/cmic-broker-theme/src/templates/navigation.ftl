@@ -1,4 +1,4 @@
-<nav class="${nav_css_class}" id="navigation" role="navigation">
+<nav class="${nav_css_class} js-navigation" id="navigation" role="navigation">
 	<ul class="nav" aria-label="<@liferay.language key="site-pages" />" role="menubar">
 		<#list nav_items as nav_item>
 			<#assign
@@ -25,7 +25,7 @@
 				<a class="${nav_link_css_class}" aria-labelledby="layout_${nav_item.getLayoutId()}" ${nav_item_attr_has_popup} href="${nav_item.getURL()}" ${nav_item.getTarget()} role="menuitem">
 					<span class="layout-icon">
 						<svg class="nav-item-icon">
-							<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#${nav_item_icon}"></use>
+							<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#${nav_item_icon}" />
 						</svg>
 					</span>
 					<span class="layout-name">${nav_item.getName()}</span>
