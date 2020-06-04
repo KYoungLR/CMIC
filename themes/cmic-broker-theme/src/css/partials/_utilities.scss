@@ -1,0 +1,4 @@
+.page-header {
+	@extend %content-spacing-x, %content-spacing-y;
+	margin: 0;
+}
