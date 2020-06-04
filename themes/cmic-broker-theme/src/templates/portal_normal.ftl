@@ -24,7 +24,9 @@
 	<#include "${full_templates_path}/header.ftl" />
 
 	<section id="content">
-		<h2 class="hide-accessible" role="heading" aria-level="1">${the_title}</h2>
+		<h1 class="hide-accessible" role="heading" aria-level="1">${the_title}</h1>
+
+		<h2 class="page-header">${greeting} <span class="font-weight-normal">${greeting_message}</span></h2>
 
 		<#if selectable>
 			<@liferay_util["include"] page=content_include />
