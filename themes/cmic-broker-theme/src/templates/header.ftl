@@ -6,7 +6,7 @@
 	</#if>
 
 	<a class="${logo_css_class}" href="${site_default_url}">
-		<svg>
+		<svg class="logo-icon">
 			<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#logo" />
 		</svg>
 	</a>
