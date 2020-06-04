@@ -241,6 +241,13 @@ $input-warning-label-color: $warning;
 $input-danger-label-color: $danger;
 
 
+// Dropdowns
+
+$dropdown-color: $gray-800;
+$dropdown-link-color: $dropdown-color;
+$dropdown-link-hover-color: $link-hover-color;
+
+
 // Pagination
 
 
@@ -280,6 +287,10 @@ $sticker-user-icon: map-merge((
 
 
 // Badges
+
+$badge-font-size: .563rem;
+$badge-font-weight: $font-weight-bolder;
+$badge-border-radius: 10rem;
 
 
 // Labels
