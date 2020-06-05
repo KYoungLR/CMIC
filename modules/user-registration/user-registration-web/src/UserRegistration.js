@@ -13,18 +13,43 @@ class UserRegistration extends React.Component {
       isDivisionAgentNumberEmpty: true,
       isRegistrationCodeEmpty: true,
       registrationCode: '',
+      formErrors: {
+        businessZipCode: null,
+        divisionAgentNumber: null,
+        registrationCode: null
+      },
+      user: {
+        registrationCode: null,
+        uuid: null
+      }
     }
 
     this.formRegistrationCode = React.createRef();
     this.formIdentity = React.createRef();
   }
 
+  isFormRegistrationCodeValid() {
+    const { isRegistrationCodeEmpty, formErrors } = this.state;
+    return !isRegistrationCodeEmpty && !formErrors.registrationCode;
+  }
+
+  isFormIdentityValid() {
+    const { isDivisionAgentNumberEmpty, formErrors } = this.state;
+    return !isDivisionAgentNumberEmpty && (!formErrors.divisionAgentNumber && !formErrors.businessZipCode);
+  }
+
   onFormRegistrationCodeSubmit(e) {
     e.preventDefault();
 
-    //TODO CMIC-247 additional validation for registration code
-    if (this.state.isRegistrationCodeEmpty) {
-      return false;
+    if (!this.isFormRegistrationCodeValid()) {
+      this.setState(previousState => ({
+        formErrors: {
+          ...previousState.formErrors,
+          registrationCode: true
+        }
+      }));
+
+      return;
     }
 
     this.submitFormRegistrationCode();
@@ -33,9 +58,16 @@ class UserRegistration extends React.Component {
   onFormIdentitySubmit(e) {
     e.preventDefault();
 
-    //TODO CMIC-247 additional validation
-    if (this.state.isDivisionAgentNumberEmpty) {
-      return false;
+    if (!this.isFormIdentityValid()) {
+      this.setState(previousState => ({
+        formErrors: {
+          ...previousState.formErrors,
+          businessZipCode: true,
+          divisionAgentNumber: true
+        }
+      }));
+
+      return;
     }
 
     this.submitFormIdentity();
@@ -59,14 +91,43 @@ class UserRegistration extends React.Component {
         throw response;
       }
 
-      this.setState({ isFormRegistrationCodeSubmitted: true });
+      response.json().then(user => {
+        if (user.registrationCode == null) {
+          this.setState(previousState => ({
+            formErrors: {
+              ...previousState.formErrors,
+              registrationCode: true
+            }
+          }));
+        }
+        else {
+          this.setState(previousState => ({
+            formErrors: {
+              ...previousState.formErrors
+            },
+            user: {
+              registrationCode: user.registrationCode,
+              uuid: user.uuid
+            }
+          }))
+
+          this.setState({ isFormRegistrationCodeSubmitted: true });
+        }
+      });
     }).catch(
-      //TODO CMIC-247 handle error
+      (e) => this.setState(previousState => ({
+        formErrors: {
+          ...previousState.formErrors,
+          registrationCode: true
+        }
+      }))
     );
   }
 
   submitFormIdentity() {
     let data = new FormData(this.formIdentity.current);
+    data.append("registrationCode", this.state.user.registrationCode);
+    data.append("uuid", this.state.user.uuid);
 
     fetch(`/o/user-registration/is-user-valid/`, {
       method: 'post',
@@ -77,28 +138,54 @@ class UserRegistration extends React.Component {
         throw response;
       }
 
-      window.location.href = Liferay.ThemeDisplay.getPortalURL() + '/group/broker';
+      response.json().then(isUserValid => {
+        if (isUserValid) {
+          window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
+        }
+        else {
+          this.setState(previousState => ({
+            formErrors: {
+              ...previousState.formErrors,
+              businessZipCode: true,
+              divisionAgentNumber: true
+            }
+          }));
+        }
+      });
     }).catch(
-      //TODO CMIC-247 handle error
+      (e) => this.setState(previousState => ({
+        formErrors: {
+          ...previousState.formErrors,
+          businessZipCode: true,
+          divisionAgentNumber: true
+        }
+      }))
     );
   }
 
-  validateAndSetDivisionAgentNumber(fieldName, fieldValue) {
-    this.setStateField(fieldName, fieldValue);
-
-    this.setState({ isDivisionAgentNumberEmpty: fieldValue == '' });
+  setDivisionAgentNumber(fieldName, fieldValue) {
+    this.setState(previousState => ({
+      fieldName: fieldValue,
+      isDivisionAgentNumberEmpty: fieldValue == "",
+      [fieldName]: fieldValue,
+      formErrors: {
+        ...previousState.formErrors
+      }
+    }));
   };
 
-  validateAndSetRegistrationCode(fieldName, fieldValue) {
-    this.setStateField(fieldName, fieldValue);
-
-    this.setState({ isRegistrationCodeEmpty: fieldValue == '' });
+  setRegistrationCode(fieldName, fieldValue) {
+    this.setState(previousState => ({
+      fieldName: fieldValue,
+      isRegistrationCodeEmpty: fieldValue == "",
+      [fieldName]: fieldValue,
+      formErrors: {
+        ...previousState.formErrors
+      }
+    }));
   };
 
   registrationCodeForm() {
-    const { isRegistrationCodeEmpty } = this.state;
-    const isSubmitEnabled = !isRegistrationCodeEmpty;
-
     return (
       <div className="user-registration-portlet">
         <h1 className="mb-5">{Liferay.Language.get("enter-registration-code")}</h1>
@@ -107,9 +194,12 @@ class UserRegistration extends React.Component {
 
           <Input
             fieldName="registrationCode"
-            handleFieldChange={(fieldName, fieldValue) => this.validateAndSetRegistrationCode(fieldName, fieldValue)}
+            handleFieldChange={(fieldName, fieldValue) => this.setRegistrationCode(fieldName, fieldValue)}
             label={Liferay.Language.get("registration-code")}
+            maxLength="150"
             value={this.state.registrationCode}
+            showErrors={this.state.formErrors.registrationCode}
+            errorMsg={Liferay.Language.get("error.registration-code")}
           />
 
           <div className="ml-3 mb-5 small">
@@ -122,7 +212,7 @@ class UserRegistration extends React.Component {
               {Liferay.Language.get("registration-help-text")}
             </div>
           </div>
-          <ClayButton disabled={!isSubmitEnabled} displayType="primary" type="submit">
+          <ClayButton disabled={!this.isFormRegistrationCodeValid()} displayType="primary" type="submit">
             {Liferay.Language.get("next")}
           </ClayButton>
         </form>
@@ -131,9 +221,6 @@ class UserRegistration extends React.Component {
   }
 
   identityForm() {
-    const { isDivisionAgentNumberEmpty } = this.state;
-    const isSubmitEnabled = !isDivisionAgentNumberEmpty;
-
     return (
       <div className="user-registration-portlet">
         <h1 className="mb-5">{Liferay.Language.get("confirm-your-identity")}</h1>
@@ -141,19 +228,25 @@ class UserRegistration extends React.Component {
         <form ref={this.formIdentity} onSubmit={(e) => this.onFormIdentitySubmit(e)}>
           <Input
             fieldName="divisionAgentNumber"
-            handleFieldChange={(fieldName, fieldValue) => this.validateAndSetDivisionAgentNumber(fieldName, fieldValue)}
+            handleFieldChange={(fieldName, fieldValue) => this.setDivisionAgentNumber(fieldName, fieldValue)}
             label={Liferay.Language.get("division-agent-number")}
+            maxLength="150"
             value={this.state.divisionAgentNumber}
+            showErrors={this.state.formErrors.divisionAgentNumber}
+            errorMsg={Liferay.Language.get("error.division-agent-number")}
+            errorMsgPosition="top"
           />
 
           <Input
             fieldName="businessZipCode"
             handleFieldChange={(fieldName, fieldValue) => this.setStateField(fieldName, fieldValue)}
             label={Liferay.Language.get("business-zip-code")}
+            maxLength="12"
             value={this.state.businessZipCode}
+            showErrors={this.state.formErrors.businessZipCode}
           />
 
-          <ClayButton disabled={!isSubmitEnabled} displayType="primary" type="submit">
+          <ClayButton disabled={!this.isFormIdentityValid()} displayType="primary" type="submit">
             {Liferay.Language.get("finish")}
           </ClayButton>
         </form>

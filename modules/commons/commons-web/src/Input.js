@@ -13,10 +13,18 @@ const Input = (props) => {
 
   let displayError = showErrors && !defaultValue;
 
-  let { label, labelHint, disabled, inputRef, errorMsg, type, required, placeholder, value } = props;
+  let { label, labelHint, disabled, inputRef, errorMsg, errorMsgPosition, maxLength, type, required, placeholder, value } = props;
 
   return (
     <ClayForm.Group className={displayError ? "has-error" : ""} filled={defaultValue ? "true" : null}>
+      {errorMsgPosition == 'top' && displayError && errorMsg != null &&
+        <ClayForm.FeedbackGroup>
+          <ClayForm.FeedbackItem className="bg-white pb-4">
+            {errorMsg}
+          </ClayForm.FeedbackItem>
+        </ClayForm.FeedbackGroup>
+      }
+
       <label htmlFor={fieldName}>
           {label}
           {required ? <AsteriskIcon /> : ''}
@@ -27,6 +35,7 @@ const Input = (props) => {
         autoComplete={props.autocomplete ? props.autocomplete : null}
         disabled={disabled}
         id={fieldName}
+        maxLength={maxLength ? maxLength : "524288"}
         name={fieldName}
         placeholder={placeholder}
         type={type ? type : "text"}
@@ -36,7 +45,7 @@ const Input = (props) => {
         value={value}
       />
 
-      {displayError  &&
+      {errorMsgPosition != 'top' && displayError && errorMsg != null &&
         <ClayForm.FeedbackGroup>
           <ClayForm.FeedbackItem>
             {errorMsg}
