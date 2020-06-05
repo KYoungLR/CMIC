@@ -121,8 +121,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	}
 
 	@Override
-	public void inviteBusinessUserByEmail(
-			String email, long groupId, long creatorUserId, boolean isProducerPortal)
+	public void inviteBusinessUserByEmail(String email, long groupId, long creatorUserId)
 		throws PortalException {
 
 		User creatorUser = _userLocalService.getUser(creatorUserId);
@@ -133,14 +132,14 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 		long invitedUserId = invitedUser.getUserId();
 
-		// Default role applied to invited users should be "Member"
+		// Default role applied to invited users should be "Admin"
 
 		Role memberRole;
 
-		if (isProducerPortal) {
+		if (_businessUserService.isBrokerOrganizationUser(creatorUserId)) {
 			long organizationId = getOrganizationOrAccountEntryId(groupId);
 
-			memberRole = _roleLocalService.getRole(companyId, RoleConstants.ORGANIZATION_USER);
+			memberRole = _roleLocalService.getRole(companyId, RoleConstants.ORGANIZATION_ADMINISTRATOR);
 
 			_organizationLocalService.addUserOrganization(invitedUserId, organizationId);
 
@@ -158,7 +157,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		else {
 			long accountEntryId = getOrganizationOrAccountEntryId(groupId);
 
-			memberRole = _roleLocalService.getRole(companyId, BusinessRole.ACCOUNT_USER.getRoleName());
+			memberRole = _roleLocalService.getRole(companyId, BusinessRole.ACCOUNT_ADMINISTRATOR.getRoleName());
 
 			if (!_accountEntryUserRelLocalService.hasAccountEntryUserRel(accountEntryId, invitedUserId)) {
 				_accountEntryUserRelLocalService.addAccountEntryUserRel(accountEntryId, invitedUserId);
@@ -188,12 +187,11 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	}
 
 	@Override
-	public void inviteBusinessUsersByEmail(
-			String[] emails, long groupId, long creatorUserId, boolean isProducerPortal)
+	public void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId)
 		throws PortalException {
 
 		for (String email : emails) {
-			inviteBusinessUserByEmail(email, groupId, creatorUserId, isProducerPortal);
+			inviteBusinessUserByEmail(email, groupId, creatorUserId);
 		}
 	}
 
@@ -315,8 +313,6 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 			boolean isProducerPortal = _businessUserService.isBrokerOrganizationUser(userId);
 
-			_validateUserIsBusinessOwner(userId, groupId, isProducerPortal);
-
 			_removeBusinessUser(groupId, memberUser, isProducerPortal);
 		}
 	}
@@ -357,6 +353,14 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 		List<UpdateMemberRoleRequest> rolesToUpdate = request.getRolesToUpdate();
 
+		boolean isProducerPortal = _businessUserService.isBrokerOrganizationUser(userId);
+
+		User currentUser = _userLocalService.getUser(userId);
+
+		Role ownerRole = _getOwnerRole(currentUser, isProducerPortal);
+
+		boolean currentUserIsOwner = hasBusinessUserRole(groupId, currentUser, ownerRole);
+
 		for (UpdateMemberRoleRequest roleToUpdate : rolesToUpdate) {
 			String userEmail = roleToUpdate.getUserEmail();
 			String roleName = roleToUpdate.getRoleName();
@@ -364,7 +368,14 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 			User user = _userLocalService.getUserByEmailAddress(companyId, userEmail);
 
 			BusinessRole businessRole = BusinessRole.fromShortenedNameKey(
-				roleName, _businessUserService.isBrokerOrganizationUser(userId));
+				roleName, isProducerPortal);
+
+			if (ownerRole.getName().equals(businessRole.getRoleName())) {
+				if (!currentUserIsOwner) {
+					throw new PortalException(
+						"Error while updating members: User " + userId + " does not have the business OWNER role");
+				}
+			}
 
 			Role newRole = _roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
 
@@ -398,18 +409,6 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 		if (ownerUserGroupRoles.size() != 1) {
 			throw new PortalException("Error updating roles: Business must have EXACTLY ONE user as Owner");
-		}
-	}
-
-	private void _validateUserIsBusinessOwner(long userId, long groupId, boolean isProducerPortal)
-		throws PortalException {
-
-		User user = _userLocalService.getUser(userId);
-
-		Role ownerRole = _getOwnerRole(user, isProducerPortal);
-
-		if (!hasBusinessUserRole(groupId, user, ownerRole)) {
-			throw new PortalException("Error while deleting member: User does not have the business OWNER role");
 		}
 	}
 

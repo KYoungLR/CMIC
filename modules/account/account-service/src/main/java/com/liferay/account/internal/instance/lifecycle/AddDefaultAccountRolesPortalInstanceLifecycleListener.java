@@ -143,7 +143,7 @@ public class AddDefaultAccountRolesPortalInstanceLifecycleListener
 	private static final Map<String, String[]>
 		_accountAdministratorResourceActionsMap = HashMapBuilder.put(
 			AccountEntry.class.getName(),
-			new String[] {AccountActionKeys.CREATE_ACCOUNT_ENTRY_USER}
+			new String[] {AccountActionKeys.UPDATE_ACCOUNT_ENTRY_USERS}
 		).build();
 	private static final Map<String, String[]>
 		_accountPowerUserResourceActionsMap = HashMapBuilder.put(

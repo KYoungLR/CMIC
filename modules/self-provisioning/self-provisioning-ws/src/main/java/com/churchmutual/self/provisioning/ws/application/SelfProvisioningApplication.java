@@ -188,7 +188,7 @@ public class SelfProvisioningApplication extends Application {
 
 			String[] invitationEmails = emails.split(",");
 
-			_addAccountUser(groupId, invitationEmails, userId);
+			_addBusinessMember(groupId, invitationEmails, userId);
 
 			JSONObject response = _jsonFactory.createJSONObject();
 
@@ -215,7 +215,7 @@ public class SelfProvisioningApplication extends Application {
 			updateBusinessMembersRequest.setUserId(userId);
 			updateBusinessMembersRequest.setGroupId(passedGroupId);
 
-			selfProvisioningBusinessService.updateBusinessMembers(updateBusinessMembersRequest);
+			_updateBusinessMember(updateBusinessMembersRequest);
 
 			return _success(_jsonFactory.createJSONObject());
 		} catch (PortalException pe) {
@@ -223,24 +223,32 @@ public class SelfProvisioningApplication extends Application {
 		}
 	}
 
-	private void _addAccountUser(long groupId, String[] emails, long creatorUserId) throws PortalException {
-		PermissionChecker permissionChecker = _getPermissionChecker(creatorUserId);
+	private void _addBusinessMember(long groupId, String[] emails, long creatorUserId) throws PortalException {
+		_checkUpdatePermissions(creatorUserId, groupId);
 
-		if (_businessUserService.isBrokerOrganizationUser(creatorUserId)) {
+		selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId);
+	}
+
+	/**
+	 * Permissions to update are restricted to Owners and Admins only
+	 * @param userId
+	 * @param groupId
+	 * @throws PortalException
+	 */
+	private void _checkUpdatePermissions(long userId, long groupId) throws PortalException {
+		PermissionChecker permissionChecker = _getPermissionChecker(userId);
+
+		if (_businessUserService.isBrokerOrganizationUser(userId)) {
 			long organizationId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 			OrganizationModelPermission.check(
-				permissionChecker, groupId, organizationId, AccountActionKeys.CREATE_ORGANIZATION_USER);
-
-			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId, true);
+				permissionChecker, groupId, organizationId, AccountActionKeys.UPDATE_ORGANIZATION_USERS);
 		}
 		else {
 			long accountEntryId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 			AccountEntryModelPermission.check(
-				permissionChecker, groupId, accountEntryId, AccountActionKeys.CREATE_ACCOUNT_ENTRY_USER);
-
-			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId, false);
+				permissionChecker, groupId, accountEntryId, AccountActionKeys.UPDATE_ACCOUNT_ENTRY_USERS);
 		}
 	}
 
@@ -312,6 +320,12 @@ public class SelfProvisioningApplication extends Application {
 		).entity(
 			entity.toJSONString()
 		).build();
+	}
+
+	private void _updateBusinessMember(UpdateBusinessMembersRequest updateBusinessMembersRequest) throws PortalException {
+		_checkUpdatePermissions(updateBusinessMembersRequest.getUserId(), updateBusinessMembersRequest.getGroupId());
+
+		selfProvisioningBusinessService.updateBusinessMembers(updateBusinessMembersRequest);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(SelfProvisioningApplication.class);

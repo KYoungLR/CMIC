@@ -21,7 +21,7 @@ public class AccountActionKeys {
 
 	public static final String ADD_ACCOUNT_ENTRY = "ADD_ACCOUNT_ENTRY";
 
-	public static final String CREATE_ACCOUNT_ENTRY_USER = "CREATE_ACCOUNT_ENTRY_USER";
+	public static final String UPDATE_ACCOUNT_ENTRY_USERS = "UPDATE_ACCOUNT_ENTRY_USERS";
 
-	public static final String CREATE_ORGANIZATION_USER = "CREATE_ORGANIZATION_USER";
+	public static final String UPDATE_ORGANIZATION_USERS = "UPDATE_ORGANIZATION_USERS";
 }

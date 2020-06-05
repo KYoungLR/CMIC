@@ -25,9 +25,11 @@ public class AddOrganizationActionsPortalInstanceLifecycleListener extends BaseP
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
-		Role role = _roleLocalService.getRole(company.getCompanyId(), RoleConstants.ORGANIZATION_ADMINISTRATOR);
+		Role ownerRole = _roleLocalService.getRole(company.getCompanyId(), RoleConstants.ORGANIZATION_OWNER);
+		Role adminRole = _roleLocalService.getRole(company.getCompanyId(), RoleConstants.ORGANIZATION_ADMINISTRATOR);
 
-		_addResourcePermissions(role.getRoleId(), _organizationAdministratorResourceActionsMap);
+		_addResourcePermissions(ownerRole.getRoleId(), _organizationAdministratorResourceActionsMap);
+		_addResourcePermissions(adminRole.getRoleId(), _organizationAdministratorResourceActionsMap);
 	}
 
 	private void _addResourcePermissions(long roleId, Map<String, String[]> resourceActionsMap) throws PortalException {
@@ -43,7 +45,7 @@ public class AddOrganizationActionsPortalInstanceLifecycleListener extends BaseP
 	}
 
 	private static final Map<String, String[]> _organizationAdministratorResourceActionsMap = HashMapBuilder.put(
-		Organization.class.getName(), new String[] {AccountActionKeys.CREATE_ORGANIZATION_USER}
+		Organization.class.getName(), new String[] {AccountActionKeys.UPDATE_ORGANIZATION_USERS}
 	).build();
 
 	@Reference

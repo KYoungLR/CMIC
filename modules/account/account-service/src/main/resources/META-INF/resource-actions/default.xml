@@ -19,13 +19,14 @@
 		<model-name>com.liferay.account.model.AccountEntry</model-name>
 		<portlet-ref>
 			<portlet-name>com_liferay_account_admin_web_internal_portlet_AccountEntriesAdminPortlet</portlet-name>
-			<portlet-name>selfprovisioningweb</portlet-name>
+			<portlet-name>com_churchmutual_self_provisioning_invite_insured_web_portlet_SelfProvisioningInviteInsuredWebPortlet</portlet-name>
+			<portlet-name>com_churchmutual_self_provisioning_web_portlet_SelfProvisioningWebPortlet</portlet-name>
 		</portlet-ref>
 		<weight>2</weight>
 		<permissions>
 			<supports>
 				<action-key>DELETE</action-key>
-				<action-key>CREATE_ACCOUNT_ENTRY_USER</action-key>
+				<action-key>UPDATE_ACCOUNT_ENTRY_USERS</action-key>
 				<action-key>MANAGE_USERS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>VIEW</action-key>
@@ -35,12 +36,13 @@
 	<model-resource>
 		<model-name>com.liferay.portal.kernel.model.Organization</model-name>
 		<portlet-ref>
-			<portlet-name>selfprovisioningweb</portlet-name>
+			<portlet-name>com_churchmutual_self_provisioning_invite_insured_web_portlet_SelfProvisioningInviteInsuredWebPortlet</portlet-name>
+			<portlet-name>com_churchmutual_self_provisioning_web_portlet_SelfProvisioningWebPortlet</portlet-name>
 		</portlet-ref>
 		<weight>3</weight>
 		<permissions>
 			<supports>
-				<action-key>CREATE_ORGANIZATION_USER</action-key>
+				<action-key>UPDATE_ORGANIZATION_USERS</action-key>
 			</supports>
 		</permissions>
 	</model-resource>
