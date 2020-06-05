@@ -1,25 +1,25 @@
-import ClayButton from "@clayui/button";
+import ClayButton from '@clayui/button';
 import React from 'react';
-import {Input} from "com.churchmutual.commons.web";
+import {Input} from 'com.churchmutual.commons.web';
 
 class UserRegistration extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      businessZipCode: "",
-      divisionAgentNumber: "",
-      isFormPage1Submitted: false,
+      businessZipCode: '',
+      divisionAgentNumber: '',
+      isFormRegistrationCodeSubmitted: false,
       isDivisionAgentNumberEmpty: true,
       isRegistrationCodeEmpty: true,
-      registrationCode: "",
+      registrationCode: '',
     }
 
-    this.form1 = React.createRef();
-    this.form2 = React.createRef();
+    this.formRegistrationCode = React.createRef();
+    this.formIdentity = React.createRef();
   }
 
-  onFormPage1Submit(e) {
+  onFormRegistrationCodeSubmit(e) {
     e.preventDefault();
 
     //TODO CMIC-247 additional validation for registration code
@@ -27,10 +27,10 @@ class UserRegistration extends React.Component {
       return false;
     }
 
-    this.submitFormPage1();
+    this.submitFormRegistrationCode();
   }
 
-  onFormPage2Submit(e) {
+  onFormIdentitySubmit(e) {
     e.preventDefault();
 
     //TODO CMIC-247 additional validation
@@ -38,7 +38,7 @@ class UserRegistration extends React.Component {
       return false;
     }
 
-    this.submitFormPage2();
+    this.submitFormIdentity();
   }
 
   setStateField(fieldName, fieldValue) {
@@ -47,8 +47,8 @@ class UserRegistration extends React.Component {
     }));
   }
 
-  submitFormPage1() {
-    let data = new FormData(this.form1.current);
+  submitFormRegistrationCode() {
+    let data = new FormData(this.formRegistrationCode.current);
 
     fetch(`/o/user-registration/validate-user-registration/`, {
       method: 'post',
@@ -59,14 +59,14 @@ class UserRegistration extends React.Component {
         throw response;
       }
 
-      this.setState({ isFormPage1Submitted: true });
+      this.setState({ isFormRegistrationCodeSubmitted: true });
     }).catch(
       //TODO CMIC-247 handle error
     );
   }
 
-  submitFormPage2() {
-    let data = new FormData(this.form2.current);
+  submitFormIdentity() {
+    let data = new FormData(this.formIdentity.current);
 
     fetch(`/o/user-registration/is-user-valid/`, {
       method: 'post',
@@ -77,7 +77,7 @@ class UserRegistration extends React.Component {
         throw response;
       }
 
-      window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
+      window.location.href = Liferay.ThemeDisplay.getPortalURL() + '/group/broker';
     }).catch(
       //TODO CMIC-247 handle error
     );
@@ -86,35 +86,35 @@ class UserRegistration extends React.Component {
   validateAndSetDivisionAgentNumber(fieldName, fieldValue) {
     this.setStateField(fieldName, fieldValue);
 
-    this.setState({ isDivisionAgentNumberEmpty: fieldValue == "" });
+    this.setState({ isDivisionAgentNumberEmpty: fieldValue == '' });
   };
 
   validateAndSetRegistrationCode(fieldName, fieldValue) {
     this.setStateField(fieldName, fieldValue);
 
-    this.setState({ isRegistrationCodeEmpty: fieldValue == "" });
+    this.setState({ isRegistrationCodeEmpty: fieldValue == '' });
   };
 
-  formPage1() {
+  registrationCodeForm() {
     const { isRegistrationCodeEmpty } = this.state;
     const isSubmitEnabled = !isRegistrationCodeEmpty;
 
     return (
-      <div className="user-registration">
-        <div className="h2 font-weight-bold pb-4">{Liferay.Language.get("enter-registration-code")}</div>
-        <form ref={this.form1} onSubmit={(e) => this.onFormPage1Submit(e)}>
+      <div className="user-registration-portlet">
+        <h1 className="mb-5">{Liferay.Language.get("enter-registration-code")}</h1>
+
+        <form ref={this.formRegistrationCode} onSubmit={(e) => this.onFormRegistrationCodeSubmit(e)}>
+
           <Input
             fieldName="registrationCode"
             handleFieldChange={(fieldName, fieldValue) => this.validateAndSetRegistrationCode(fieldName, fieldValue)}
             label={Liferay.Language.get("registration-code")}
-            placeholder={Liferay.Language.get("registration-code")}
             value={this.state.registrationCode}
           />
 
-          <div className="registration-code-link">
-
+          <div className="ml-3 mb-5 small">
             <a data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
-               className="collapsed secondary" href="#helpText">
+               className="collapsed text-muted" href="#helpText">
               {Liferay.Language.get("cant-find-your-registration-code")}
             </a>
 
@@ -130,19 +130,19 @@ class UserRegistration extends React.Component {
     );
   }
 
-  formPage2() {
+  identityForm() {
     const { isDivisionAgentNumberEmpty } = this.state;
     const isSubmitEnabled = !isDivisionAgentNumberEmpty;
 
     return (
-      <div className="user-registration user-registration-2">
-        <div className="h2 font-weight-bold pb-4">{Liferay.Language.get("confirm-your-identity")}</div>
-        <form ref={this.form2} onSubmit={(e) => this.onFormPage2Submit(e)}>
+      <div className="user-registration-portlet">
+        <h1 className="mb-5">{Liferay.Language.get("confirm-your-identity")}</h1>
+
+        <form ref={this.formIdentity} onSubmit={(e) => this.onFormIdentitySubmit(e)}>
           <Input
             fieldName="divisionAgentNumber"
             handleFieldChange={(fieldName, fieldValue) => this.validateAndSetDivisionAgentNumber(fieldName, fieldValue)}
             label={Liferay.Language.get("division-agent-number")}
-            placeholder={Liferay.Language.get("division-agent-number")}
             value={this.state.divisionAgentNumber}
           />
 
@@ -150,7 +150,6 @@ class UserRegistration extends React.Component {
             fieldName="businessZipCode"
             handleFieldChange={(fieldName, fieldValue) => this.setStateField(fieldName, fieldValue)}
             label={Liferay.Language.get("business-zip-code")}
-            placeholder={Liferay.Language.get("business-zip-code")}
             value={this.state.businessZipCode}
           />
 
@@ -163,11 +162,11 @@ class UserRegistration extends React.Component {
   }
 
   render() {
-    if (!this.state.isFormPage1Submitted) {
-      return this.formPage1()
+    if (!this.state.isFormRegistrationCodeSubmitted) {
+      return this.registrationCodeForm();
     }
     else {
-      return this.formPage2()
+      return this.identityForm();
     }
   }
 }
