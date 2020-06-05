@@ -38,6 +38,10 @@ export default class extends React.Component {
   }
 
   updateInvitations(value) {
+    if (this.state.showErrors) {
+      this.setShowErrors(false);
+    }
+
     this.setState({
       emails: value
     })
@@ -107,7 +111,6 @@ export default class extends React.Component {
         <div className="invite-members-container">
           <div className="invite-members-form">
             <Input
-              defaultValue={this.state.emails}
               label={Liferay.Language.get("email-s")}
               fieldName="invitationEmailsInput"
               handleFieldChange={(fieldName, fieldValue) => this.updateInvitations(fieldValue)}
