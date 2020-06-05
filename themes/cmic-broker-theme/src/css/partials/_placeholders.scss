@@ -27,3 +27,11 @@
 		padding-bottom: $main-content-padding-y-xl;
 	}
 }
+
+%card-box {
+	max-width: 29rem;
+	margin: 8rem auto 2rem;
+	padding: 3.5rem 2rem;
+	border: .063em solid $gray-300;
+	border-radius: .125rem;
+}

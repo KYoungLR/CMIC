@@ -26,7 +26,7 @@
 	<section id="content">
 		<h1 class="hide-accessible" role="heading" aria-level="1">${the_title}</h1>
 
-		<#if is_first_parent>
+		<#if is_first_parent && is_signed_in>
 			<h2 class="page-header text-center text-lg-left">${greeting} <span class="font-weight-normal">${greeting_message}</span></h2>
 		</#if>
 
