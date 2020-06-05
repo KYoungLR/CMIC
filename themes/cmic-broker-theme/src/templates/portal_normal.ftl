@@ -26,7 +26,9 @@
 	<section id="content">
 		<h1 class="hide-accessible" role="heading" aria-level="1">${the_title}</h1>
 
-		<h2 class="page-header">${greeting} <span class="font-weight-normal">${greeting_message}</span></h2>
+		<#if is_first_parent>
+			<h2 class="page-header text-center text-lg-left">${greeting} <span class="font-weight-normal">${greeting_message}</span></h2>
+		</#if>
 
 		<#if selectable>
 			<@liferay_util["include"] page=content_include />
