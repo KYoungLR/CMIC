@@ -1,6 +1,5 @@
 package com.churchmutual.self.provisioning.service;
 
-import com.churchmutual.commons.constants.CommonConstants;
 import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.self.provisioning.api.BusinessUserService;
@@ -9,8 +8,10 @@ import com.liferay.account.service.business.AccountEntryBusinessService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -21,41 +22,47 @@ import java.util.List;
 public class BusinessUserServiceImpl implements BusinessUserService {
 
 	@Override
-	public Group getProducerPortalGroup(long companyId) throws PortalException {
+	public List<AccountEntry> getAccountEntries(long userId) throws PortalException {
+		return _accountEntryBusinessService.getAccountEntries(userId);
+	}
+
+	@Override
+	public Group getBrokerPortalGroup(long companyId) throws PortalException {
 		return _groupLocalService.getFriendlyURLGroup(companyId, BusinessPortalType.BROKER.getFriendlyURL());
 	}
 
 	@Override
-	public long getProducerPortalGroupId(long companyId) throws PortalException {
-		return getProducerPortalGroup(companyId).getGroupId();
+	public long getBrokerPortalGroupId(long companyId) throws PortalException {
+		return getBrokerPortalGroup(companyId).getGroupId();
 	}
 
 	@Override
-	public long getUserAccountEntryId(long userId) throws PortalException {
-		List<AccountEntry> accountEntries = _accountEntryBusinessService.getAccountEntries(userId);
+	public AccountEntry getFirstAccountEntry(long userId) throws PortalException {
+		List<AccountEntry> accountEntries = getAccountEntries(userId);
 
-		if (accountEntries.isEmpty()) {
-			return CommonConstants.DEFAULT_ACCOUNT_ENTRY_ID;
-		}
-
-		return CollectionsUtil.getFirst(accountEntries).getAccountEntryId();
+		return CollectionsUtil.getFirst(accountEntries);
 	}
 
 	@Override
-	public long getProducerOrganizationId(long userId) {
-		Organization organizationOnlyOne = CollectionsUtil.getOnlyOne(
-			_organizationLocalService.getUserOrganizations(userId));
+	public Organization getFirstOrganization(long userId) {
+		List<Organization> organizations = getOrganizations(userId);
 
-		if (Validator.isNull(organizationOnlyOne)) {
-			return CommonConstants.DEFAULT_ORGANIZATION_ID;
-		}
-
-		return organizationOnlyOne.getOrganizationId();
+		return CollectionsUtil.getFirst(organizations);
 	}
 
 	@Override
-	public boolean isProducerBusinessUser(long userId) {
-		return getProducerOrganizationId(userId) != CommonConstants.DEFAULT_ORGANIZATION_ID;
+	public List<Organization> getOrganizations(long userId) {
+		return _organizationLocalService.getUserOrganizations(userId);
+	}
+
+	@Override
+	public boolean isBrokerOrganizationUser(long userId) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		long brokerPortalGroupId = getBrokerPortalGroupId(user.getCompanyId());
+
+		return _groupLocalService.hasUserGroup(userId, brokerPortalGroupId) &&
+			Validator.isNotNull(getFirstOrganization(userId));
 	}
 
 	@Reference
@@ -66,5 +73,8 @@ public class BusinessUserServiceImpl implements BusinessUserService {
 
 	@Reference
 	private OrganizationLocalService _organizationLocalService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

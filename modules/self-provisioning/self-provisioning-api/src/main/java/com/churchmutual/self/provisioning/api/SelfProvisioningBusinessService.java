@@ -25,11 +25,13 @@ public interface SelfProvisioningBusinessService {
 
     BusinessUserStatus getBusinessUserStatus(long groupId, User user) throws PortalException;
 
+    long getOrganizationOrAccountEntryId(long groupId) throws PortalException;
+
     boolean hasBusinessUserRole(long groupId, User user, Role businessRole);
 
-    void inviteBusinessUserByEmail(String email, long groupId, long portalGroupId, long creatorUserId, boolean isProducerPortal) throws PortalException;
+    void inviteBusinessUserByEmail(String email, long groupId, long creatorUserId, boolean isProducerPortal) throws PortalException;
 
-    void inviteBusinessUsersByEmail(String[] emails, long groupId, long portalGroupId, long creatorUserId, boolean isProducerPortal) throws PortalException;
+    void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId, boolean isProducerPortal) throws PortalException;
 
     void setBusinessUserStatus(long groupId, User user, BusinessUserStatus businessUserStatus) throws PortalException;
 

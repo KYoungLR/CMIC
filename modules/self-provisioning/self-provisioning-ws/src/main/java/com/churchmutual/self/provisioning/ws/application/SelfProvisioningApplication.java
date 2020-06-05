@@ -64,12 +64,48 @@ import java.util.stream.Stream;
 public class SelfProvisioningApplication extends Application {
 
 	@GET
+	@Path("/businesses/{userId}")
+	public Response getBusinessesList(@PathParam("userId") long userId) {
+		try {
+			JSONArray response = JSONFactoryUtil.createJSONArray();
+
+			if (_businessUserService.isBrokerOrganizationUser(userId)) {
+				List<Organization> organizations = _businessUserService.getOrganizations(userId);
+
+				for (Organization organization : organizations) {
+					JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+					jsonObject.put("groupId", organization.getGroupId());
+					jsonObject.put("name", organization.getName());
+
+					response.put(jsonObject);
+				}
+			}
+			else {
+				List<AccountEntry> accountEntries = _businessUserService.getAccountEntries(userId);
+
+				for (AccountEntry accountEntry : accountEntries) {
+					JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+					jsonObject.put("groupId", accountEntry.getAccountEntryGroupId());
+					jsonObject.put("name", accountEntry.getName());
+
+					response.put(jsonObject);
+				}
+			}
+
+			return _success(response);
+		}
+		catch (Exception pe) {
+			return _handleError(pe);
+		}
+	}
+
+	@GET
 	@Path("/primary/{userId}/group/{groupId}")
-	public Response getPrimaryUser(@PathParam("userId") long userId, @PathParam("groupId") long portalGroupId) {
+	public Response getPrimaryUser(@PathParam("userId") long userId, @PathParam("groupId") long groupId) {
 		try {
 			User user = _userLocalService.getUserById(userId);
-
-			long groupId = _getRelatedGroupId(userId);
 
 			JSONObject response = _accountUserSerializer.serialize(user, groupId);
 
@@ -84,18 +120,20 @@ public class SelfProvisioningApplication extends Application {
 
 	@GET
 	@Path("/{userId}/group/{groupId}")
-	public Response getRelatedUsersList(@PathParam("userId") long userId, @PathParam("groupId") long portalGroupId) {
+	public Response getRelatedUsersList(@PathParam("userId") long userId, @PathParam("groupId") long groupId) {
 		try {
 			List<User> usersList;
 
-			if (_businessUserService.isProducerBusinessUser(userId)) {
-				usersList = _getUsersFromOrganization(userId, true);
+			if (_businessUserService.isBrokerOrganizationUser(userId)) {
+				long organizationId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
+
+				usersList = _getUsersFromOrganization(userId, organizationId, true);
 			}
 			else {
-				usersList = _getUsersFromAccountEntry(userId, true);
-			}
+				long accountEntryId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
-			long groupId = _getRelatedGroupId(userId);
+				usersList = _getUsersFromAccountEntry(userId, accountEntryId,true);
+			}
 
 			JSONArray response = _accountUserSerializer.serialize(usersList, groupId);
 
@@ -110,9 +148,9 @@ public class SelfProvisioningApplication extends Application {
 	@Path("/roleTypes/{userId}/group/{groupId}")
 	public Response getRoleTypes(
 		@PathParam("userId") long userId,
-		@PathParam("groupId") long portalGroupId) {
+		@PathParam("groupId") long groupId) {
 		try {
-			String businessType = _businessUserService.isProducerBusinessUser(userId)
+			String businessType = _businessUserService.isBrokerOrganizationUser(userId)
 				? CommonConstants.BUSINESS_TYPE_ORGANIZATION : CommonConstants.BUSINESS_TYPE_ACCOUNT;
 
 			JSONArray response = JSONFactoryUtil.createJSONArray();
@@ -145,12 +183,12 @@ public class SelfProvisioningApplication extends Application {
 			JSONObject selfProvisioningInfo = _jsonFactory.createJSONObject(jsonSelfProvisioningInfo);
 
 			String emails = selfProvisioningInfo.getString("emails");
-			long portalGroupId = selfProvisioningInfo.getLong("groupId");
+			long groupId = selfProvisioningInfo.getLong("groupId");
 			long userId = selfProvisioningInfo.getLong("userId");
 
 			String[] invitationEmails = emails.split(",");
 
-			_addAccountUser(portalGroupId, invitationEmails, userId);
+			_addAccountUser(groupId, invitationEmails, userId);
 
 			JSONObject response = _jsonFactory.createJSONObject();
 
@@ -185,28 +223,24 @@ public class SelfProvisioningApplication extends Application {
 		}
 	}
 
-	private void _addAccountUser(long portalGroupId, String[] emails, long creatorUserId) throws PortalException {
+	private void _addAccountUser(long groupId, String[] emails, long creatorUserId) throws PortalException {
 		PermissionChecker permissionChecker = _getPermissionChecker(creatorUserId);
 
-		if (_businessUserService.isProducerBusinessUser(creatorUserId)) {
-			long organizationId = _businessUserService.getProducerOrganizationId(creatorUserId);
-
-			long groupId = _organizationLocalService.getOrganization(organizationId).getGroupId();
+		if (_businessUserService.isBrokerOrganizationUser(creatorUserId)) {
+			long organizationId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 			OrganizationModelPermission.check(
 				permissionChecker, groupId, organizationId, AccountActionKeys.CREATE_ORGANIZATION_USER);
 
-			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, portalGroupId, creatorUserId, true);
+			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId, true);
 		}
 		else {
-			long accountEntryId = _businessUserService.getUserAccountEntryId(creatorUserId);
-
-			long groupId = _accountEntryLocalService.getAccountEntry(accountEntryId).getAccountEntryGroupId();
+			long accountEntryId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 			AccountEntryModelPermission.check(
 				permissionChecker, groupId, accountEntryId, AccountActionKeys.CREATE_ACCOUNT_ENTRY_USER);
 
-			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, portalGroupId, creatorUserId, false);
+			selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId, false);
 		}
 	}
 
@@ -218,26 +252,8 @@ public class SelfProvisioningApplication extends Application {
 		return permissionCheckerFactory.create(user);
 	}
 
-	private long _getRelatedGroupId(long userId) throws PortalException {
-		if (_businessUserService.isProducerBusinessUser(userId)) {
-			long organizationId = _businessUserService.getProducerOrganizationId(userId);
-
-			Organization organization = _organizationLocalService.getOrganization(organizationId);
-
-			return organization.getGroupId();
-		}
-
-		long accountEntryId = _businessUserService.getUserAccountEntryId(userId);
-
-		AccountEntry accountEntry = _accountEntryLocalService.getAccountEntry(accountEntryId);
-
-		return accountEntry.getAccountEntryGroupId();
-	}
-
-	private List<User> _getUsersFromAccountEntry(long insuredUserId, boolean onlyIncludeOtherUsers)
+	private List<User> _getUsersFromAccountEntry(long insuredUserId, long accountEntryId, boolean onlyIncludeOtherUsers)
 		throws PortalException {
-
-		long accountEntryId = _businessUserService.getUserAccountEntryId(insuredUserId);
 
 		List<AccountEntryUserRel> accountEntryUserRelList =
 			_accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountEntryId(accountEntryId);
@@ -258,10 +274,8 @@ public class SelfProvisioningApplication extends Application {
 		return userList;
 	}
 
-	private List<User> _getUsersFromOrganization(long producerUserId, boolean onlyIncludeOtherUsers)
+	private List<User> _getUsersFromOrganization(long producerUserId, long organizationId, boolean onlyIncludeOtherUsers)
 		throws PortalException {
-
-		long organizationId = _businessUserService.getProducerOrganizationId(producerUserId);
 
 		List<User> userList = _userLocalService.getOrganizationUsers(organizationId);
 

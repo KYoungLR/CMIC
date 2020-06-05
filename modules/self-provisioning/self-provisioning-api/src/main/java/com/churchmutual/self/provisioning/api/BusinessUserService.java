@@ -1,18 +1,26 @@
 package com.churchmutual.self.provisioning.api;
 
+import com.liferay.account.model.AccountEntry;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Organization;
+
+import java.util.List;
 
 public interface BusinessUserService {
 
-	public Group getProducerPortalGroup(long companyId) throws PortalException;
+	public List<AccountEntry> getAccountEntries(long userId) throws PortalException;
 
-	public long getProducerPortalGroupId(long companyId) throws PortalException;
+	public Group getBrokerPortalGroup(long companyId) throws PortalException;
 
-	public long getUserAccountEntryId(long userId) throws PortalException;
+	public long getBrokerPortalGroupId(long companyId) throws PortalException;
 
-	public long getProducerOrganizationId(long userId);
+	public AccountEntry getFirstAccountEntry(long userId) throws PortalException;
 
-	public boolean isProducerBusinessUser(long userId);
+	public Organization getFirstOrganization(long userId);
+
+	public List<Organization> getOrganizations(long userId);
+
+	public boolean isBrokerOrganizationUser(long userId) throws PortalException;
 
 }
