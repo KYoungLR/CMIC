@@ -23,7 +23,7 @@ public enum BusinessRole implements DisplayEnum {
 		"Organization Administrator", "organization-administrator", CommonConstants.BUSINESS_TYPE_ORGANIZATION,
 		"admin"),
 	ORGANIZATION_OWNER("Organization Owner", "organization-owner", CommonConstants.BUSINESS_TYPE_ORGANIZATION, "owner"),
-	ORGANIZATION_USER("Organization User", "organization-user", CommonConstants.BUSINESS_TYPE_ORGANIZATION, "member");
+	ORGANIZATION_MEMBER("Organization Member", "organization-user", CommonConstants.BUSINESS_TYPE_ORGANIZATION, "member");
 
 	public static BusinessRole fromRoleName(String roleName) {
 		BusinessRole businessRole = ROLE_NAME_MAP.get(roleName);
@@ -94,7 +94,7 @@ public enum BusinessRole implements DisplayEnum {
 	private static final Map<String, BusinessRole> ORGANIZATION_ROLE_KEY_MAP = new HashMap<>();
 
 	private static final BusinessRole[] ORGANIZATION_ROLES = {
-		ORGANIZATION_ADMINISTRATOR, ORGANIZATION_OWNER, ORGANIZATION_USER
+		ORGANIZATION_ADMINISTRATOR, ORGANIZATION_OWNER, ORGANIZATION_MEMBER
 	};
 
 	private static final Map<String, BusinessRole> ROLE_NAME_MAP = new HashMap<>();

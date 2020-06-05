@@ -1,6 +1,7 @@
 package com.churchmutual.content.setup.upgrade.util.v1_0_0;
 
 import com.churchmutual.commons.enums.BusinessCompanyRole;
+import com.churchmutual.commons.enums.BusinessRole;
 import com.churchmutual.commons.util.RoleHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
@@ -24,7 +25,10 @@ public class AddRolesUpgradeProcess extends UpgradeProcess {
 		Role insuredRole = RoleHelper.addRole(BusinessCompanyRole.INSURED.getRoleName(), StringPool.BLANK,
 			RoleConstants.TYPE_SITE);
 
-		Role[] roles = {brokerRole, underwriterRole, insuredRole};
+		Role organizationMemberRole = RoleHelper.addRole(BusinessRole.ORGANIZATION_MEMBER.getRoleName(), StringPool.BLANK,
+			RoleConstants.TYPE_ORGANIZATION);
+
+		Role[] roles = {brokerRole, underwriterRole, insuredRole, organizationMemberRole};
 
 		RoleHelper.addResourcePermissionWithGroupTemplateScope(
 			roles, groupResourceActionIds, Group.class.getName());
