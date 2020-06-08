@@ -3,12 +3,14 @@ package com.churchmutual.self.provisioning.service;
 import com.churchmutual.commons.enums.BusinessCompanyRole;
 import com.churchmutual.commons.enums.BusinessRole;
 import com.churchmutual.commons.enums.BusinessUserStatus;
+import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.self.provisioning.api.BusinessUserService;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
 import com.churchmutual.self.provisioning.api.constants.SelfProvisioningConstants;
 import com.churchmutual.self.provisioning.api.dto.UpdateBusinessMembersRequest;
 import com.churchmutual.self.provisioning.api.dto.UpdateMemberRoleRequest;
 import com.churchmutual.self.provisioning.api.mail.UserRegistrationMailService;
+import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.petra.string.StringPool;
@@ -196,6 +198,24 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	}
 
 	@Override
+	public void promoteFirstActiveUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
+		if (isProducerOrganization) {
+			Organization organization = _organizationLocalService.getOrganization(entityId);
+
+			long groupId = organization.getGroupId();
+
+			_promoteFirstActiveUser(userId, groupId, true);
+		}
+		else {
+			AccountEntry accountEntry = _accountEntryLocalService.getAccountEntry(entityId);
+
+			long groupId = accountEntry.getAccountEntryGroupId();
+
+			_promoteFirstActiveUser(userId, groupId, false);
+		}
+	}
+
+	@Override
 	public void setBusinessUserStatus(long groupId, User user, BusinessUserStatus businessUserStatus)
 		throws PortalException {
 
@@ -254,6 +274,54 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		}
 
 		return _roleLocalService.getRole(user.getCompanyId(), BusinessRole.ACCOUNT_OWNER.getRoleName());
+	}
+
+	private User _getOwnerUser(long groupId, Role ownerRole, boolean isProducerPortal)
+		throws PortalException {
+
+		List<UserGroupRole> ownerUserGroupRoles = _userGroupRoleLocalService.getUserGroupRolesByGroupAndRole(
+			groupId, ownerRole.getRoleId());
+
+		long classPK = getOrganizationOrAccountEntryId(groupId);
+
+		long creatorUserId = 0;
+
+		if (isProducerPortal) {
+			Organization organization = _organizationLocalService.getOrganization(classPK);
+
+			creatorUserId = organization.getUserId();
+		}
+		else {
+			AccountEntry accountEntry = _accountEntryLocalService.getAccountEntry(classPK);
+
+			creatorUserId = accountEntry.getUserId();
+		}
+
+		List<UserGroupRole> userGroupRoles = _removeCreatorUserEntry(ownerUserGroupRoles, creatorUserId);
+
+		if (userGroupRoles.size() != 1) {
+			throw new PortalException("Error updating roles: Business must have EXACTLY ONE user as Owner");
+		}
+
+		UserGroupRole owner = CollectionsUtil.getFirst(userGroupRoles);
+
+		return owner.getUser();
+	}
+
+	private void _promoteFirstActiveUser(long userId, long groupId, boolean isProducerPortal) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		Role ownerRole = _getOwnerRole(user, isProducerPortal);
+		Role adminRole = _getAdminRole(user, isProducerPortal);
+
+		User owner = _getOwnerUser(groupId, ownerRole, isProducerPortal);
+
+		if(!BusinessUserStatus.ACTIVE.equals(getBusinessUserStatus(groupId, owner))) {
+			_updateBusinessUserRole(groupId, owner, adminRole);
+			_updateBusinessUserRole(groupId, user, ownerRole);
+
+			setBusinessUserStatus(groupId, user, BusinessUserStatus.ACTIVE);
+		}
 	}
 
 	private void _removeBusinessUser(long groupId, User user, boolean isProducerPortal) throws PortalException {
@@ -389,27 +457,9 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		boolean isProducerPortal = _businessUserService.isBrokerOrganizationUser(userId);
 		User modifierUser = _userLocalService.getUser(userId);
 
-		long classPK = getOrganizationOrAccountEntryId(groupId);
-
-		long creatorUserId = 0;
-
-		if (isProducerPortal) {
-			creatorUserId = _organizationLocalService.getOrganization(classPK).getUserId();
-		}
-		else {
-			creatorUserId = _accountEntryLocalService.getAccountEntry(classPK).getUserId();
-		}
-
 		Role ownerRole = _getOwnerRole(modifierUser, isProducerPortal);
 
-		List<UserGroupRole> ownerUserGroupRolesAll = _userGroupRoleLocalService.getUserGroupRolesByGroupAndRole(
-			groupId, ownerRole.getRoleId());
-
-		List<UserGroupRole> ownerUserGroupRoles = _removeCreatorUserEntry(ownerUserGroupRolesAll, creatorUserId);
-
-		if (ownerUserGroupRoles.size() != 1) {
-			throw new PortalException("Error updating roles: Business must have EXACTLY ONE user as Owner");
-		}
+		_getOwnerUser(groupId, ownerRole, isProducerPortal);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(SelfProvisioningBusinessServiceImpl.class);

@@ -33,6 +33,8 @@ public interface SelfProvisioningBusinessService {
 
     void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId) throws PortalException;
 
+    void promoteFirstActiveUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException;
+
     void setBusinessUserStatus(long groupId, User user, BusinessUserStatus businessUserStatus) throws PortalException;
 
     void updateBusinessMembers(UpdateBusinessMembersRequest updateBusinessMembersRequest) throws PortalException;

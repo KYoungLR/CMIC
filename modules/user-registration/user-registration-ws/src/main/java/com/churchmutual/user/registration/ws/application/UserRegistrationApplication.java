@@ -2,6 +2,8 @@ package com.churchmutual.user.registration.ws.application;
 
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
+import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -73,9 +75,16 @@ public class UserRegistrationApplication extends Application {
 		return Response.ok(user.toString()).build();
 	}
 
+	private void _promoteFirstRegisteredUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
+		_selfProvisioningBusinessService.promoteFirstActiveUser(userId, entityId, isProducerOrganization);
+	}
+
 	@Reference
 	private JSONFactory _jsonFactory;
 
 	@Reference
 	private PortalUserWebService _portalUserWebService;
+
+	@Reference
+	private SelfProvisioningBusinessService _selfProvisioningBusinessService;
 }
