@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * @author Kayleen Lim
  */
-public class CMICTransactionAccountSummary extends CMICObject {
+public class CMICTransactionAccountSummaryDTO extends CMICObjectDTO {
 
 	public String getAccountNumber() {
 		return _accountNumber;

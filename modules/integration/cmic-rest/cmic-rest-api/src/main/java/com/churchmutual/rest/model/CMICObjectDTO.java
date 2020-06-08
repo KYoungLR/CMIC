@@ -8,7 +8,7 @@ import com.liferay.portal.kernel.json.JSONSerializer;
 /**
  * @author Kayleen Lim
  */
-public abstract class CMICObject {
+public abstract class CMICObjectDTO {
 
 	public JSONObject toJSONObject() {
 		try {

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Kayleen Lim
  */
-public class CMICUser extends CMICObject {
+public class CMICUserDTO extends CMICObjectDTO {
 
 	public int getId() {
 		return _id;
@@ -19,7 +19,7 @@ public class CMICUser extends CMICObject {
 		return _registrationExpirationDate;
 	}
 
-	public List<CMICUserRelation> getUserRelations() {
+	public List<CMICUserRelationDTO> getUserRelations() {
 		return _userRelations;
 	}
 
@@ -47,7 +47,7 @@ public class CMICUser extends CMICObject {
 		_registrationExpirationDate = registrationExpirationDate;
 	}
 
-	public void setUserRelations(List<CMICUserRelation> userRelations) {
+	public void setUserRelations(List<CMICUserRelationDTO> userRelations) {
 		_userRelations = userRelations;
 	}
 
@@ -66,7 +66,7 @@ public class CMICUser extends CMICObject {
 	private int _id;
 	private String _registrationCode;
 	private String _registrationExpirationDate;
-	private List<CMICUserRelation> _userRelations;
+	private List<CMICUserRelationDTO> _userRelations;
 	private String _userRole;
 	private String _userStatusText;
 	private String _uuid;

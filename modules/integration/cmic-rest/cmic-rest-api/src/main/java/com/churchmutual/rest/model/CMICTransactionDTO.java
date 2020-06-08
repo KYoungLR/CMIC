@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author Kayleen Lim
  */
-public class CMICTransaction extends CMICObject {
+public class CMICTransactionDTO extends CMICObjectDTO {
 
 	public String getAccountNumber() {
 		return _accountNumber;

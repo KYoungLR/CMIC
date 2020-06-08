@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICAddress extends CMICObject {
+public class CMICAddressDTO extends CMICObjectDTO {
 
 	public String getCity() {
 		return _city;

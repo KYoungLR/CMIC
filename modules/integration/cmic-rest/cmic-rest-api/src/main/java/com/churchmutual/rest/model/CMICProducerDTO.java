@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICProducer extends CMICObject {
+public class CMICProducerDTO extends CMICObjectDTO {
 
 	public String getDivision() {
 		return _division;

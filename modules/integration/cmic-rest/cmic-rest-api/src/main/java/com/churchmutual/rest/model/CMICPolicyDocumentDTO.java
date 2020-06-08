@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICPolicyDocument extends CMICObject {
+public class CMICPolicyDocumentDTO extends CMICObjectDTO {
 
 	public String getAccountNumber() {
 		return _accountNumber;

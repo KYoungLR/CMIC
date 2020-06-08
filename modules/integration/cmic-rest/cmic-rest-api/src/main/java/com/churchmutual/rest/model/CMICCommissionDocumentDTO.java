@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICCommissionDocument extends CMICObject {
+public class CMICCommissionDocumentDTO extends CMICObjectDTO {
 
 	public String getAgentNumber() {
 		return _agentNumber;

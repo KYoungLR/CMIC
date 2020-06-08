@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICFile extends CMICObject {
+public class CMICFileDTO extends CMICObjectDTO {
 
 	public String getBytes() {
 		return _bytes;

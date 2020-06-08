@@ -3,7 +3,7 @@ package com.churchmutual.rest.model;
 /**
  * @author Kayleen Lim
  */
-public class CMICContact extends CMICObject {
+public class CMICContactDTO extends CMICObjectDTO {
 
 	public String getDepartment() {
 		return _department;
