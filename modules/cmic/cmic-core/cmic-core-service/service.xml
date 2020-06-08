@@ -30,11 +30,11 @@
 
 		<!-- PK fields -->
 
-		<column name="cmicOrganizationId" primary="true" type="long"/>
+		<column name="cmicOrganizationId" primary="true" type="long" />
 
 		<!-- Other fields -->
 
-		<column name="organizationId" type="long"/>
+		<column name="organizationId" type="long" />
 		<column name="agent" type="String" />
 		<column name="division" type="String" />
 		<column name="producerId" type="long" />
