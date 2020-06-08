@@ -10,4 +10,13 @@
 		<field name="numInForcePolicies" type="int" />
 		<field name="totalBilledPremium" type="String" />
 	</model>
+	<model name="com.churchmutual.core.model.CMICOrganization">
+		<field name="cmicOrganizationId" type="long" />
+		<field name="organizationId" type="long" />
+		<field name="agent" type="String" />
+		<field name="division" type="String" />
+		<field name="producerId" type="long" />
+		<field name="producerType" type="int" />
+		<field name="active" type="boolean" />
+	</model>
 </model-hints>

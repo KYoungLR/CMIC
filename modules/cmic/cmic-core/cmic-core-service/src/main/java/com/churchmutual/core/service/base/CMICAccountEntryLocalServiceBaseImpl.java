@@ -17,6 +17,7 @@ package com.churchmutual.core.service.base;
 import com.churchmutual.core.model.CMICAccountEntry;
 import com.churchmutual.core.service.CMICAccountEntryLocalService;
 import com.churchmutual.core.service.persistence.CMICAccountEntryPersistence;
+import com.churchmutual.core.service.persistence.CMICOrganizationPersistence;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -396,6 +397,9 @@ public abstract class CMICAccountEntryLocalServiceBaseImpl
 
 	@Reference
 	protected CMICAccountEntryPersistence cmicAccountEntryPersistence;
+
+	@Reference
+	protected CMICOrganizationPersistence cmicOrganizationPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService
