@@ -4,5 +4,26 @@
 <service-builder dependency-injector="ds" package-path="com.churchmutual.core">
 	<author>Kayleen Lim</author>
 	<namespace>cmic</namespace>
-	
+
+	<entity local-service="true" name="CMICAccountEntry" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="cmicAccountEntryId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="accountEntryId" type="long" />
+		<column name="accountNumber" type="String" />
+		<column name="numExpiredPolicies" type="int" />
+		<column name="numFuturePolicies" type="int" />
+		<column name="numInForcePolicies" type="int" />
+		<column name="totalBilledPremium" type="String" />
+
+		<!-- Finders -->
+
+		<finder name="AccountNumber" return-type="CMICAccountEntry" unique="true">
+			<finder-column name="accountNumber" />
+		</finder>
+	</entity>
 </service-builder>
