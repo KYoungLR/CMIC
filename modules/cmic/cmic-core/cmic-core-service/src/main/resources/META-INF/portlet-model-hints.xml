@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.churchmutual.core.model.CMICAccountEntry">
+		<field name="cmicAccountEntryId" type="long" />
+		<field name="accountEntryId" type="long" />
+		<field name="accountNumber" type="String" />
+		<field name="numExpiredPolicies" type="int" />
+		<field name="numFuturePolicies" type="int" />
+		<field name="numInForcePolicies" type="int" />
+		<field name="totalBilledPremium" type="String" />
+	</model>
+</model-hints>
