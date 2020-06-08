@@ -117,10 +117,12 @@
 	.layout-icon {
 		display: flex;
 		width: $layout-icon-width;
+		min-width: $layout-icon-width;
 		justify-content: center;
 
 		@include media-breakpoint-down(sm) {
 			width: auto;
+			min-width: auto;
 			height: $layout-icon-height;
 			align-items: flex-end;
 		}
