@@ -10,6 +10,7 @@ import com.churchmutual.self.provisioning.api.constants.SelfProvisioningConstant
 import com.churchmutual.self.provisioning.api.dto.UpdateBusinessMembersRequest;
 import com.churchmutual.self.provisioning.api.dto.UpdateMemberRoleRequest;
 import com.churchmutual.self.provisioning.api.mail.UserRegistrationMailService;
+
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
@@ -32,13 +33,14 @@ import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Chan
@@ -123,9 +125,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	}
 
 	@Override
-	public void inviteBusinessUserByEmail(String email, long groupId, long creatorUserId)
-		throws PortalException {
-
+	public void inviteBusinessUserByEmail(String email, long groupId, long creatorUserId) throws PortalException {
 		User creatorUser = _userLocalService.getUser(creatorUserId);
 
 		long companyId = creatorUser.getCompanyId();
@@ -147,8 +147,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 			Organization organization = _organizationLocalService.getOrganization(organizationId);
 
-			Role role = _roleLocalService.getRole(
-				invitedUser.getCompanyId(), BusinessCompanyRole.BROKER.getRoleName());
+			Role role = _roleLocalService.getRole(invitedUser.getCompanyId(), BusinessCompanyRole.BROKER.getRoleName());
 
 			_userGroupRoleLocalService.addUserGroupRoles(
 				invitedUserId, organization.getGroupId(), new long[] {role.getRoleId()});
@@ -179,39 +178,35 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 			setBusinessUserStatus(groupId, invitedUser, BusinessUserStatus.INVITED);
 		}
 
-		if (BusinessUserStatus.INVITED.getMessageKey().equals(
-				getBusinessUserStatus(groupId, invitedUser).getMessageKey())) {
+		if (BusinessUserStatus.INVITED.equals(getBusinessUserStatus(groupId, invitedUser))) {
 
 			// TODO Create CMIC invitation email template
 
-//			_sendEmailInvitation(portalGroupId, creatorUserId, invitedUser);
+			// _sendEmailInvitation(portalGroupId, creatorUserId, invitedUser);
+
 		}
 	}
 
 	@Override
-	public void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId)
-		throws PortalException {
-
+	public void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId) throws PortalException {
 		for (String email : emails) {
 			inviteBusinessUserByEmail(email, groupId, creatorUserId);
 		}
 	}
 
 	@Override
-	public void promoteFirstActiveUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
+	public void promoteFirstActiveUser(long userId, long entityId, boolean isProducerOrganization)
+		throws PortalException {
+
 		if (isProducerOrganization) {
 			Organization organization = _organizationLocalService.getOrganization(entityId);
 
-			long groupId = organization.getGroupId();
-
-			_promoteFirstActiveUser(userId, groupId, true);
+			_promoteFirstActiveUser(userId, organization.getGroupId(), true);
 		}
 		else {
 			AccountEntry accountEntry = _accountEntryLocalService.getAccountEntry(entityId);
 
-			long groupId = accountEntry.getAccountEntryGroupId();
-
-			_promoteFirstActiveUser(userId, groupId, false);
+			_promoteFirstActiveUser(userId, accountEntry.getAccountEntryGroupId(), false);
 		}
 	}
 
@@ -276,9 +271,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		return _roleLocalService.getRole(user.getCompanyId(), BusinessRole.ACCOUNT_OWNER.getRoleName());
 	}
 
-	private User _getOwnerUser(long groupId, Role ownerRole, boolean isProducerPortal)
-		throws PortalException {
-
+	private User _getOwnerUser(long groupId, Role ownerRole, boolean isProducerPortal) throws PortalException {
 		List<UserGroupRole> ownerUserGroupRoles = _userGroupRoleLocalService.getUserGroupRolesByGroupAndRole(
 			groupId, ownerRole.getRoleId());
 
@@ -316,7 +309,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 		User owner = _getOwnerUser(groupId, ownerRole, isProducerPortal);
 
-		if(!BusinessUserStatus.ACTIVE.equals(getBusinessUserStatus(groupId, owner))) {
+		if (!BusinessUserStatus.ACTIVE.equals(getBusinessUserStatus(groupId, owner))) {
 			_updateBusinessUserRole(groupId, owner, adminRole);
 			_updateBusinessUserRole(groupId, user, ownerRole);
 
@@ -363,7 +356,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	private List<UserGroupRole> _removeCreatorUserEntry(List<UserGroupRole> ownerUserGroupRoles, long creatorUserId) {
 		return ownerUserGroupRoles.stream(
 		).filter(
-			(userGroupRole) -> userGroupRole.getUserId() != creatorUserId
+			userGroupRole -> userGroupRole.getUserId() != creatorUserId
 		).collect(
 			Collectors.toList()
 		);
@@ -389,9 +382,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 		_userRegistrationMailService.sendMail(groupId, inviterUserId, invitedUser);
 	}
 
-	private void _updateBusinessUserRole(long groupId, User user, Role newRole)
-		throws PortalException {
-
+	private void _updateBusinessUserRole(long groupId, User user, Role newRole) throws PortalException {
 		List<Role> businessRoles = getBusinessRoles(user.getCompanyId());
 
 		boolean isProducerPortal = _businessUserService.isBrokerOrganizationUser(user.getUserId());
@@ -435,14 +426,11 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 			User user = _userLocalService.getUserByEmailAddress(companyId, userEmail);
 
-			BusinessRole businessRole = BusinessRole.fromShortenedNameKey(
-				roleName, isProducerPortal);
+			BusinessRole businessRole = BusinessRole.fromShortenedNameKey(roleName, isProducerPortal);
 
-			if (ownerRole.getName().equals(businessRole.getRoleName())) {
-				if (!currentUserIsOwner) {
-					throw new PortalException(
-						"Error while updating members: User " + userId + " does not have the business OWNER role");
-				}
+			if (ownerRole.equals(businessRole) && !currentUserIsOwner) {
+				throw new PortalException(
+					"Error while updating members: User " + userId + " does not have the business OWNER role");
 			}
 
 			Role newRole = _roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
@@ -454,6 +442,7 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 	private void _validateBusinessHasOwnerUser(UpdateBusinessMembersRequest request) throws PortalException {
 		long groupId = request.getGroupId();
 		long userId = request.getUserId();
+
 		boolean isProducerPortal = _businessUserService.isBrokerOrganizationUser(userId);
 		User modifierUser = _userLocalService.getUser(userId);
 
