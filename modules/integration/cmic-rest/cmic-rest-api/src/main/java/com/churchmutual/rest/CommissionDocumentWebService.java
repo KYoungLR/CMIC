@@ -1,7 +1,7 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICCommissionDocument;
-import com.churchmutual.rest.model.CMICFile;
+import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
+import com.churchmutual.rest.model.CMICFileDTO;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface CommissionDocumentWebService {
 
-	public List<CMICFile> downloadDocuments(String[] ids, boolean includeBytes);
+	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes);
 
-	public List<CMICCommissionDocument> searchDocuments(
+	public List<CMICCommissionDocumentDTO> searchDocuments(
 		String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
 		String minimumStatementDate);
 

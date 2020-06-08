@@ -1,16 +1,16 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICPolicyDocument;
+import com.churchmutual.rest.model.CMICPolicyDocumentDTO;
 
 /**
  * @author Kayleen Lim
  */
 public interface PolicyDocumentWebService {
 
-	public CMICPolicyDocument getRecentTransactions(
+	public CMICPolicyDocumentDTO getRecentTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType);
 
-	public CMICPolicyDocument getTransactions(
+	public CMICPolicyDocumentDTO getTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType, String sequenceNum);
 
 }

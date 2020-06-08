@@ -1,7 +1,7 @@
 package com.churchmutual.user.registration.ws.application;
 
 import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.model.CMICUserDTO;
 import com.liferay.portal.kernel.json.JSONFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -68,7 +68,7 @@ public class UserRegistrationApplication extends Application {
 
 		String registrationCode = map.getFirst("registrationCode");
 
-		CMICUser user = _portalUserWebService.validateUserRegistration(registrationCode);
+		CMICUserDTO user = _portalUserWebService.validateUserRegistration(registrationCode);
 
 		return Response.ok(user.toString()).build();
 	}

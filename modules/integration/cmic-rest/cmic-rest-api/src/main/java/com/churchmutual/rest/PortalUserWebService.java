@@ -1,6 +1,6 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.model.CMICUserDTO;
 
 /**
  * @author Kayleen Lim
@@ -11,8 +11,8 @@ public interface PortalUserWebService {
 
 	public boolean isUserValid(String agentNumber, String divisionNumber, String registrationCode, String uuid);
 
-	public CMICUser validateUser(String registrationCode);
+	public CMICUserDTO validateUser(String registrationCode);
 
-	public CMICUser validateUserRegistration(String registrationCode);
+	public CMICUserDTO validateUserRegistration(String registrationCode);
 
 }

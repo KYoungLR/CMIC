@@ -1,7 +1,7 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.PolicyDocumentWebService;
-import com.churchmutual.rest.model.CMICPolicyDocument;
+import com.churchmutual.rest.model.CMICPolicyDocumentDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -93,7 +93,7 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 			String policyNum = ParamUtil.getString(portletRequest, "policyNum");
 			String policyType = ParamUtil.getString(portletRequest, "policyType");
 
-			CMICPolicyDocument policyDocument = _policyDocumentWebService.getRecentTransactions(
+			CMICPolicyDocumentDTO policyDocument = _policyDocumentWebService.getRecentTransactions(
 				accountNum, includeBytes, policyNum, policyType);
 
 			response.put(policyDocument.toJSONObject());
@@ -105,7 +105,7 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 			String policyType = ParamUtil.getString(portletRequest, "policyType");
 			String sequenceNum = ParamUtil.getString(portletRequest, "sequenceNum");
 
-			CMICPolicyDocument policyDocument = _policyDocumentWebService.getTransactions(
+			CMICPolicyDocumentDTO policyDocument = _policyDocumentWebService.getTransactions(
 				accountNum, includeBytes, policyNum, policyType, sequenceNum);
 
 			response.put(policyDocument.toJSONObject());

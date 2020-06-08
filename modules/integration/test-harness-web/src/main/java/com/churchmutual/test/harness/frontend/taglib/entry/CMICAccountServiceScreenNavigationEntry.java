@@ -1,8 +1,8 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.AccountWebService;
-import com.churchmutual.rest.model.CMICAccount;
-import com.churchmutual.rest.model.CMICAddress;
+import com.churchmutual.rest.model.CMICAccountDTO;
+import com.churchmutual.rest.model.CMICAddressDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -101,21 +101,21 @@ public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 		if (_GET_ACCOUNT_BY_ACCOUNT_NUMBER_ENDPOINT.equals(endpoint)) {
 			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
 
-			CMICAccount account = _accountWebService.getAccounts(accountNumber);
+			CMICAccountDTO account = _accountWebService.getAccounts(accountNumber);
 
 			response.put(account.toJSONObject());
 		}
 		else if (_GET_ACCOUNTS_BY_PRODUCER_CODES_ENDPOINT.equals(endpoint)) {
 			String[] producerCode = ParamUtil.getStringValues(portletRequest, "producerCode");
 
-			List<CMICAccount> accounts = _accountWebService.getAccountsSearchByProducer(producerCode);
+			List<CMICAccountDTO> accounts = _accountWebService.getAccountsSearchByProducer(producerCode);
 
 			accounts.forEach(account -> response.put(account.toJSONObject()));
 		}
 		else if (_GET_ADDRESS_ACCOUNT.equals(endpoint)) {
 			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
 
-			CMICAddress address = _accountWebService.getAddressAccount(accountNumber);
+			CMICAddressDTO address = _accountWebService.getAddressAccount(accountNumber);
 
 			response.put(address.toJSONObject());
 		}

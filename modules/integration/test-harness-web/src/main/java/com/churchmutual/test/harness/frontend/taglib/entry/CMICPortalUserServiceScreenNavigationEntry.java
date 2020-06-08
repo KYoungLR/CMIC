@@ -1,7 +1,7 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -124,14 +124,14 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 		else if (_VALIDATE_USER_ENDPOINT.equals(endpoint)) {
 			String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
 
-			CMICUser user = _portalUserWebService.validateUser(registrationCode);
+			CMICUserDTO user = _portalUserWebService.validateUser(registrationCode);
 
 			response.put(user.toJSONObject());
 		}
 		else if (_VALIDATE_USER_REGISTRATION_ENDPOINT.equals(endpoint)) {
 			String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
 
-			CMICUser user = _portalUserWebService.validateUserRegistration(registrationCode);
+			CMICUserDTO user = _portalUserWebService.validateUserRegistration(registrationCode);
 
 			response.put(user.toJSONObject());
 		}

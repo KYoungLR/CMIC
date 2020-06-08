@@ -1,7 +1,7 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICContact;
-import com.churchmutual.rest.model.CMICProducer;
+import com.churchmutual.rest.model.CMICContactDTO;
+import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -19,38 +19,38 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockProducerWebServiceClient.class)
 public class MockProducerWebServiceClient {
 
-	public List<CMICContact> getContacts(long producerId) {
+	public List<CMICContactDTO> getContacts(long producerId) {
 		String fileName = _PRODUCER_WEB_SERVICE_DIR + "getContacts.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICContact[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICContactDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICContact[] cmicContacts = jsonDeserializer.deserialize(fileContent, CMICContact[].class);
+		CMICContactDTO[] cmicContactDTOS = jsonDeserializer.deserialize(fileContent, CMICContactDTO[].class);
 
-		return ListUtil.fromArray(cmicContacts);
+		return ListUtil.fromArray(cmicContactDTOS);
 	}
 
-	public CMICProducer getProducerById(long id) {
+	public CMICProducerDTO getProducerById(long id) {
 		String fileName = _PRODUCER_WEB_SERVICE_DIR + "getProducerById.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICProducer> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICProducerDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICProducer.class);
+		return jsonDeserializer.deserialize(fileContent, CMICProducerDTO.class);
 	}
 
-	public List<CMICProducer> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
 		String fileName = _PRODUCER_WEB_SERVICE_DIR + "getProducers.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICProducer[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICProducerDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICProducer[] cmicProducers = jsonDeserializer.deserialize(fileContent, CMICProducer[].class);
+		CMICProducerDTO[] cmicProducerDTOS = jsonDeserializer.deserialize(fileContent, CMICProducerDTO[].class);
 
-		return ListUtil.fromArray(cmicProducers);
+		return ListUtil.fromArray(cmicProducerDTOS);
 	}
 
 	private static final String _PRODUCER_WEB_SERVICE_DIR = "producer-web-service/";

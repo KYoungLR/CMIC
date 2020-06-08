@@ -1,8 +1,8 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.CommissionDocumentWebService;
-import com.churchmutual.rest.model.CMICCommissionDocument;
-import com.churchmutual.rest.model.CMICFile;
+import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
+import com.churchmutual.rest.model.CMICFileDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -109,7 +109,7 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 			String[] ids = ParamUtil.getStringValues(portletRequest, "ids");
 			boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
 
-			List<CMICFile> files = _commissionDocumentWebService.downloadDocuments(ids, includeBytes);
+			List<CMICFileDTO> files = _commissionDocumentWebService.downloadDocuments(ids, includeBytes);
 
 			files.forEach(account -> response.put(account.toJSONObject()));
 		}
@@ -120,7 +120,7 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 			String maximumStatementDate = ParamUtil.getString(portletRequest, "maximumStatementDate");
 			String minimumStatementDate = ParamUtil.getString(portletRequest, "minimumStatementDate");
 
-			List<CMICCommissionDocument> commissionDocuments = _commissionDocumentWebService.searchDocuments(
+			List<CMICCommissionDocumentDTO> commissionDocuments = _commissionDocumentWebService.searchDocuments(
 				agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
 
 			commissionDocuments.forEach(account -> response.put(account.toJSONObject()));

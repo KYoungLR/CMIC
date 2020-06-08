@@ -1,7 +1,7 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICContact;
-import com.churchmutual.rest.model.CMICProducer;
+import com.churchmutual.rest.model.CMICContactDTO;
+import com.churchmutual.rest.model.CMICProducerDTO;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import java.util.List;
  */
 public interface ProducerWebService {
 
-	public List<CMICContact> getContacts(long producerId);
+	public List<CMICContactDTO> getContacts(long producerId);
 
-	public CMICProducer getProducerById(long id);
+	public CMICProducerDTO getProducerById(long id);
 
-	public List<CMICProducer> getProducers(String agent, String division, String name, boolean payOutOfCdms);
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms);
 
 }

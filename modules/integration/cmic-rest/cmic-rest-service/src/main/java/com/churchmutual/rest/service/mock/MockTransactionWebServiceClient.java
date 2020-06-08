@@ -1,8 +1,8 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICTransaction;
-import com.churchmutual.rest.model.CMICTransactionAccountSummary;
-import com.churchmutual.rest.model.CMICTransactionPolicySummary;
+import com.churchmutual.rest.model.CMICTransactionDTO;
+import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -20,63 +20,63 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockTransactionWebServiceClient.class)
 public class MockTransactionWebServiceClient {
 
-	public CMICTransaction getTransaction(String combinedPolicyNumber, int sequenceNumber) {
+	public CMICTransactionDTO getTransaction(String combinedPolicyNumber, int sequenceNumber) {
 		String fileName = _TRANSACTION_WEB_SERVICE_DIR + "getTransaction.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICTransaction> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICTransactionDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICTransaction.class);
+		return jsonDeserializer.deserialize(fileContent, CMICTransactionDTO.class);
 	}
 
-	public List<CMICTransactionAccountSummary> getTransactionAccountSummaryByAccounts(String[] accountNumber) {
+	public List<CMICTransactionAccountSummaryDTO> getTransactionAccountSummaryByAccounts(String[] accountNumber) {
 		String fileName = _TRANSACTION_WEB_SERVICE_DIR + "getTransactionAccountSummaryByAccounts.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICTransactionAccountSummary[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICTransactionAccountSummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICTransactionAccountSummary[] transactionAccountSummaries = jsonDeserializer.deserialize(
-			fileContent, CMICTransactionAccountSummary[].class);
+		CMICTransactionAccountSummaryDTO[] transactionAccountSummaries = jsonDeserializer.deserialize(
+			fileContent, CMICTransactionAccountSummaryDTO[].class);
 
 		return ListUtil.fromArray(transactionAccountSummaries);
 	}
 
-	public List<CMICTransaction> getTransactionOnPolicy(String combinedPolicyNumber) {
+	public List<CMICTransactionDTO> getTransactionOnPolicy(String combinedPolicyNumber) {
 		String fileName = _TRANSACTION_WEB_SERVICE_DIR + "getTransactionOnPolicy.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICTransaction[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICTransactionDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICTransaction[] transactions = jsonDeserializer.deserialize(fileContent, CMICTransaction[].class);
+		CMICTransactionDTO[] transactions = jsonDeserializer.deserialize(fileContent, CMICTransactionDTO[].class);
 
 		return ListUtil.fromArray(transactions);
 	}
 
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber) {
 		String fileName = _TRANSACTION_WEB_SERVICE_DIR + "getTransactionPolicySummaryByPolicies.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICTransactionPolicySummary[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICTransactionPolicySummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICTransactionPolicySummary[] transactionPolicySummaries = jsonDeserializer.deserialize(
-			fileContent, CMICTransactionPolicySummary[].class);
+		CMICTransactionPolicySummaryDTO[] transactionPolicySummaries = jsonDeserializer.deserialize(
+			fileContent, CMICTransactionPolicySummaryDTO[].class);
 
 		return ListUtil.fromArray(transactionPolicySummaries);
 	}
 
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryOnAccount(String accountNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryOnAccount(String accountNumber) {
 		String fileName = _TRANSACTION_WEB_SERVICE_DIR + "getTransactionPolicySummaryOnAccount.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICTransactionPolicySummary[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICTransactionPolicySummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICTransactionPolicySummary[] transactionPolicySummaries = jsonDeserializer.deserialize(
-			fileContent, CMICTransactionPolicySummary[].class);
+		CMICTransactionPolicySummaryDTO[] transactionPolicySummaries = jsonDeserializer.deserialize(
+			fileContent, CMICTransactionPolicySummaryDTO[].class);
 
 		return ListUtil.fromArray(transactionPolicySummaries);
 	}

@@ -1,7 +1,7 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICCommissionDocument;
-import com.churchmutual.rest.model.CMICFile;
+import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
+import com.churchmutual.rest.model.CMICFileDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -26,12 +26,12 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockCommissionDocumentWebServiceClient.class)
 public class MockCommissionDocumentWebServiceClient {
 
-	public List<CMICFile> downloadDocuments(String[] ids, boolean includeBytes) {
+	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) {
 		String fileName = _COMMISSION_DOCUMENT_WEB_SERVICE_DIR + "downloadDocuments.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		List<CMICFile> allFiles = new ArrayList<>();
+		List<CMICFileDTO> allFiles = new ArrayList<>();
 
 		try {
 			JSONObject file = _jsonFactory.createJSONObject(fileContent);
@@ -43,9 +43,9 @@ public class MockCommissionDocumentWebServiceClient {
 
 				String fileArray = file.getString(fileId);
 
-				JSONDeserializer<CMICFile[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+				JSONDeserializer<CMICFileDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-				CMICFile[] files = jsonDeserializer.deserialize(fileArray, CMICFile[].class);
+				CMICFileDTO[] files = jsonDeserializer.deserialize(fileArray, CMICFileDTO[].class);
 
 				Collections.addAll(allFiles, files);
 			}
@@ -59,7 +59,7 @@ public class MockCommissionDocumentWebServiceClient {
 		return allFiles;
 	}
 
-	public List<CMICCommissionDocument> searchDocuments(
+	public List<CMICCommissionDocumentDTO> searchDocuments(
 		String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
 		String minimumStatementDate) {
 
@@ -67,10 +67,10 @@ public class MockCommissionDocumentWebServiceClient {
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICCommissionDocument[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICCommissionDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICCommissionDocument[] commissionDocuments = jsonDeserializer.deserialize(
-			fileContent, CMICCommissionDocument[].class);
+		CMICCommissionDocumentDTO[] commissionDocuments = jsonDeserializer.deserialize(
+			fileContent, CMICCommissionDocumentDTO[].class);
 
 		return ListUtil.fromArray(commissionDocuments);
 	}

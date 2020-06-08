@@ -1,7 +1,7 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICAccount;
-import com.churchmutual.rest.model.CMICAddress;
+import com.churchmutual.rest.model.CMICAccountDTO;
+import com.churchmutual.rest.model.CMICAddressDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -19,36 +19,36 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockAccountWebServiceClient.class)
 public class MockAccountWebServiceClient {
 
-	public CMICAccount getAccounts(String accountNumber) {
+	public CMICAccountDTO getAccounts(String accountNumber) {
 		String fileName = _ACCOUNT_WEB_SERVICE_DIR + "getAccounts.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAccount> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAccountDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICAccount.class);
+		return jsonDeserializer.deserialize(fileContent, CMICAccountDTO.class);
 	}
 
-	public List<CMICAccount> getAccountsSearchByProducer(String[] producerCode) {
+	public List<CMICAccountDTO> getAccountsSearchByProducer(String[] producerCode) {
 		String fileName = _ACCOUNT_WEB_SERVICE_DIR + "getAccountsSearchByProducer.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAccount[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAccountDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICAccount[] cmicAccounts = jsonDeserializer.deserialize(fileContent, CMICAccount[].class);
+		CMICAccountDTO[] cmicAccountDTOS = jsonDeserializer.deserialize(fileContent, CMICAccountDTO[].class);
 
-		return ListUtil.fromArray(cmicAccounts);
+		return ListUtil.fromArray(cmicAccountDTOS);
 	}
 
-	public CMICAddress getAddressAccount(String accountNumber) {
+	public CMICAddressDTO getAddressAccount(String accountNumber) {
 		String fileName = _ACCOUNT_WEB_SERVICE_DIR + "getAddressAccount.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICAddress> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICAddressDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICAddress.class);
+		return jsonDeserializer.deserialize(fileContent, CMICAddressDTO.class);
 	}
 
 	private static final String _ACCOUNT_WEB_SERVICE_DIR = "account-web-service/";

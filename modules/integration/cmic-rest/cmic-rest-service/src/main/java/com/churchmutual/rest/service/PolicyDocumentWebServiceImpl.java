@@ -2,7 +2,7 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.PolicyDocumentWebService;
 import com.churchmutual.rest.configuration.MockPolicyDocumentWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICPolicyDocument;
+import com.churchmutual.rest.model.CMICPolicyDocumentDTO;
 import com.churchmutual.rest.service.mock.MockPolicyDocumentWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Reference;
 public class PolicyDocumentWebServiceImpl implements PolicyDocumentWebService {
 
 	@Override
-	public CMICPolicyDocument getRecentTransactions(
+	public CMICPolicyDocumentDTO getRecentTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType) {
 
 		if (_mockPolicyDocumentWebServiceConfiguration.enableMockGetRecentTransactions()) {
@@ -34,7 +34,7 @@ public class PolicyDocumentWebServiceImpl implements PolicyDocumentWebService {
 
 		//TODO CMIC-201
 
-		CMICPolicyDocument policyDocument = new CMICPolicyDocument();
+		CMICPolicyDocumentDTO policyDocument = new CMICPolicyDocumentDTO();
 
 		policyDocument.setAccountNumber("ACTUAL");
 
@@ -42,7 +42,7 @@ public class PolicyDocumentWebServiceImpl implements PolicyDocumentWebService {
 	}
 
 	@Override
-	public CMICPolicyDocument getTransactions(
+	public CMICPolicyDocumentDTO getTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType, String sequenceNum) {
 
 		if (_mockPolicyDocumentWebServiceConfiguration.enableMockGetTransactions()) {
@@ -52,7 +52,7 @@ public class PolicyDocumentWebServiceImpl implements PolicyDocumentWebService {
 
 		//TODO CMIC-201
 
-		CMICPolicyDocument policyDocument = new CMICPolicyDocument();
+		CMICPolicyDocumentDTO policyDocument = new CMICPolicyDocumentDTO();
 
 		policyDocument.setAccountNumber("ACTUAL");
 

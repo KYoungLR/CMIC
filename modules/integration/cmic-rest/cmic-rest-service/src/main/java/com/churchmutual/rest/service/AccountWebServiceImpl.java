@@ -2,8 +2,8 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICAccount;
-import com.churchmutual.rest.model.CMICAddress;
+import com.churchmutual.rest.model.CMICAccountDTO;
+import com.churchmutual.rest.model.CMICAddressDTO;
 import com.churchmutual.rest.service.mock.MockAccountWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -27,14 +27,14 @@ import org.osgi.service.component.annotations.Reference;
 public class AccountWebServiceImpl implements AccountWebService {
 
 	@Override
-	public CMICAccount getAccounts(String accountNumber) {
+	public CMICAccountDTO getAccounts(String accountNumber) {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAccounts()) {
 			return _mockAccountWebServiceClient.getAccounts(accountNumber);
 		}
 
 		//TODO CMIC-146
 
-		CMICAccount account = new CMICAccount();
+		CMICAccountDTO account = new CMICAccountDTO();
 
 		account.setAccountName("ACTUAL");
 
@@ -42,14 +42,14 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	@Override
-	public List<CMICAccount> getAccountsSearchByProducer(String[] producerCode) {
+	public List<CMICAccountDTO> getAccountsSearchByProducer(String[] producerCode) {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAccountsSearchByProducer()) {
 			return _mockAccountWebServiceClient.getAccountsSearchByProducer(producerCode);
 		}
 
 		//TODO CMIC-146
 
-		CMICAccount account = new CMICAccount();
+		CMICAccountDTO account = new CMICAccountDTO();
 
 		account.setAccountName("ACTUAL");
 
@@ -57,14 +57,14 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	@Override
-	public CMICAddress getAddressAccount(String accountNumber) {
+	public CMICAddressDTO getAddressAccount(String accountNumber) {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAddressAccount()) {
 			return _mockAccountWebServiceClient.getAddressAccount(accountNumber);
 		}
 
 		//TODO CMIC-146
 
-		CMICAddress address = new CMICAddress();
+		CMICAddressDTO address = new CMICAddressDTO();
 
 		address.setCity("ACTUAL");
 

@@ -1,6 +1,6 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -23,24 +23,24 @@ public class MockPortalUserWebServiceClient {
 		return true;
 	}
 
-	public CMICUser validateUser(String registrationCode) {
+	public CMICUserDTO validateUser(String registrationCode) {
 		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUser.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICUser> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICUserDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICUser.class);
+		return jsonDeserializer.deserialize(fileContent, CMICUserDTO.class);
 	}
 
-	public CMICUser validateUserRegistration(String registrationCode) {
+	public CMICUserDTO validateUserRegistration(String registrationCode) {
 		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUserRegistration.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICUser> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICUserDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICUser.class);
+		return jsonDeserializer.deserialize(fileContent, CMICUserDTO.class);
 	}
 
 	private static final String _PORTAL_USER_WEB_SERVICE_DIR = "portal-user-web-service/";

@@ -2,8 +2,8 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.CommissionDocumentWebService;
 import com.churchmutual.rest.configuration.MockCommissionDocumentWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICCommissionDocument;
-import com.churchmutual.rest.model.CMICFile;
+import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
+import com.churchmutual.rest.model.CMICFileDTO;
 import com.churchmutual.rest.service.mock.MockCommissionDocumentWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -27,14 +27,14 @@ import org.osgi.service.component.annotations.Reference;
 public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebService {
 
 	@Override
-	public List<CMICFile> downloadDocuments(String[] ids, boolean includeBytes) {
+	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) {
 		if (_mockCommissionDocumentWebServiceConfiguration.enableMockDownloadDocuments()) {
 			return _mockCommissionDocumentWebServiceClient.downloadDocuments(ids, includeBytes);
 		}
 
 		//TODO CMIC-202
 
-		CMICFile file = new CMICFile();
+		CMICFileDTO file = new CMICFileDTO();
 
 		file.setId("ACTUAL");
 
@@ -42,7 +42,7 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 	}
 
 	@Override
-	public List<CMICCommissionDocument> searchDocuments(
+	public List<CMICCommissionDocumentDTO> searchDocuments(
 		String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
 		String minimumStatementDate) {
 
@@ -53,7 +53,7 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 
 		//TODO CMIC-202
 
-		CMICCommissionDocument commissionDocument = new CMICCommissionDocument();
+		CMICCommissionDocumentDTO commissionDocument = new CMICCommissionDocumentDTO();
 
 		commissionDocument.setId("ACTUAL");
 

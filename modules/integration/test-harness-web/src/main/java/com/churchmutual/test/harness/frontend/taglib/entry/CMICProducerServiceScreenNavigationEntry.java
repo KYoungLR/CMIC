@@ -1,8 +1,8 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.ProducerWebService;
-import com.churchmutual.rest.model.CMICContact;
-import com.churchmutual.rest.model.CMICProducer;
+import com.churchmutual.rest.model.CMICContactDTO;
+import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -104,14 +104,14 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 		if (_GET_CONTACTS_ENDPOINT.equals(endpoint)) {
 			long producerId = ParamUtil.getLong(portletRequest, "producerId");
 
-			List<CMICContact> contacts = _producerWebService.getContacts(producerId);
+			List<CMICContactDTO> contacts = _producerWebService.getContacts(producerId);
 
 			contacts.forEach(contact -> response.put(contact.toJSONObject()));
 		}
 		else if (_GET_PRODUCER_BY_ID_ENDPOINT.equals(endpoint)) {
 			long id = ParamUtil.getLong(portletRequest, "id");
 
-			CMICProducer producer = _producerWebService.getProducerById(id);
+			CMICProducerDTO producer = _producerWebService.getProducerById(id);
 
 			response.put(producer.toJSONObject());
 		}
@@ -121,7 +121,7 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 			String name = ParamUtil.getString(portletRequest, "name");
 			boolean payOutOfCdms = ParamUtil.getBoolean(portletRequest, "payOutOfCdms");
 
-			List<CMICProducer> producers = _producerWebService.getProducers(agent, division, name, payOutOfCdms);
+			List<CMICProducerDTO> producers = _producerWebService.getProducers(agent, division, name, payOutOfCdms);
 
 			producers.forEach(producer -> response.put(producer.toJSONObject()));
 		}

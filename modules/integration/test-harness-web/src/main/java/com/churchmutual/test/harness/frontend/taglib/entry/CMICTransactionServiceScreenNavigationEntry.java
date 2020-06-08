@@ -1,9 +1,9 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.TransactionWebService;
-import com.churchmutual.rest.model.CMICTransaction;
-import com.churchmutual.rest.model.CMICTransactionAccountSummary;
-import com.churchmutual.rest.model.CMICTransactionPolicySummary;
+import com.churchmutual.rest.model.CMICTransactionDTO;
+import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -119,14 +119,14 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 			String combinedPolicyNumber = ParamUtil.getString(portletRequest, "combinedPolicyNumber");
 			int sequenceNumber = ParamUtil.getInteger(portletRequest, "sequenceNumber");
 
-			CMICTransaction transaction = _transactionWebService.getTransaction(combinedPolicyNumber, sequenceNumber);
+			CMICTransactionDTO transaction = _transactionWebService.getTransaction(combinedPolicyNumber, sequenceNumber);
 
 			response.put(transaction.toJSONObject());
 		}
 		else if (_GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS_ENDPOINT.equals(endpoint)) {
 			String[] accountNumber = ParamUtil.getStringValues(portletRequest, "accountNumber");
 
-			List<CMICTransactionAccountSummary> transactionAccountSummaries =
+			List<CMICTransactionAccountSummaryDTO> transactionAccountSummaries =
 				_transactionWebService.getTransactionAccountSummaryByAccounts(accountNumber);
 
 			transactionAccountSummaries.forEach(
@@ -135,27 +135,27 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 		else if (_GET_TRANSACTION_ON_POLICY_ENDPOINT.equals(endpoint)) {
 			String combinedPolicyNumber = ParamUtil.getString(portletRequest, "combinedPolicyNumber");
 
-			List<CMICTransaction> transactions = _transactionWebService.getTransactionOnPolicy(combinedPolicyNumber);
+			List<CMICTransactionDTO> transactions = _transactionWebService.getTransactionOnPolicy(combinedPolicyNumber);
 
 			transactions.forEach(transaction -> response.put(transaction.toJSONObject()));
 		}
 		else if (_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_ENDPOINT.equals(endpoint)) {
 			String[] combinedPolicyNumber = ParamUtil.getStringValues(portletRequest, "combinedPolicyNumber");
 
-			List<CMICTransactionPolicySummary> transactionPolicySummaries =
+			List<CMICTransactionPolicySummaryDTO> transactionPolicySummaries =
 				_transactionWebService.getTransactionPolicySummaryByPolicies(combinedPolicyNumber);
 
 			transactionPolicySummaries.forEach(
-				cmicTransactionPolicySummary -> response.put(cmicTransactionPolicySummary.toJSONObject()));
+					cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
 		}
 		else if (_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_ENDPOINT.equals(endpoint)) {
 			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
 
-			List<CMICTransactionPolicySummary> transactionPolicySummaries =
+			List<CMICTransactionPolicySummaryDTO> transactionPolicySummaries =
 				_transactionWebService.getTransactionPolicySummaryOnAccount(accountNumber);
 
 			transactionPolicySummaries.forEach(
-				cmicTransactionPolicySummary -> response.put(cmicTransactionPolicySummary.toJSONObject()));
+					cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
 		}
 
 		return response.toString();

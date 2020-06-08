@@ -2,9 +2,9 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.TransactionWebService;
 import com.churchmutual.rest.configuration.MockTransactionWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICTransaction;
-import com.churchmutual.rest.model.CMICTransactionAccountSummary;
-import com.churchmutual.rest.model.CMICTransactionPolicySummary;
+import com.churchmutual.rest.model.CMICTransactionDTO;
+import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.rest.service.mock.MockTransactionWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -28,14 +28,14 @@ import org.osgi.service.component.annotations.Reference;
 public class TransactionWebServiceImpl implements TransactionWebService {
 
 	@Override
-	public CMICTransaction getTransaction(String combinedPolicyNumber, int sequenceNumber) {
+	public CMICTransactionDTO getTransaction(String combinedPolicyNumber, int sequenceNumber) {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransaction()) {
 			return _mockTransactionWebServiceClient.getTransaction(combinedPolicyNumber, sequenceNumber);
 		}
 
 		//TODO CMIC-200
 
-		CMICTransaction transaction = new CMICTransaction();
+		CMICTransactionDTO transaction = new CMICTransactionDTO();
 
 		transaction.setAccountNumber("ACTUAL");
 
@@ -43,14 +43,14 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionAccountSummary> getTransactionAccountSummaryByAccounts(String[] accountNumber) {
+	public List<CMICTransactionAccountSummaryDTO> getTransactionAccountSummaryByAccounts(String[] accountNumber) {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionAccountSummaryByAccounts()) {
 			return _mockTransactionWebServiceClient.getTransactionAccountSummaryByAccounts(accountNumber);
 		}
 
 		//TODO CMIC-200
 
-		CMICTransactionAccountSummary transactionAccountSummary = new CMICTransactionAccountSummary();
+		CMICTransactionAccountSummaryDTO transactionAccountSummary = new CMICTransactionAccountSummaryDTO();
 
 		transactionAccountSummary.setAccountNumber("ACTUAL");
 
@@ -58,14 +58,14 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransaction> getTransactionOnPolicy(String combinedPolicyNumber) {
+	public List<CMICTransactionDTO> getTransactionOnPolicy(String combinedPolicyNumber) {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionOnPolicy()) {
 			return _mockTransactionWebServiceClient.getTransactionOnPolicy(combinedPolicyNumber);
 		}
 
 		//TODO CMIC-200
 
-		CMICTransaction transaction = new CMICTransaction();
+		CMICTransactionDTO transaction = new CMICTransactionDTO();
 
 		transaction.setAccountNumber("ACTUAL");
 
@@ -73,14 +73,14 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber) {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionPolicySummaryByPolicies()) {
 			return _mockTransactionWebServiceClient.getTransactionPolicySummaryByPolicies(combinedPolicyNumber);
 		}
 
 		//TODO CMIC-200
 
-		CMICTransactionPolicySummary transactionPolicySummary = new CMICTransactionPolicySummary();
+		CMICTransactionPolicySummaryDTO transactionPolicySummary = new CMICTransactionPolicySummaryDTO();
 
 		transactionPolicySummary.setAccountNumber("ACTUAL");
 
@@ -88,14 +88,14 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryOnAccount(String accountNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryOnAccount(String accountNumber) {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionPolicySummaryOnAccount()) {
 			return _mockTransactionWebServiceClient.getTransactionPolicySummaryOnAccount(accountNumber);
 		}
 
 		//TODO CMIC-200
 
-		CMICTransactionPolicySummary transactionPolicySummary = new CMICTransactionPolicySummary();
+		CMICTransactionPolicySummaryDTO transactionPolicySummary = new CMICTransactionPolicySummaryDTO();
 
 		transactionPolicySummary.setAccountNumber("ACTUAL");
 

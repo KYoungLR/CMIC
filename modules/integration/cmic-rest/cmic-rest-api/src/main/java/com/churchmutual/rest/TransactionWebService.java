@@ -1,8 +1,8 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICTransaction;
-import com.churchmutual.rest.model.CMICTransactionAccountSummary;
-import com.churchmutual.rest.model.CMICTransactionPolicySummary;
+import com.churchmutual.rest.model.CMICTransactionDTO;
+import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import java.util.List;
  */
 public interface TransactionWebService {
 
-	public CMICTransaction getTransaction(String combinedPolicyNumber, int sequenceNumber);
+	public CMICTransactionDTO getTransaction(String combinedPolicyNumber, int sequenceNumber);
 
-	public List<CMICTransactionAccountSummary> getTransactionAccountSummaryByAccounts(String[] accountNumber);
+	public List<CMICTransactionAccountSummaryDTO> getTransactionAccountSummaryByAccounts(String[] accountNumber);
 
-	public List<CMICTransaction> getTransactionOnPolicy(String combinedPolicyNumber);
+	public List<CMICTransactionDTO> getTransactionOnPolicy(String combinedPolicyNumber);
 
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber);
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber);
 
-	public List<CMICTransactionPolicySummary> getTransactionPolicySummaryOnAccount(String accountNumber);
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryOnAccount(String accountNumber);
 
 }

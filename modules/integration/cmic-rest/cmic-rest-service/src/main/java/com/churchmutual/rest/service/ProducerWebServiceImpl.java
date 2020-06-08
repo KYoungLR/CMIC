@@ -2,8 +2,8 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.configuration.MockProducerWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICContact;
-import com.churchmutual.rest.model.CMICProducer;
+import com.churchmutual.rest.model.CMICContactDTO;
+import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.service.mock.MockProducerWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -27,14 +27,14 @@ import org.osgi.service.component.annotations.Reference;
 public class ProducerWebServiceImpl implements ProducerWebService {
 
 	@Override
-	public List<CMICContact> getContacts(long producerId) {
+	public List<CMICContactDTO> getContacts(long producerId) {
 		if (_mockProducerWebServiceConfiguration.enableMockGetContacts()) {
 			return _mockProducerWebServiceClient.getContacts(producerId);
 		}
 
 		//TODO CMIC-199
 
-		CMICContact contact = new CMICContact();
+		CMICContactDTO contact = new CMICContactDTO();
 
 		contact.setFirstName("ACTUAL");
 
@@ -42,14 +42,14 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public CMICProducer getProducerById(long id) {
+	public CMICProducerDTO getProducerById(long id) {
 		if (_mockProducerWebServiceConfiguration.enableMockGetProducerById()) {
 			return _mockProducerWebServiceClient.getProducerById(id);
 		}
 
 		//TODO CMIC-199
 
-		CMICProducer producer = new CMICProducer();
+		CMICProducerDTO producer = new CMICProducerDTO();
 
 		producer.setDivision("ACTUAL");
 
@@ -57,14 +57,14 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public List<CMICProducer> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
 		if (_mockProducerWebServiceConfiguration.enableMockGetProducers()) {
 			return _mockProducerWebServiceClient.getProducers(agent, division, name, payOutOfCdms);
 		}
 
 		//TODO CMIC-199
 
-		CMICProducer producer = new CMICProducer();
+		CMICProducerDTO producer = new CMICProducerDTO();
 
 		producer.setDivision("ACTUAL");
 

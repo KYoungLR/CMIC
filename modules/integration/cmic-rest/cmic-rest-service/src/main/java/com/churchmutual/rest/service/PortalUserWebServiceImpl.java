@@ -2,7 +2,7 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.configuration.MockPortalUserWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICUser;
+import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.rest.service.mock.MockPortalUserWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -46,14 +46,14 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 	}
 
 	@Override
-	public CMICUser validateUser(String registrationCode) {
+	public CMICUserDTO validateUser(String registrationCode) {
 		if (_mockPortalUserWebServiceConfiguration.enableMockValidateUser()) {
 			return _mockPortalUserWebServiceClient.validateUser(registrationCode);
 		}
 
 		//TODO CMIC-178
 
-		CMICUser user = new CMICUser();
+		CMICUserDTO user = new CMICUserDTO();
 
 		user.setId(123);
 		user.setRegistrationCode("ACTUAL");
@@ -62,14 +62,14 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 	}
 
 	@Override
-	public CMICUser validateUserRegistration(String registrationCode) {
+	public CMICUserDTO validateUserRegistration(String registrationCode) {
 		if (_mockPortalUserWebServiceConfiguration.enableMockValidateUserRegistration()) {
 			return _mockPortalUserWebServiceClient.validateUserRegistration(registrationCode);
 		}
 
 		//TODO CMIC-178
 
-		CMICUser user = new CMICUser();
+		CMICUserDTO user = new CMICUserDTO();
 
 		user.setId(123);
 		user.setRegistrationCode("ACTUAL");

@@ -1,7 +1,7 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICAccount;
-import com.churchmutual.rest.model.CMICAddress;
+import com.churchmutual.rest.model.CMICAccountDTO;
+import com.churchmutual.rest.model.CMICAddressDTO;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import java.util.List;
  */
 public interface AccountWebService {
 
-	public CMICAccount getAccounts(String accountNumber);
+	public CMICAccountDTO getAccounts(String accountNumber);
 
-	public List<CMICAccount> getAccountsSearchByProducer(String[] producerCode);
+	public List<CMICAccountDTO> getAccountsSearchByProducer(String[] producerCode);
 
-	public CMICAddress getAddressAccount(String accountNumber);
+	public CMICAddressDTO getAddressAccount(String accountNumber);
 
 }
