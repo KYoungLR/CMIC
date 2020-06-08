@@ -9,7 +9,7 @@ public class LayoutURLKeyConstants {
 
 	public static final String LAYOUT_FURL_BROKER_ACCOUNTS = "/accounts";
 
-	public static final String LAYOUT_FURL_BROKER_CONTACTS = "/contacts";
+	public static final String LAYOUT_FURL_BROKER_CONTACT = "/contact";
 
 	public static final String LAYOUT_FURL_BROKER_DASHBOARD = "/dashboard";
 

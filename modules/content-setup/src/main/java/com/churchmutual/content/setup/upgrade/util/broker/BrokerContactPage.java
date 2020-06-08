@@ -7,13 +7,13 @@ import com.churchmutual.commons.constants.LayoutURLKeyConstants;
 /**
  * @author Matthew Chan
  */
-public class BrokerContactsPage {
+public class BrokerContactPage {
 
 	public static void addPage(long companyId, long userId, long groupId) throws Exception {
 		LayoutConfig layoutConfig = new LayoutConfig().setName(
-			"Contacts"
+			"Contact"
 		).setFriendlyURL(
-			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_CONTACTS
+			LayoutURLKeyConstants.LAYOUT_FURL_BROKER_CONTACT
 		).addPortletKey(
 			_CONTACT_PRODUCER_LIST_WEB_PORTLET
 		);

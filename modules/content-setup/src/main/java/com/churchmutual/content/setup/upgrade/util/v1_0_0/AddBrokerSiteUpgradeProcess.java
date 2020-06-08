@@ -2,7 +2,7 @@ package com.churchmutual.content.setup.upgrade.util.v1_0_0;
 
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountDetailsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountsPage;
-import com.churchmutual.content.setup.upgrade.util.broker.BrokerContactsPage;
+import com.churchmutual.content.setup.upgrade.util.broker.BrokerContactPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerDashboardPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerPolicyDetailsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerProfilePage;
@@ -58,7 +58,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		BrokerAccountDetailsPage.addPage(companyId, userId, groupId);
 		BrokerPolicyDetailsPage.addPage(companyId, userId, groupId);
 		BrokerResourcesPage.addPage(companyId, userId, groupId);
-		BrokerContactsPage.addPage(companyId, userId, groupId);
+		BrokerContactPage.addPage(companyId, userId, groupId);
 		BrokerProfilePage.addPage(companyId, userId, groupId);
 	}
 
