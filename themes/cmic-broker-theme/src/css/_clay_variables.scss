@@ -39,6 +39,7 @@ $danger-l4: lighten(desaturate($danger, 20.39), 51.18); // #fcf4ee;
 
 // Body
 
+$body-bg: $gray-200;
 $body-color: $black;
 
 
@@ -83,6 +84,8 @@ $elevation: (
 );
 
 $page-header-bg: transparent;
+
+$sheet-bg: $white;
 
 
 // Typography
