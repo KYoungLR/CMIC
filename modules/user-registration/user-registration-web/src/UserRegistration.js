@@ -17,10 +17,6 @@ class UserRegistration extends React.Component {
         businessZipCode: null,
         divisionAgentNumber: null,
         registrationCode: null
-      },
-      user: {
-        registrationCode: null,
-        uuid: null
       }
     }
 
@@ -75,7 +71,12 @@ class UserRegistration extends React.Component {
 
   setStateField(fieldName, fieldValue) {
     this.setState(previousState => ({
-      [fieldName]: fieldValue
+      [fieldName]: fieldValue,
+      formErrors: {
+        ...previousState.formErrors,
+        businessZipCode: null,
+        divisionAgentNumber: null
+      }
     }));
   }
 
@@ -91,8 +92,8 @@ class UserRegistration extends React.Component {
         throw response;
       }
 
-      response.json().then(user => {
-        if (user.registrationCode == null) {
+      response.text().then(businessPortalType => {
+        if (businessPortalType == null || businessPortalType == "insured") {
           this.setState(previousState => ({
             formErrors: {
               ...previousState.formErrors,
@@ -101,16 +102,6 @@ class UserRegistration extends React.Component {
           }));
         }
         else {
-          this.setState(previousState => ({
-            formErrors: {
-              ...previousState.formErrors
-            },
-            user: {
-              registrationCode: user.registrationCode,
-              uuid: user.uuid
-            }
-          }))
-
           this.setState({ isFormRegistrationCodeSubmitted: true });
         }
       });
@@ -126,8 +117,7 @@ class UserRegistration extends React.Component {
 
   submitFormIdentity() {
     let data = new FormData(this.formIdentity.current);
-    data.append("registrationCode", this.state.user.registrationCode);
-    data.append("uuid", this.state.user.uuid);
+    data.append("registrationCode", this.state.registrationCode);
 
     fetch(`/o/user-registration/is-user-valid/`, {
       method: 'post',
@@ -139,10 +129,7 @@ class UserRegistration extends React.Component {
       }
 
       response.json().then(isUserValid => {
-        if (isUserValid) {
-          window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
-        }
-        else {
+        if (!isUserValid) {
           this.setState(previousState => ({
             formErrors: {
               ...previousState.formErrors,
@@ -150,6 +137,9 @@ class UserRegistration extends React.Component {
               divisionAgentNumber: true
             }
           }));
+        }
+        else {
+          window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
         }
       });
     }).catch(
@@ -169,7 +159,9 @@ class UserRegistration extends React.Component {
       isDivisionAgentNumberEmpty: fieldValue == "",
       [fieldName]: fieldValue,
       formErrors: {
-        ...previousState.formErrors
+        ...previousState.formErrors,
+        businessZipCode: null,
+        divisionAgentNumber: null
       }
     }));
   };
@@ -180,7 +172,8 @@ class UserRegistration extends React.Component {
       isRegistrationCodeEmpty: fieldValue == "",
       [fieldName]: fieldValue,
       formErrors: {
-        ...previousState.formErrors
+        ...previousState.formErrors,
+        registrationCode: null
       }
     }));
   };
