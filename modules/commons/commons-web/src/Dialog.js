@@ -40,9 +40,9 @@ const Dialog = (props) => {
             {!props.hideFooter && <ClayModal.Footer
                 last={
                     <ClayButton.Group spaced>
-                        <ClayButton displayType="secondary" onClick={onClose}>
+                        {!props.hideCancel && <ClayButton displayType="outline-secondary" onClick={onClose}>
                             {Liferay.Language.get("cancel")}
-                        </ClayButton>
+                        </ClayButton>}
                         <ClayButton displayType="primary" onClick={onConfirm}>
                             {buttonConfirm}
                         </ClayButton>

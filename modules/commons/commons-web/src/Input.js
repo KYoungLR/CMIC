@@ -28,7 +28,6 @@ const Input = (props) => {
       <label htmlFor={fieldName}>
           {label}
           {required ? <AsteriskIcon /> : ''}
-          {labelHint ? <small><i> {labelHint.toLowerCase()}</i></small> : ''}
       </label>
 
       <ClayInput
@@ -44,6 +43,8 @@ const Input = (props) => {
         ref={inputRef}
         value={value}
       />
+
+      {labelHint ? <small>{labelHint}</small> : ''}
 
       {errorMsgPosition != 'top' && displayError && errorMsg != null &&
         <ClayForm.FeedbackGroup>
