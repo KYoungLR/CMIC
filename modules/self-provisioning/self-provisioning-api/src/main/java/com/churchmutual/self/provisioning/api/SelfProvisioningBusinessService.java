@@ -17,25 +17,25 @@ import java.util.List;
 )
 public interface SelfProvisioningBusinessService {
 
-    void addBusinessUserRole(long groupId, User user, Role role);
+    void addBusinessUserRole(long userId, long groupId, long roleId);
 
     List<Role> getBusinessRoles(long companyId);
 
-    List<Role> getBusinessUserRoles(long groupId, User user);
+    List<Role> getBusinessUserRoles(long userId, long groupId);
 
-    BusinessUserStatus getBusinessUserStatus(long groupId, User user) throws PortalException;
+    BusinessUserStatus getBusinessUserStatus(long userId, long groupId) throws PortalException;
 
     long getOrganizationOrAccountEntryId(long groupId) throws PortalException;
 
-    boolean hasBusinessUserRole(long groupId, User user, Role businessRole);
+    boolean hasBusinessUserRole(long userId, long groupId, Role businessRole);
 
-    void inviteBusinessUserByEmail(String email, long groupId, long creatorUserId) throws PortalException;
+    void inviteBusinessUserByEmail(long creatorUserId, long groupId, String email) throws PortalException;
 
-    void inviteBusinessUsersByEmail(String[] emails, long groupId, long creatorUserId) throws PortalException;
+    void inviteBusinessUsersByEmail(long creatorUserId, long groupId, String[] emails) throws PortalException;
 
     void promoteFirstActiveUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException;
 
-    void setBusinessUserStatus(long groupId, User user, BusinessUserStatus businessUserStatus) throws PortalException;
+    void setBusinessUserStatus(long userId, long groupId, BusinessUserStatus businessUserStatus) throws PortalException;
 
     void updateBusinessMembers(UpdateBusinessMembersRequest updateBusinessMembersRequest) throws PortalException;
 }

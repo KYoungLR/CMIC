@@ -188,7 +188,7 @@ public class SelfProvisioningApplication extends Application {
 
 			String[] invitationEmails = emails.split(",");
 
-			_addBusinessMember(groupId, invitationEmails, userId);
+			_addBusinessMember(userId, groupId, invitationEmails);
 
 			JSONObject response = _jsonFactory.createJSONObject();
 
@@ -223,10 +223,10 @@ public class SelfProvisioningApplication extends Application {
 		}
 	}
 
-	private void _addBusinessMember(long groupId, String[] emails, long creatorUserId) throws PortalException {
+	private void _addBusinessMember(long creatorUserId, long groupId, String[] emails) throws PortalException {
 		_checkUpdatePermissions(creatorUserId, groupId);
 
-		selfProvisioningBusinessService.inviteBusinessUsersByEmail(emails, groupId, creatorUserId);
+		selfProvisioningBusinessService.inviteBusinessUsersByEmail(creatorUserId, groupId, emails);
 	}
 
 	/**

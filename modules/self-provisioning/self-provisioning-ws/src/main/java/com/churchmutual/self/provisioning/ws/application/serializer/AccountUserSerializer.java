@@ -40,7 +40,7 @@ public class AccountUserSerializer {
 	public JSONObject serialize(User user, long groupId) throws PortalException {
 		JSONObject obj = _jsonFactory.createJSONObject();
 
-		BusinessUserStatus businessUserStatus = _selfProvisioningBusinessService.getBusinessUserStatus(groupId, user);
+		BusinessUserStatus businessUserStatus = _selfProvisioningBusinessService.getBusinessUserStatus(user.getUserId(), groupId);
 
 		obj.put("email", user.getEmailAddress());
 		obj.put("fullName", _getUserFullName(user, businessUserStatus));
@@ -64,7 +64,7 @@ public class AccountUserSerializer {
 	}
 
 	private String _getUserRoleName(User user, long groupId) throws PortalException {
-		List<Role> userAccountRoles = _selfProvisioningBusinessService.getBusinessUserRoles(groupId, user);
+		List<Role> userAccountRoles = _selfProvisioningBusinessService.getBusinessUserRoles(user.getUserId(), groupId);
 
 		Role userAccountRole = null;
 
