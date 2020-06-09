@@ -50,12 +50,12 @@ public class UserRegistrationApplication extends Application {
 			@Context HttpServletRequest request, @Context HttpServletResponse response,
 			MultivaluedMap<String, String> map) {
 
-		String agentNumber = map.getFirst("agentNumber");
-		String divisionNumber = map.getFirst("divisionNumber");
+		String businessZipCode = map.getFirst("businessZipCode");
+		String divisionAgentNumber = map.getFirst("divisionAgentNumber");
 		String registrationCode = map.getFirst("registrationCode");
 		String uuid = map.getFirst("uuid");
 
-		boolean isUserValid = _portalUserWebService.isUserValid(agentNumber, divisionNumber, registrationCode, uuid);
+		boolean isUserValid = _portalUserWebService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, uuid);
 
 		return Response.ok(_jsonFactory.serialize(isUserValid)).build();
 	}

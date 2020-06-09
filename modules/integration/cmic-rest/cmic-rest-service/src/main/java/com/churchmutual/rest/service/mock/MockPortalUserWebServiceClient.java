@@ -19,7 +19,13 @@ public class MockPortalUserWebServiceClient {
 		return true;
 	}
 
-	public boolean isUserValid(String agentNumber, String divisionNumber, String registrationCode, String uuid) {
+	public boolean isUserValid(String businessZipCode, String divisionAgentNumber, String registrationCode, String uuid) {
+		if ("error".equals(businessZipCode) || "error".equals(divisionAgentNumber) || "error".equals(registrationCode) ||
+			"error".equals(uuid)) {
+
+			return false;
+		}
+
 		return true;
 	}
 

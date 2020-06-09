@@ -35,9 +35,9 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 	}
 
 	@Override
-	public boolean isUserValid(String agentNumber, String divisionNumber, String registrationCode, String uuid) {
+	public boolean isUserValid(String businessZipCode, String divisionAgentNumber, String registrationCode, String uuid) {
 		if (_mockPortalUserWebServiceConfiguration.enableMockIsUserValid()) {
-			return _mockPortalUserWebServiceClient.isUserValid(agentNumber, divisionNumber, registrationCode, uuid);
+			return _mockPortalUserWebServiceClient.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, uuid);
 		}
 
 		//TODO CMIC-178
