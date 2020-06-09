@@ -40,6 +40,10 @@ public class MockPortalUserWebServiceClient {
 	}
 
 	public CMICUserDTO validateUserRegistration(String registrationCode) {
+		if ("error".equals(registrationCode)) {
+			return null;
+		}
+
 		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUserRegistration.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);

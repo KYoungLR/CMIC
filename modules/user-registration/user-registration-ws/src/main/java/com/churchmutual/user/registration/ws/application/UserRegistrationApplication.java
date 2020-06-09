@@ -1,10 +1,15 @@
 package com.churchmutual.user.registration.ws.application;
 
+import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
@@ -70,14 +75,52 @@ public class UserRegistrationApplication extends Application {
 
 		String registrationCode = map.getFirst("registrationCode");
 
-		CMICUserDTO user = _portalUserWebService.validateUserRegistration(registrationCode);
+		CMICUserDTO cmicUserDTO = _portalUserWebService.validateUserRegistration(registrationCode);
 
-		return Response.ok(user.toString()).build();
+		if (Validator.isNull(cmicUserDTO)) {
+			return Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR
+			).build();
+		}
+
+		String userRole = cmicUserDTO.getUserRole();
+
+		BusinessPortalType portalType = _getBusinessPortalType(userRole);
+
+		if (Validator.isNull(portalType) || BusinessPortalType.INSURED.equals(portalType)) {
+			return Response.status(
+				Response.Status.INTERNAL_SERVER_ERROR
+			).build();
+		}
+
+		return Response.ok(portalType.getGroupKey()).build();
+	}
+
+	private BusinessPortalType _getBusinessPortalType(String userRole) {
+		String[] splitStrings = userRole.split(StringPool.SPACE);
+
+		if (splitStrings != null && splitStrings.length > 1) {
+			switch (splitStrings[0]) {
+				case "producer":
+					return BusinessPortalType.BROKER;
+				case "insured":
+					return BusinessPortalType.INSURED;
+				default:
+					_log.error("Error: portal type was not found for user with role " + userRole);
+
+					return null;
+			}
+		}
+
+		return null;
 	}
 
 	private void _promoteFirstRegisteredUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
 		_selfProvisioningBusinessService.promoteFirstActiveUser(userId, entityId, isProducerOrganization);
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		UserRegistrationApplication.class);
 
 	@Reference
 	private JSONFactory _jsonFactory;
