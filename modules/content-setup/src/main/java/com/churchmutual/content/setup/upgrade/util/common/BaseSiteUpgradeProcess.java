@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.VirtualHostLocalService;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.TreeMapBuilder;
 import com.liferay.portal.kernel.util.Validator;
@@ -47,11 +48,11 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		Map<Locale, String> nameMap = new HashMap<>();
 
-		nameMap.put(Locale.getDefault(), name);
+		nameMap.put(LocaleUtil.getDefault(), name);
 
 		Map<Locale, String> descriptionMap = new HashMap<>();
 
-		descriptionMap.put(Locale.getDefault(), description);
+		descriptionMap.put(LocaleUtil.getDefault(), description);
 
 		return groupLocalService.addGroup(
 			userLocalService.getDefaultUserId(companyId), GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0, nameMap,
