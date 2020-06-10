@@ -1,15 +1,12 @@
 package com.churchmutual.user.registration.ws.application;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
-import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICUserDTO;
+import com.churchmutual.core.service.CMICUserService;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
@@ -60,7 +57,7 @@ public class UserRegistrationApplication extends Application {
 		String registrationCode = map.getFirst("registrationCode");
 		String uuid = map.getFirst("uuid");
 
-		boolean isUserValid = _portalUserWebService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, uuid);
+		boolean isUserValid = _cmicUserService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, uuid);
 
 		return Response.ok(_jsonFactory.serialize(isUserValid)).build();
 	}
@@ -73,60 +70,39 @@ public class UserRegistrationApplication extends Application {
 			@Context HttpServletRequest request, @Context HttpServletResponse response,
 			MultivaluedMap<String, String> map) {
 
-		String registrationCode = map.getFirst("registrationCode");
+		try {
+			String registrationCode = map.getFirst("registrationCode");
 
-		CMICUserDTO cmicUserDTO = _portalUserWebService.validateUserRegistration(registrationCode);
+			BusinessPortalType businessPortalType = _cmicUserService.getBusinessPortalType(registrationCode);
 
-		if (Validator.isNull(cmicUserDTO)) {
-			return Response.status(
-				Response.Status.INTERNAL_SERVER_ERROR
-			).build();
-		}
-
-		String userRole = cmicUserDTO.getUserRole();
-
-		BusinessPortalType portalType = _getBusinessPortalType(userRole);
-
-		if (Validator.isNull(portalType) || BusinessPortalType.INSURED.equals(portalType)) {
-			return Response.status(
-				Response.Status.INTERNAL_SERVER_ERROR
-			).build();
-		}
-
-		return Response.ok(portalType.getGroupKey()).build();
-	}
-
-	private BusinessPortalType _getBusinessPortalType(String userRole) {
-		String[] splitStrings = userRole.split(StringPool.SPACE);
-
-		if (splitStrings != null && splitStrings.length > 1) {
-			switch (splitStrings[0]) {
-				case "producer":
-					return BusinessPortalType.BROKER;
-				case "insured":
-					return BusinessPortalType.INSURED;
-				default:
-					_log.error("Error: portal type was not found for user with role " + userRole);
-
-					return null;
+			if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+				throw new PortalException("User must have the Broker portal type");
 			}
+
+			return Response.ok(businessPortalType.getGroupKey()).build();
 		}
-
-		return null;
+		catch (Exception ex) {
+			return _handleError(ex);
+		}
 	}
 
-	private void _promoteFirstRegisteredUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
-		_selfProvisioningBusinessService.promoteFirstActiveUser(userId, entityId, isProducerOrganization);
+	private Response _handleError(Exception ex) {
+		_log.error(ex);
+
+		return Response.status(
+			Response.Status.INTERNAL_SERVER_ERROR
+		).entity(
+			ex.getMessage()
+		).build();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		UserRegistrationApplication.class);
+	private static final Log _log = LogFactoryUtil.getLog(UserRegistrationApplication.class);
+
+	@Reference
+	private CMICUserService _cmicUserService;
 
 	@Reference
 	private JSONFactory _jsonFactory;
-
-	@Reference
-	private PortalUserWebService _portalUserWebService;
 
 	@Reference
 	private SelfProvisioningBusinessService _selfProvisioningBusinessService;
