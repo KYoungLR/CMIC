@@ -8,7 +8,10 @@ const Input = (props) => {
 
   const onChange = (e) => {
     let fieldValue = e.target.value;
-    handleFieldChange(fieldName, fieldValue);
+
+    if (handleFieldChange) {
+      handleFieldChange(fieldName, fieldValue);
+    }
   };
 
   let displayError = showErrors && !defaultValue;

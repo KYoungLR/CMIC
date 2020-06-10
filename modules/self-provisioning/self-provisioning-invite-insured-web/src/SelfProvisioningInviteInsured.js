@@ -91,7 +91,6 @@ class SelfProvisioningInviteInsured extends React.Component {
               label={Liferay.Language.get('emails')}
               labelHint={Liferay.Language.get('separate-emails-by-commas')}
               placeholder={Liferay.Language.get('emails')}
-              value={this.state.emails}
               showErrors={this.state.formErrors.emails}
               errorMsg={Liferay.Language.get('error.emails')}
             />
