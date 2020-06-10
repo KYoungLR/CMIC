@@ -7,8 +7,8 @@ dependencies {
 	compileOnly group: "org.osgi", name: "org.osgi.annotation.versioning"
 	compileOnly group: "org.osgi", name: "org.osgi.core"
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
-	compileOnly project(":modules:commons:commons-util")
 	compileOnly project(":modules:cmic:cmic-core:cmic-core-api")
+	compileOnly project(":modules:commons:commons-util")
 	compileOnly project(":modules:integration:cmic-rest:cmic-rest-api")
 	compileOnly project(":modules:self-provisioning:self-provisioning-api")
 }

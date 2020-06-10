@@ -6,6 +6,7 @@ import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
+
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -18,6 +19,7 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -47,7 +49,9 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 	}
 
 	@Override
-	public boolean isUserValid(String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
+	public boolean isUserValid(
+		String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
+
 		return _portalUserWebService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, cmicUUID);
 	}
 
@@ -67,10 +71,10 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 			user = _userLocalService.addUser(
 				defaultUser.getUserId(), companyId, CMICUserConstants.AUTO_PASSWORD, StringPool.BLANK, StringPool.BLANK,
 				CMICUserConstants.AUTO_SCREEN_NAME, StringPool.BLANK, CMICUserConstants.EMAIL, 0, StringPool.BLANK,
-				LocaleUtil.getDefault(), CMICUserConstants.FIRST_NAME, StringPool.BLANK, CMICUserConstants.LAST_NAME,
-				0, 0, CMICUserConstants.IS_MALE, CMICUserConstants.BIRTHDAY_MONTH,
-				CMICUserConstants.BIRTHDAY_DAY, CMICUserConstants.BIRTHDAY_YEAR, StringPool.BLANK, null,
-				null, null, null, CMICUserConstants.SEND_EMAIL_NOTIFICATIONS, null);
+				LocaleUtil.getDefault(), CMICUserConstants.FIRST_NAME, StringPool.BLANK, CMICUserConstants.LAST_NAME, 0,
+				0, CMICUserConstants.IS_MALE, CMICUserConstants.BIRTHDAY_MONTH, CMICUserConstants.BIRTHDAY_DAY,
+				CMICUserConstants.BIRTHDAY_YEAR, StringPool.BLANK, null, null, null, null,
+				CMICUserConstants.SEND_EMAIL_NOTIFICATIONS, null);
 
 			user.setExternalReferenceCode(cmicUUID);
 
@@ -87,7 +91,7 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 
 		String[] splitStrings = userRole.split(StringPool.SPACE);
 
-		if (splitStrings != null && splitStrings.length > 1) {
+		if ((splitStrings != null) && (splitStrings.length > 1)) {
 			switch (splitStrings[0]) {
 				case "producer":
 					return BusinessPortalType.BROKER;
@@ -101,14 +105,16 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 		throw new PortalException("Error: portal type was undefined user with role " + userRole);
 	}
 
+	private void _promoteFirstRegisteredUser(long userId, long entityId, boolean isProducerOrganization)
+		throws PortalException {
+
+		_selfProvisioningBusinessService.promoteFirstActiveUser(userId, entityId, isProducerOrganization);
+	}
+
 	private void _validateCMICUserDTO(CMICUserDTO cmicUserDTO) throws PortalException {
 		if (Validator.isNull(cmicUserDTO)) {
 			throw new PortalException("Error: received invalid cmicUser information");
 		}
-	}
-
-	private void _promoteFirstRegisteredUser(long userId, long entityId, boolean isProducerOrganization) throws PortalException {
-		_selfProvisioningBusinessService.promoteFirstActiveUser(userId, entityId, isProducerOrganization);
 	}
 
 	@Reference

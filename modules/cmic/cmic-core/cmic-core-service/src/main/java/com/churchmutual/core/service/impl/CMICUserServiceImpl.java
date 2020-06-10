@@ -17,8 +17,10 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.CMICUserService;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -44,7 +46,9 @@ public class CMICUserServiceImpl implements CMICUserService {
 	}
 
 	@Override
-	public boolean isUserValid(String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
+	public boolean isUserValid(
+		String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
+
 		return _cmicUserLocalService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, cmicUUID);
 	}
 
