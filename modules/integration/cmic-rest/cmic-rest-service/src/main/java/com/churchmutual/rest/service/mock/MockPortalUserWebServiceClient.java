@@ -20,8 +20,8 @@ public class MockPortalUserWebServiceClient {
 	}
 
 	public boolean isUserValid(String businessZipCode, String divisionAgentNumber, String registrationCode, String uuid) {
-		if ("error".equals(businessZipCode) || "error".equals(divisionAgentNumber) || "error".equals(registrationCode) ||
-			"error".equals(uuid)) {
+		if (_ERROR.equals(businessZipCode) || _ERROR.equals(divisionAgentNumber) || _ERROR.equals(registrationCode) ||
+			_ERROR.equals(uuid)) {
 
 			return false;
 		}
@@ -30,6 +30,10 @@ public class MockPortalUserWebServiceClient {
 	}
 
 	public CMICUserDTO validateUser(String registrationCode) {
+		if (_ERROR.equals(registrationCode)) {
+			return null;
+		}
+
 		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "validateUser.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
@@ -40,7 +44,7 @@ public class MockPortalUserWebServiceClient {
 	}
 
 	public CMICUserDTO validateUserRegistration(String registrationCode) {
-		if ("error".equals(registrationCode)) {
+		if (_ERROR.equals(registrationCode)) {
 			return null;
 		}
 
@@ -52,6 +56,8 @@ public class MockPortalUserWebServiceClient {
 
 		return jsonDeserializer.deserialize(fileContent, CMICUserDTO.class);
 	}
+
+	private static final String _ERROR = "error";
 
 	private static final String _PORTAL_USER_WEB_SERVICE_DIR = "portal-user-web-service/";
 
