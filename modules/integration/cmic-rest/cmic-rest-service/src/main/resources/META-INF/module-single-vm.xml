@@ -14,4 +14,26 @@
 		overflowToDisk="false"
 		timeToIdleSeconds="60"
 	/>
+	<cache
+		eternal="false"
+		maxElementsInMemory="1000"
+		name="com.churchmutual.rest.service.ProducerWebServiceImpl_GET_CONTACTS"
+		overflowToDisk="false"
+		timeToIdleSeconds="60"
+	/>
+	<cache
+		eternal="false"
+		maxElementsInMemory="1000"
+		name="com.churchmutual.rest.service.ProducerWebServiceImpl_GET_PRODUCER_BY_ID"
+		overflowToDisk="false"
+		timeToIdleSeconds="60"
+	/>
+	<cache
+		eternal="false"
+		maxElementsInMemory="1000"
+		name="com.churchmutual.rest.service.ProducerWebServiceImpl_GET_PRODUCERS"
+		overflowToDisk="false"
+		timeToIdleSeconds="60"
+	/>
+
 </ehcache>
