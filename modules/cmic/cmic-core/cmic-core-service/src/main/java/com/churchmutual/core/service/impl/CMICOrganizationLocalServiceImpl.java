@@ -14,11 +14,22 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
-
+import com.churchmutual.rest.PortalUserWebService;
+import com.churchmutual.rest.model.CMICProducerDTO;
 import com.liferay.portal.aop.AopService;
-
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The implementation of the cmic organization local service.
@@ -36,10 +47,36 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = "model.class.name=com.churchmutual.core.model.CMICOrganization", service = AopService.class)
 public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServiceBaseImpl {
 
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICOrganizationLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICOrganizationLocalServiceUtil</code>.
-	 */
+	@Override
+	public List<CMICOrganization> getCMICOrganizations(long userId) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		String cmicUUID = user.getExternalReferenceCode();
+
+		List<CMICProducerDTO> cmicProducerDTOList = _producerUserWebService.getCMICUserProducers(cmicUUID);
+
+		//TODO CMIC-273
+
+		List<Organization> organizations = _organizationLocalService.getUserOrganizations(userId);
+
+		List<CMICOrganization> cmicOrganizationList = new ArrayList<>();
+
+		for (Organization organization: organizations) {
+			CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByOrganizationId(organization.getOrganizationId());
+
+			cmicOrganizationList.add(cmicOrganization);
+		}
+
+		return cmicOrganizationList;
+	}
+
+	@Reference
+	private OrganizationLocalService _organizationLocalService;
+
+	@Reference
+	private PortalUserWebService _producerUserWebService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

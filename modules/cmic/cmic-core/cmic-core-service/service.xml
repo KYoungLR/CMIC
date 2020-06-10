@@ -43,6 +43,9 @@
 
 		<!-- Finders -->
 
+		<finder name="OrganizationId" return-type="CMICOrganization">
+			<finder-column name="organizationId" />
+		</finder>
 		<finder name="ProducerId" return-type="CMICOrganization">
 			<finder-column name="producerId" />
 		</finder>

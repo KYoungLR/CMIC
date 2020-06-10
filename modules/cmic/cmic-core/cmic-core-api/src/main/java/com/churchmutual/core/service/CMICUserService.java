@@ -18,6 +18,8 @@ import com.churchmutual.commons.enums.BusinessPortalType;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 
+import java.util.List;
+
 /**
  * @author Matthew Chan
  */
@@ -26,12 +28,22 @@ public interface CMICUserService {
 	public User addUser(String cmicUUID, String registrationCode) throws PortalException;
 
 	public BusinessPortalType getBusinessPortalType(String registrationCode)
-		throws PortalException;
+			throws PortalException;
 
-	public boolean isUserRegistered(String cmicUUID);
+	public BusinessPortalType getBusinessPortalType(long userId) throws PortalException;
+
+	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException;
+
+	public User getUser(String cmicUUID);
+
+	public void inviteUserToCMICOrganization(String emailAddress, long cmicOrganizationId) throws PortalException;
+
+	public boolean isUserRegistered(String uuid);
 
 	public boolean isUserValid(
 		String businessZipCode, String divisionAgentNumber,
-		String registrationCode, String cmicUUID);
+		String registrationCode, String uuid);
+
+	public void removeUserFromCMICOrganization(long userId, long cmicOrganizationId) throws PortalException;
 
 }

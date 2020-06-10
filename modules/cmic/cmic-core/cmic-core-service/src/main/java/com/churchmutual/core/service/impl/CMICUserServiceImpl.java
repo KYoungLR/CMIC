@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.model.User;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import java.util.List;
+
 /**
  * @author Matthew Chan
  */
@@ -41,6 +43,26 @@ public class CMICUserServiceImpl implements CMICUserService {
 	}
 
 	@Override
+	public BusinessPortalType getBusinessPortalType(long userId) throws PortalException {
+		return _cmicUserLocalService.getBusinessPortalType(userId);
+	}
+
+	@Override
+	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException {
+		return _cmicUserLocalService.getCMICOrganizationUsers(cmicOrganizationId);
+	}
+
+	@Override
+	public User getUser(String cmicUUID) {
+		return _cmicUserLocalService.getUser(cmicUUID);
+	}
+
+	@Override
+	public void inviteUserToCMICOrganization(String emailAddress, long cmicOrganizationId) throws PortalException {
+		_cmicUserLocalService.inviteUserToCMICOrganization(emailAddress, cmicOrganizationId);
+	}
+
+	@Override
 	public boolean isUserRegistered(String cmicUUID) {
 		return _cmicUserLocalService.isUserRegistered(cmicUUID);
 	}
@@ -50,6 +72,11 @@ public class CMICUserServiceImpl implements CMICUserService {
 		String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
 
 		return _cmicUserLocalService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, cmicUUID);
+	}
+
+	@Override
+	public void removeUserFromCMICOrganization(long userId, long cmicOrganizationId) throws PortalException {
+		_cmicUserLocalService.removeUserFromCMICOrganization(userId, cmicOrganizationId);
 	}
 
 	@Reference

@@ -14,11 +14,17 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
+import com.liferay.portal.kernel.exception.PortalException;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The implementation of the cmic organization remote service.
@@ -39,10 +45,12 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl {
 
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICOrganizationServiceUtil</code> to access the cmic organization remote service.
-	 */
+	@Override
+	public List<CMICOrganization> getCMICOrganizations(long userId) throws PortalException {
+		return _cmicOrganizationLocalService.getCMICOrganizations(userId);
+	}
+
+	@Reference
+	private CMICOrganizationLocalService _cmicOrganizationLocalService;
 
 }
