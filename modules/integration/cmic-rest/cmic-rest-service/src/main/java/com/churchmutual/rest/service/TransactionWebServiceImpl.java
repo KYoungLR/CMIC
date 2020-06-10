@@ -2,8 +2,8 @@ package com.churchmutual.rest.service;
 
 import com.churchmutual.rest.TransactionWebService;
 import com.churchmutual.rest.configuration.MockTransactionWebServiceConfiguration;
-import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.rest.service.mock.MockTransactionWebServiceClient;
 

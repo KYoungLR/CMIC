@@ -1,7 +1,7 @@
 package com.churchmutual.rest.service.mock;
 
-import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
