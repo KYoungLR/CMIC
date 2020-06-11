@@ -82,6 +82,7 @@ class SelfProvisioning extends React.Component {
             displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
             displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
             groupId={this.state.groupId}
+            currentBusinessName={this.getCurrentBusinessName()}
             updateUserList={() => this.userListRef.updateUserList()}
             visible={this.state.inviteMembersVisible}
             onClickCancel={() => this.setState({inviteMembersVisible: false})}
@@ -170,8 +171,7 @@ class SelfProvisioning extends React.Component {
         <div className="autofit-col">
           {(() => {
             if (this.state.isEditingUsers) {
-              let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId);
-              return business.name;
+              return this.getCurrentBusinessName();
             }
             else {
               return (
@@ -266,12 +266,9 @@ class SelfProvisioning extends React.Component {
     }
   }
 
-  getCompanyId() {
-    return Liferay.ThemeDisplay.getCompanyId();
-  }
-
-  getUserId() {
-    return Liferay.ThemeDisplay.getUserId();
+  getCurrentBusinessName() {
+    let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId);
+    return business.name;
   }
 
   updateBusinessUsers(groupId) {

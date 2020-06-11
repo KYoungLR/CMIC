@@ -112,7 +112,7 @@ export default class extends React.Component {
             handleFieldChange={(fieldName, fieldValue) => this.updateInvitations(fieldValue)}
             showErrors={this.state.showErrors}
             errorMsg={Liferay.Language.get('please-enter-a-valid-email-address')}
-            labelHint={Liferay.Language.get('separate-emails-by-commas')}
+            labelHint={Liferay.Util.sub(Liferay.Language.get('add-email-to-invite-user-to-x'), this.props.currentBusinessName)}
             inputRef={this.emailsInputRef}
           />
         </div>
