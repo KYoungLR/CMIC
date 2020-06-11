@@ -2,3 +2,8 @@
 	@extend %content-spacing-x, %content-spacing-y;
 	margin: 0;
 }
+
+.lead-text {
+	font-size: $lead-font-size;
+	padding: map-get($spacers, 5);
+}

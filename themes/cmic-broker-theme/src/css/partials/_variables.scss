@@ -40,3 +40,11 @@ $main-content-padding-x-xl: 2.25rem;
 $main-content-padding-y: 1.5rem;
 $main-content-padding-y-sm: 1rem;
 $main-content-padding-y-xl: 2.25rem;
+
+
+// Changes Feedback
+
+$changes-feedback-text-font-size: 87.5%;
+$changes-feedback-indicator-size: .5rem;
+$changes-feedback-indicator-bg: $gray-700;
+$changes-feedback-indicator-unsaved-bg: theme-color("warning");

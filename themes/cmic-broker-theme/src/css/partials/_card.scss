@@ -1,3 +1,12 @@
 .card {
 	box-shadow: $card-box-shadow;
 }
+
+.card-title::after {
+	content: '';
+	width: 1.438rem;
+	height: .063rem;
+	display: block;
+	position: absolute;
+	background-color: theme-color("primary");
+}

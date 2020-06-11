@@ -1,0 +1,11 @@
+.self-provisioning-portlet {
+
+	.table .unsaved-changes {
+
+		&,
+		& > td,
+		& > th {
+			background-color: $warning-l4;
+		}
+	}
+}

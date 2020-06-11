@@ -8,6 +8,7 @@
 			position: absolute;
 			background-color: $white;
 			transform: translateY(-50%);
+			z-index: 1;
 		}
 	}
 }
@@ -33,4 +34,19 @@
 		background-color: $form-feedback-danger-bg;
 		background-image: clay-icon(exclamation-full, $input-danger-label-color);
 	}
+}
+
+
+.form-control-sm,
+.input-sm {
+	padding-top: $input-padding-y-sm;
+	padding-bottom: $input-padding-y-sm;
+}
+
+.help-block {
+	display: block;
+	font-size: $small-font-size;
+	color: $text-muted;
+	margin-top: .3rem;
+	margin-left: 1rem;
 }

@@ -59,7 +59,8 @@ $link-action: map-merge((
 	text-transform: uppercase,
 	font-size: .815rem,
 	font-weight: 900,
-	letter-spacing: .065rem
+	letter-spacing: .065rem,
+	focus-box-shadow: none
 ), $link-action);
 
 
@@ -108,6 +109,7 @@ $h6-font-size: $font-size-base * .875;
 $headings-font-weight: $font-weight-bolder;
 
 $small-font-size: 87.5%;
+$strong-font-weight: $font-weight-bold;
 
 $text-muted: $gray-700;
 
@@ -136,6 +138,8 @@ $table-list-title-link: (
 
 $input-btn-padding-y: .8125rem;
 $input-btn-padding-x: 1rem;
+
+$input-padding-y-sm: 0;
 
 $input-btn-focus-width: .1rem;
 
@@ -258,13 +262,17 @@ $dropdown-link-hover-color: $link-hover-color;
 
 // Cards
 
+$card-spacer-y: 1.25rem;
+$card-cap-bg: transparent;
 $card-border-color: transparent;
 $card-box-shadow: map-get($elevation, 3);
 
+
 $card-title: () !default;
 $card-title: map-merge((
-	font-weight: $font-weight-bold,
-	margin-bottom: .25rem
+	font-size: $h2-font-size,
+	font-weight: $font-weight-bolder,
+	margin-bottom: 0
 ), $card-title);
 
 $card-subtitle: () !default;
