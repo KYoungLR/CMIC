@@ -11,12 +11,16 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserConstants;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +48,7 @@ public class AccountUserSerializer {
 
 		obj.put("email", user.getEmailAddress());
 		obj.put("fullName", _getUserFullName(user, businessUserStatus));
+		obj.put("portraitImageUrl", _getPortraitImageUrl(user));
 		obj.put("role", _getUserRoleName(user, groupId));
 		obj.put("status", businessUserStatus.getUserStatusName());
 
@@ -87,6 +92,14 @@ public class AccountUserSerializer {
 		return businessRole.getShortenedNameKey();
 	}
 
+	private String _getPortraitImageUrl(User user) throws PortalException {
+		String portraitURL = UserConstants.getPortraitURL(
+				portal.getPathImage(), user.isMale(), user.getPortraitId(),
+				user.getUserUuid());
+
+		return portraitURL + "&timestamp=" + new Date().getTime();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(AccountUserSerializer.class);
 
 	@Reference
@@ -94,5 +107,8 @@ public class AccountUserSerializer {
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private Portal portal;
 
 }
