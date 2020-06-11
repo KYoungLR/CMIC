@@ -47,16 +47,16 @@ const Input = (props) => {
         value={value}
       />
 
-      {labelHint != null &&
-        <div className="help-block">{labelHint}</div>
-      }
-
       {errorMsgPosition != 'top' && displayError && errorMsg != null &&
         <ClayForm.FeedbackGroup>
           <ClayForm.FeedbackItem>
             {errorMsg}
           </ClayForm.FeedbackItem>
         </ClayForm.FeedbackGroup>
+      }
+
+      {labelHint != null &&
+        <div className="help-block">{labelHint}</div>
       }
     </ClayForm.Group>
   );
