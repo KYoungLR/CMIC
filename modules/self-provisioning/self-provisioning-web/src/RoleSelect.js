@@ -1,30 +1,21 @@
-import {ClaySelect} from '@clayui/form';
 import React, {useState} from 'react';
+import {ClaySelect} from '@clayui/form';
 import {Dialog} from 'com.churchmutual.commons.web';
 
 const RoleSelect = (props) => {
 
     const options = [
-        {
-            label: "Owner",
-            value: "owner"
-        },
-        {
-            label: "Admin",
-            value: "Admin"
-        },
-        {
-            label: "Member",
-            value: "Member"
-        }
+        { label: 'Owner', value: 'owner' },
+        { label: 'Admin', value: 'Admin' },
+        { label: 'Member', value: 'Member' }
     ];
 
     const [visible, setChangeOwnerModalVisible] = useState(false);
 
     function isRemovingOwnerFromYourself(fieldValue) {
-        return fieldValue === "owner"
+        return fieldValue === 'owner'
           && !isPrimaryUser()
-          && props.primaryUser.role === "owner";
+          && props.primaryUser.role === 'owner';
     }
 
     function onChange(e) {
@@ -44,14 +35,14 @@ const RoleSelect = (props) => {
     function confirmUpdateOwner() {
         setChangeOwnerModalVisible(false);
 
-        props.handleFieldChange(props.user, "owner", isPrimaryUser());
+        props.handleFieldChange(props.user, 'owner', isPrimaryUser());
     }
 
     function getOptions() {
-        if (props.value.toLowerCase() === "owner") {
+        if (props.value.toLowerCase() === 'owner') {
             return [options[0]];
         }
-        if (props.primaryUser.role === "owner") {
+        if (props.primaryUser.role === 'owner') {
             return options;
         }
 
@@ -63,7 +54,7 @@ const RoleSelect = (props) => {
     }
 
     return (
-        <div>
+        <React.Fragment>
             <ClaySelect aria-label="Select Role" id="roleSelector"
               onChange={(e) => onChange(e)} value={props.value}>
                 {getOptions().map(item => (
@@ -76,21 +67,21 @@ const RoleSelect = (props) => {
             </ClaySelect>
 
             <Dialog
-              title={Liferay.Language.get("change-owner")}
-              buttonConfirmText={Liferay.Language.get("continue")}
+              title={Liferay.Language.get('change-owner')}
+              buttonConfirmText={Liferay.Language.get('continue')}
               onClickConfirm={() => confirmUpdateOwner()}
               visible={visible}
               setVisible={(show) => setChangeOwnerModalVisible(show)}
               status="warning"
             >
-                <div dangerouslySetInnerHTML={{
+                <div className="lead-text" dangerouslySetInnerHTML={{
                     __html: Liferay.Util.sub(
-                        Liferay.Language.get("are-you-sure-you-want-to-make-x-the-account-owner"),
+                        Liferay.Language.get('are-you-sure-you-want-to-make-x-the-account-owner'),
                         props.user.email
                     )
                 }}/>
             </Dialog>
-        </div>
+        </React.Fragment>
     );
 };
 

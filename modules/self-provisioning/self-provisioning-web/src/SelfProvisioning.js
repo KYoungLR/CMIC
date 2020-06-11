@@ -1,10 +1,10 @@
 import React from 'react';
-import UserList from "./UserList";
-import InviteMembers from "./InviteMembers";
-import ClayButton from "@clayui/button";
-import {Toast} from "com.churchmutual.commons.web";
-import {ChangesFeedback, ChangesTrackerContext} from 'com.churchmutual.commons.web';
-import {ClaySelect} from "@clayui/form";
+import ClayCard from '@clayui/card';
+import ClayButton from '@clayui/button';
+import {ClaySelect} from '@clayui/form';
+import {Toast, ChangesFeedback, ChangesTrackerContext} from 'com.churchmutual.commons.web';
+import UserList from './UserList';
+import InviteMembers from './InviteMembers';
 
 class SelfProvisioning extends React.Component {
 
@@ -24,12 +24,15 @@ class SelfProvisioning extends React.Component {
       membersToBeRemoved: [],
       roleTypes: [],
       toast:  {
-        displayType: "",
-        message: "",
-        title: "",
+        displayType: '',
+        message: '',
+        title: '',
       },
       updatedUserRoles: []
     };
+
+    this.companyId = Liferay.ThemeDisplay.getCompanyId();
+    this.userId = Liferay.ThemeDisplay.getUserId();
   }
 
   componentDidMount() {
@@ -39,14 +42,14 @@ class SelfProvisioning extends React.Component {
 
   updateAccountMembers() {
       let data = JSON.stringify({
-          "updateUsersRoles": this.state.updatedUserRoles,
-          "removeUsers": this.state.membersToBeRemoved
+          'updateUsersRoles': this.state.updatedUserRoles,
+          'removeUsers': this.state.membersToBeRemoved
       });
 
       let headers = new Headers();
-      headers.set("Content-Type", "application/json");
+      headers.set('Content-Type', 'application/json');
 
-      fetch(`/o/self-provisioning/update-account-members/${this.getCompanyId()}/${this.getUserId()}/${this.state.groupId}`, {
+      fetch(`/o/self-provisioning/update-account-members/${this.companyId}/${this.userId}/${this.state.groupId}`, {
           method: 'post',
           headers: headers,
           body: data
@@ -65,9 +68,9 @@ class SelfProvisioning extends React.Component {
             membersToBeRemoved: [],
           });
 
-          this.displaySuccessMessage("your-request-completed-successfully")
+          this.displaySuccessMessage('your-request-completed-successfully')
       }).catch(
-          () => this.displayErrorMessage("your-request-failed-to-complete")
+          () => this.displayErrorMessage('your-request-failed-to-complete')
       );
   }
 
@@ -75,26 +78,22 @@ class SelfProvisioning extends React.Component {
     return this.state.inviteMembersVisible
       && !this.state.isEditingUsers
       && (
-        <div>
-            <hr className="policy-details-divider mb-3"/>
-            <InviteMembers
-                displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
-                displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
-                groupId={this.state.groupId}
-                updateUserList={() => this.userListRef.updateUserList()}
-                visible={this.state.inviteMembersVisible}
-                onClickCancel={() => this.setState({inviteMembersVisible: false})}
-            />
-        </div>
+        <InviteMembers
+            displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
+            displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
+            groupId={this.state.groupId}
+            updateUserList={() => this.userListRef.updateUserList()}
+            visible={this.state.inviteMembersVisible}
+            onClickCancel={() => this.setState({inviteMembersVisible: false})}
+        />
     );
   }
 
   cancelSaveButtons() {
     return this.state.isEditingUsers && (
-        <ClayButton.Group
-          className="invite-members-buttons flex-nowrap account-user-control-buttons" spaced>
+        <ClayButton.Group spaced>
             <ChangesFeedback />
-            <ClayButton displayType="secondary"
+            <ClayButton displayType="outline-secondary"
               onClick={() => this.cancelUpdateAccountMembers()}>
                 {Liferay.Language.get("cancel")}
             </ClayButton>
@@ -106,14 +105,16 @@ class SelfProvisioning extends React.Component {
   }
 
   editButton() {
-    return !this.state.isEditingUsers && this.state.isAdminOrOwner && (
-      <button className="btn btn-outline-primary account-user-control-buttons"
-              onClick={() => this.setState({
-                isEditingUsers: true,
-                inviteMembersVisible: false
-              })}>
-        {Liferay.Language.get("edit")}
-      </button>
+    return !this.state.isEditingUsers
+    && this.state.isAdminOrOwner
+    && (
+      <ClayButton displayType="link" small className="link-action"
+          onClick={() => this.setState({
+            isEditingUsers: true,
+            inviteMembersVisible: false
+          })}>
+        {Liferay.Language.get('edit-users')}
+      </ClayButton>
     );
   }
 
@@ -129,13 +130,16 @@ class SelfProvisioning extends React.Component {
   }
 
   addUserButton() {
-    return !this.state.isEditingUsers && this.state.isAdminOrOwner && (
-        <div className="self-provisioning-add-button">
-            <button className="btn btn-outline-primary add-button"
-              disabled={this.state.inviteMembersVisible} onClick={() => this.setState({inviteMembersVisible: true})}>
-                {Liferay.Language.get("add +")}
-            </button>
-        </div>
+    return !this.state.isEditingUsers
+      && this.state.isAdminOrOwner
+      && !this.state.inviteMembersVisible
+      && (
+        <ClayButton displayType="link" small className="link-action"
+          onClick={() => this.setState({
+            inviteMembersVisible: true
+          })}>
+          {Liferay.Language.get('Add users +')}
+        </ClayButton>
     );
   }
 
@@ -160,30 +164,31 @@ class SelfProvisioning extends React.Component {
   }
 
   businessSelect() {
-    if (this.state.isEditingUsers) {
-      let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId)
-      return (
-        <div className="businessSelector">
-          <div className="viewing">{Liferay.Language.get('viewing')}</div>
-          <div>
-            {business.name}
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <div className="businessSelector">
-        <div className="viewing">{Liferay.Language.get('viewing')}</div>
-        <ClaySelect onChange={(e) => this.updateBusinessUsers(e.target.value)} value={this.state.groupId}>
-          {this.state.businessesList.map(business => (
-            <ClaySelect.Option
-              key={business.groupId}
-              label={business.name}
-              value={business.groupId}
-            />
-          ))}
-        </ClaySelect>
+      <div className="autofit-row align-items-center mb-2 mb-lg-0">
+        <div className="autofit-col px-2">{Liferay.Language.get('viewing')}</div>
+        <div className="autofit-col">
+          {(() => {
+            if (this.state.isEditingUsers) {
+              let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId);
+              return business.name;
+            }
+            else {
+              return (
+                <ClaySelect className="form-control-sm"
+                  onChange={(e) => this.updateBusinessUsers(e.target.value)} value={this.state.groupId}>
+                    {this.state.businessesList.map(business => (
+                      <ClaySelect.Option
+                        key={business.groupId}
+                        label={business.name}
+                        value={business.groupId}
+                      />
+                    ))}
+                </ClaySelect>
+              );
+            }
+          })()}
+        </div>
       </div>
     );
   }
@@ -191,9 +196,9 @@ class SelfProvisioning extends React.Component {
   displayErrorMessage(msg) {
     this.setState({
       toast: {
-        displayType: "danger",
+        displayType: 'danger',
         message: msg,
-        title: Liferay.Language.get("error-colon")
+        title: Liferay.Language.get('error-colon')
       }
     });
   }
@@ -201,9 +206,9 @@ class SelfProvisioning extends React.Component {
   displaySuccessMessage(msg) {
     this.setState({
       toast: {
-        displayType: "success",
+        displayType: 'success',
         message: msg,
-        title: Liferay.Language.get("success-colon")
+        title: Liferay.Language.get('success-colon')
       }
     });
   }
@@ -211,15 +216,15 @@ class SelfProvisioning extends React.Component {
   onToastClosed() {
     this.setState({
       toast: {
-        displayType: "",
-        message: "",
-        title: ""
+        displayType: '',
+        message: '',
+        title: ''
       }
     });
   }
 
   getBusinessesList() {
-    fetch(`/o/self-provisioning/businesses/${this.getUserId()}`)
+    fetch(`/o/self-provisioning/businesses/${this.userId}`)
       .then(res => res.json())
       .then(data => {
         let businesses = data;
@@ -231,14 +236,14 @@ class SelfProvisioning extends React.Component {
           this.userListRef.updateUserList(groupId);
         }
       })
-      .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-user-businesses"))
+      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-user-businesses'))
   }
 
   getRoleTypes() {
-    fetch(`/o/self-provisioning/roleTypes/${this.getUserId()}/group/${this.state.groupId}`)
+    fetch(`/o/self-provisioning/roleTypes/${this.userId}/group/${this.state.groupId}`)
       .then(res => res.json())
       .then(data => this.setState({ roleTypes: data }))
-      .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-account-roles"));
+      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-account-roles'));
   }
 
   getRoleLabel(value) {
@@ -277,9 +282,9 @@ class SelfProvisioning extends React.Component {
       inviteMembersVisible: false,
       membersToBeRemoved: [],
       toast:  {
-        displayType: "",
-        message: "",
-        title: "",
+        displayType: '',
+        message: '',
+        title: '',
       },
       updatedUserRoles: []
     });
@@ -289,44 +294,52 @@ class SelfProvisioning extends React.Component {
 
   render() {
     return (
-        <div>
-          <div className="vertical">
-            <h1 className="self-provisioning-portlet-title">
+      <div className="self-provisioning-portlet">
+        <ClayCard>
+          <div className="card-header">
+            <ClayCard.Description displayType="title">
               {Liferay.Language.get('users')}
-
-              {this.editButton()}
-              {this.cancelSaveButtons()}
-            </h1>
-
-            {this.businessSelect()}
-
-            <div>
-              <UserList
-                addMemberToBeRemoved={(user) => this.addMemberToBeRemoved(user)}
-                addUpdatedUserRole={(user) => this.addUpdatedUserRole(user)}
-                displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
-                displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
-                isEditingUsers={this.state.isEditingUsers}
-                groupId={this.state.groupId}
-                ref={(userListRef) => this.userListRef = userListRef}
-                setIsAdminOrOwner={(isAdminOrOwner) => this.setState({isAdminOrOwner: isAdminOrOwner})}
-              />
+            </ClayCard.Description>
+          </div>
+          <ClayCard.Body>
+            <div key={0} className="row no-gutters align-items-center mb-3">
+              <div className="col py-2">
+                {this.businessSelect()}
+              </div>
+              <div className="col-md-auto">
+                {this.editButton()}
+                {this.cancelSaveButtons()}
+              </div>
             </div>
 
+            <UserList
+              key={1}
+              addMemberToBeRemoved={(user) => this.addMemberToBeRemoved(user)}
+              addUpdatedUserRole={(user) => this.addUpdatedUserRole(user)}
+              displayErrorMessage={(msg) => this.displayErrorMessage(msg)}
+              displaySuccessMessage={(msg) => this.displaySuccessMessage(msg)}
+              isEditingUsers={this.state.isEditingUsers}
+              groupId={this.state.groupId}
+              ref={(userListRef) => this.userListRef = userListRef}
+              setIsAdminOrOwner={(isAdminOrOwner) => this.setState({isAdminOrOwner: isAdminOrOwner})}
+            />
+          </ClayCard.Body>
+          <div className="card-footer">
             {this.addUserButton()}
-
             {this.inviteMembers()}
-
-            <Toast
-              displayType={this.state.toast.displayType}
-              message={this.state.toast.message}
-              onClose={() => this.onToastClosed()}
-              title={this.state.toast.title} />
           </div>
-        </div>
+        </ClayCard>
+
+        <Toast
+          displayType={this.state.toast.displayType}
+          message={this.state.toast.message}
+          onClose={() => this.onToastClosed()}
+          title={this.state.toast.title} />
+      </div>
     );
   }
 };
+
 SelfProvisioning.contextType = ChangesTrackerContext;
 
 export default SelfProvisioning;

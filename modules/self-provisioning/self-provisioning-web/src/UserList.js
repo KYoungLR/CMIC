@@ -1,9 +1,9 @@
 import React from 'react';
 import ClayIcon from '@clayui/icon';
-import ClayTable from "@clayui/table";
-import {RoleSelect} from "./RoleSelect";
-import ClayButton from "@clayui/button";
-import {Dialog} from 'com.churchmutual.commons.web';
+import ClayTable from '@clayui/table';
+import ClayButton from '@clayui/button';
+import {Dialog, UserAvatar} from 'com.churchmutual.commons.web';
+import {RoleSelect} from './RoleSelect';
 
 export default class extends React.Component {
 
@@ -11,10 +11,10 @@ export default class extends React.Component {
     super(props);
     this.state = {
       primaryUser: {
-        fullName: "",
-        email: "",
-        role: "",
-        status: ""
+        fullName: '',
+        email: '',
+        role: '',
+        status: ''
       },
       userList: [],
       removeUser: {
@@ -37,14 +37,14 @@ export default class extends React.Component {
     fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${groupId}`)
       .then(res => res.json())
       .then(data => this.updatePrimaryUser(data))
-      .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-primary-account-user"));
+      .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-primary-account-user'));
   }
 
   getRelatedUsersList(groupId) {
     fetch(`/o/self-provisioning/${this.getUserId()}/group/${groupId}`)
       .then(res => res.json())
       .then(data => this.setState({ userList: data }))
-      .catch(() => this.props.displayErrorMessage("error.unable-to-retrieve-list-of-account-users"));
+      .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-list-of-account-users'));
   }
 
   updatePrimaryUser(user) {
@@ -56,11 +56,11 @@ export default class extends React.Component {
   isAdminOrOwner(user) {
     let primaryUserRole = user.role.toLowerCase();
 
-    return primaryUserRole === "admin" || primaryUserRole === "owner";
+    return primaryUserRole === 'admin' || primaryUserRole === 'owner';
   }
 
   setNewRole(user, newRole, isPrimaryUser) {
-    if (newRole === "owner") {
+    if (newRole === 'owner') {
       this.updateCurrentOwnerToAdmin();
     }
 
@@ -86,7 +86,7 @@ export default class extends React.Component {
   updateCurrentOwnerToAdmin() {
     let ownerUser = this.getOwnerUser();
 
-    this.setNewRole(ownerUser, "Admin", this.isPrimaryUser(ownerUser));
+    this.setNewRole(ownerUser, 'Admin', this.isPrimaryUser(ownerUser));
   }
 
   isPrimaryUser(user) {
@@ -94,32 +94,26 @@ export default class extends React.Component {
   }
 
   getOwnerUser() {
-    if (this.state.primaryUser.role === "owner") {
+    if (this.state.primaryUser.role === 'owner') {
       return this.state.primaryUser;
     } else {
-      return this.state.userList.find((u) => u.role === "owner");
+      return this.state.userList.find((u) => u.role === 'owner');
     }
   }
 
   roleSelect(user) {
     if (!this.props.isEditingUsers || user.removed) {
-      return (
-        <div>
-          {this.getLocalization(user.role)}
-        </div>
-      );
+      return this.getLocalization(user.role);
     }
 
     return (
-      <div>
-        <RoleSelect
-          value={this.getLocalization(user.role)}
-          user={user}
-          primaryUser={this.state.primaryUser}
-          handleFieldChange={(user, fieldValue, isPrimaryUser) =>
-            this.setNewRole(user, fieldValue, isPrimaryUser)}
-        />
-      </div>
+      <RoleSelect
+        value={this.getLocalization(user.role)}
+        user={user}
+        primaryUser={this.state.primaryUser}
+        handleFieldChange={(user, fieldValue, isPrimaryUser) =>
+          this.setNewRole(user, fieldValue, isPrimaryUser)}
+      />
     );
   }
 
@@ -127,14 +121,12 @@ export default class extends React.Component {
     if (this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) && !this.isPrimaryUser(user)) {
       return (
         <ClayTable.Cell>
-          <div>
-            {!user.removed && (
-              <ClayButton monospaced="true" displayType="unstyled" small="true"
-                  onClick={() => this.showRemoveUserConfirmationDialog(user)}>
-                <ClayIcon symbol={"trash"} spritemap={this.getSpritemap()}/>
-              </ClayButton>
-            )}
-          </div>
+          {!user.removed && (
+            <ClayButton monospaced="true" displayType="unstyled" small="true" className="text-danger"
+                onClick={() => this.showRemoveUserConfirmationDialog(user)}>
+              <ClayIcon symbol={"trash"} spritemap={this.getSpritemap()}/>
+            </ClayButton>
+          )}
         </ClayTable.Cell>
       );
     }
@@ -198,11 +190,11 @@ export default class extends React.Component {
   }
 
   getSpritemap() {
-    return Liferay.ThemeDisplay.getPathThemeImages() + "/lexicon/icons.svg";
+    return Liferay.ThemeDisplay.getPathThemeImages() + '/lexicon/icons.svg';
   }
 
   getLocalization(key) {
-    return key && key != "" ? Liferay.Language.get(key) : key;
+    return key && key != '' ? Liferay.Language.get(key) : key;
   }
 
   getUserId() {
@@ -215,66 +207,46 @@ export default class extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <ClayTable>
           <ClayTable.Head>
             <ClayTable.Row>
-              <ClayTable.Cell headingCell>
-                {Liferay.Language.get('name')}
-              </ClayTable.Cell>
-              <ClayTable.Cell headingCell>
-                {Liferay.Language.get('email')}
-              </ClayTable.Cell>
-              <ClayTable.Cell headingCell>
-                {Liferay.Language.get('role')}
-                <ClayIcon
-                  spritemap={this.getSpritemap()}
-                  symbol="caret-bottom"
-                />
-              </ClayTable.Cell>
-              <ClayTable.Cell headingCell>
-                {Liferay.Language.get('status')}
-              </ClayTable.Cell>
+              <ClayTable.Cell expanded headingCell>{Liferay.Language.get('name')}</ClayTable.Cell>
+              <ClayTable.Cell expanded headingCell>{Liferay.Language.get('email')}</ClayTable.Cell>
+              <ClayTable.Cell expanded headingCell>{Liferay.Language.get('role')}</ClayTable.Cell>
+              <ClayTable.Cell headingCell>{Liferay.Language.get('status')}</ClayTable.Cell>
               {this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) ? <ClayTable.Cell/> : null}
             </ClayTable.Row>
           </ClayTable.Head>
 
           <ClayTable.Body>
-            <ClayTable.Row className={this.state.primaryUser.changed ? "changed" : ""}>
-              <ClayTable.Cell>
-                <span className="font-weight-bold">
-                  {this.state.primaryUser.fullName}
-                </span>
-                <span className="primary-user-me">
-                  {" (" + Liferay.Language.get('me').toLowerCase() + ")"}
-                </span>
+            <ClayTable.Row className={this.state.primaryUser.changed ? "unsaved-changes" : ""}>
+              <ClayTable.Cell className="h4">
+                <div className="flex-container align-items-center">
+                  <UserAvatar className="mr-3" image={this.state.primaryUser.portraitImageUrl} />
+                  <div>
+                    {this.state.primaryUser.fullName}
+                    <small className="font-weight-normal">{" (" + Liferay.Language.get('me').toLowerCase() + ")"}</small>
+                  </div>
+                </div>
               </ClayTable.Cell>
-              <ClayTable.Cell>
-                {this.state.primaryUser.email}
-              </ClayTable.Cell>
-              <ClayTable.Cell>
-                {this.roleSelect(this.state.primaryUser)}
-              </ClayTable.Cell>
-              <ClayTable.Cell>
-                {this.getLocalization(this.state.primaryUser.status)}
-              </ClayTable.Cell>
+              <ClayTable.Cell>{this.state.primaryUser.email}</ClayTable.Cell>
+              <ClayTable.Cell>{this.roleSelect(this.state.primaryUser)}</ClayTable.Cell>
+              <ClayTable.Cell>{this.getLocalization(this.state.primaryUser.status)}</ClayTable.Cell>
               {this.removeUserButton(this.state.primaryUser)}
             </ClayTable.Row>
 
             {this.state.userList.map((user, index) => (
-              <ClayTable.Row key={index} className={[user.changed ? "changed" : "", user.removed ? "removed" : ""].join(' ')}>
-                <ClayTable.Cell>
-                  {user.fullName}
+              <ClayTable.Row key={index} className={(user.changed || user.removed) ? "unsaved-changes" : ""}>
+                <ClayTable.Cell className="h4">
+                  <div className="flex-container align-items-center">
+                    <UserAvatar className="mr-3" image={user.portraitImageUrl} />
+                    <div>{user.fullName}</div>
+                  </div>
                 </ClayTable.Cell>
-                <ClayTable.Cell>
-                  {user.email}
-                </ClayTable.Cell>
-                <ClayTable.Cell>
-                  {this.roleSelect(user)}
-                </ClayTable.Cell>
-                <ClayTable.Cell>
-                  {Liferay.Language.get(user.status)}
-                </ClayTable.Cell>
+                <ClayTable.Cell>{user.email}</ClayTable.Cell>
+                <ClayTable.Cell>{this.roleSelect(user)}</ClayTable.Cell>
+                <ClayTable.Cell>{Liferay.Language.get(user.status)}</ClayTable.Cell>
                 {this.removeUserButton(user)}
               </ClayTable.Row>
             ))}
@@ -283,21 +255,21 @@ export default class extends React.Component {
         </ClayTable>
 
         <Dialog
-          title={Liferay.Language.get("remove-user")}
-          buttonConfirmText={Liferay.Language.get("continue")}
+          title={Liferay.Language.get('remove-user')}
+          buttonConfirmText={Liferay.Language.get('continue')}
           onClickConfirm={() => this.confirmRemoveUser()}
           visible={this.state.removeUser.removeUserModalVisible}
           setVisible={(show) => this.setRemoveUserConfirmationDialogVisible(show)}
           status="warning"
         >
-          <div dangerouslySetInnerHTML={{
+          <div className="lead-text" dangerouslySetInnerHTML={{
               __html: Liferay.Util.sub(
-                  Liferay.Language.get("are-you-sure-you-want-to-remove-x-from-this-account"),
+                  Liferay.Language.get('are-you-sure-you-want-to-remove-x-from-this-account'),
                   this.state.removeUser.removingUser.fullName
               )
           }}/>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }

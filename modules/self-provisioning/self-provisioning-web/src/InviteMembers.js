@@ -1,13 +1,13 @@
 import React from 'react';
 import ClayButton from '@clayui/button';
-import {Input} from "com.churchmutual.commons.web";
+import {Input} from 'com.churchmutual.commons.web';
 
 export default class extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      emails: "",
+      emails: '',
       showErrors: false
     };
     this.emailsInputRef = React.createRef();
@@ -15,7 +15,7 @@ export default class extends React.Component {
 
   clearMemberEmails() {
     this.setState({
-      emails: "",
+      emails: '',
       showInviteMembers: false
     });
     this.emailsInputRef.current.value = '';
@@ -55,7 +55,7 @@ export default class extends React.Component {
     });
 
     let headers = new Headers();
-    headers.set("Content-Type", "application/json");
+    headers.set('Content-Type', 'application/json');
 
     fetch(`/o/self-provisioning/invite-members/`, {
       method: 'post',
@@ -67,12 +67,12 @@ export default class extends React.Component {
       }
       this.setShowErrors(false);
       this.updateAccountUserEntries();
-      this.props.displaySuccessMessage("your-request-completed-successfully")
+      this.props.displaySuccessMessage('your-request-completed-successfully')
       this.clearMemberEmails();
     }).catch((e) => {
         e.text().then(message => {
-          if (message == "") {
-            message = "your-request-failed-to-complete";
+          if (message == '') {
+            message = 'your-request-failed-to-complete';
           }
           this.props.displayErrorMessage(message)
         });
@@ -81,7 +81,7 @@ export default class extends React.Component {
   }
 
   validateAndSubmit() {
-    let emails = this.state.emails.split(",");
+    let emails = this.state.emails.split(',');
 
     for (const email of emails) {
       if (email.indexOf('@') < 0 || email.indexOf('.') < 0) {
@@ -91,7 +91,7 @@ export default class extends React.Component {
 
       // check if multiple emails exist without a separator, denoted by special character @
 
-      const re = new RegExp("@.*@");
+      const re = new RegExp('@.*@');
 
       if (re.test(email)) {
         this.setShowErrors(true);
@@ -104,31 +104,28 @@ export default class extends React.Component {
 
   render () {
     return this.props.visible && (
-      <div>
-        <div>
-          <label className="invite-members-text">{Liferay.Language.get("invite-members")}</label>
+      <div className="row">
+        <div className="col">
+          <Input
+            label={Liferay.Language.get('email-s')}
+            fieldName="invitationEmailsInput"
+            handleFieldChange={(fieldName, fieldValue) => this.updateInvitations(fieldValue)}
+            showErrors={this.state.showErrors}
+            errorMsg={Liferay.Language.get('please-enter-a-valid-email-address')}
+            labelHint={Liferay.Language.get('separate-emails-by-commas')}
+            inputRef={this.emailsInputRef}
+          />
         </div>
-        <div className="invite-members-container">
-          <div className="invite-members-form">
-            <Input
-              label={Liferay.Language.get("email-s")}
-              fieldName="invitationEmailsInput"
-              handleFieldChange={(fieldName, fieldValue) => this.updateInvitations(fieldValue)}
-              showErrors={this.state.showErrors}
-              errorMsg={Liferay.Language.get('please-enter-a-valid-email-address')}
-              inputRef={this.emailsInputRef}
-            />
-          </div>
-          <ClayButton.Group className="invite-members-buttons flex-nowrap" spaced>
-            <ClayButton displayType="secondary" onClick={() => this.clearMemberEmails()}>
-              {Liferay.Language.get("cancel")}
+        <div className="col-md-auto">
+          <ClayButton.Group spaced>
+            <ClayButton displayType="outline-secondary" className="btn-lg" onClick={() => this.clearMemberEmails()}>
+              {Liferay.Language.get('cancel')}
             </ClayButton>
-            <ClayButton displayType="primary" onClick={() => this.validateAndSubmit()}>
-              {Liferay.Language.get("invite")}
+            <ClayButton displayType="primary" className="btn-lg" onClick={() => this.validateAndSubmit()}>
+              {Liferay.Language.get('invite')}
             </ClayButton>
           </ClayButton.Group>
         </div>
-        <label className="separate-emails-by-commas">{Liferay.Language.get("separate-emails-by-commas")}</label>
       </div>
     );
   }
