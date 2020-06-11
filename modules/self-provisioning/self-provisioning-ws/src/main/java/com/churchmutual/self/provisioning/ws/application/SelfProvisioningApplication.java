@@ -3,7 +3,12 @@ package com.churchmutual.self.provisioning.ws.application;
 import com.churchmutual.account.permissions.AccountEntryModelPermission;
 import com.churchmutual.account.permissions.OrganizationModelPermission;
 import com.churchmutual.commons.constants.CommonConstants;
+import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.commons.enums.BusinessRole;
+import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICOrganizationLocalService;
+import com.churchmutual.core.service.CMICOrganizationService;
+import com.churchmutual.core.service.CMICUserService;
 import com.churchmutual.self.provisioning.api.BusinessUserService;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
 import com.churchmutual.self.provisioning.api.dto.UpdateBusinessMembersRequest;
@@ -69,10 +74,12 @@ public class SelfProvisioningApplication extends Application {
 		try {
 			JSONArray response = JSONFactoryUtil.createJSONArray();
 
-			if (_businessUserService.isBrokerOrganizationUser(userId)) {
-				List<Organization> organizations = _businessUserService.getOrganizations(userId);
+			BusinessPortalType businessPortalType = _cmicUserService.getBusinessPortalType(userId);
 
-				for (Organization organization : organizations) {
+			if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+				List<Organization> organizationList = _cmicOrganizationService.getCMICOrganizations(userId);
+
+				for (Organization organization : organizationList) {
 					JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 					jsonObject.put("groupId", organization.getGroupId());
@@ -124,7 +131,9 @@ public class SelfProvisioningApplication extends Application {
 		try {
 			List<User> usersList;
 
-			if (_businessUserService.isBrokerOrganizationUser(userId)) {
+			BusinessPortalType businessPortalType = _cmicUserService.getBusinessPortalType(userId);
+
+			if (BusinessPortalType.BROKER.equals(businessPortalType)) {
 				long organizationId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 				usersList = _getUsersFromOrganization(userId, organizationId, true);
@@ -226,6 +235,17 @@ public class SelfProvisioningApplication extends Application {
 	private void _addBusinessMember(long creatorUserId, long groupId, String[] emails) throws PortalException {
 		_checkUpdatePermissions(creatorUserId, groupId);
 
+		BusinessPortalType businessPortalType = _cmicUserService.getBusinessPortalType(creatorUserId);
+
+		long organizationOrAccountEntryId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
+
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			_cmicUserService.inviteUserToCMICOrganization(emails, organizationOrAccountEntryId);
+		}
+		else {
+			//TODO invite insured members
+		}
+
 		selfProvisioningBusinessService.inviteBusinessUsersByEmail(creatorUserId, groupId, emails);
 	}
 
@@ -238,7 +258,9 @@ public class SelfProvisioningApplication extends Application {
 	private void _checkUpdatePermissions(long userId, long groupId) throws PortalException {
 		PermissionChecker permissionChecker = _getPermissionChecker(userId);
 
-		if (_businessUserService.isBrokerOrganizationUser(userId)) {
+		BusinessPortalType businessPortalType = _cmicUserService.getBusinessPortalType(userId);
+
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
 			long organizationId = selfProvisioningBusinessService.getOrganizationOrAccountEntryId(groupId);
 
 			OrganizationModelPermission.check(
@@ -344,6 +366,12 @@ public class SelfProvisioningApplication extends Application {
 
 	@Reference
 	private BusinessUserService _businessUserService;
+
+	@Reference
+	private CMICOrganizationService _cmicOrganizationService;
+
+	@Reference
+	private CMICUserService _cmicUserService;
 
 	@Reference
 	private JSONFactory _jsonFactory;

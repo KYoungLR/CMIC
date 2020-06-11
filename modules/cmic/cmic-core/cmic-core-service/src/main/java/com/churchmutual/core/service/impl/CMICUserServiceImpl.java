@@ -58,8 +58,8 @@ public class CMICUserServiceImpl implements CMICUserService {
 	}
 
 	@Override
-	public void inviteUserToCMICOrganization(String emailAddress, long cmicOrganizationId) throws PortalException {
-		_cmicUserLocalService.inviteUserToCMICOrganization(emailAddress, cmicOrganizationId);
+	public void inviteUserToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException {
+		_cmicUserLocalService.inviteUsersToCMICOrganization(emailAddresses, cmicOrganizationId);
 	}
 
 	@Override

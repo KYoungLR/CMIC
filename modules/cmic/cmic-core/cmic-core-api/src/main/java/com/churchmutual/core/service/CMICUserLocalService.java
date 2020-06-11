@@ -45,7 +45,7 @@ public interface CMICUserLocalService {
 
 	public User getUser(String cmicUUID);
 
-	public void inviteUserToCMICOrganization(String emailAddress, long cmicOrganizationId) throws PortalException;
+	public void inviteUsersToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException;
 
 	public boolean isUserRegistered(String uuid);
 

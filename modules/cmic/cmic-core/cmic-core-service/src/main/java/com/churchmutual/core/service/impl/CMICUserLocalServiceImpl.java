@@ -51,16 +51,10 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 
 		Group brokerPortalGroup = _groupLocalService.getFriendlyURLGroup(
 			user.getCompanyId(), BusinessPortalType.BROKER.getFriendlyURL());
-		Group insuredPortalGroup = _groupLocalService.getFriendlyURLGroup(
-			user.getCompanyId(), BusinessPortalType.INSURED.getFriendlyURL());
 
 		if (_groupLocalService.hasUserGroup(userId, brokerPortalGroup.getGroupId())) {
 
 			return BusinessPortalType.BROKER;
-		}
-		else if (_groupLocalService.hasUserGroup(userId, insuredPortalGroup.getGroupId())) {
-
-			return BusinessPortalType.INSURED;
 		}
 
 		throw new PortalException("Error: portal type was undefined for user " + userId);
@@ -96,10 +90,14 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 	}
 
 	@Override
-	public void inviteUserToCMICOrganization(String emailAddress, long cmicOrganizationId) throws PortalException {
-		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.getCMICOrganization(cmicOrganizationId);
+	public void inviteUsersToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException {
+		for (String emailAddress: emailAddresses) {
+			CMICOrganization cmicOrganization = _cmicOrganizationLocalService.fetchCMICOrganization(cmicOrganizationId);
 
-		_portalUserWebService.inviteUserToCMICOrganization(emailAddress, cmicOrganization.getProducerId());
+			if (Validator.isNotNull(cmicOrganization)) {
+				_portalUserWebService.inviteUserToCMICOrganization(emailAddress.trim(), cmicOrganization.getProducerId());
+			}
+		}
 	}
 
 	@Override

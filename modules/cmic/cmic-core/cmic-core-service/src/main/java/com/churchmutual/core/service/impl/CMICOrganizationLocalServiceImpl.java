@@ -48,7 +48,7 @@ import java.util.List;
 public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServiceBaseImpl {
 
 	@Override
-	public List<CMICOrganization> getCMICOrganizations(long userId) throws PortalException {
+	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
 		User user = _userLocalService.getUser(userId);
 
 		String cmicUUID = user.getExternalReferenceCode();
@@ -62,12 +62,17 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		List<CMICOrganization> cmicOrganizationList = new ArrayList<>();
 
 		for (Organization organization: organizations) {
-			CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByOrganizationId(organization.getOrganizationId());
+			CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(organization.getOrganizationId());
 
 			cmicOrganizationList.add(cmicOrganization);
 		}
 
-		return cmicOrganizationList;
+		return organizations;
+	}
+
+	@Override
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+		return cmicOrganizationPersistence.findByOrganizationId(organizationId);
 	}
 
 	@Reference

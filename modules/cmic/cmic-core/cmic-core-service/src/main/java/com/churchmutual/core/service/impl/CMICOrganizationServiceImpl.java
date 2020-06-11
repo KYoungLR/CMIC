@@ -23,6 +23,7 @@ import com.liferay.portal.aop.AopService;
 import java.util.List;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -46,8 +47,13 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl {
 
 	@Override
-	public List<CMICOrganization> getCMICOrganizations(long userId) throws PortalException {
+	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
 		return _cmicOrganizationLocalService.getCMICOrganizations(userId);
+	}
+
+	@Override
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+		return _cmicOrganizationLocalService.getCMICOrganizationByOrganizationId(organizationId);
 	}
 
 	@Reference

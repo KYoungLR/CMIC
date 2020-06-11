@@ -5,5 +5,6 @@ dependencies {
 	compileOnly project(":modules:account:account-api")
 	compileOnly project(":modules:account:account-permissions")
 	compileOnly project(":modules:commons:commons-util")
+	compileOnly project(":modules:cmic:cmic-core:cmic-core-api")
 	compileOnly project(":modules:self-provisioning:self-provisioning-api")
 }
