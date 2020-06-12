@@ -11,6 +11,8 @@ import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -98,26 +100,35 @@ public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 
 		JSONArray response = JSONFactoryUtil.createJSONArray();
 
-		if (_GET_ACCOUNT_BY_ACCOUNT_NUMBER_ENDPOINT.equals(endpoint)) {
-			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
+		try {
+			if (_GET_ACCOUNT_BY_ACCOUNT_NUMBER_ENDPOINT.equals(endpoint)) {
+				String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
 
-			CMICAccountDTO account = _accountWebService.getAccounts(accountNumber);
+				CMICAccountDTO account = _accountWebService.getAccounts(accountNumber);
 
-			response.put(account.toJSONObject());
+				response.put(account.toJSONObject());
+			}
+			else if (_GET_ACCOUNTS_BY_PRODUCER_CODES_ENDPOINT.equals(endpoint)) {
+				String[] producerCode = ParamUtil.getStringValues(portletRequest, "producerCode");
+
+				List<CMICAccountDTO> accounts = _accountWebService.getAccountsSearchByProducer(producerCode);
+
+				accounts.forEach(account -> response.put(account.toJSONObject()));
+			}
+			else if (_GET_ADDRESS_ACCOUNT.equals(endpoint)) {
+				String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
+
+				CMICAddressDTO address = _accountWebService.getAddressAccount(accountNumber);
+
+				response.put(address.toJSONObject());
+			}
 		}
-		else if (_GET_ACCOUNTS_BY_PRODUCER_CODES_ENDPOINT.equals(endpoint)) {
-			String[] producerCode = ParamUtil.getStringValues(portletRequest, "producerCode");
+		catch (Exception pe) {
+			response.put(pe.getMessage());
 
-			List<CMICAccountDTO> accounts = _accountWebService.getAccountsSearchByProducer(producerCode);
-
-			accounts.forEach(account -> response.put(account.toJSONObject()));
-		}
-		else if (_GET_ADDRESS_ACCOUNT.equals(endpoint)) {
-			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
-
-			CMICAddressDTO address = _accountWebService.getAddressAccount(accountNumber);
-
-			response.put(address.toJSONObject());
+			if (_log.isErrorEnabled()) {
+				_log.error("Could not get response for " + endpoint, pe);
+			}
 		}
 
 		return response.toString();
@@ -128,6 +139,8 @@ public class CMICAccountServiceScreenNavigationEntry extends BaseTestHarnessScre
 	private static final String _GET_ACCOUNTS_BY_PRODUCER_CODES_ENDPOINT = "/v1/accounts/search/by-producer";
 
 	private static final String _GET_ADDRESS_ACCOUNT = "/v1/addresses/account";
+
+	private static final Log _log = LogFactoryUtil.getLog(CMICAccountServiceScreenNavigationEntry.class);
 
 	@Reference
 	private AccountWebService _accountWebService;
