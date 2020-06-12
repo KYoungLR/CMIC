@@ -55,11 +55,11 @@ class Accounts extends React.Component {
 
     this.setState({
       accountsList: [
-        { accountName: 'First Baptist Green Bay', accountNumber: '1AJNS1981', policies: 24, amountBilled: 54428.21 },
-        { accountName: 'Merrill School District', accountNumber: '1AJNS1981', policies: 14, amountBilled: 27594.21 },
-        { accountName: 'Lucy’s Daycare', accountNumber: '1AJNS1981', policies: 17, amountBilled: 16750.21 },
-        { accountName: 'St. John’s Cathedral', accountNumber: '1AJNS1981', policies: 32, amountBilled: 83300.21 },
-        { accountName: 'Trinity United Methodist', accountNumber: '1AJNS1981', policies: 23, amountBilled: 2460.21 }
+        { accountName: 'First Baptist Green Bay', accountNumber: '1AJNS1981', inForcePolicies: 24, amountBilled: 54428.21 },
+        { accountName: 'Merrill School District', accountNumber: '1AJNS1981', inForcePolicies: 14, amountBilled: 27594.21 },
+        { accountName: 'Lucy’s Daycare', accountNumber: '1AJNS1981', inForcePolicies: 17, amountBilled: 16750.21 },
+        { accountName: 'St. John’s Cathedral', accountNumber: '1AJNS1981', inForcePolicies: 32, amountBilled: 83300.21 },
+        { accountName: 'Trinity United Methodist', accountNumber: '1AJNS1981', inForcePolicies: 23, amountBilled: 2460.21 }
       ],
       isLoading: false
     });

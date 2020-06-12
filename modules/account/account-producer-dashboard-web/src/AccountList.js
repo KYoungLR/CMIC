@@ -46,7 +46,7 @@ const AccountList = (props) => {
                 <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
                 <small className="text-muted">#{account.accountNumber}</small>
               </ClayTable.Cell>
-              <ClayTable.Cell align="center">{account.policies}</ClayTable.Cell>
+              <ClayTable.Cell align="center">{account.inForcePolicies}</ClayTable.Cell>
               <ClayTable.Cell align="right" className="h3 font-weight-bold">
                 <NumberFormat value={account.amountBilled} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </ClayTable.Cell>
