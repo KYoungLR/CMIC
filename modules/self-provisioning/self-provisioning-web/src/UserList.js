@@ -34,14 +34,14 @@ export default class extends React.Component {
   }
 
   getPrimaryUser(groupId) {
-    fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${groupId}`)
+    fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${groupId}?p_auth=${Liferay.authToken}`)
       .then(res => res.json())
       .then(data => this.updatePrimaryUser(data))
       .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-primary-account-user'));
   }
 
   getRelatedUsersList(groupId) {
-    fetch(`/o/self-provisioning/${this.getUserId()}/group/${groupId}`)
+    fetch(`/o/self-provisioning/${this.getUserId()}/group/${groupId}?p_auth=${Liferay.authToken}`)
       .then(res => res.json())
       .then(data => this.setState({ userList: data }))
       .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-list-of-account-users'));

@@ -57,7 +57,7 @@ export default class extends React.Component {
     let headers = new Headers();
     headers.set('Content-Type', 'application/json');
 
-    fetch(`/o/self-provisioning/invite-members/`, {
+    fetch(`/o/self-provisioning/invite-members?p_auth=${Liferay.authToken}`, {
       method: 'post',
       headers: headers,
       body: data

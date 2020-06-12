@@ -49,7 +49,7 @@ class SelfProvisioning extends React.Component {
       let headers = new Headers();
       headers.set('Content-Type', 'application/json');
 
-      fetch(`/o/self-provisioning/update-account-members/${this.companyId}/${this.userId}/${this.state.groupId}`, {
+      fetch(`/o/self-provisioning/update-account-members/${this.companyId}/${this.userId}/${this.state.groupId}?p_auth=${Liferay.authToken}`, {
           method: 'post',
           headers: headers,
           body: data
@@ -224,7 +224,7 @@ class SelfProvisioning extends React.Component {
   }
 
   getBusinessesList() {
-    fetch(`/o/self-provisioning/businesses/${this.userId}`)
+    fetch(`/o/self-provisioning/businesses/${this.userId}?p_auth=${Liferay.authToken}`)
       .then(res => res.json())
       .then(data => {
         let businesses = data;
@@ -240,7 +240,7 @@ class SelfProvisioning extends React.Component {
   }
 
   getRoleTypes() {
-    fetch(`/o/self-provisioning/roleTypes/${this.userId}/group/${this.state.groupId}`)
+    fetch(`/o/self-provisioning/roleTypes/${this.userId}/group/${this.state.groupId}?p_auth=${Liferay.authToken}`)
       .then(res => res.json())
       .then(data => this.setState({ roleTypes: data }))
       .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-account-roles'));
