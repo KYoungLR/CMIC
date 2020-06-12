@@ -17,17 +17,17 @@ public class WebServiceException extends PortalException {
 		_responseCode = responseCode;
 	}
 
-	public WebServiceException(int responseCode, String msg, Throwable throwable) {
-		super(msg, throwable);
-
-		_responseCode = responseCode;
-	}
-
 	public WebServiceException(int responseCode, String msg, String payload) {
 		super(msg);
 
 		_responseCode = responseCode;
 		_payload = payload;
+	}
+
+	public WebServiceException(int responseCode, String msg, Throwable throwable) {
+		super(msg, throwable);
+
+		_responseCode = responseCode;
 	}
 
 	@Override

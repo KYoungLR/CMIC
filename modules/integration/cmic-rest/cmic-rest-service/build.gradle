@@ -1,4 +1,5 @@
 dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.portal.configuration.metatype.api"
 	compileOnly project(":modules:integration:cmic-rest:cmic-rest-api")
+	compileOnly project(":modules:integration:ws-commons-client:ws-commons-client-api")
 }

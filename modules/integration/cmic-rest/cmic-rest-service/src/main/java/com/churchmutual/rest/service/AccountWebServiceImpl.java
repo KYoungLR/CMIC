@@ -1,5 +1,6 @@
 package com.churchmutual.rest.service;
 
+import com.churchmutual.portal.ws.commons.client.executor.WebServiceExecutor;
 import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.configuration.MockAccountWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICAccountDTO;
@@ -7,8 +8,14 @@ import com.churchmutual.rest.model.CMICAddressDTO;
 import com.churchmutual.rest.service.mock.MockAccountWebServiceClient;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONDeserializer;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,48 +34,72 @@ import org.osgi.service.component.annotations.Reference;
 public class AccountWebServiceImpl implements AccountWebService {
 
 	@Override
-	public CMICAccountDTO getAccounts(String accountNumber) {
+	public CMICAccountDTO getAccounts(String accountNumber) throws PortalException {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAccounts()) {
 			return _mockAccountWebServiceClient.getAccounts(accountNumber);
 		}
 
-		//TODO CMIC-146
+		String response = _webServiceExecutor.executeGet(_GET_ACCOUNTS_URL, ListUtil.toList(accountNumber));
 
-		CMICAccountDTO account = new CMICAccountDTO();
+		JSONDeserializer<CMICAccountDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		account.setAccountName("ACTUAL");
-
-		return account;
+		try {
+			return jsonDeserializer.deserialize(response, CMICAccountDTO.class);
+		}
+		catch (Exception e) {
+			throw new PortalException(String.format("Account with accountNumber %s could not be found", accountNumber));
+		}
 	}
 
 	@Override
-	public List<CMICAccountDTO> getAccountsSearchByProducer(String[] producerCode) {
+	public List<CMICAccountDTO> getAccountsSearchByProducer(String[] producerCode) throws PortalException {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAccountsSearchByProducer()) {
 			return _mockAccountWebServiceClient.getAccountsSearchByProducer(producerCode);
 		}
 
-		//TODO CMIC-146
+		Map<String, String> queryParameters = new HashMap<>();
 
-		CMICAccountDTO account = new CMICAccountDTO();
+		Arrays.stream(
+			producerCode
+		).forEach(
+			singleProducerCode -> {
+				queryParameters.put("producerCode", singleProducerCode);
+			}
+		);
 
-		account.setAccountName("ACTUAL");
+		String response = _webServiceExecutor.executeGet(_GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL, queryParameters);
 
-		return ListUtil.toList(account);
+		JSONDeserializer<CMICAccountDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		try {
+			CMICAccountDTO[] results = jsonDeserializer.deserialize(response, CMICAccountDTO[].class);
+
+			return ListUtil.fromArray(results);
+		}
+		catch (Exception e) {
+			return Collections.emptyList();
+		}
 	}
 
 	@Override
-	public CMICAddressDTO getAddressAccount(String accountNumber) {
+	public CMICAddressDTO getAddressAccount(String accountNumber) throws PortalException {
 		if (_mockAccountWebServiceConfiguration.enableMockGetAddressAccount()) {
 			return _mockAccountWebServiceClient.getAddressAccount(accountNumber);
 		}
 
-		//TODO CMIC-146
+		Map<String, String> queryParameters = new HashMap<>();
+		queryParameters.put("accountNumber", accountNumber);
 
-		CMICAddressDTO address = new CMICAddressDTO();
+		String response = _webServiceExecutor.executeGet(_GET_ADDRESS_ACCOUNT_URL, queryParameters);
 
-		address.setCity("ACTUAL");
+		JSONDeserializer<CMICAddressDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return address;
+		try {
+			return jsonDeserializer.deserialize(response, CMICAddressDTO.class);
+		}
+		catch (Exception e) {
+			throw new PortalException(String.format("Address for accountNumber %s could not be found", accountNumber));
+		}
 	}
 
 	@Activate
@@ -78,9 +109,21 @@ public class AccountWebServiceImpl implements AccountWebService {
 			MockAccountWebServiceConfiguration.class, properties);
 	}
 
+	private final String _GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL = "/account-service/v1/accounts/search/by-producer";
+
+	private final String _GET_ACCOUNTS_URL = "/account-service/v1/accounts";
+
+	private final String _GET_ADDRESS_ACCOUNT_URL = "/account-service/v1/addresses/account";
+
+	@Reference
+	private JSONFactory _jsonFactory;
+
 	@Reference
 	private MockAccountWebServiceClient _mockAccountWebServiceClient;
 
 	private MockAccountWebServiceConfiguration _mockAccountWebServiceConfiguration;
+
+	@Reference
+	private WebServiceExecutor _webServiceExecutor;
 
 }
