@@ -42,55 +42,59 @@
 			markupView="lexicon"
 			title="${title}"
 		>
-			<div>
-				<strong><liferay-ui:message key="method-description" />:</strong> ${harnessDescriptor.description}
-			</div>
-
-			<c:if test="${harnessDescriptor.pathParameters.size() > 0}">
+			<aui:form name="${harnessDescriptor.endpoint}">
 				<div>
-					<strong><liferay-ui:message key="path-parameters" />:</strong>
+					<strong><liferay-ui:message key="method-description" />:</strong> ${harnessDescriptor.description}
 				</div>
 
-				<div>
-					<c:set value="${harnessDescriptor.pathParameters}" var="parameters" />
-					<%@ include file="/api/parameters.jspf" %>
-				</div>
-			</c:if>
+				<c:if test="${harnessDescriptor.pathParameters.size() > 0}">
+					<div>
+						<strong><liferay-ui:message key="path-parameters" />:</strong>
+					</div>
 
-			<c:if test="${harnessDescriptor.queryParameters.size() > 0}">
-				<div>
-					<strong><liferay-ui:message key="query-parameters" />:</strong>
-				</div>
+					<div>
+						<c:set value="${harnessDescriptor.pathParameters}" var="parameters" />
+						<%@ include file="/api/parameters.jspf" %>
+					</div>
+				</c:if>
 
-				<div>
-					<c:set value="${harnessDescriptor.queryParameters}" var="parameters" />
-					<%@ include file="/api/parameters.jspf" %>
-				</div>
-			</c:if>
+				<c:if test="${harnessDescriptor.queryParameters.size() > 0}">
+					<div>
+						<strong><liferay-ui:message key="query-parameters" />:</strong>
+					</div>
 
-			<c:if test="${harnessDescriptor.bodyParameters.size() > 0}">
-				<div>
-					<strong><liferay-ui:message key="body-parameters" />:</strong>
-				</div>
+					<div>
+						<c:set value="${harnessDescriptor.queryParameters}" var="parameters" />
+						<%@ include file="/api/parameters.jspf" %>
+					</div>
+				</c:if>
 
-				<div>
-					<c:set value="${harnessDescriptor.bodyParameters}" var="parameters" />
-					<%@ include file="/api/parameters.jspf" %>
-				</div>
-			</c:if>
+				<c:if test="${harnessDescriptor.bodyParameters.size() > 0}">
+					<div>
+						<strong><liferay-ui:message key="body-parameters" />:</strong>
+					</div>
 
-			<aui:input name="screenNavigationCategoryKey" type="hidden" value="${screenNavigationCategoryKey}" />
-			<aui:input name="screenNavigationEntryKey" type="hidden" value="${screenNavigationEntryKey}" />
+					<div>
+						<c:set value="${harnessDescriptor.bodyParameters}" var="parameters" />
+						<%@ include file="/api/parameters.jspf" %>
+					</div>
+				</c:if>
 
-			<portlet:resourceURL id="/invoke" var="invokeURL">
-				<portlet:param name="screenNavigationCategoryKey" value="${screenNavigationCategoryKey}" />
-				<portlet:param name="screenNavigationEntryKey" value="${screenNavigationEntryKey}" />
-				<portlet:param name="endpoint" value="${harnessDescriptor.endpoint}" />
-			</portlet:resourceURL>
+				<aui:input name="screenNavigationCategoryKey" type="hidden" value="${screenNavigationCategoryKey}" />
+				<aui:input name="screenNavigationEntryKey" type="hidden" value="${screenNavigationEntryKey}" />
 
-			<aui:button-row>
-				<aui:button cssClass="btn-info js-invoke" data-url="${invokeURL}" value="invoke" />
-			</aui:button-row>
+				<c:set var="portletNamespace"><portlet:namespace/></c:set>
+
+				<portlet:resourceURL id="/invoke" var="invokeURL">
+					<portlet:param name="screenNavigationCategoryKey" value="${screenNavigationCategoryKey}" />
+					<portlet:param name="screenNavigationEntryKey" value="${screenNavigationEntryKey}" />
+					<portlet:param name="endpoint" value="${harnessDescriptor.endpoint}" />
+				</portlet:resourceURL>
+
+				<aui:button-row>
+					<aui:button cssClass="api-method btn-info" data-url="${invokeURL}" form="${portletNamespace}${harnessDescriptor.endpoint}" value="invoke" />
+				</aui:button-row>
+			</aui:form>
 		</liferay-ui:panel>
 	</c:forEach>
 </liferay-ui:panel-container>

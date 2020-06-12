@@ -11,7 +11,7 @@ class TestHarness extends Component {
 
 	_attachListeners(selector) {
 		let container = document.querySelector(selector);
-		let buttons = container.querySelectorAll('.js-invoke');
+		let buttons = container.querySelectorAll('.api-method');
 
 		for (var i = 0; i < buttons.length; i++) {
 			var button = buttons[i];
@@ -19,10 +19,15 @@ class TestHarness extends Component {
 			button.addEventListener('click', event => {
 				let currentTarget = event.currentTarget;
 				let resourceURL = currentTarget.dataset.url;
+				let data = new FormData(event.currentTarget.form);
 
 				currentTarget.innerText = 'Loading...';
 
-				fetch(resourceURL).then(response => {
+				fetch(resourceURL, {
+					method: 'post',
+					headers: new Headers(),
+					body: data
+				}).then(response => {
 					return response.json();
 				}).then(data => {
 					let responseContainer = container.querySelector('#response');

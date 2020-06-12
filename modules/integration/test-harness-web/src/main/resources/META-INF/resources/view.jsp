@@ -6,12 +6,12 @@ String resolvedModuleName = GetterUtil.getString(request.getAttribute("resolvedM
 
 <portlet:actionURL name="<%= TestHarnessMVCActionCommand.MVC_COMMAND_NAME %>" var="invokeURL" />
 
-<aui:form action="<%= invokeURL %>" cssClass="api-container" method="post" name="fm">
+<div class="api-container">
 	<liferay-frontend:screen-navigation
 		key="<%= TestHarnessConstants.SCREEN_NAVIGATION_KEY %>"
 		portletURL="<%= currentURLObj %>"
 	/>
-</aui:form>
+</div>
 
 <aui:script require="<%= resolvedModuleName %>">
 	var TestHarnessObj = TestHarness.default;
