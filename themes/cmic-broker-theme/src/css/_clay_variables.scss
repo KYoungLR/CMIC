@@ -261,6 +261,20 @@ $dropdown-link-hover-color: $link-hover-color;
 
 // Pagination
 
+$pagination-padding-x-sm: .7rem;
+$pagination-link-border-radius: $border-radius;
+$pagination-link-border-radius-sm: .125rem;
+
+$pagination-color: rgba($link-color, .7);
+$pagination-border-width: 0;
+
+$pagination-hover-bg: $gray-200;
+
+$pagination-active-color: $link-color;
+$pagination-active-bg: $pagination-hover-bg;
+
+$pagination-items-per-page-lexicon-icon-margin-top: 0;
+
 
 // Cards
 
