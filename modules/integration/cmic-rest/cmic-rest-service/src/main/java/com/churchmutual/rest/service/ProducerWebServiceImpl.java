@@ -1,5 +1,6 @@
 package com.churchmutual.rest.service;
 
+import com.churchmutual.portal.ws.commons.client.executor.WebServiceExecutor;
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.configuration.MockProducerWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICContactDTO;
@@ -10,10 +11,16 @@ import com.liferay.petra.lang.HashUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONDeserializer;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -41,12 +48,10 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public List<CMICContactDTO> getContacts(long producerId) {
+	public List<CMICContactDTO> getContacts(long producerId) throws PortalException {
 		if (_mockProducerWebServiceConfiguration.enableMockGetContacts()) {
 			return _mockProducerWebServiceClient.getContacts(producerId);
 		}
-
-		//TODO CMIC-199 implement real service
 
 		ProducerIdKey key = new ProducerIdKey(producerId);
 
@@ -56,12 +61,23 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			return cache;
 		}
 
-		CMICContactDTO contact = new CMICContactDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
-		contact.setId(producerId);
-		contact.setFirstName("ACTUAL");
+		queryParameters.put("producerId", String.valueOf(producerId));
 
-		List<CMICContactDTO> list = ListUtil.toList(contact);
+		String response = _webServiceExecutor.executeGet(_GET_CONTACTS, queryParameters);
+
+		JSONDeserializer<CMICContactDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICContactDTO> list = new ArrayList();
+
+		try {
+			CMICContactDTO[] results = jsonDeserializer.deserialize(response, CMICContactDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getContactsPortalCache.put(key, list);
 
@@ -69,12 +85,10 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public CMICProducerDTO getProducerById(long id) {
+	public CMICProducerDTO getProducerById(long id) throws PortalException {
 		if (_mockProducerWebServiceConfiguration.enableMockGetProducerById()) {
 			return _mockProducerWebServiceClient.getProducerById(id);
 		}
-
-		//TODO CMIC-199 implement real service
 
 		ProducerIdKey key = new ProducerIdKey(id);
 
@@ -84,10 +98,18 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			return cache;
 		}
 
-		CMICProducerDTO producer = new CMICProducerDTO();
+		String response = _webServiceExecutor.executeGet(_GET_PRODUCER_BY_ID, ListUtil.toList(String.valueOf(id)));
 
-		producer.setId(id);
-		producer.setDivision("ACTUAL");
+		JSONDeserializer<CMICProducerDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		CMICProducerDTO producer = null;
+
+		try {
+			producer = jsonDeserializer.deserialize(response, CMICProducerDTO.class);
+		}
+		catch (Exception e) {
+			throw new PortalException(String.format("Producer with id %s could not be found", id), e);
+		}
 
 		_getProducerByIdPortalCache.put(key, producer);
 
@@ -95,12 +117,12 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms)
+		throws PortalException {
+
 		if (_mockProducerWebServiceConfiguration.enableMockGetProducers()) {
 			return _mockProducerWebServiceClient.getProducers(agent, division, name, payOutOfCdms);
 		}
-
-		//TODO CMIC-199 implement real service
 
 		GetProducersKey key = new GetProducersKey(agent, division, name, payOutOfCdms);
 
@@ -110,11 +132,26 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			return cache;
 		}
 
-		CMICProducerDTO producer = new CMICProducerDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
-		producer.setDivision("ACTUAL");
+		queryParameters.put("agent", agent);
+		queryParameters.put("division", division);
+		queryParameters.put("name", name);
+		queryParameters.put("payOutOfCdms", String.valueOf(payOutOfCdms));
 
-		List<CMICProducerDTO> list = ListUtil.toList(producer);
+		String response = _webServiceExecutor.executeGet(_GET_PRODUCERS, queryParameters);
+
+		JSONDeserializer<CMICProducerDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICProducerDTO> list = new ArrayList();
+
+		try {
+			CMICProducerDTO[] results = jsonDeserializer.deserialize(response, CMICProducerDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getProducersPortalCache.put(key, list);
 
@@ -135,10 +172,16 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			_GET_PRODUCERS_CACHE_NAME);
 	}
 
+	private static final String _GET_CONTACTS = "/producer-api/v1/contacts";
+
 	private static final String _GET_CONTACTS_CACHE_NAME = ProducerWebServiceImpl.class.getName() + "_GET_CONTACTS";
+
+	private static final String _GET_PRODUCER_BY_ID = "/producer-api/v1/producers";
 
 	private static final String _GET_PRODUCER_BY_ID_CACHE_NAME =
 		ProducerWebServiceImpl.class.getName() + "_GET_PRODUCER_BY_ID";
+
+	private static final String _GET_PRODUCERS = "/producer-api/v1/producers";
 
 	private static final String _GET_PRODUCERS_CACHE_NAME = ProducerWebServiceImpl.class.getName() + "_GET_PRODUCERS";
 
@@ -147,12 +190,18 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	private PortalCache<GetProducersKey, List<CMICProducerDTO>> _getProducersPortalCache;
 
 	@Reference
+	private JSONFactory _jsonFactory;
+
+	@Reference
 	private MockProducerWebServiceClient _mockProducerWebServiceClient;
 
 	private MockProducerWebServiceConfiguration _mockProducerWebServiceConfiguration;
 
 	@Reference
 	private SingleVMPool _singleVMPool;
+
+	@Reference
+	private WebServiceExecutor _webServiceExecutor;
 
 	private static class GetProducersKey implements Serializable {
 

@@ -3,6 +3,8 @@ package com.churchmutual.rest;
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
 
+import com.liferay.portal.kernel.exception.PortalException;
+
 import java.util.List;
 
 /**
@@ -10,10 +12,11 @@ import java.util.List;
  */
 public interface ProducerWebService {
 
-	public List<CMICContactDTO> getContacts(long producerId);
+	public List<CMICContactDTO> getContacts(long producerId) throws PortalException;
 
-	public CMICProducerDTO getProducerById(long id);
+	public CMICProducerDTO getProducerById(long id) throws PortalException;
 
-	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms);
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms)
+		throws PortalException;
 
 }

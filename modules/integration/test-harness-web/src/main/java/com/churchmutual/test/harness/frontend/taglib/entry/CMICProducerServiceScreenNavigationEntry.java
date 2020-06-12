@@ -11,6 +11,8 @@ import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -101,29 +103,38 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 
 		JSONArray response = JSONFactoryUtil.createJSONArray();
 
-		if (_GET_CONTACTS_ENDPOINT.equals(endpoint)) {
-			long producerId = ParamUtil.getLong(portletRequest, "producerId");
+		try {
+			if (_GET_CONTACTS_ENDPOINT.equals(endpoint)) {
+				long producerId = ParamUtil.getLong(portletRequest, "producerId");
 
-			List<CMICContactDTO> contacts = _producerWebService.getContacts(producerId);
+				List<CMICContactDTO> contacts = _producerWebService.getContacts(producerId);
 
-			contacts.forEach(contact -> response.put(contact.toJSONObject()));
+				contacts.forEach(contact -> response.put(contact.toJSONObject()));
+			}
+			else if (_GET_PRODUCER_BY_ID_ENDPOINT.equals(endpoint)) {
+				long id = ParamUtil.getLong(portletRequest, "id");
+
+				CMICProducerDTO producer = _producerWebService.getProducerById(id);
+
+				response.put(producer.toJSONObject());
+			}
+			else if (_GET_PRODUCERS_ENDPOINT.equals(endpoint)) {
+				String agent = ParamUtil.getString(portletRequest, "agent");
+				String division = ParamUtil.getString(portletRequest, "division");
+				String name = ParamUtil.getString(portletRequest, "name");
+				boolean payOutOfCdms = ParamUtil.getBoolean(portletRequest, "payOutOfCdms");
+
+				List<CMICProducerDTO> producers = _producerWebService.getProducers(agent, division, name, payOutOfCdms);
+
+				producers.forEach(producer -> response.put(producer.toJSONObject()));
+			}
 		}
-		else if (_GET_PRODUCER_BY_ID_ENDPOINT.equals(endpoint)) {
-			long id = ParamUtil.getLong(portletRequest, "id");
+		catch (Exception pe) {
+			response.put(pe.getMessage());
 
-			CMICProducerDTO producer = _producerWebService.getProducerById(id);
-
-			response.put(producer.toJSONObject());
-		}
-		else if (_GET_PRODUCERS_ENDPOINT.equals(endpoint)) {
-			String agent = ParamUtil.getString(portletRequest, "agent");
-			String division = ParamUtil.getString(portletRequest, "division");
-			String name = ParamUtil.getString(portletRequest, "name");
-			boolean payOutOfCdms = ParamUtil.getBoolean(portletRequest, "payOutOfCdms");
-
-			List<CMICProducerDTO> producers = _producerWebService.getProducers(agent, division, name, payOutOfCdms);
-
-			producers.forEach(producer -> response.put(producer.toJSONObject()));
+			if (_log.isErrorEnabled()) {
+				_log.error("Could not get response for " + endpoint, pe);
+			}
 		}
 
 		return response.toString();
@@ -134,6 +145,8 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 	private static final String _GET_PRODUCER_BY_ID_ENDPOINT = "/v1/producers/{id}";
 
 	private static final String _GET_PRODUCERS_ENDPOINT = "/v1/producers";
+
+	private static final Log _log = LogFactoryUtil.getLog(CMICProducerServiceScreenNavigationEntry.class);
 
 	@Reference
 	private JSPRenderer _jspRenderer;
