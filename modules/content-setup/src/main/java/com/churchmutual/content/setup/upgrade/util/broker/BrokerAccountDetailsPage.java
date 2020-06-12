@@ -42,8 +42,7 @@ public class BrokerAccountDetailsPage {
 	};
 
 	private static final String[] _PORTLETS_COLUMN_2 = {
-		"com_churchmutual_loss_run_report_web_portlet_LossRunReportWebPortlet",
-		"com_churchmutual_self_provisioning_invite_insured_web_portlet_SelfProvisioningInviteInsuredWebPortlet"
+		"com_churchmutual_loss_run_report_web_portlet_LossRunReportWebPortlet"
 	};
 
 }
