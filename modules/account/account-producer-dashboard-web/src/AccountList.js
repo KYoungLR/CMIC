@@ -6,7 +6,7 @@ import ClayTable from '@clayui/table';
 import NumberFormat from 'react-number-format';
 
 const AccountList = (props) => {
-  const spriteMap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
+  const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
 
   if (props.isLoading) {
     return (<ClayLoadingIndicator />);
@@ -19,21 +19,21 @@ const AccountList = (props) => {
             <ClayTable.Cell expanded headingCell>
               {Liferay.Language.get('name')}
               <a href="javascript:;" className="text-muted">
-                <ClayIcon symbol={"sort"} spritemap={spriteMap} />
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
               </a>
             </ClayTable.Cell>
 
             <ClayTable.Cell expanded headingCell align="center" className="table-cell-expand-smallest">
               {Liferay.Language.get('in-force-policies')}
               <a href="javascript:;" className="text-muted">
-                <ClayIcon symbol={"sort"} spritemap={spriteMap} />
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
               </a>
             </ClayTable.Cell>
 
             <ClayTable.Cell headingCell align="right" className="table-cell-ws-nowrap">
               {Liferay.Language.get('amount-billed')}
               <a href="javascript:;" className="text-muted">
-                <ClayIcon symbol={"sort"} spritemap={spriteMap} />
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
               </a>
             </ClayTable.Cell>
 
