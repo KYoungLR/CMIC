@@ -89,6 +89,228 @@ public class CMICOrganizationPersistenceImpl
 	private FinderPath _finderPathWithPaginationFindAll;
 	private FinderPath _finderPathWithoutPaginationFindAll;
 	private FinderPath _finderPathCountAll;
+	private FinderPath _finderPathFetchByOrganizationId;
+	private FinderPath _finderPathCountByOrganizationId;
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or throws a <code>NoSuchCMICOrganizationException</code> if it could not be found.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization
+	 * @throws NoSuchCMICOrganizationException if a matching cmic organization could not be found
+	 */
+	@Override
+	public CMICOrganization findByOrganizationId(long organizationId)
+		throws NoSuchCMICOrganizationException {
+
+		CMICOrganization cmicOrganization = fetchByOrganizationId(
+			organizationId);
+
+		if (cmicOrganization == null) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("organizationId=");
+			msg.append(organizationId);
+
+			msg.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(msg.toString());
+			}
+
+			throw new NoSuchCMICOrganizationException(msg.toString());
+		}
+
+		return cmicOrganization;
+	}
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	@Override
+	public CMICOrganization fetchByOrganizationId(long organizationId) {
+		return fetchByOrganizationId(organizationId, true);
+	}
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	@Override
+	public CMICOrganization fetchByOrganizationId(
+		long organizationId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {organizationId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByOrganizationId, finderArgs, this);
+		}
+
+		if (result instanceof CMICOrganization) {
+			CMICOrganization cmicOrganization = (CMICOrganization)result;
+
+			if ((organizationId != cmicOrganization.getOrganizationId())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_SELECT_CMICORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(organizationId);
+
+				List<CMICOrganization> list = q.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByOrganizationId, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {organizationId};
+							}
+
+							_log.warn(
+								"CMICOrganizationPersistenceImpl.fetchByOrganizationId(long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					CMICOrganization cmicOrganization = list.get(0);
+
+					result = cmicOrganization;
+
+					cacheResult(cmicOrganization);
+				}
+			}
+			catch (Exception e) {
+				if (useFinderCache) {
+					finderCache.removeResult(
+						_finderPathFetchByOrganizationId, finderArgs);
+				}
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (CMICOrganization)result;
+		}
+	}
+
+	/**
+	 * Removes the cmic organization where organizationId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the cmic organization that was removed
+	 */
+	@Override
+	public CMICOrganization removeByOrganizationId(long organizationId)
+		throws NoSuchCMICOrganizationException {
+
+		CMICOrganization cmicOrganization = findByOrganizationId(
+			organizationId);
+
+		return remove(cmicOrganization);
+	}
+
+	/**
+	 * Returns the number of cmic organizations where organizationId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the number of matching cmic organizations
+	 */
+	@Override
+	public int countByOrganizationId(long organizationId) {
+		FinderPath finderPath = _finderPathCountByOrganizationId;
+
+		Object[] finderArgs = new Object[] {organizationId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_CMICORGANIZATION_WHERE);
+
+			query.append(_FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(organizationId);
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ORGANIZATIONID_ORGANIZATIONID_2 =
+		"cmicOrganization.organizationId = ?";
+
 	private FinderPath _finderPathFetchByProducerId;
 	private FinderPath _finderPathCountByProducerId;
 
@@ -334,6 +556,11 @@ public class CMICOrganizationPersistenceImpl
 			cmicOrganization.getPrimaryKey(), cmicOrganization);
 
 		finderCache.putResult(
+			_finderPathFetchByOrganizationId,
+			new Object[] {cmicOrganization.getOrganizationId()},
+			cmicOrganization);
+
+		finderCache.putResult(
 			_finderPathFetchByProducerId,
 			new Object[] {cmicOrganization.getProducerId()}, cmicOrganization);
 
@@ -415,8 +642,16 @@ public class CMICOrganizationPersistenceImpl
 		CMICOrganizationModelImpl cmicOrganizationModelImpl) {
 
 		Object[] args = new Object[] {
-			cmicOrganizationModelImpl.getProducerId()
+			cmicOrganizationModelImpl.getOrganizationId()
 		};
+
+		finderCache.putResult(
+			_finderPathCountByOrganizationId, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByOrganizationId, args, cmicOrganizationModelImpl,
+			false);
+
+		args = new Object[] {cmicOrganizationModelImpl.getProducerId()};
 
 		finderCache.putResult(
 			_finderPathCountByProducerId, args, Long.valueOf(1), false);
@@ -428,6 +663,26 @@ public class CMICOrganizationPersistenceImpl
 	protected void clearUniqueFindersCache(
 		CMICOrganizationModelImpl cmicOrganizationModelImpl,
 		boolean clearCurrent) {
+
+		if (clearCurrent) {
+			Object[] args = new Object[] {
+				cmicOrganizationModelImpl.getOrganizationId()
+			};
+
+			finderCache.removeResult(_finderPathCountByOrganizationId, args);
+			finderCache.removeResult(_finderPathFetchByOrganizationId, args);
+		}
+
+		if ((cmicOrganizationModelImpl.getColumnBitmask() &
+			 _finderPathFetchByOrganizationId.getColumnBitmask()) != 0) {
+
+			Object[] args = new Object[] {
+				cmicOrganizationModelImpl.getOriginalOrganizationId()
+			};
+
+			finderCache.removeResult(_finderPathCountByOrganizationId, args);
+			finderCache.removeResult(_finderPathFetchByOrganizationId, args);
+		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
@@ -920,6 +1175,17 @@ public class CMICOrganizationPersistenceImpl
 			entityCacheEnabled, finderCacheEnabled, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
 			new String[0]);
+
+		_finderPathFetchByOrganizationId = new FinderPath(
+			entityCacheEnabled, finderCacheEnabled, CMICOrganizationImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByOrganizationId",
+			new String[] {Long.class.getName()},
+			CMICOrganizationModelImpl.ORGANIZATIONID_COLUMN_BITMASK);
+
+		_finderPathCountByOrganizationId = new FinderPath(
+			entityCacheEnabled, finderCacheEnabled, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByOrganizationId",
+			new String[] {Long.class.getName()});
 
 		_finderPathFetchByProducerId = new FinderPath(
 			entityCacheEnabled, finderCacheEnabled, CMICOrganizationImpl.class,

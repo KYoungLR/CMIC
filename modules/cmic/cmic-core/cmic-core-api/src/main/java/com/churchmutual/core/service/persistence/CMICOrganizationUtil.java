@@ -125,6 +125,65 @@ public class CMICOrganizationUtil {
 	}
 
 	/**
+	 * Returns the cmic organization where organizationId = &#63; or throws a <code>NoSuchCMICOrganizationException</code> if it could not be found.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization
+	 * @throws NoSuchCMICOrganizationException if a matching cmic organization could not be found
+	 */
+	public static CMICOrganization findByOrganizationId(long organizationId)
+		throws com.churchmutual.core.exception.NoSuchCMICOrganizationException {
+
+		return getPersistence().findByOrganizationId(organizationId);
+	}
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	public static CMICOrganization fetchByOrganizationId(long organizationId) {
+		return getPersistence().fetchByOrganizationId(organizationId);
+	}
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	public static CMICOrganization fetchByOrganizationId(
+		long organizationId, boolean useFinderCache) {
+
+		return getPersistence().fetchByOrganizationId(
+			organizationId, useFinderCache);
+	}
+
+	/**
+	 * Removes the cmic organization where organizationId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the cmic organization that was removed
+	 */
+	public static CMICOrganization removeByOrganizationId(long organizationId)
+		throws com.churchmutual.core.exception.NoSuchCMICOrganizationException {
+
+		return getPersistence().removeByOrganizationId(organizationId);
+	}
+
+	/**
+	 * Returns the number of cmic organizations where organizationId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the number of matching cmic organizations
+	 */
+	public static int countByOrganizationId(long organizationId) {
+		return getPersistence().countByOrganizationId(organizationId);
+	}
+
+	/**
 	 * Returns the cmic organization where producerId = &#63; or throws a <code>NoSuchCMICOrganizationException</code> if it could not be found.
 	 *
 	 * @param producerId the producer ID

@@ -14,10 +14,16 @@
 
 package com.churchmutual.core.service.http;
 
+import com.churchmutual.core.service.CMICOrganizationServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.rmi.RemoteException;
 
 /**
  * Provides the SOAP utility for the
- * <code>com.churchmutual.core.service.CMICOrganizationServiceUtil</code> service
+ * <code>CMICOrganizationServiceUtil</code> service
  * utility. The static methods of this class call the same methods of the
  * service utility. However, the signatures are different because it is
  * difficult for SOAP to support certain types.
@@ -55,4 +61,46 @@ package com.churchmutual.core.service.http;
  * @generated
  */
 public class CMICOrganizationServiceSoap {
+
+	public static com.liferay.portal.kernel.model.OrganizationSoap[]
+			getCMICOrganizations(long userId)
+		throws RemoteException {
+
+		try {
+			java.util.List<com.liferay.portal.kernel.model.Organization>
+				returnValue = CMICOrganizationServiceUtil.getCMICOrganizations(
+					userId);
+
+			return com.liferay.portal.kernel.model.OrganizationSoap.
+				toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.churchmutual.core.model.CMICOrganizationSoap
+			getCMICOrganizationByOrganizationId(long organizationId)
+		throws RemoteException {
+
+		try {
+			com.churchmutual.core.model.CMICOrganization returnValue =
+				CMICOrganizationServiceUtil.getCMICOrganizationByOrganizationId(
+					organizationId);
+
+			return com.churchmutual.core.model.CMICOrganizationSoap.toSoapModel(
+				returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		CMICOrganizationServiceSoap.class);
+
 }

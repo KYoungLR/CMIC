@@ -43,6 +43,51 @@ public interface CMICOrganizationPersistence
 	 */
 
 	/**
+	 * Returns the cmic organization where organizationId = &#63; or throws a <code>NoSuchCMICOrganizationException</code> if it could not be found.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization
+	 * @throws NoSuchCMICOrganizationException if a matching cmic organization could not be found
+	 */
+	public CMICOrganization findByOrganizationId(long organizationId)
+		throws NoSuchCMICOrganizationException;
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	public CMICOrganization fetchByOrganizationId(long organizationId);
+
+	/**
+	 * Returns the cmic organization where organizationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching cmic organization, or <code>null</code> if a matching cmic organization could not be found
+	 */
+	public CMICOrganization fetchByOrganizationId(
+		long organizationId, boolean useFinderCache);
+
+	/**
+	 * Removes the cmic organization where organizationId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the cmic organization that was removed
+	 */
+	public CMICOrganization removeByOrganizationId(long organizationId)
+		throws NoSuchCMICOrganizationException;
+
+	/**
+	 * Returns the number of cmic organizations where organizationId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @return the number of matching cmic organizations
+	 */
+	public int countByOrganizationId(long organizationId);
+
+	/**
 	 * Returns the cmic organization where producerId = &#63; or throws a <code>NoSuchCMICOrganizationException</code> if it could not be found.
 	 *
 	 * @param producerId the producer ID

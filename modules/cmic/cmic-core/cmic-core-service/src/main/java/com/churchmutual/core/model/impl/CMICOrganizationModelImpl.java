@@ -105,9 +105,11 @@ public class CMICOrganizationModelImpl
 
 	public static final String TX_MANAGER = "liferayTransactionManager";
 
-	public static final long PRODUCERID_COLUMN_BITMASK = 1L;
+	public static final long ORGANIZATIONID_COLUMN_BITMASK = 1L;
 
-	public static final long CMICORGANIZATIONID_COLUMN_BITMASK = 2L;
+	public static final long PRODUCERID_COLUMN_BITMASK = 2L;
+
+	public static final long CMICORGANIZATIONID_COLUMN_BITMASK = 4L;
 
 	public static void setEntityCacheEnabled(boolean entityCacheEnabled) {
 		_entityCacheEnabled = entityCacheEnabled;
@@ -354,7 +356,19 @@ public class CMICOrganizationModelImpl
 
 	@Override
 	public void setOrganizationId(long organizationId) {
+		_columnBitmask |= ORGANIZATIONID_COLUMN_BITMASK;
+
+		if (!_setOriginalOrganizationId) {
+			_setOriginalOrganizationId = true;
+
+			_originalOrganizationId = _organizationId;
+		}
+
 		_organizationId = organizationId;
+	}
+
+	public long getOriginalOrganizationId() {
+		return _originalOrganizationId;
 	}
 
 	@JSON
@@ -545,6 +559,11 @@ public class CMICOrganizationModelImpl
 	public void resetOriginalValues() {
 		CMICOrganizationModelImpl cmicOrganizationModelImpl = this;
 
+		cmicOrganizationModelImpl._originalOrganizationId =
+			cmicOrganizationModelImpl._organizationId;
+
+		cmicOrganizationModelImpl._setOriginalOrganizationId = false;
+
 		cmicOrganizationModelImpl._originalProducerId =
 			cmicOrganizationModelImpl._producerId;
 
@@ -662,6 +681,8 @@ public class CMICOrganizationModelImpl
 
 	private long _cmicOrganizationId;
 	private long _organizationId;
+	private long _originalOrganizationId;
+	private boolean _setOriginalOrganizationId;
 	private String _agent;
 	private String _division;
 	private long _producerId;
