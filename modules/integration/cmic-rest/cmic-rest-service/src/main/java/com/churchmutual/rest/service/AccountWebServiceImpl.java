@@ -47,7 +47,8 @@ public class AccountWebServiceImpl implements AccountWebService {
 			return jsonDeserializer.deserialize(response, CMICAccountDTO.class);
 		}
 		catch (Exception e) {
-			throw new PortalException(String.format("Account with accountNumber %s could not be found", accountNumber));
+			throw new PortalException(
+				String.format("Account with accountNumber %s could not be found", accountNumber), e);
 		}
 	}
 
@@ -62,9 +63,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 		Arrays.stream(
 			producerCode
 		).forEach(
-			singleProducerCode -> {
-				queryParameters.put("producerCode", singleProducerCode);
-			}
+			singleProducerCode -> queryParameters.put("producerCode", singleProducerCode)
 		);
 
 		String response = _webServiceExecutor.executeGet(_GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL, queryParameters);
@@ -88,6 +87,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 		}
 
 		Map<String, String> queryParameters = new HashMap<>();
+
 		queryParameters.put("accountNumber", accountNumber);
 
 		String response = _webServiceExecutor.executeGet(_GET_ADDRESS_ACCOUNT_URL, queryParameters);
@@ -98,7 +98,8 @@ public class AccountWebServiceImpl implements AccountWebService {
 			return jsonDeserializer.deserialize(response, CMICAddressDTO.class);
 		}
 		catch (Exception e) {
-			throw new PortalException(String.format("Address for accountNumber %s could not be found", accountNumber));
+			throw new PortalException(
+				String.format("Address for accountNumber %s could not be found", accountNumber), e);
 		}
 	}
 
@@ -109,11 +110,12 @@ public class AccountWebServiceImpl implements AccountWebService {
 			MockAccountWebServiceConfiguration.class, properties);
 	}
 
-	private final String _GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL = "/account-service/v1/accounts/search/by-producer";
+	private static final String _GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL =
+		"/account-service/v1/accounts/search/by-producer";
 
-	private final String _GET_ACCOUNTS_URL = "/account-service/v1/accounts";
+	private static final String _GET_ACCOUNTS_URL = "/account-service/v1/accounts";
 
-	private final String _GET_ADDRESS_ACCOUNT_URL = "/account-service/v1/addresses/account";
+	private static final String _GET_ADDRESS_ACCOUNT_URL = "/account-service/v1/addresses/account";
 
 	@Reference
 	private JSONFactory _jsonFactory;

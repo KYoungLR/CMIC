@@ -1,8 +1,8 @@
 package com.churchmutual.test.harness.frontend.taglib.entry;
 
 import com.churchmutual.rest.TransactionWebService;
-import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICTransactionDTO;
 import com.churchmutual.rest.model.CMICTransactionPolicySummaryDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
@@ -119,7 +119,8 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 			String combinedPolicyNumber = ParamUtil.getString(portletRequest, "combinedPolicyNumber");
 			int sequenceNumber = ParamUtil.getInteger(portletRequest, "sequenceNumber");
 
-			CMICTransactionDTO transaction = _transactionWebService.getTransaction(combinedPolicyNumber, sequenceNumber);
+			CMICTransactionDTO transaction = _transactionWebService.getTransaction(
+				combinedPolicyNumber, sequenceNumber);
 
 			response.put(transaction.toJSONObject());
 		}
@@ -146,7 +147,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 				_transactionWebService.getTransactionPolicySummaryByPolicies(combinedPolicyNumber);
 
 			transactionPolicySummaries.forEach(
-					cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
+				cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
 		}
 		else if (_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_ENDPOINT.equals(endpoint)) {
 			String accountNumber = ParamUtil.getString(portletRequest, "accountNumber");
@@ -155,7 +156,7 @@ public class CMICTransactionServiceScreenNavigationEntry extends BaseTestHarness
 				_transactionWebService.getTransactionPolicySummaryOnAccount(accountNumber);
 
 			transactionPolicySummaries.forEach(
-					cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
+				cmicTransactionPolicySummaryDTO -> response.put(cmicTransactionPolicySummaryDTO.toJSONObject()));
 		}
 
 		return response.toString();
