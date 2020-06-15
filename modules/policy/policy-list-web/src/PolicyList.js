@@ -1,0 +1,79 @@
+import React, {useState} from 'react';
+import ClayButton from '@clayui/button';
+import ClayIcon from '@clayui/icon';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
+import ClayTable from '@clayui/table';
+import NumberFormat from 'react-number-format';
+
+const PolicyList = (props) => {
+  const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
+
+  if (props.isLoading) {
+    return (<ClayLoadingIndicator />);
+  }
+  else {
+    return (
+      <ClayTable className="table-heading-nowrap">
+        <ClayTable.Head>
+          <ClayTable.Row>
+            <ClayTable.Cell expanded headingCell>
+              {Liferay.Language.get('type')}
+              <a href="javascript:;" className="text-muted">
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
+              </a>
+            </ClayTable.Cell>
+
+            <ClayTable.Cell headingCell>
+              {Liferay.Language.get('effective-date')}
+              <a href="javascript:;" className="text-muted">
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
+              </a>
+            </ClayTable.Cell>
+
+            <ClayTable.Cell headingCell align="right">
+              {Liferay.Language.get('transactions')}
+              <a href="javascript:;" className="text-muted">
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
+              </a>
+            </ClayTable.Cell>
+
+            <ClayTable.Cell headingCell align="right">
+              {Liferay.Language.get('amount-billed')}
+              <a href="javascript:;" className="text-muted">
+                <ClayIcon symbol={"sort"} spritemap={spritemap} />
+              </a>
+            </ClayTable.Cell>
+
+            <ClayTable.Cell headingCell />
+
+          </ClayTable.Row>
+        </ClayTable.Head>
+        <ClayTable.Body>
+          {props.policiesList.map((policy, index) => (
+            <ClayTable.Row key={index}>
+              <ClayTable.Cell>
+                <h5 className="font-weight-bold mb-0">{policy.policyName}</h5>
+                <small className="text-muted">#{policy.policyNumber}</small>
+              </ClayTable.Cell>
+
+              <ClayTable.Cell>{policy.startDate} - {policy.endDate}</ClayTable.Cell>
+              <ClayTable.Cell align="right">{policy.transactions}</ClayTable.Cell>
+
+              <ClayTable.Cell align="right" className="h3 font-weight-bold">
+                <NumberFormat value={policy.amountBilled} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+              </ClayTable.Cell>
+
+              <ClayTable.Cell align="right">
+                <ClayButton displayType="unstyled" monospaced className="text-primary">
+                  <ClayIcon symbol={"download"} spritemap={spritemap} className="lexicon-icon-lg" />
+                </ClayButton>
+              </ClayTable.Cell>
+            </ClayTable.Row>
+          ))}
+        </ClayTable.Body>
+      </ClayTable>
+    );
+  }
+};
+
+export default PolicyList;
