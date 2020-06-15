@@ -1,16 +1,20 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ClayCard from '@clayui/card';
-import {Toast} from 'com.churchmutual.commons.web';
+import {Toast, CardPageHeader} from 'com.churchmutual.commons.web';
+import AccountInfo from './AccountInfo';
 import PolicyList from './PolicyList';
 import PolicySearch from './PolicySearch';
 
-class Policies extends React.Component {
+const mainContent = document.getElementById('main-content');
+
+class Account extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      policiesList: [],
+      account: {},
       isLoading: true,
       filterBy: '',
       groupId: 0,
@@ -24,7 +28,7 @@ class Policies extends React.Component {
   }
 
   componentDidMount() {
-    this.getPoliciesList();
+    this.getAccount();
   }
 
   displayErrorMessage(msg) {
@@ -47,7 +51,7 @@ class Policies extends React.Component {
     });
   }
 
-  getPoliciesList() {
+  getAccount() {
     /*fetch(`/o/account/accounts/${this.userId}`)
       .then(res => res.json())
       .then(data => {
@@ -57,12 +61,18 @@ class Policies extends React.Component {
       .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts'))*/
 
     this.setState({
-      policiesList: [
-        { policyName: 'Commercial Auto', policyNumber: '1AJNS1981', startDate: '1/1/20', endDate: '1/1/21', transactions: 7, amountBilled: 54428.21 },
-        { policyName: 'General Liability', policyNumber: '9811ANS1J', startDate: '1/1/20', endDate: '1/1/21', transactions: 1, amountBilled: 27594.21 },
-        { policyName: 'International Travel', policyNumber: '8BCU91982', startDate: '1/1/20', endDate: '1/1/21', transactions: 14, amountBilled: 16750.21 },
-        { policyName: 'Multi-Peril', policyNumber: '44SD1NZC34', startDate: '1/1/19', endDate: '1/1/20', transactions: 35, amountBilled: 2460.21 }
-      ],
+      account: {
+        accountName: 'First Baptist Green Bay',
+        accountNumber: '1AJNS1981',
+        producerEntity: 'XYZ Insurance',
+        producerEntityCode: '35-001',
+        policyList: [
+          { policyName: 'Commercial Auto', policyNumber: '1AJNS1981', startDate: '1/1/20', endDate: '1/1/21', transactions: 7, amountBilled: 54428.21 },
+          { policyName: 'General Liability', policyNumber: '9811ANS1J', startDate: '1/1/20', endDate: '1/1/21', transactions: 1, amountBilled: 27594.21 },
+          { policyName: 'International Travel', policyNumber: '8BCU91982', startDate: '1/1/20', endDate: '1/1/21', transactions: 14, amountBilled: 16750.21 },
+          { policyName: 'Multi-Peril', policyNumber: '44SD1NZC34', startDate: '1/1/19', endDate: '1/1/20', transactions: 35, amountBilled: 2460.21 }
+        ]
+      },
       isLoading: false
     });
   }
@@ -70,6 +80,12 @@ class Policies extends React.Component {
   render() {
     return (
       <div className="account-list-portlet">
+        <CardPageHeader>
+            <AccountInfo
+              account={this.state.account}
+              isLoading={this.state.isLoading}
+            />
+        </CardPageHeader>
         <ClayCard>
           <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
             <ClayCard.Description displayType="title">{Liferay.Language.get('policies')}</ClayCard.Description>
@@ -81,7 +97,7 @@ class Policies extends React.Component {
           </div>
           <ClayCard.Body>
             <PolicyList
-              policiesList={this.state.policiesList}
+              policyList={this.state.account.policyList}
               isLoading={this.state.isLoading}
             />
           </ClayCard.Body>
@@ -98,4 +114,4 @@ class Policies extends React.Component {
 };
 
 
-export default Policies;
+export default Account;

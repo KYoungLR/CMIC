@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Policies from './Policies';
+import Account from './Account';
 
 /**
  * This is the main entry point of the portlet.
@@ -15,7 +15,7 @@ import Policies from './Policies';
 
 export default function main({portletNamespace, contextPath, portletElementId, configuration}) {
     ReactDOM.render(
-        <Policies
+        <Account
             portletNamespace={portletNamespace}
             contextPath={contextPath}
             portletElementId={portletElementId}

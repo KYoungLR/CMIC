@@ -49,7 +49,7 @@ const PolicyList = (props) => {
           </ClayTable.Row>
         </ClayTable.Head>
         <ClayTable.Body>
-          {props.policiesList.map((policy, index) => (
+          {props.policyList.map((policy, index) => (
             <ClayTable.Row key={index}>
               <ClayTable.Cell>
                 <h5 className="font-weight-bold mb-0">{policy.policyName}</h5>
