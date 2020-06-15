@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +49,16 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 
 	@Override
 	public String executeGet(String baseURL, List<String> pathParameters) throws PortalException {
-		return executeGet(baseURL, pathParameters, new HashMap<>());
+		return executeGet(baseURL, pathParameters, new HashMap<>(), new HashMap<>());
 	}
 
 	@Override
-	public String executeGet(String baseURL, List<String> pathParameters, Map<String, String> queryParameters)
+	public String executeGet(
+			String baseURL, List<String> pathParameters, Map<String, String> queryParameters,
+			Map<String, String[]> repeatedQueryParameters)
 		throws PortalException {
 
-		URI fullURI = getFullURI(baseURL, pathParameters, queryParameters);
+		URI fullURI = getFullURI(baseURL, pathParameters, queryParameters, repeatedQueryParameters);
 
 		HttpGet httpGet = new HttpGet(fullURI);
 
@@ -68,7 +71,14 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 
 	@Override
 	public String executeGet(String baseURL, Map<String, String> queryParameters) throws PortalException {
-		return executeGet(baseURL, new ArrayList<>(), queryParameters);
+		return executeGet(baseURL, new ArrayList<>(), queryParameters, new HashMap<>());
+	}
+
+	@Override
+	public String executeGetWithRepeatedQueryParameters(String baseURL, Map<String, String[]> repeatedQueryParameters)
+		throws PortalException {
+
+		return executeGet(baseURL, new ArrayList<>(), new HashMap<>(), repeatedQueryParameters);
 	}
 
 	@Override
@@ -76,7 +86,7 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 			String baseURL, List<String> pathParameters, Map<String, String> queryParameters, String bodyParameters)
 		throws PortalException {
 
-		URI fullURI = getFullURI(baseURL, pathParameters, queryParameters);
+		URI fullURI = getFullURI(baseURL, pathParameters, queryParameters, new HashMap<>());
 
 		HttpPost httpPost = new HttpPost(fullURI);
 
@@ -121,7 +131,9 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 		return webServiceRequestExecutor.execute();
 	}
 
-	protected URI getFullURI(String url, List<String> pathParameters, Map<String, String> queryParameters)
+	protected URI getFullURI(
+			String url, List<String> pathParameters, Map<String, String> queryParameters,
+			Map<String, String[]> repeatedQueryParameters)
 		throws PortalException {
 
 		String fullURL = url;
@@ -146,7 +158,15 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 			URIBuilder builder = new URIBuilder(fullURL);
 
 			for (Map.Entry<String, String> queryParameter : queryParameters.entrySet()) {
-				builder.setParameter(queryParameter.getKey(), queryParameter.getValue());
+				builder.addParameter(queryParameter.getKey(), queryParameter.getValue());
+			}
+
+			for (Map.Entry<String, String[]> repeatedQueryParameter : repeatedQueryParameters.entrySet()) {
+				Arrays.stream(
+					repeatedQueryParameter.getValue()
+				).forEach(
+					parameter -> builder.addParameter(repeatedQueryParameter.getKey(), parameter)
+				);
 			}
 
 			return builder.build();

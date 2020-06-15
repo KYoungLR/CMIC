@@ -12,10 +12,15 @@ public interface WebServiceExecutor {
 
 	public String executeGet(String baseURL, List<String> pathParameters) throws PortalException;
 
-	public String executeGet(String baseURL, List<String> pathParameters, Map<String, String> queryParameters)
+	public String executeGet(
+			String baseURL, List<String> pathParameters, Map<String, String> queryParameters,
+			Map<String, String[]> repeatedQueryParameters)
 		throws PortalException;
 
 	public String executeGet(String baseURL, Map<String, String> queryParameters) throws PortalException;
+
+	public String executeGetWithRepeatedQueryParameters(String baseURL, Map<String, String[]> repeatedQueryParameters)
+		throws PortalException;
 
 	public String executePost(
 			String baseURL, List<String> pathParameters, Map<String, String> queryParameters, String bodyParameters)

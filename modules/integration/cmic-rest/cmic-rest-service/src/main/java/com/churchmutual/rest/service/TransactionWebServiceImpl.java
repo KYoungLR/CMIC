@@ -1,5 +1,6 @@
 package com.churchmutual.rest.service;
 
+import com.churchmutual.portal.ws.commons.client.executor.WebServiceExecutor;
 import com.churchmutual.rest.TransactionWebService;
 import com.churchmutual.rest.configuration.MockTransactionWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
@@ -11,10 +12,16 @@ import com.liferay.petra.lang.HashUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONDeserializer;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,12 +51,10 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public CMICTransactionDTO getTransaction(String combinedPolicyNumber, int sequenceNumber) {
+	public CMICTransactionDTO getTransaction(String combinedPolicyNumber, int sequenceNumber) throws PortalException {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransaction()) {
 			return _mockTransactionWebServiceClient.getTransaction(combinedPolicyNumber, sequenceNumber);
 		}
-
-		//TODO CMIC-200 implement real service
 
 		CombinedPolicyNumberAndSequenceNumberKey key = new CombinedPolicyNumberAndSequenceNumberKey(
 			combinedPolicyNumber, sequenceNumber);
@@ -60,9 +65,27 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 			return cache;
 		}
 
-		CMICTransactionDTO transaction = new CMICTransactionDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
-		transaction.setAccountNumber("ACTUAL");
+		queryParameters.put("combinedPolicyNumber", combinedPolicyNumber);
+		queryParameters.put("sequenceNumber", String.valueOf(sequenceNumber));
+
+		String response = _webServiceExecutor.executeGet(_GET_TRANSACTION_URL, queryParameters);
+
+		JSONDeserializer<CMICTransactionDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		CMICTransactionDTO transaction = null;
+
+		try {
+			transaction = jsonDeserializer.deserialize(response, CMICTransactionDTO.class);
+		}
+		catch (Exception e) {
+			throw new PortalException(
+				String.format(
+					"Transaction with combinedPolicyNumber %s and sequenceNumber %s could not be found",
+					combinedPolicyNumber, sequenceNumber),
+				e);
+		}
 
 		_getTransactionPortalCache.put(key, transaction);
 
@@ -70,12 +93,12 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionAccountSummaryDTO> getTransactionAccountSummaryByAccounts(String[] accountNumber) {
+	public List<CMICTransactionAccountSummaryDTO> getTransactionAccountSummaryByAccounts(String[] accountNumber)
+		throws PortalException {
+
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionAccountSummaryByAccounts()) {
 			return _mockTransactionWebServiceClient.getTransactionAccountSummaryByAccounts(accountNumber);
 		}
-
-		//TODO CMIC-200 implement real service
 
 		AccountNumbersKey key = new AccountNumbersKey(accountNumber);
 
@@ -85,11 +108,25 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 			return cache;
 		}
 
-		CMICTransactionAccountSummaryDTO transactionAccountSummary = new CMICTransactionAccountSummaryDTO();
+		Map<String, String[]> repeatedQueryParameters = new HashMap<>();
 
-		transactionAccountSummary.setAccountNumber("ACTUAL");
+		repeatedQueryParameters.put("accountNumber", accountNumber);
 
-		List<CMICTransactionAccountSummaryDTO> list = ListUtil.toList(transactionAccountSummary);
+		String response = _webServiceExecutor.executeGetWithRepeatedQueryParameters(
+			_GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS_URL, repeatedQueryParameters);
+
+		JSONDeserializer<CMICTransactionAccountSummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICTransactionAccountSummaryDTO> list = new ArrayList();
+
+		try {
+			CMICTransactionAccountSummaryDTO[] results = jsonDeserializer.deserialize(
+				response, CMICTransactionAccountSummaryDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getTransactionAccountSummaryByAccountsPortalCache.put(key, list);
 
@@ -97,12 +134,10 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionDTO> getTransactionOnPolicy(String combinedPolicyNumber) {
+	public List<CMICTransactionDTO> getTransactionOnPolicy(String combinedPolicyNumber) throws PortalException {
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionOnPolicy()) {
 			return _mockTransactionWebServiceClient.getTransactionOnPolicy(combinedPolicyNumber);
 		}
-
-		//TODO CMIC-200 implement real service
 
 		CombinedPolicyNumberKey key = new CombinedPolicyNumberKey(combinedPolicyNumber);
 
@@ -112,11 +147,23 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 			return cache;
 		}
 
-		CMICTransactionDTO transaction = new CMICTransactionDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
-		transaction.setAccountNumber("ACTUAL");
+		queryParameters.put("combinedPolicyNumber", combinedPolicyNumber);
 
-		List<CMICTransactionDTO> list = ListUtil.toList(transaction);
+		String response = _webServiceExecutor.executeGet(_GET_TRANSACTION_ON_POLICY_URL, queryParameters);
+
+		JSONDeserializer<CMICTransactionDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICTransactionDTO> list = new ArrayList();
+
+		try {
+			CMICTransactionDTO[] results = jsonDeserializer.deserialize(response, CMICTransactionDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getTransactionOnPolicyPortalCache.put(key, list);
 
@@ -124,12 +171,12 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryByPolicies(String[] combinedPolicyNumber)
+		throws PortalException {
+
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionPolicySummaryByPolicies()) {
 			return _mockTransactionWebServiceClient.getTransactionPolicySummaryByPolicies(combinedPolicyNumber);
 		}
-
-		//TODO CMIC-200 implement real service
 
 		CombinedPolicyNumberKey key = new CombinedPolicyNumberKey(combinedPolicyNumber);
 
@@ -139,11 +186,25 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 			return cache;
 		}
 
-		CMICTransactionPolicySummaryDTO transactionPolicySummary = new CMICTransactionPolicySummaryDTO();
+		Map<String, String[]> repeatedQueryParameters = new HashMap<>();
 
-		transactionPolicySummary.setAccountNumber("ACTUAL");
+		repeatedQueryParameters.put("combinedPolicyNumber", combinedPolicyNumber);
 
-		List<CMICTransactionPolicySummaryDTO> list = ListUtil.toList(transactionPolicySummary);
+		String response = _webServiceExecutor.executeGetWithRepeatedQueryParameters(
+			_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_URL, repeatedQueryParameters);
+
+		JSONDeserializer<CMICTransactionPolicySummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICTransactionPolicySummaryDTO> list = new ArrayList();
+
+		try {
+			CMICTransactionPolicySummaryDTO[] results = jsonDeserializer.deserialize(
+				response, CMICTransactionPolicySummaryDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getTransactionPolicySummaryByPoliciesPortalCache.put(key, list);
 
@@ -151,12 +212,12 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	}
 
 	@Override
-	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryOnAccount(String accountNumber) {
+	public List<CMICTransactionPolicySummaryDTO> getTransactionPolicySummaryOnAccount(String accountNumber)
+		throws PortalException {
+
 		if (_mockTransactionWebServiceConfiguration.enableMockGetTransactionPolicySummaryOnAccount()) {
 			return _mockTransactionWebServiceClient.getTransactionPolicySummaryOnAccount(accountNumber);
 		}
-
-		//TODO CMIC-200 implement real service
 
 		AccountNumbersKey key = new AccountNumbersKey(accountNumber);
 
@@ -166,11 +227,25 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 			return cache;
 		}
 
-		CMICTransactionPolicySummaryDTO transactionPolicySummary = new CMICTransactionPolicySummaryDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
-		transactionPolicySummary.setAccountNumber("ACTUAL");
+		queryParameters.put("accountNumber", accountNumber);
 
-		List<CMICTransactionPolicySummaryDTO> list = ListUtil.toList(transactionPolicySummary);
+		String response = _webServiceExecutor.executeGet(
+			_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_URL, queryParameters);
+
+		JSONDeserializer<CMICTransactionPolicySummaryDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICTransactionPolicySummaryDTO> list = new ArrayList();
+
+		try {
+			CMICTransactionPolicySummaryDTO[] results = jsonDeserializer.deserialize(
+				response, CMICTransactionPolicySummaryDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_getTransactionPolicySummaryOnAccountPortalCache.put(key, list);
 
@@ -203,17 +278,30 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	private static final String _GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS_CACHE_NAME =
 		TransactionWebServiceImpl.class.getName() + "_GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS";
 
+	private static final String _GET_TRANSACTION_ACCOUNT_SUMMARY_BY_ACCOUNTS_URL =
+		"/transaction-service/v1/transaction-account-summary/accounts";
+
 	private static final String _GET_TRANSACTION_CACHE_NAME =
 		TransactionWebServiceImpl.class.getName() + "_GET_TRANSACTION";
 
 	private static final String _GET_TRANSACTION_ON_POLICY_CACHE_NAME =
 		TransactionWebServiceImpl.class.getName() + "_GET_TRANSACTION_ON_POLICY";
 
+	private static final String _GET_TRANSACTION_ON_POLICY_URL = "/transaction-service/v1/transactions/on-policy";
+
 	private static final String _GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_CACHE_NAME =
 		TransactionWebServiceImpl.class.getName() + "_GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES";
 
+	private static final String _GET_TRANSACTION_POLICY_SUMMARY_BY_POLICIES_URL =
+		"/transaction-service/v1/transaction-policy-summary/policies";
+
 	private static final String _GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_CACHE_NAME =
 		TransactionWebServiceImpl.class.getName() + "_GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT";
+
+	private static final String _GET_TRANSACTION_POLICY_SUMMARY_ON_ACCOUNT_URL =
+		"/transaction-service/v1/transaction-policy-summary/on-account";
+
+	private static final String _GET_TRANSACTION_URL = "/transaction-service/v1/transactions";
 
 	private PortalCache<AccountNumbersKey, List<CMICTransactionAccountSummaryDTO>>
 		_getTransactionAccountSummaryByAccountsPortalCache;
@@ -225,12 +313,18 @@ public class TransactionWebServiceImpl implements TransactionWebService {
 	private PortalCache<CombinedPolicyNumberAndSequenceNumberKey, CMICTransactionDTO> _getTransactionPortalCache;
 
 	@Reference
+	private JSONFactory _jsonFactory;
+
+	@Reference
 	private MockTransactionWebServiceClient _mockTransactionWebServiceClient;
 
 	private MockTransactionWebServiceConfiguration _mockTransactionWebServiceConfiguration;
 
 	@Reference
 	private SingleVMPool _singleVMPool;
+
+	@Reference
+	private WebServiceExecutor _webServiceExecutor;
 
 	private static class AccountNumbersKey implements Serializable {
 
