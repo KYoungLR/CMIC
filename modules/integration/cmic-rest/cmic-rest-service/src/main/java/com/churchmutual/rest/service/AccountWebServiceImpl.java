@@ -13,7 +13,6 @@ import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -58,15 +57,12 @@ public class AccountWebServiceImpl implements AccountWebService {
 			return _mockAccountWebServiceClient.getAccountsSearchByProducer(producerCode);
 		}
 
-		Map<String, String> queryParameters = new HashMap<>();
+		Map<String, String[]> repeatedQueryParameters = new HashMap<>();
 
-		Arrays.stream(
-			producerCode
-		).forEach(
-			singleProducerCode -> queryParameters.put("producerCode", singleProducerCode)
-		);
+		repeatedQueryParameters.put("producerCode", producerCode);
 
-		String response = _webServiceExecutor.executeGet(_GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL, queryParameters);
+		String response = _webServiceExecutor.executeGetWithRepeatedQueryParameters(
+			_GET_ACCOUNTS_SEARCH_BY_PRODUCER_URL, repeatedQueryParameters);
 
 		JSONDeserializer<CMICAccountDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
