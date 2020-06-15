@@ -1,4 +1,5 @@
 import AsteriskIcon from './AsteriskIcon';
+import CardPageHeader from './CardPageHeader';
 import Dialog from './Dialog';
 import Input from './Input';
 import Select from './Select';
@@ -10,14 +11,15 @@ import {ChangesFeedback, ChangesTrackerProvider, ChangesTrackerContext} from "./
 
 export {
     AsteriskIcon,
+    CardPageHeader,
     ChangesFeedback,
     ChangesTrackerContext,
     ChangesTrackerProvider,
     Dialog,
     Input,
+    removeOutsideClickEvent,
     Select,
     Toast,
-    removeOutsideClickEvent,
     UserAvatar,
     UserCard
 }

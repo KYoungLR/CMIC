@@ -36,3 +36,29 @@
 		@include text-truncate;
 	}
 }
+
+.card-page-header {
+	position: relative;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+	margin-bottom: $card-margin-bottom;
+	word-wrap: break-word;
+	background-color: $card-bg;
+	border: $card-border-width solid $card-border-color;
+	border-radius: 0;
+	box-shadow: $card-box-shadow;
+	@extend %content-spacing-x;
+
+	#main-content & {
+		@extend %content-spacing-subtract-x;
+	}
+
+	@include media-breakpoint-up(sm) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+}

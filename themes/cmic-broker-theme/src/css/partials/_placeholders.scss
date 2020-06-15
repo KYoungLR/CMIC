@@ -28,6 +28,36 @@
 	}
 }
 
+%content-spacing-subtract-x {
+	margin-left: -$main-content-padding-x-sm;
+	margin-right: -$main-content-padding-x-sm;
+
+	@include media-breakpoint-up(md) {
+		margin-left: -$main-content-padding-x;
+		margin-right: -$main-content-padding-x;
+	}
+
+	@include media-breakpoint-up(xl) {
+		margin-left: -$main-content-padding-x-xl;
+		margin-right: -$main-content-padding-x-xl;
+	}
+}
+
+%content-spacing-subtract-y {
+	margin-top: -$main-content-padding-y-sm;
+	margin-bottom: -$main-content-padding-y-sm;
+
+	@include media-breakpoint-up(md) {
+		margin-top: -$main-content-padding-y;
+		margin-bottom: -$main-content-padding-y;
+	}
+
+	@include media-breakpoint-up(xl) {
+		margin-top: -$main-content-padding-y-xl;
+		margin-bottom: -$main-content-padding-y-xl;
+	}
+}
+
 %card-box {
 	max-width: 29rem;
 	margin: 8rem auto 2rem;
