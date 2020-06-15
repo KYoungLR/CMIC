@@ -2,17 +2,21 @@ import React from 'react';
 import ClayIcon from '@clayui/icon';
 import getCN from 'classnames';
 
-const UserAvatar = ({className, image}) => {
+const UserAvatar = (props) => {
+	const size = props.size || 'lg';
 	const avatarClassName = getCN(
-		className,
-		'sticker sticker-circle sticker-light sticker-lg'
+		[`sticker sticker-circle sticker-light sticker-${size}`],
+		{
+			[`elevation-${props.elevation}`]: props.elevation
+		},
+		props.className
 	);
 
 	return (
 		<span className={avatarClassName}>
 			<span className="sticker-overlay">
-				{image ? (
-					<img className="sticker-img" src={image} />
+				{props.image ? (
+					<img className="sticker-img" src={props.image} />
 				) : (
 					<ClayIcon symbol="user" />
 				)}

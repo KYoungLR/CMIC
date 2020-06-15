@@ -4,6 +4,7 @@ import Input from './Input';
 import Select from './Select';
 import Toast from './Toast';
 import UserAvatar from './UserAvatar';
+import UserCard from './UserCard';
 import {removeOutsideClickEvent} from "./removeOutsideClickEvent";
 import {ChangesFeedback, ChangesTrackerProvider, ChangesTrackerContext} from "./ChangesTracker/index";
 
@@ -17,5 +18,6 @@ export {
     Select,
     Toast,
     removeOutsideClickEvent,
-    UserAvatar
+    UserAvatar,
+    UserCard
 }
