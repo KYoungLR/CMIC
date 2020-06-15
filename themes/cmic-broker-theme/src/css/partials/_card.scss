@@ -10,3 +10,29 @@
 	position: absolute;
 	background-color: theme-color("primary");
 }
+
+.user-card {
+	display: flex;
+	margin-bottom: $user-card-margin-bottom;
+
+	&-image {
+		margin-right: 1.5rem;
+	}
+
+	&-body {
+		min-width: 0;
+	}
+
+	&-title {
+		@include clay-text-typography($user-card-title);
+	}
+
+	&-subtitle {
+		@include clay-text-typography($user-card-subtitle);
+	}
+
+	&-text {
+		@include clay-text-typography($user-card-text);
+		@include text-truncate;
+	}
+}
