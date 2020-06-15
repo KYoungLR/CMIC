@@ -5,6 +5,7 @@
 				<div class="d-none row template-row">
 					<div class="col-9">
 						<aui:input
+							disabled="true"
 							label=""
 							name="${parameter.name}"
 							required="${parameter.required}"

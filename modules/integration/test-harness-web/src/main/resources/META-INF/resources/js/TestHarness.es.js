@@ -66,8 +66,13 @@ class TestHarness extends Component {
 				let currentTarget = event.currentTarget;
 				let arrayField = currentTarget.parentElement;
 				let templateRow = arrayField.querySelector('.template-row');
+
 				let newRow = templateRow.cloneNode(true);
 				newRow.classList.remove(...["d-none", "template-row"]);
+				let newInput = newRow.querySelector('input');
+				newInput.disabled = false;
+				newInput.classList.remove("disabled");
+
 				let removeButton = newRow.querySelector('.remove-item');
 
 				removeButton.addEventListener('click', event => {
