@@ -12,7 +12,7 @@ const ProducerOrgList = (props) => {
           <div className="well well-lg" key={index}>
             <div>
               <h2 className="well-title">{producer.producerName}</h2>
-              <div className="small font-weight-bold text-muted text-uppercase">{Liferay.Language.get('producer-code')} {producer.producerCode}</div>
+              <div className="small font-weight-bold text-muted text-uppercase">{Liferay.Language.get('producer-code')}: {producer.producerCode}</div>
             </div>
             <div>
               {producer.producerAddress &&
