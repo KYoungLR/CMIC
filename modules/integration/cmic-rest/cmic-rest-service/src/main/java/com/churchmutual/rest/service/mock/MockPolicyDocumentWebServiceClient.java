@@ -6,8 +6,11 @@ import com.churchmutual.rest.service.MockResponseReaderUtil;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
 
+import com.liferay.portal.kernel.util.ListUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import java.util.List;
 
 /**
  * @author Kayleen Lim
@@ -15,28 +18,32 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockPolicyDocumentWebServiceClient.class)
 public class MockPolicyDocumentWebServiceClient {
 
-	public CMICPolicyDocumentDTO getRecentTransactions(
+	public List<CMICPolicyDocumentDTO> getRecentTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType) {
 
 		String fileName = _POLICY_DOCUMENT_WEB_SERVICE_DIR + "getRecentTransactions.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICPolicyDocumentDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICPolicyDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO.class);
+		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO[].class);
+
+		return ListUtil.fromArray(policyDocuments);
 	}
 
-	public CMICPolicyDocumentDTO getTransactions(
+	public List<CMICPolicyDocumentDTO> getTransactions(
 		String accountNum, boolean includeBytes, String policyNum, String policyType, String sequenceNum) {
 
 		String fileName = _POLICY_DOCUMENT_WEB_SERVICE_DIR + "getTransactions.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);
 
-		JSONDeserializer<CMICPolicyDocumentDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+		JSONDeserializer<CMICPolicyDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		return jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO.class);
+		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO[].class);
+
+		return ListUtil.fromArray(policyDocuments);
 	}
 
 	private static final String _POLICY_DOCUMENT_WEB_SERVICE_DIR = "policy-document-web-service/";
