@@ -15,7 +15,6 @@
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.core.model.CMICOrganization;
-import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICProducerDTO;
