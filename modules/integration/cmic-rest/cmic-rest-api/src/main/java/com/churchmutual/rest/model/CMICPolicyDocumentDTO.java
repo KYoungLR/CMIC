@@ -37,7 +37,7 @@ public class CMICPolicyDocumentDTO extends CMICObjectDTO {
 		return _url;
 	}
 
-	public void setAccountNumber(String accountNumber) {
+	public void setAccountNum(String accountNumber) {
 		_accountNumber = accountNumber;
 	}
 
@@ -57,11 +57,11 @@ public class CMICPolicyDocumentDTO extends CMICObjectDTO {
 		_name = name;
 	}
 
-	public void setPolicyNumber(String policyNumber) {
+	public void setPolicyNum(String policyNumber) {
 		_policyNumber = policyNumber;
 	}
 
-	public void setSequenceNumber(String sequenceNumber) {
+	public void setSequenceNum(String sequenceNumber) {
 		_sequenceNumber = sequenceNumber;
 	}
 
