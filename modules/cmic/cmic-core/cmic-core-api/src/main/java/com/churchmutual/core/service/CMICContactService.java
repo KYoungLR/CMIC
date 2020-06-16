@@ -16,33 +16,36 @@ package com.churchmutual.core.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.service.BaseLocalService;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
+import com.liferay.portal.kernel.security.access.control.AccessControlled;
+import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Provides the local service interface for CMICTransaction. Methods of this
- * service will not have security checks based on the propagated JAAS
- * credentials because this service can only be accessed from within the same
- * VM.
+ * Provides the remote service interface for CMICContact. Methods of this
+ * service are expected to have security checks based on the propagated JAAS
+ * credentials because this service can be accessed remotely.
  *
  * @author Kayleen Lim
- * @see CMICTransactionLocalServiceUtil
+ * @see CMICContactServiceUtil
  * @generated
  */
+@AccessControlled
+@JSONWebService
 @ProviderType
 @Transactional(
 	isolation = Isolation.PORTAL,
 	rollbackFor = {PortalException.class, SystemException.class}
 )
-public interface CMICTransactionLocalService extends BaseLocalService {
+public interface CMICContactService extends BaseService {
 
 	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this interface directly. Always use {@link CMICTransactionLocalServiceUtil} to access the cmic transaction local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICTransactionLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify or reference this interface directly. Always use {@link CMICContactServiceUtil} to access the cmic contact remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICContactServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 
 	/**
