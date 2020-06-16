@@ -8,6 +8,7 @@ import com.churchmutual.portal.ws.commons.client.executor.WebServiceRequestExecu
 import com.churchmutual.rest.configuration.CMICWebServiceAuthenticationConfiguration;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
@@ -109,6 +110,10 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 		WebServiceRequest webServiceRequest = new WebServiceRequest(httpPost, _basicAuthUsername, _basicAuthPassword);
 
 		return execute(webServiceRequest);
+	}
+
+	public String executePost(String baseURL, Map<String, String> queryParameters) throws PortalException {
+		return executePost(baseURL, new ArrayList<>(), queryParameters, StringPool.BLANK);
 	}
 
 	@Activate

@@ -26,4 +26,6 @@ public interface WebServiceExecutor {
 			String baseURL, List<String> pathParameters, Map<String, String> queryParameters, String bodyParameters)
 		throws PortalException;
 
+	public String executePost(String baseURL, Map<String, String> queryParameters) throws PortalException;
+
 }

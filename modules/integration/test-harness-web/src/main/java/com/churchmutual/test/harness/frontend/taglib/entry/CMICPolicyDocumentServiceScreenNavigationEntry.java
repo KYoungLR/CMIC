@@ -10,6 +10,8 @@ import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -43,15 +45,15 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 	@Override
 	public List<HarnessDescriptor> getHarnessDescriptors() {
 		HarnessDescriptor.Parameter accountNum = new HarnessDescriptor.Parameter(
-			"accountNum", "accountNum", true, "", String.class.getName());
+			"accountNum", "accountNum", true, "0017522", String.class.getName());
 		HarnessDescriptor.Parameter includeBytes = new HarnessDescriptor.Parameter(
 			"includeBytes", "includeBytes", false, true, Boolean.class.getName());
 		HarnessDescriptor.Parameter policyNum = new HarnessDescriptor.Parameter(
-			"policyNum", "policyNum", true, "", String.class.getName());
+			"policyNum", "policyNum", true, "111055", String.class.getName());
 		HarnessDescriptor.Parameter policyType = new HarnessDescriptor.Parameter(
-			"policyType", "policyType", true, "", String.class.getName());
+			"policyType", "policyType", true, "25", String.class.getName());
 		HarnessDescriptor.Parameter sequenceNum = new HarnessDescriptor.Parameter(
-			"sequenceNum", "sequenceNum", true, "", String.class.getName());
+			"sequenceNum", "sequenceNum", true, "3", String.class.getName());
 
 		HarnessDescriptor getRecentTransactionsDescriptor = new HarnessDescriptor(
 			"Download transaction document", _GET_RECENT_TRANSACTIONS_ENDPOINT, Http.Method.POST);
@@ -87,28 +89,37 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 
 		JSONArray response = JSONFactoryUtil.createJSONArray();
 
-		if (_GET_RECENT_TRANSACTIONS_ENDPOINT.equals(endpoint)) {
-			String accountNum = ParamUtil.getString(portletRequest, "accountNum");
-			boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
-			String policyNum = ParamUtil.getString(portletRequest, "policyNum");
-			String policyType = ParamUtil.getString(portletRequest, "policyType");
+		try {
+			if (_GET_RECENT_TRANSACTIONS_ENDPOINT.equals(endpoint)) {
+				String accountNum = ParamUtil.getString(portletRequest, "accountNum");
+				boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
+				String policyNum = ParamUtil.getString(portletRequest, "policyNum");
+				String policyType = ParamUtil.getString(portletRequest, "policyType");
 
-			CMICPolicyDocumentDTO policyDocument = _policyDocumentWebService.getRecentTransactions(
-				accountNum, includeBytes, policyNum, policyType);
+				List<CMICPolicyDocumentDTO> policyDocuments = _policyDocumentWebService.getRecentTransactions(
+					accountNum, includeBytes, policyNum, policyType);
 
-			response.put(policyDocument.toJSONObject());
+				policyDocuments.forEach(policyDocument -> response.put(policyDocument.toJSONObject()));
+			}
+			else if (_GET_TRANSACTIONS_ENDPOINT.equals(endpoint)) {
+				String accountNum = ParamUtil.getString(portletRequest, "accountNum");
+				boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
+				String policyNum = ParamUtil.getString(portletRequest, "policyNum");
+				String policyType = ParamUtil.getString(portletRequest, "policyType");
+				String sequenceNum = ParamUtil.getString(portletRequest, "sequenceNum");
+
+				List<CMICPolicyDocumentDTO> policyDocuments = _policyDocumentWebService.getTransactions(
+					accountNum, includeBytes, policyNum, policyType, sequenceNum);
+
+				policyDocuments.forEach(policyDocument -> response.put(policyDocument.toJSONObject()));
+			}
 		}
-		else if (_GET_TRANSACTIONS_ENDPOINT.equals(endpoint)) {
-			String accountNum = ParamUtil.getString(portletRequest, "accountNum");
-			boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
-			String policyNum = ParamUtil.getString(portletRequest, "policyNum");
-			String policyType = ParamUtil.getString(portletRequest, "policyType");
-			String sequenceNum = ParamUtil.getString(portletRequest, "sequenceNum");
+		catch (Exception pe) {
+			response.put(pe.getMessage());
 
-			CMICPolicyDocumentDTO policyDocument = _policyDocumentWebService.getTransactions(
-				accountNum, includeBytes, policyNum, policyType, sequenceNum);
-
-			response.put(policyDocument.toJSONObject());
+			if (_log.isErrorEnabled()) {
+				_log.error("Could not get response for " + endpoint, pe);
+			}
 		}
 
 		return response.toString();
@@ -117,6 +128,8 @@ public class CMICPolicyDocumentServiceScreenNavigationEntry extends BaseTestHarn
 	private static final String _GET_RECENT_TRANSACTIONS_ENDPOINT = "/v1/download/transactions/recent";
 
 	private static final String _GET_TRANSACTIONS_ENDPOINT = "/v1/download/transactions";
+
+	private static final Log _log = LogFactoryUtil.getLog(CMICPolicyDocumentServiceScreenNavigationEntry.class);
 
 	@Reference
 	private JSPRenderer _jspRenderer;
