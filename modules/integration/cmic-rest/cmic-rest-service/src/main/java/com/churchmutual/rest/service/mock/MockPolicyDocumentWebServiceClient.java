@@ -5,12 +5,12 @@ import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
-
 import com.liferay.portal.kernel.util.ListUtil;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Kayleen Lim
@@ -27,7 +27,8 @@ public class MockPolicyDocumentWebServiceClient {
 
 		JSONDeserializer<CMICPolicyDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO[].class);
+		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(
+			fileContent, CMICPolicyDocumentDTO[].class);
 
 		return ListUtil.fromArray(policyDocuments);
 	}
@@ -41,7 +42,8 @@ public class MockPolicyDocumentWebServiceClient {
 
 		JSONDeserializer<CMICPolicyDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(fileContent, CMICPolicyDocumentDTO[].class);
+		CMICPolicyDocumentDTO[] policyDocuments = jsonDeserializer.deserialize(
+			fileContent, CMICPolicyDocumentDTO[].class);
 
 		return ListUtil.fromArray(policyDocuments);
 	}
