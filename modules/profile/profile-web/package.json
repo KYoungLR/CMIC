@@ -3,19 +3,24 @@
 	"version": "1.0.0",
 	"description": "CMIC Profile Web",
 	"devDependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.9.6",
+		"@babel/plugin-proposal-class-properties": "^7.8.3",
+		"@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/preset-react": "^7.9.4",
+		"copy-webpack-plugin": "4.6.0",
 		"liferay-npm-bundler": "^2.18.5",
 		"liferay-npm-build-support": "^2.18.5",
-		"copy-webpack-plugin": "4.6.0",
 		"webpack": "4.29.6",
 		"webpack-cli": "3.3.0",
-		"webpack-dev-server": "3.2.1",
-		"babel-cli": "6.26.0",
-		"babel-preset-env": "1.7.0",
-		"babel-preset-react": "6.24.1",
-		"babel-loader": "7.1.5"
+		"webpack-dev-server": "3.2.1"
 	},
 	"dependencies": {
+		"@clayui/alert": "^3.3.0",
 		"@clayui/button": "^3.3.0",
+		"@clayui/modal": "^3.4.0",
+		"@clayui/form": "^3.6.0",
 		"react": "16.8.6",
 		"react-dom": "16.8.6"
 	},

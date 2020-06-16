@@ -1,3 +1,7 @@
+dependencies {
+    providedModules group: "commons-io", name: "commons-io", version: "2.6"
+}
+
 configure(subprojects.findAll { !it.subprojects }) {
     if (project.path.startsWith(":modules:") && project.file("bnd.bnd").exists()) {
         afterEvaluate { project ->

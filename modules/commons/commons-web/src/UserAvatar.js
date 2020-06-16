@@ -13,7 +13,7 @@ const UserAvatar = (props) => {
 	);
 
 	return (
-		<span className={avatarClassName}>
+		<span className={avatarClassName} onClick={props.onClick}>
 			<span className="sticker-overlay">
 				{props.image ? (
 					<img className="sticker-img" src={props.image} />
