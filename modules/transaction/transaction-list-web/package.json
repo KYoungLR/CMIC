@@ -15,6 +15,14 @@
 		"babel-loader": "7.1.5"
 	},
 	"dependencies": {
+		"@clayui/breadcrumb": "^3.2.0",
+		"@clayui/button": "^3.3.1",
+		"@clayui/card": "^3.2.1",
+		"@clayui/form": "^3.8.0",
+		"@clayui/icon": "^3.0.5",
+		"@clayui/loading-indicator": "^3.1.0",
+		"@clayui/pagination-bar": "^3.1.4",
+		"@clayui/table": "^3.0.7",
 		"react": "16.8.6",
 		"react-dom": "16.8.6"
 	},
@@ -26,7 +34,6 @@
 	},
 	"portlet": {
 		"com.liferay.portlet.display-category": "category.churchmutual",
-		"com.liferay.portlet.header-portlet-css": "/css/styles.css",
 		"com.liferay.portlet.instanceable": true,
 		"javax.portlet.name": "com_churchmutual_transaction_list_web_portlet_TransactionListWebPortlet",
 		"javax.portlet.security-role-ref": "power-user,user",

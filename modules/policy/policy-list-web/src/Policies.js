@@ -77,7 +77,7 @@ class Policies extends React.Component {
 
   render() {
     return (
-      <div className="account-list-portlet">
+      <div className="policy-list-portlet">
         <CardPageHeader>
             <AccountInfo
               account={this.state.account}
