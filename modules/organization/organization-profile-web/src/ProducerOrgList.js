@@ -8,7 +8,7 @@ const ProducerOrgList = (props) => {
   else {
     return (
       <React.Fragment>
-        {props.producerOrgList.map((producer, index) => (
+        {props.producerOrgList.slice(0, 3).map((producer, index) => (
           <div className="well well-lg" key={index}>
             <div>
               <h2 className="well-title">{producer.producerName}</h2>
@@ -29,7 +29,9 @@ const ProducerOrgList = (props) => {
         ))}
 
         {props.producerOrgList.length > 3 &&
-          <a href="javascript:;">{Liferay.Language.get('show-all')}</a>
+          <div className="bg-fade">
+            <a className="link-action" href="javascript:;">{Liferay.Language.get('show-all')}</a>
+          </div>
         }
       </React.Fragment>
     );
