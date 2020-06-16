@@ -6,9 +6,7 @@ import AccountInfo from './AccountInfo';
 import PolicyList from './PolicyList';
 import PolicySearch from './PolicySearch';
 
-const mainContent = document.getElementById('main-content');
-
-class Account extends React.Component {
+class Policies extends React.Component {
 
   constructor(props) {
     super(props);
@@ -114,4 +112,4 @@ class Account extends React.Component {
 };
 
 
-export default Account;
+export default Policies;
