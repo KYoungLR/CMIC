@@ -33,16 +33,13 @@ import org.osgi.service.component.annotations.Component;
  * @author Kayleen Lim
  * @see CMICTransactionLocalServiceBaseImpl
  */
-@Component(
-	property = "model.class.name=com.churchmutual.core.model.CMICTransaction",
-	service = AopService.class
-)
-public class CMICTransactionLocalServiceImpl
-	extends CMICTransactionLocalServiceBaseImpl {
+@Component(property = "model.class.name=com.churchmutual.core.model.CMICTransaction", service = AopService.class)
+public class CMICTransactionLocalServiceImpl extends CMICTransactionLocalServiceBaseImpl {
 
 	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICTransactionLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICTransactionLocalServiceUtil</code>.
 	 */
+
 }

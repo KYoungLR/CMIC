@@ -18,17 +18,19 @@ import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICProducerDTO;
+
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The implementation of the cmic organization local service.
@@ -47,6 +49,11 @@ import java.util.List;
 public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServiceBaseImpl {
 
 	@Override
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+		return cmicOrganizationPersistence.findByOrganizationId(organizationId);
+	}
+
+	@Override
 	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
 		User user = _userLocalService.getUser(userId);
 
@@ -60,18 +67,14 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 		List<CMICOrganization> cmicOrganizationList = new ArrayList<>();
 
-		for (Organization organization: organizations) {
-			CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(organization.getOrganizationId());
+		for (Organization organization : organizations) {
+			CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(
+				organization.getOrganizationId());
 
 			cmicOrganizationList.add(cmicOrganization);
 		}
 
 		return organizations;
-	}
-
-	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
-		return cmicOrganizationPersistence.findByOrganizationId(organizationId);
 	}
 
 	@Reference

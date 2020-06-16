@@ -34,10 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @see CMICTransactionServiceBaseImpl
  */
 @Component(
-	property = {
-		"json.web.service.context.name=cmic",
-		"json.web.service.context.path=CMICTransaction"
-	},
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICTransaction"},
 	service = AopService.class
 )
 public class CMICTransactionServiceImpl extends CMICTransactionServiceBaseImpl {
@@ -47,4 +44,5 @@ public class CMICTransactionServiceImpl extends CMICTransactionServiceBaseImpl {
 	 *
 	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICTransactionServiceUtil</code> to access the cmic transaction remote service.
 	 */
+
 }

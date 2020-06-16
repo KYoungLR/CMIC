@@ -33,10 +33,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Kayleen Lim
  * @see CMICPolicyLocalServiceBaseImpl
  */
-@Component(
-	property = "model.class.name=com.churchmutual.core.model.CMICPolicy",
-	service = AopService.class
-)
+@Component(property = "model.class.name=com.churchmutual.core.model.CMICPolicy", service = AopService.class)
 public class CMICPolicyLocalServiceImpl extends CMICPolicyLocalServiceBaseImpl {
 
 	/**
@@ -44,4 +41,5 @@ public class CMICPolicyLocalServiceImpl extends CMICPolicyLocalServiceBaseImpl {
 	 *
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICPolicyLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICPolicyLocalServiceUtil</code>.
 	 */
+
 }

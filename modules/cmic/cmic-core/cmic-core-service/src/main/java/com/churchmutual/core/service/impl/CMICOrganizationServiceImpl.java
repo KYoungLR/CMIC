@@ -19,11 +19,11 @@ import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Organization;
 
 import java.util.List;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Organization;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -47,13 +47,13 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl {
 
 	@Override
-	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
-		return _cmicOrganizationLocalService.getCMICOrganizations(userId);
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+		return _cmicOrganizationLocalService.getCMICOrganizationByOrganizationId(organizationId);
 	}
 
 	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
-		return _cmicOrganizationLocalService.getCMICOrganizationByOrganizationId(organizationId);
+	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
+		return _cmicOrganizationLocalService.getCMICOrganizations(userId);
 	}
 
 	@Reference

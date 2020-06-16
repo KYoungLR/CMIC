@@ -34,10 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @see CMICContactServiceBaseImpl
  */
 @Component(
-	property = {
-		"json.web.service.context.name=cmic",
-		"json.web.service.context.path=CMICContact"
-	},
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICContact"},
 	service = AopService.class
 )
 public class CMICContactServiceImpl extends CMICContactServiceBaseImpl {
@@ -47,4 +44,5 @@ public class CMICContactServiceImpl extends CMICContactServiceBaseImpl {
 	 *
 	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICContactServiceUtil</code> to access the cmic contact remote service.
 	 */
+
 }

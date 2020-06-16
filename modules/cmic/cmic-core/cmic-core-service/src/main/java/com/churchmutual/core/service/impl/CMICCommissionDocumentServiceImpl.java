@@ -34,18 +34,15 @@ import org.osgi.service.component.annotations.Component;
  * @see CMICCommissionDocumentServiceBaseImpl
  */
 @Component(
-	property = {
-		"json.web.service.context.name=cmic",
-		"json.web.service.context.path=CMICCommissionDocument"
-	},
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICCommissionDocument"},
 	service = AopService.class
 )
-public class CMICCommissionDocumentServiceImpl
-	extends CMICCommissionDocumentServiceBaseImpl {
+public class CMICCommissionDocumentServiceImpl extends CMICCommissionDocumentServiceBaseImpl {
 
 	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICCommissionDocumentServiceUtil</code> to access the cmic commission document remote service.
 	 */
+
 }

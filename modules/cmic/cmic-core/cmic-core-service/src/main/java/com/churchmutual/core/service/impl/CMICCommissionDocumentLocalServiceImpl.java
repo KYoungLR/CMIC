@@ -33,16 +33,13 @@ import org.osgi.service.component.annotations.Component;
  * @author Kayleen Lim
  * @see CMICCommissionDocumentLocalServiceBaseImpl
  */
-@Component(
-	property = "model.class.name=com.churchmutual.core.model.CMICCommissionDocument",
-	service = AopService.class
-)
-public class CMICCommissionDocumentLocalServiceImpl
-	extends CMICCommissionDocumentLocalServiceBaseImpl {
+@Component(property = "model.class.name=com.churchmutual.core.model.CMICCommissionDocument", service = AopService.class)
+public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocumentLocalServiceBaseImpl {
 
 	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICCommissionDocumentLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICCommissionDocumentLocalServiceUtil</code>.
 	 */
+
 }

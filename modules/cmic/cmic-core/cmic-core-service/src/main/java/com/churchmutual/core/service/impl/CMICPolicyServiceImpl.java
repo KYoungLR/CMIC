@@ -34,10 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @see CMICPolicyServiceBaseImpl
  */
 @Component(
-	property = {
-		"json.web.service.context.name=cmic",
-		"json.web.service.context.path=CMICPolicy"
-	},
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICPolicy"},
 	service = AopService.class
 )
 public class CMICPolicyServiceImpl extends CMICPolicyServiceBaseImpl {
@@ -47,4 +44,5 @@ public class CMICPolicyServiceImpl extends CMICPolicyServiceBaseImpl {
 	 *
 	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICPolicyServiceUtil</code> to access the cmic policy remote service.
 	 */
+
 }
