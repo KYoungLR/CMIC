@@ -54,4 +54,5 @@
 	<entity local-service="true" name="CMICContact" remote-service="true" />
 	<entity local-service="true" name="CMICPolicy" remote-service="true" />
 	<entity local-service="true" name="CMICTransaction" remote-service="true" />
+	<entity local-service="true" name="CMICUser" remote-service="true" />
 </service-builder>

@@ -15,71 +15,74 @@
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
-import com.churchmutual.core.service.CMICUserLocalService;
-import com.churchmutual.core.service.CMICUserService;
 
+import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.util.List;
 
 /**
  * @author Matthew Chan
  */
-@Component(immediate = true, service = CMICUserService.class)
-public class CMICUserServiceImpl implements CMICUserService {
+@Component(
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICUser"},
+	service = AopService.class
+)
+public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 
 	@Override
 	public User addUser(String cmicUUID, String registrationCode) throws PortalException {
-		return _cmicUserLocalService.addUser(cmicUUID, registrationCode);
+		return cmicUserLocalService.addUser(cmicUUID, registrationCode);
 	}
 
 	@Override
 	public BusinessPortalType getBusinessPortalType(String registrationCode) throws PortalException {
-		return _cmicUserLocalService.getBusinessPortalType(registrationCode);
+		return cmicUserLocalService.getBusinessPortalType(registrationCode);
 	}
 
 	@Override
 	public BusinessPortalType getBusinessPortalType(long userId) throws PortalException {
-		return _cmicUserLocalService.getBusinessPortalType(userId);
+		return cmicUserLocalService.getBusinessPortalType(userId);
 	}
 
 	@Override
 	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException {
-		return _cmicUserLocalService.getCMICOrganizationUsers(cmicOrganizationId);
+		return cmicUserLocalService.getCMICOrganizationUsers(cmicOrganizationId);
 	}
 
 	@Override
 	public User getUser(String cmicUUID) {
-		return _cmicUserLocalService.getUser(cmicUUID);
+		return cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override
 	public void inviteUserToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException {
-		_cmicUserLocalService.inviteUsersToCMICOrganization(emailAddresses, cmicOrganizationId);
+		cmicUserLocalService.inviteUsersToCMICOrganization(emailAddresses, cmicOrganizationId);
 	}
 
 	@Override
 	public boolean isUserRegistered(String cmicUUID) {
-		return _cmicUserLocalService.isUserRegistered(cmicUUID);
+		return cmicUserLocalService.isUserRegistered(cmicUUID);
 	}
 
 	@Override
 	public boolean isUserValid(
 		String businessZipCode, String divisionAgentNumber, String registrationCode, String cmicUUID) {
 
-		return _cmicUserLocalService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, cmicUUID);
+		return cmicUserLocalService.isUserValid(businessZipCode, divisionAgentNumber, registrationCode, cmicUUID);
 	}
 
 	@Override
 	public void removeUserFromCMICOrganization(long userId, long cmicOrganizationId) throws PortalException {
-		_cmicUserLocalService.removeUserFromCMICOrganization(userId, cmicOrganizationId);
+		cmicUserLocalService.removeUserFromCMICOrganization(userId, cmicOrganizationId);
 	}
 
-	@Reference
-	private CMICUserLocalService _cmicUserLocalService;
-
+	@Override
+	public void validateUserRegistration(String registrationCode) throws PortalException {
+		cmicUserLocalService.validateUserRegistration(registrationCode);
+	}
 }

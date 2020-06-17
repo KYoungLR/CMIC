@@ -5,7 +5,7 @@ import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.core.constants.CMICUserConstants;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
-import com.churchmutual.core.service.CMICUserLocalService;
+import com.churchmutual.core.service.base.CMICUserLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.self.provisioning.api.SelfProvisioningBusinessService;
@@ -35,8 +35,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Kayleen Lim
  */
-@Component(immediate = true, service = AopService.class)
-public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalService {
+@Component(property = "model.class.name=com.churchmutual.core.model.CMICUser", service = AopService.class)
+public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
 	public User addUser(String cmicUUID, String registrationCode) throws PortalException {
@@ -121,6 +121,15 @@ public class CMICUserLocalServiceImpl implements AopService, CMICUserLocalServic
 		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.getCMICOrganization(cmicOrganizationId);
 
 		_portalUserWebService.removeUserFromCMICOrganization(cmicUUID, cmicOrganization.getProducerId());
+	}
+
+	@Override
+	public void validateUserRegistration(String registrationCode) throws PortalException {
+		BusinessPortalType businessPortalType = getBusinessPortalType(registrationCode);
+
+		if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+			throw new PortalException("User must have the Broker portal type");
+		}
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
