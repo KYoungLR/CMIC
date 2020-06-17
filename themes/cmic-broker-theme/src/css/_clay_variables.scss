@@ -326,6 +326,37 @@ $sticker-user-icon: map-merge((
 	box-shadow: map-get($elevation, 6)
 ), $sticker-user-icon);
 
+$sticker-blue-bg: $blue;
+$sticker-blue-border-color: null;
+$sticker-blue-color: $white;
+
+$sticker-green-bg: $green;
+$sticker-green-border-color: null;
+$sticker-green-color: $white;
+
+$sticker-orange-bg: $orange;
+$sticker-orange-border-color: null;
+$sticker-orange-color: $white;
+
+$sticker-palette: () !default;
+$sticker-palette: map-merge((
+	blue: (
+		bg: $sticker-blue-bg,
+		border-color: $sticker-blue-border-color,
+		color: $sticker-blue-color
+	),
+	green: (
+		bg: $sticker-green-bg,
+		border-color: $sticker-green-border-color,
+		color: $sticker-green-color
+	),
+	orange: (
+		bg: $sticker-orange-bg,
+		border-color: $sticker-orange-border-color,
+		color: $sticker-orange-color
+	)
+),$sticker-palette);
+
 
 // Badges
 
