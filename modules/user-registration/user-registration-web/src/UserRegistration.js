@@ -81,75 +81,61 @@ class UserRegistration extends React.Component {
   }
 
   submitFormRegistrationCode() {
-    let data = new FormData(this.formRegistrationCode.current);
+    let callback = () => this.setState({ isFormRegistrationCodeSubmitted: true });
 
-    fetch(`/o/user-registration/validate-user-registration/`, {
-      method: 'post',
-      headers: new Headers(),
-      body: data
-    }).then((response) =>  {
-      if (!response.ok) {
-        throw response;
-      }
-
-      response.text().then(businessPortalType => {
-        if (businessPortalType == null || businessPortalType == "insured") {
-          this.setState(previousState => ({
-            formErrors: {
-              ...previousState.formErrors,
-              registrationCode: true
-            }
-          }));
-        }
-        else {
-          this.setState({ isFormRegistrationCodeSubmitted: true });
-        }
-      });
-    }).catch(
-      (e) => this.setState(previousState => ({
+    let errCallback = () =>
+      this.setState(previousState => ({
         formErrors: {
           ...previousState.formErrors,
           registrationCode: true
         }
-      }))
+      }));
+
+    Liferay.Service(
+      '/cmic.cmicuser/validate-user-registration',
+      {
+        registrationCode: this.state.registrationCode
+      },
+      callback,
+      errCallback
     );
   }
 
   submitFormIdentity() {
-    let data = new FormData(this.formIdentity.current);
-    data.append("registrationCode", this.state.registrationCode);
-
-    fetch(`/o/user-registration/is-user-valid/`, {
-      method: 'post',
-      headers: new Headers(),
-      body: data
-    }).then((response) =>  {
-      if (!response.ok) {
-        throw response;
+    let callback = (isUserValid) => {
+      if (!isUserValid) {
+        this.setState(previousState => ({
+          formErrors: {
+            ...previousState.formErrors,
+            businessZipCode: true,
+            divisionAgentNumber: true
+          }
+        }));
       }
+      else {
+        window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
+      }
+    }
 
-      response.json().then(isUserValid => {
-        if (!isUserValid) {
-          this.setState(previousState => ({
-            formErrors: {
-              ...previousState.formErrors,
-              businessZipCode: true,
-              divisionAgentNumber: true
-            }
-          }));
-        }
-        else {
-          window.location.href = Liferay.ThemeDisplay.getPortalURL() + "/group/broker";
-        }
-      });
-    }).catch(
-      (e) => this.setState(previousState => ({
+    let errCallback = () =>
+      this.setState(previousState => ({
         formErrors: {
           ...previousState.formErrors,
           businessZipCode: true,
           divisionAgentNumber: true
         }
-      }))
+      }));
+
+    Liferay.Service(
+      '/cmic.cmicuser/is-user-valid',
+      {
+        businessZipCode: this.state.businessZipCode,
+        divisionAgentNumber: this.state.divisionAgentNumber,
+        registrationCode: this.state.registrationCode,
+        cmicUUID: ''
+      },
+      callback,
+      errCallback
     );
   }
 
