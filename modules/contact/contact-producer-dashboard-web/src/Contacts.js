@@ -1,7 +1,8 @@
 import React from 'react';
 import ClayCard from '@clayui/card';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {Toast} from 'com.churchmutual.commons.web';
-import ContactList from './ContactList';
+import {ContactCards} from 'com.churchmutual.commons.web';
 
 class Contacts extends React.Component {
 
@@ -55,9 +56,10 @@ class Contacts extends React.Component {
 
     this.setState({
       contactsList: [
-        { name: 'Karlie Schowalter', title: 'Div Agents: 35-000, 35-001, 35-858', email: 'karlie.schowalter@churchmutal.com', phone: '715-555-5555', image: 'https://clayui.com/images/long_user_image.png' },
-        { name: 'Doris O’Connell', title: 'Div Agents: 49-064', email: 'doris.oconnell@churchmutal.com', phone: '715-555-5555', image: 'https://clayui.com/images/thumbnail_coffee.jpg' },
-        { name: 'Elouise Hintz', title: 'Div Agents: 49-334', email: 'elouise.hintz@churchmutal.com', phone: '715-555-5555', image: 'https://clayui.com/images/thumbnail_dock.jpg' }
+        { firstName: 'Karlie', lastName: 'Schowalter', fullName: 'Karlie Schowalter', title: 'Div Agents: 35-000, 35-001, 35-858', email: 'karlie.schowalter@churchmutal.com', phoneNumber: '715-555-5555' },
+        { firstName: 'Doris', lastName: 'O’Connell', fullName: 'Doris O’Connell', title: 'Div Agents: 49-064', email: 'doris.oconnell@churchmutal.com', phoneNumber: '715-555-5555' },
+        { firstName: 'Elouise', lastName: 'Hintz', fullName: 'Elouise Hintz', title: 'Div Agents: 49-334', email: 'elouise.hintz@churchmutal.com', phoneNumber: '715-555-5555' },
+        { firstName: 'Karlie', lastName: 'Schowalter', fullName: 'Karlie Schowalter', title: 'Div Agents: 35-000, 35-001, 35-858', email: 'karlie.schowalter@churchmutal.com', phoneNumber: '715-555-5555' }
       ],
       isLoading: false
     });
@@ -71,10 +73,18 @@ class Contacts extends React.Component {
             <ClayCard.Description displayType="title">{Liferay.Language.get('territory-managers')}</ClayCard.Description>
           </div>
           <ClayCard.Body>
-            <ContactList
-              contactsList={this.state.contactsList}
-              isLoading={this.state.isLoading}
-            />
+            {this.state.isLoading ? (
+              <ClayLoadingIndicator />
+              ) : (
+              <ContactCards
+                list={this.state.contactsList}
+                isLoading={this.state.isLoading}
+                limit={3}
+                pathname="contact"
+                md={6}
+                lg={12}
+              />
+            )}
           </ClayCard.Body>
         </ClayCard>
 
