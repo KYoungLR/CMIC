@@ -4,8 +4,11 @@ import getCN from 'classnames';
 
 const UserAvatar = (props) => {
 	const size = props.size || 'lg';
+	const initials = `${props.firstName.substring(0, 1)}${props.lastName.substring(0, 1)}`;
+	const variations = ['blue', 'green', 'orange'];
+	const color = variations[props.index % variations.length];
 	const avatarClassName = getCN(
-		[`sticker sticker-circle sticker-light sticker-${size}`],
+		[`sticker sticker-circle sticker-${color} sticker-${size}`],
 		{
 			[`elevation-${props.elevation}`]: props.elevation
 		},
@@ -18,7 +21,7 @@ const UserAvatar = (props) => {
 				{props.image ? (
 					<img className="sticker-img" src={props.image} />
 				) : (
-					<ClayIcon symbol="user" />
+					initials
 				)}
 			</span>
 		</span>

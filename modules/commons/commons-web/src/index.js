@@ -1,5 +1,6 @@
 import AsteriskIcon from './AsteriskIcon';
 import CardPageHeader from './CardPageHeader';
+import ContactCards from './ContactCards';
 import Dialog from './Dialog';
 import Input from './Input';
 import Select from './Select';
@@ -15,6 +16,7 @@ export {
     ChangesFeedback,
     ChangesTrackerContext,
     ChangesTrackerProvider,
+    ContactCards,
     Dialog,
     Input,
     removeOutsideClickEvent,
