@@ -62,25 +62,6 @@ import java.rmi.RemoteException;
  */
 public class CMICOrganizationServiceSoap {
 
-	public static com.liferay.portal.kernel.model.OrganizationSoap[]
-			getCMICOrganizations(long userId)
-		throws RemoteException {
-
-		try {
-			java.util.List<com.liferay.portal.kernel.model.Organization>
-				returnValue = CMICOrganizationServiceUtil.getCMICOrganizations(
-					userId);
-
-			return com.liferay.portal.kernel.model.OrganizationSoap.
-				toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.churchmutual.core.model.CMICOrganizationSoap
 			getCMICOrganizationByOrganizationId(long organizationId)
 		throws RemoteException {
@@ -92,6 +73,25 @@ public class CMICOrganizationServiceSoap {
 
 			return com.churchmutual.core.model.CMICOrganizationSoap.toSoapModel(
 				returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.portal.kernel.model.OrganizationSoap[]
+			getCMICOrganizations(long userId)
+		throws RemoteException {
+
+		try {
+			java.util.List<com.liferay.portal.kernel.model.Organization>
+				returnValue = CMICOrganizationServiceUtil.getCMICOrganizations(
+					userId);
+
+			return com.liferay.portal.kernel.model.OrganizationSoap.
+				toSoapModels(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

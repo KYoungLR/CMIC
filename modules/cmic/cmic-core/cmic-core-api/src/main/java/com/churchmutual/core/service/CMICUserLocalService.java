@@ -15,44 +15,83 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
-import org.osgi.annotation.versioning.ProviderType;
 
 import java.util.List;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
+ * Provides the local service interface for CMICUser. Methods of this
+ * service will not have security checks based on the propagated JAAS
+ * credentials because this service can only be accessed from within the same
+ * VM.
+ *
  * @author Kayleen Lim
+ * @see CMICUserLocalServiceUtil
+ * @generated
  */
 @ProviderType
 @Transactional(
 	isolation = Isolation.PORTAL,
 	rollbackFor = {PortalException.class, SystemException.class}
 )
-public interface CMICUserLocalService {
+public interface CMICUserLocalService extends BaseLocalService {
 
-	public User addUser(String cmicUUID, String registrationCode) throws PortalException;
+	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never modify or reference this interface directly. Always use {@link CMICUserLocalServiceUtil} to access the cmic user local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICUserLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 */
+	public User addUser(String cmicUUID, String registrationCode)
+		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public BusinessPortalType getBusinessPortalType(long userId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public BusinessPortalType getBusinessPortalType(String registrationCode)
 		throws PortalException;
 
-	public BusinessPortalType getBusinessPortalType(long userId) throws PortalException;
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<User> getCMICOrganizationUsers(long cmicOrganizationId)
+		throws PortalException;
 
-	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException;
+	/**
+	 * Returns the OSGi service identifier.
+	 *
+	 * @return the OSGi service identifier
+	 */
+	public String getOSGiServiceIdentifier();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public User getUser(String cmicUUID);
 
-	public void inviteUsersToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException;
+	public void inviteUsersToCMICOrganization(
+			String[] emailAddresses, long cmicOrganizationId)
+		throws PortalException;
 
-	public boolean isUserRegistered(String uuid);
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public boolean isUserRegistered(String cmicUUID);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean isUserValid(
 		String businessZipCode, String divisionAgentNumber,
-		String registrationCode, String uuid);
+		String registrationCode, String cmicUUID);
 
-	public void removeUserFromCMICOrganization(long userId, long cmicOrganizationId) throws PortalException;
+	public void removeUserFromCMICOrganization(
+			long userId, long cmicOrganizationId)
+		throws PortalException;
+
+	public void validateUserRegistration(String registrationCode)
+		throws PortalException;
 
 }
