@@ -447,6 +447,13 @@ public class SelfProvisioningBusinessServiceImpl implements AopService, SelfProv
 
 			Role newRole = _roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
 
+			BusinessUserStatus businessUserStatus = getBusinessUserStatus(user.getUserId(), groupId);
+
+			if (BusinessUserStatus.INVITED.equals(businessUserStatus) && ownerRole.equals(newRole)) {
+				throw new PortalException(
+					"Error while updating members: Cannot set user with Invited status to OWNER");
+			}
+
 			_updateBusinessUserRole(user.getUserId(), groupId, newRole.getRoleId());
 		}
 	}

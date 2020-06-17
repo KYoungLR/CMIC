@@ -42,6 +42,11 @@ const RoleSelect = (props) => {
         if (props.value.toLowerCase() === 'owner') {
             return [options[0]];
         }
+
+        if (props.user.statusKey === 'invited') {
+            return [options[1], options[2]];
+        }
+
         if (props.primaryUser.role === 'owner') {
             return options;
         }
