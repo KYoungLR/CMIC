@@ -14,15 +14,19 @@ const Download = (props) => {
 
     return (
       <ClayLayout.Row>
-        <ClayLayout.Col md={6}>
+        <ClayLayout.Col md={7} lg={6}>
           <ClayForm.Group>
             <ClaySelect
               aria-label="Select Statement"
               id="statementSelect"
               onChange={(e) => setActivePath(e.target.value)}
+              defaultValue={0}
             >
-              {!activePath && <ClaySelect.Option />}
-
+              <ClaySelect.Option
+                disabled
+                value={0}
+                label={Liferay.Language.get('date-range')}
+              />
               {props.statementList.map((statement, index) => (
                 <ClaySelect.Option
                   key={index}
@@ -33,7 +37,7 @@ const Download = (props) => {
             </ClaySelect>
           </ClayForm.Group>
         </ClayLayout.Col>
-        <ClayLayout.Col md={6}>
+        <ClayLayout.Col md={5} lg={6}>
           <ClayButton displayType="primary" className="btn-lg">
           {Liferay.Language.get('download-statement')}
           <ClayIcon
