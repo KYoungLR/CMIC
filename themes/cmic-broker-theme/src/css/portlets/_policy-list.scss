@@ -1,0 +1,9 @@
+.policy-list-portlet {
+
+	.card-header .input-group {
+
+		@include media-breakpoint-up(md) {
+			min-width: 23rem;
+		}
+	}
+}

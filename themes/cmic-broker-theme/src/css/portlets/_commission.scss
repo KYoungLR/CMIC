@@ -1,0 +1,14 @@
+.commission-portlet {
+
+	.btn {
+
+		@include media-breakpoint-down(sm) {
+			display: block;
+			width: 100%;
+		}
+
+		.lexicon-icon {
+			font-size: 1.3rem;
+		}
+	}
+}
