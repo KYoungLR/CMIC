@@ -223,7 +223,12 @@ export default class extends React.Component {
             <ClayTable.Row className={this.state.primaryUser.changed ? "unsaved-changes" : ""}>
               <ClayTable.Cell className="h4">
                 <div className="flex-container align-items-center">
-                  <UserAvatar className="mr-3" image={this.state.primaryUser.portraitImageUrl} />
+                  <UserAvatar
+                    image={this.state.primaryUser.portraitImageUrl}
+                    firstName={this.state.primaryUser.firstName}
+                    lastName={this.state.primaryUser.lastName}
+                    className="mr-3"
+                  />
                   <div>
                     {this.state.primaryUser.fullName}
                     <small className="font-weight-normal">{" (" + Liferay.Language.get('me').toLowerCase() + ")"}</small>
@@ -240,7 +245,13 @@ export default class extends React.Component {
               <ClayTable.Row key={index} className={(user.changed || user.removed) ? "unsaved-changes" : ""}>
                 <ClayTable.Cell className="h4">
                   <div className="flex-container align-items-center">
-                    <UserAvatar className="mr-3" image={user.portraitImageUrl} />
+                    <UserAvatar
+                      index={index}
+                      image={user.portraitImageUrl}
+                      firstName={user.firstName}
+                      lastName={user.lastName}
+                      className="mr-3"
+                    />
                     <div>{user.fullName}</div>
                   </div>
                 </ClayTable.Cell>

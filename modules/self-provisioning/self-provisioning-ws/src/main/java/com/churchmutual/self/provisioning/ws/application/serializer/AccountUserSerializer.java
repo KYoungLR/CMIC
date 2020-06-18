@@ -49,6 +49,8 @@ public class AccountUserSerializer {
 			user.getUserId(), groupId);
 
 		obj.put("email", user.getEmailAddress());
+		obj.put("firstName", user.getFirstName());
+		obj.put("lastName", user.getLastName());
 		obj.put("fullName", _getUserFullName(user, businessUserStatus));
 		obj.put("portraitImageUrl", _getPortraitImageUrl(user));
 		obj.put("role", _getUserRoleName(user, groupId));
