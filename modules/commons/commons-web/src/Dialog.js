@@ -10,6 +10,10 @@ const Dialog = (props) => {
     const { observer, onClose } = useModal({
         onClose: () => {
             props.setVisible(false);
+
+            if (props.onClickCancel != null){
+                props.onClickCancel();
+            }
         }
     });
 
