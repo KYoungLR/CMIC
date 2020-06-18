@@ -1,4 +1,5 @@
 import React, {useRef} from 'react';
+import ClayButton from '@clayui/button';
 import {Dialog, UserAvatar} from 'com.churchmutual.commons.web';
 
 function UpdatePortraitModal(props) {
@@ -7,6 +8,7 @@ function UpdatePortraitModal(props) {
   return <Dialog
     title={Liferay.Language.get('update-profile-picture')}
     confirmButtonText={Liferay.Language.get('done')}
+    onClickCancel={() => props.onClickCancel()}
     onClickConfirm={() => props.onClickDone()}
     setVisible={props.setVisible}
     visible={props.visible}
@@ -28,6 +30,9 @@ function UpdatePortraitModal(props) {
               onClick={() => inputRef.current.click()}>
             {Liferay.Language.get('select')}
           </button>
+          <ClayButton borderless='true' displayType='secondary' onClick={() => props.handleDeleteClick(true)}>
+            {Liferay.Language.get("delete")}
+          </ClayButton>
         </div>
       </div>
     </div>

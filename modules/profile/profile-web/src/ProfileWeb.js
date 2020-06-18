@@ -1,6 +1,6 @@
 import React from 'react';
 import ClayButton from '@clayui/button';
-import {Toast, UserAvatar} from 'com.churchmutual.commons.web';
+import {Dialog, Toast, UserAvatar} from 'com.churchmutual.commons.web';
 import {UpdatePortraitModal} from './UpdatePortraitModal';
 
 class ProfileWeb extends React.Component {
@@ -9,6 +9,9 @@ class ProfileWeb extends React.Component {
     super(props);
 
     this.state = {
+      deletePortraitModal: {
+        visible: false
+      },
       email: '',
       fullName: '',
       portraitURL: '',
@@ -40,6 +43,24 @@ class ProfileWeb extends React.Component {
       .catch(() => this.displayErrorMessage('your-request-failed-to-complete'));
   }
 
+  setDeletePortraitModalVisible(value) {
+    this.setState({
+      deletePortraitModal: {
+        ...this.state.deletePortraitModal,
+        visible: value
+      }
+    });
+
+    if (value) {
+      this.setState({
+        updatePortraitModal: {
+          ...this.state.updatePortraitModal,
+          visible: false
+        }
+      });
+    }
+  }
+
   setUpdatePortraitModalVisible(value) {
     this.setState({
       updatePortraitModal: {
@@ -47,6 +68,15 @@ class ProfileWeb extends React.Component {
         visible: value
       }
     });
+
+    if (value) {
+      this.setState({
+        deletePortraitModal: {
+          ...this.state.deletePortraitModal,
+          visible: false
+        }
+      });
+    }
   }
 
   setPortraitPreview(event) {
@@ -69,14 +99,47 @@ class ProfileWeb extends React.Component {
     reader.readAsDataURL(file);
   }
 
+  cancelDeletePortrait() {
+    this.setUpdatePortraitModalVisible(true);
+  }
+
   cancelUpdatePortrait() {
     this.setState({
       portrait: {
         file: null,
         previewURL: null,
         visible: false,
+      },
+      updatePortraitModal: {
+        file: null,
+        previewURL: null,
+        visible: false,
       }
     });
+  }
+
+  deletePortrait() {
+    fetch(`/o/profile/${this.getUserId()}/delete-portrait`,
+      {
+        method: 'POST'
+      })
+      .then(res => res.json())
+      .then(data => {
+        this.setState(
+          {
+            portraitURL: data.portraitURL,
+            updatePortraitModal: {
+              file: null,
+              previewURL: data.portraitURL,
+              visible: false,
+            }
+          }
+        );
+
+        this.setDeletePortraitModalVisible(false);
+        this.setUpdatePortraitModalVisible(false);
+      })
+      .catch(() => this.displayErrorMessage('your-request-failed-to-complete'));
   }
 
   updatePortrait() {
@@ -140,10 +203,30 @@ class ProfileWeb extends React.Component {
             portraitURL={this.state.updatePortraitModal.previewURL ? this.state.updatePortraitModal.previewURL : this.state.portraitURL}
             setVisible={(visible) => this.setUpdatePortraitModalVisible(visible)}
             visible={this.state.updatePortraitModal.visible}
+            handleDeleteClick={(event) => this.setDeletePortraitModalVisible(event)}
             handlePictureFileChanged={(event) => this.setPortraitPreview(event)}
             onClickDone={() => this.updatePortrait()}
             onClickCancel={() => this.cancelUpdatePortrait()}
           />
+
+          <Dialog
+            title={Liferay.Language.get('delete-profile-picture')}
+            buttonConfirmText={Liferay.Language.get("continue")}
+            onClickCancel={() => this.cancelDeletePortrait()}
+            onClickConfirm={() => this.deletePortrait()}
+            setVisible={(visible) => this.setDeletePortraitModalVisible(visible)}
+            visible={this.state.deletePortraitModal.visible}
+            status='warning'
+          >
+            <div className='text-center'>
+              <p dangerouslySetInnerHTML={{
+                __html: Liferay.Language.get('are-you-sure-you-want-to-delete-your-profile-picture')
+              }}/>
+              <p dangerouslySetInnerHTML={{
+                __html: Liferay.Language.get('deleting-your-profile-picture-is-permanent.-you-will-need-to-re-upload-a-new-image')
+              }}/>
+            </div>
+          </Dialog>
 
           <Toast
             message={this.state.errorMessage}

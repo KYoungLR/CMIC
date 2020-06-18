@@ -10,10 +10,12 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Portal;
-import org.apache.commons.io.IOUtils;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
+
+import java.io.InputStream;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,10 +25,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
 /**
  * @author Matthew Chan
@@ -34,18 +38,26 @@ import java.util.Set;
 @Component(
 	property = {
 		JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE + "=/profile",
-		JaxrsWhiteboardConstants.JAX_RS_NAME + "=Profile.Rest",
-		"auth.verifier.guest.allowed=true",
+		JaxrsWhiteboardConstants.JAX_RS_NAME + "=Profile.Rest", "auth.verifier.guest.allowed=true",
 		"liferay.access.control.disable=true"
 	},
 	service = Application.class
 )
-@Produces(MediaType.APPLICATION_JSON)
 @Path("/{userId}")
+@Produces(MediaType.APPLICATION_JSON)
 public class ProfileApplication extends Application {
 
-	public Set<Object> getSingletons() {
-		return Collections.singleton(this);
+	@Path("/delete-portrait")
+	@POST
+	public Response deletePortrait(@PathParam("userId") long userId) {
+		try {
+			_userLocalService.deletePortrait(userId);
+
+			return getProfileInformation(userId);
+		}
+		catch (Exception ex) {
+			return _handleError(ex);
+		}
 	}
 
 	@GET
@@ -67,8 +79,12 @@ public class ProfileApplication extends Application {
 		}
 	}
 
-	@POST
+	public Set<Object> getSingletons() {
+		return Collections.singleton(this);
+	}
+
 	@Path("/portrait")
+	@POST
 	public Response updatePortrait(@PathParam("userId") long userId, InputStream in) {
 		try {
 			byte[] bytes = IOUtils.toByteArray(in);
@@ -84,8 +100,7 @@ public class ProfileApplication extends Application {
 
 	private String _getPortraitURL(User user) throws PortalException {
 		String portraitURL = UserConstants.getPortraitURL(
-			_portal.getPathImage(), user.isMale(), user.getPortraitId(),
-			user.getUserUuid());
+			_portal.getPathImage(), user.isMale(), user.getPortraitId(), user.getUserUuid());
 
 		return portraitURL + "&timestamp=" + new Date().getTime();
 	}
