@@ -236,13 +236,6 @@ public class CMICOrganizationLocalServiceUtil {
 		return getService().getCMICOrganizations(start, end);
 	}
 
-	public static java.util.List<com.liferay.portal.kernel.model.Organization>
-			getCMICOrganizations(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return getService().getCMICOrganizations(userId);
-	}
-
 	/**
 	 * Returns the number of cmic organizations.
 	 *

@@ -50,13 +50,6 @@ public class CMICOrganizationServiceUtil {
 		return getService().getCMICOrganizationByOrganizationId(organizationId);
 	}
 
-	public static java.util.List<com.liferay.portal.kernel.model.Organization>
-			getCMICOrganizations(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return getService().getCMICOrganizations(userId);
-	}
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *

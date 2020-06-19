@@ -81,25 +81,6 @@ public class CMICOrganizationServiceSoap {
 		}
 	}
 
-	public static com.liferay.portal.kernel.model.OrganizationSoap[]
-			getCMICOrganizations(long userId)
-		throws RemoteException {
-
-		try {
-			java.util.List<com.liferay.portal.kernel.model.Organization>
-				returnValue = CMICOrganizationServiceUtil.getCMICOrganizations(
-					userId);
-
-			return com.liferay.portal.kernel.model.OrganizationSoap.
-				toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		CMICOrganizationServiceSoap.class);
 

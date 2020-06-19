@@ -18,7 +18,10 @@ import com.churchmutual.commons.enums.BusinessPortalType;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.BaseService;
@@ -57,16 +60,25 @@ public interface CMICUserService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public BusinessPortalType getBusinessPortalType(long userId)
-		throws PortalException;
+	public List<Group> getBusinesses() throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public BusinessPortalType getBusinessPortalType(String registrationCode)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public BusinessPortalType getBusinessPortalTypeByGroupId(long groupId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public JSONArray getBusinessRoles(long groupId) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<User> getCMICOrganizationUsers(long cmicOrganizationId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public JSONArray getGroupOtherUsers(long groupId) throws PortalException;
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -76,10 +88,15 @@ public interface CMICUserService extends BaseService {
 	public String getOSGiServiceIdentifier();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public String getPortraitImageURL() throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public User getUser(String cmicUUID);
 
-	public void inviteUserToCMICOrganization(
-			String[] emailAddresses, long cmicOrganizationId)
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public JSONObject getUserDetails(long groupId) throws PortalException;
+
+	public void inviteBusinessMembers(long groupId, String emailAddresses)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -92,6 +109,11 @@ public interface CMICUserService extends BaseService {
 
 	public void removeUserFromCMICOrganization(
 			long userId, long cmicOrganizationId)
+		throws PortalException;
+
+	public void updateBusinessMembers(
+			long groupId, String updateUserRolesJSONString,
+			String removeUsersJSONString)
 		throws PortalException;
 
 	public void validateUserRegistration(String registrationCode)

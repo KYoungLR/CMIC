@@ -252,14 +252,6 @@ public class CMICOrganizationLocalServiceWrapper
 		return _cmicOrganizationLocalService.getCMICOrganizations(start, end);
 	}
 
-	@Override
-	public java.util.List<com.liferay.portal.kernel.model.Organization>
-			getCMICOrganizations(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cmicOrganizationLocalService.getCMICOrganizations(userId);
-	}
-
 	/**
 	 * Returns the number of cmic organizations.
 	 *

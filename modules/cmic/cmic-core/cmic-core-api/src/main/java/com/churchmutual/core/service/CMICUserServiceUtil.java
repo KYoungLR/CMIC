@@ -50,11 +50,11 @@ public class CMICUserServiceUtil {
 		return getService().addUser(cmicUUID, registrationCode);
 	}
 
-	public static com.churchmutual.commons.enums.BusinessPortalType
-			getBusinessPortalType(long userId)
+	public static java.util.List<com.liferay.portal.kernel.model.Group>
+			getBusinesses()
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().getBusinessPortalType(userId);
+		return getService().getBusinesses();
 	}
 
 	public static com.churchmutual.commons.enums.BusinessPortalType
@@ -64,11 +64,32 @@ public class CMICUserServiceUtil {
 		return getService().getBusinessPortalType(registrationCode);
 	}
 
+	public static com.churchmutual.commons.enums.BusinessPortalType
+			getBusinessPortalTypeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getBusinessPortalTypeByGroupId(groupId);
+	}
+
+	public static com.liferay.portal.kernel.json.JSONArray getBusinessRoles(
+			long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getBusinessRoles(groupId);
+	}
+
 	public static java.util.List<com.liferay.portal.kernel.model.User>
 			getCMICOrganizationUsers(long cmicOrganizationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getCMICOrganizationUsers(cmicOrganizationId);
+	}
+
+	public static com.liferay.portal.kernel.json.JSONArray getGroupOtherUsers(
+			long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getGroupOtherUsers(groupId);
 	}
 
 	/**
@@ -80,18 +101,30 @@ public class CMICUserServiceUtil {
 		return getService().getOSGiServiceIdentifier();
 	}
 
+	public static String getPortraitImageURL()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getPortraitImageURL();
+	}
+
 	public static com.liferay.portal.kernel.model.User getUser(
 		String cmicUUID) {
 
 		return getService().getUser(cmicUUID);
 	}
 
-	public static void inviteUserToCMICOrganization(
-			String[] emailAddresses, long cmicOrganizationId)
+	public static com.liferay.portal.kernel.json.JSONObject getUserDetails(
+			long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		getService().inviteUserToCMICOrganization(
-			emailAddresses, cmicOrganizationId);
+		return getService().getUserDetails(groupId);
+	}
+
+	public static void inviteBusinessMembers(
+			long groupId, String emailAddresses)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		getService().inviteBusinessMembers(groupId, emailAddresses);
 	}
 
 	public static boolean isUserRegistered(String cmicUUID) {
@@ -111,6 +144,15 @@ public class CMICUserServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		getService().removeUserFromCMICOrganization(userId, cmicOrganizationId);
+	}
+
+	public static void updateBusinessMembers(
+			long groupId, String updateUserRolesJSONString,
+			String removeUsersJSONString)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		getService().updateBusinessMembers(
+			groupId, updateUserRolesJSONString, removeUsersJSONString);
 	}
 
 	public static void validateUserRegistration(String registrationCode)

@@ -46,11 +46,11 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
-	public com.churchmutual.commons.enums.BusinessPortalType
-			getBusinessPortalType(long userId)
+	public java.util.List<com.liferay.portal.kernel.model.Group> getBusinesses(
+			long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserLocalService.getBusinessPortalType(userId);
+		return _cmicUserLocalService.getBusinesses(userId);
 	}
 
 	@Override
@@ -62,12 +62,36 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
+	public com.churchmutual.commons.enums.BusinessPortalType
+			getBusinessPortalTypeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.getBusinessPortalTypeByGroupId(groupId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONArray getBusinessRoles(
+			long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.getBusinessRoles(groupId);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portal.kernel.model.User>
 			getCMICOrganizationUsers(long cmicOrganizationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cmicUserLocalService.getCMICOrganizationUsers(
 			cmicOrganizationId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONArray getGroupOtherUsers(
+			long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.getGroupOtherUsers(userId, groupId);
 	}
 
 	/**
@@ -81,17 +105,32 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
+	public String getPortraitImageURL(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.getPortraitImageURL(userId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.model.User getUser(String cmicUUID) {
 		return _cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override
-	public void inviteUsersToCMICOrganization(
-			String[] emailAddresses, long cmicOrganizationId)
+	public com.liferay.portal.kernel.json.JSONObject getUserDetails(
+			long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		_cmicUserLocalService.inviteUsersToCMICOrganization(
-			emailAddresses, cmicOrganizationId);
+		return _cmicUserLocalService.getUserDetails(userId, groupId);
+	}
+
+	@Override
+	public void inviteBusinessMembers(
+			long userId, long groupId, String emailAddresses)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_cmicUserLocalService.inviteBusinessMembers(
+			userId, groupId, emailAddresses);
 	}
 
 	@Override
@@ -115,6 +154,16 @@ public class CMICUserLocalServiceWrapper
 
 		_cmicUserLocalService.removeUserFromCMICOrganization(
 			userId, cmicOrganizationId);
+	}
+
+	@Override
+	public void updateBusinessMembers(
+			long userId, long groupId, String updateUserRolesJSONString,
+			String removeUsersJSONString)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_cmicUserLocalService.updateBusinessMembers(
+			userId, groupId, updateUserRolesJSONString, removeUsersJSONString);
 	}
 
 	@Override

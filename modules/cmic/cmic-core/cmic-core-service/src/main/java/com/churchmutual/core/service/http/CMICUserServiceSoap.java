@@ -68,6 +68,23 @@ public class CMICUserServiceSoap {
 		}
 	}
 
+	public static com.liferay.portal.kernel.model.Group[] getBusinesses()
+		throws RemoteException {
+
+		try {
+			java.util.List<com.liferay.portal.kernel.model.Group> returnValue =
+				CMICUserServiceUtil.getBusinesses();
+
+			return returnValue.toArray(
+				new com.liferay.portal.kernel.model.Group[returnValue.size()]);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.churchmutual.commons.enums.BusinessPortalType
 			getBusinessPortalType(String registrationCode)
 		throws RemoteException {
@@ -86,14 +103,28 @@ public class CMICUserServiceSoap {
 	}
 
 	public static com.churchmutual.commons.enums.BusinessPortalType
-			getBusinessPortalType(long userId)
+			getBusinessPortalTypeByGroupId(long groupId)
 		throws RemoteException {
 
 		try {
 			com.churchmutual.commons.enums.BusinessPortalType returnValue =
-				CMICUserServiceUtil.getBusinessPortalType(userId);
+				CMICUserServiceUtil.getBusinessPortalTypeByGroupId(groupId);
 
 			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static String getBusinessRoles(long groupId) throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONArray returnValue =
+				CMICUserServiceUtil.getBusinessRoles(groupId);
+
+			return returnValue.toString();
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -121,6 +152,35 @@ public class CMICUserServiceSoap {
 		}
 	}
 
+	public static String getGroupOtherUsers(long groupId)
+		throws RemoteException {
+
+		try {
+			com.liferay.portal.kernel.json.JSONArray returnValue =
+				CMICUserServiceUtil.getGroupOtherUsers(groupId);
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static String getPortraitImageURL() throws RemoteException {
+		try {
+			String returnValue = CMICUserServiceUtil.getPortraitImageURL();
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)
 		throws RemoteException {
 
@@ -137,13 +197,26 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static void inviteUserToCMICOrganization(
-			String[] emailAddresses, long cmicOrganizationId)
+	public static String getUserDetails(long groupId) throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONObject returnValue =
+				CMICUserServiceUtil.getUserDetails(groupId);
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static void inviteBusinessMembers(
+			long groupId, String emailAddresses)
 		throws RemoteException {
 
 		try {
-			CMICUserServiceUtil.inviteUserToCMICOrganization(
-				emailAddresses, cmicOrganizationId);
+			CMICUserServiceUtil.inviteBusinessMembers(groupId, emailAddresses);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -194,6 +267,22 @@ public class CMICUserServiceSoap {
 		try {
 			CMICUserServiceUtil.removeUserFromCMICOrganization(
 				userId, cmicOrganizationId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static void updateBusinessMembers(
+			long groupId, String updateUserRolesJSONString,
+			String removeUsersJSONString)
+		throws RemoteException {
+
+		try {
+			CMICUserServiceUtil.updateBusinessMembers(
+				groupId, updateUserRolesJSONString, removeUsersJSONString);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
