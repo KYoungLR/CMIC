@@ -1,33 +1,31 @@
 import React from 'react';
 import ClayIcon from '@clayui/icon';
+import ClaySticker from '@clayui/sticker';
 import getCN from 'classnames';
 
-const UserAvatar = (props) => {
-	const size = props.size || 'lg';
+const UserAvatar = ({shape = 'circle', size = 'lg', displayType = 'light', elevation, className, index, image, firstName, lastName, onClick}) => {
+	const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
 	const variations = ['blue', 'green', 'orange'];
-	const color = props.index !== undefined ? variations[props.index % variations.length] : 'light';
+	const display = index !== undefined ? variations[index % variations.length] : displayType;
 	const avatarClassName = getCN(
-		[`sticker sticker-circle sticker-${color} sticker-${size}`],
 		{
-			[`elevation-${props.elevation}`]: props.elevation
+			[`elevation-${elevation}`]: elevation
 		},
-		props.className
+		className
 	);
 
 	return (
-		<span className={avatarClassName} onClick={props.onClick}>
-			<span className="sticker-overlay">
-				{props.image ? (
-					<img className="sticker-img" src={props.image} />
+		<ClaySticker shape={shape} displayType={display} size={size} className={avatarClassName} onClick={onClick}>
+			{image ? (
+				<img className="sticker-img" src={image} />
+			) : (
+				(firstName && lastName) ? (
+					`${firstName.substring(0, 1)}${lastName.substring(0, 1)}`
 				) : (
-					(props.firstName && props.lastName) ? (
-						`${props.firstName.substring(0, 1)}${props.lastName.substring(0, 1)}`
-					) : (
-						<ClayIcon symbol="user" />
-					)
-				)}
-			</span>
-		</span>
+					<ClayIcon symbol="user" spritemap={spritemap} />
+				)
+			)}
+		</ClaySticker>
 	)
 };
 
