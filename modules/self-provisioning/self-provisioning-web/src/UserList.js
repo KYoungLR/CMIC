@@ -28,23 +28,39 @@ export default class extends React.Component {
     let groupId = businessGroupId ? businessGroupId : this.props.groupId;
 
     if (groupId != 0) {
-      this.getPrimaryUser(groupId);
-      this.getRelatedUsersList(groupId);
+      this.getCurrentUser(groupId);
+      this.getGroupOtherUsers(groupId);
     }
   }
 
-  getPrimaryUser(groupId) {
-    fetch(`/o/self-provisioning/primary/${this.getUserId()}/group/${groupId}?p_auth=${Liferay.authToken}`)
-      .then(res => res.json())
-      .then(data => this.updatePrimaryUser(data))
-      .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-primary-account-user'));
+  getCurrentUser(groupId) {
+    let callback = (data) => this.updatePrimaryUser(data);
+
+    let errCallback = () => this.props.displayErrorMessage('error.unable-to-retrieve-current-business-user');
+
+    Liferay.Service(
+      '/cmic.cmicuser/get-user-details',
+      {
+        groupId: groupId
+      },
+      callback,
+      errCallback
+    );
   }
 
-  getRelatedUsersList(groupId) {
-    fetch(`/o/self-provisioning/${this.getUserId()}/group/${groupId}?p_auth=${Liferay.authToken}`)
-      .then(res => res.json())
-      .then(data => this.setState({ userList: data }))
-      .catch(() => this.props.displayErrorMessage('error.unable-to-retrieve-list-of-account-users'));
+  getGroupOtherUsers(groupId) {
+    let callback = (data) => this.setState({ userList: data });
+
+    let errCallback = () => this.props.displayErrorMessage('error.unable-to-retrieve-list-of-business-users');
+
+    Liferay.Service(
+      '/cmic.cmicuser/get-group-other-users',
+      {
+        groupId: groupId
+      },
+      callback,
+      errCallback
+    );
   }
 
   updatePrimaryUser(user) {

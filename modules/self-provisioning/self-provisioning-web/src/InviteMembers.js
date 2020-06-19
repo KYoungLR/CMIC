@@ -48,35 +48,29 @@ export default class extends React.Component {
   }
 
   submit() {
-    let data = JSON.stringify({
-      emails: this.state.emails,
-      groupId: this.props.groupId,
-      userId: this.getUserId()
-    });
-
-    let headers = new Headers();
-    headers.set('Content-Type', 'application/json');
-
-    fetch(`/o/self-provisioning/invite-members?p_auth=${Liferay.authToken}`, {
-      method: 'post',
-      headers: headers,
-      body: data
-    }).then((response) =>  {
-      if (!response.ok) {
-        throw response;
-      }
+    let callback = () => {
       this.setShowErrors(false);
       this.updateAccountUserEntries();
-      this.props.displaySuccessMessage('your-request-completed-successfully')
       this.clearMemberEmails();
-    }).catch((e) => {
-        e.text().then(message => {
-          if (message == '') {
-            message = 'your-request-failed-to-complete';
-          }
-          this.props.displayErrorMessage(message)
-        });
+      this.props.displaySuccessMessage('your-request-completed-successfully');
+    }
+
+    let errCallback = (message) => {
+      if (message == '') {
+        message = 'your-request-failed-to-complete';
       }
+
+      this.props.displayErrorMessage(message)
+    }
+
+    Liferay.Service(
+      '/cmic.cmicuser/invite-business-members',
+      {
+        groupId: this.props.groupId,
+        emailAddresses: this.state.emails
+      },
+      callback,
+      errCallback
     );
   }
 

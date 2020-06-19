@@ -36,42 +36,40 @@ class SelfProvisioning extends React.Component {
   }
 
   componentDidMount() {
-    this.getBusinessesList();
-    this.getRoleTypes();
+    this.getBusinesses();
   }
 
-  updateAccountMembers() {
-      let data = JSON.stringify({
-          'updateUsersRoles': this.state.updatedUserRoles,
-          'removeUsers': this.state.membersToBeRemoved
+  updateBusinessMembers() {
+    let callback = () => {
+      this.userListRef.updateUserList();
+
+      this.context.clearChanges();
+
+      this.setState({
+        isEditingUsers: false,
+        updatedUserRoles: [],
+        membersToBeRemoved: [],
       });
 
-      let headers = new Headers();
-      headers.set('Content-Type', 'application/json');
+      this.displaySuccessMessage('your-request-completed-successfully');
+    }
 
-      fetch(`/o/self-provisioning/update-account-members/${this.companyId}/${this.userId}/${this.state.groupId}?p_auth=${Liferay.authToken}`, {
-          method: 'post',
-          headers: headers,
-          body: data
-      }).then((response) => {
-          if(!response.ok) {
-              throw response;
-          }
+    let errCallback = () => this.displayErrorMessage('your-request-failed-to-complete');
 
-          this.userListRef.updateUserList();
+    let updateUserRolesJSONString = JSON.stringify(this.state.updatedUserRoles);
 
-          this.context.clearChanges();
+    let removeUsersJSONString = JSON.stringify(this.state.membersToBeRemoved);
 
-          this.setState({
-            isEditingUsers: false,
-            updatedUserRoles: [],
-            membersToBeRemoved: [],
-          });
-
-          this.displaySuccessMessage('your-request-completed-successfully')
-      }).catch(
-          () => this.displayErrorMessage('your-request-failed-to-complete')
-      );
+    Liferay.Service(
+      '/cmic.cmicuser/update-business-members',
+      {
+        groupId: this.state.groupId,
+        updateUserRolesJSONString: updateUserRolesJSONString,
+        removeUsersJSONString: removeUsersJSONString
+      },
+      callback,
+      errCallback
+    )
   }
 
   inviteMembers() {
@@ -98,7 +96,7 @@ class SelfProvisioning extends React.Component {
               onClick={() => this.cancelUpdateAccountMembers()}>
                 {Liferay.Language.get("cancel")}
             </ClayButton>
-            <ClayButton displayType="primary" onClick={() => this.updateAccountMembers()}>
+            <ClayButton displayType="primary" onClick={() => this.updateBusinessMembers()}>
                 {Liferay.Language.get("save")}
             </ClayButton>
         </ClayButton.Group>
@@ -170,17 +168,17 @@ class SelfProvisioning extends React.Component {
         <div className="autofit-col px-2">{Liferay.Language.get('viewing')}</div>
         <div className="autofit-col">
           {(() => {
-            if (this.state.isEditingUsers) {
+            if (this.state.isEditingUsers || this.state.businessesList.length <= 1) {
               return this.getCurrentBusinessName();
             }
             else {
               return (
                 <ClaySelect className="form-control-sm"
-                  onChange={(e) => this.updateBusinessUsers(e.target.value)} value={this.state.groupId}>
+                  onChange={(e) => this.updateGroupUsersList(e.target.value)} value={this.state.groupId}>
                     {this.state.businessesList.map(business => (
                       <ClaySelect.Option
                         key={business.groupId}
-                        label={business.name}
+                        label={business.descriptiveName}
                         value={business.groupId}
                       />
                     ))}
@@ -223,55 +221,55 @@ class SelfProvisioning extends React.Component {
     });
   }
 
-  getBusinessesList() {
-    fetch(`/o/self-provisioning/businesses/${this.userId}?p_auth=${Liferay.authToken}`)
-      .then(res => res.json())
-      .then(data => {
-        let businesses = data;
-        this.setState({businessesList: businesses});
+  getBusinesses() {
+    let callback = (data) => {
+      let businesses = data;
+      this.setState({businessesList: businesses});
 
-        if (businesses != null && businesses.length != 0) {
-          let groupId = businesses[0].groupId;
-          this.setState({groupId: groupId});
-          this.userListRef.updateUserList(groupId);
-        }
-      })
-      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-user-businesses'))
-  }
+      if (businesses != null && businesses.length != 0) {
+        let groupId = businesses[0].groupId;
+        this.setState({groupId: groupId});
+        this.userListRef.updateUserList(groupId);
 
-  getRoleTypes() {
-    fetch(`/o/self-provisioning/roleTypes/${this.userId}/group/${this.state.groupId}?p_auth=${Liferay.authToken}`)
-      .then(res => res.json())
-      .then(data => this.setState({ roleTypes: data }))
-      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-account-roles'));
-  }
-
-  getRoleLabel(value) {
-    let roleTypes = this.state.roleTypes;
-
-    let index = roleTypes.find(role => role.value == value);
-
-    if (index) {
-      return roleTypes[index].label;
+        this.getRoleTypes(groupId);
+      }
     }
+
+    let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-list-of-user-businesses');
+
+    Liferay.Service(
+      '/cmic.cmicuser/get-businesses', {},
+      callback,
+      errCallback
+    )
   }
 
-  getRoleValue(label) {
-    let roleTypes = this.state.roleTypes;
+  getRoleTypes(groupId) {
+    let callback = (data) => this.setState({ roleTypes: data });
 
-    let index = roleTypes.find(role => role.label == label);
+    let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-list-of-business-roles');
 
-    if (index) {
-      return roleTypes[index].value;
-    }
+    Liferay.Service(
+      '/cmic.cmicuser/get-business-roles',
+      {
+        groupId: groupId
+      },
+      callback,
+      errCallback
+    );
   }
 
   getCurrentBusinessName() {
     let business = this.state.businessesList.find((b) => b.groupId == this.state.groupId);
-    return business.name;
+
+    if (!business) {
+      return '';
+    }
+
+    return business.descriptiveName;
   }
 
-  updateBusinessUsers(groupId) {
+  updateGroupUsersList(groupId) {
     this.setState({
       groupId: groupId,
       isAdminOrOwner: false,
@@ -287,6 +285,7 @@ class SelfProvisioning extends React.Component {
     });
 
     this.userListRef.updateUserList(groupId);
+    this.getRoleTypes(groupId);
   }
 
   render() {
@@ -318,6 +317,7 @@ class SelfProvisioning extends React.Component {
               isEditingUsers={this.state.isEditingUsers}
               groupId={this.state.groupId}
               ref={(userListRef) => this.userListRef = userListRef}
+              roleTypes={this.state.roleTypes}
               setIsAdminOrOwner={(isAdminOrOwner) => this.setState({isAdminOrOwner: isAdminOrOwner})}
             />
           </ClayCard.Body>
