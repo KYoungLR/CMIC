@@ -3,6 +3,8 @@ package com.churchmutual.rest;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
 import com.churchmutual.rest.model.CMICFileDTO;
 
+import com.liferay.portal.kernel.exception.PortalException;
+
 import java.util.List;
 
 /**
@@ -10,10 +12,11 @@ import java.util.List;
  */
 public interface CommissionDocumentWebService {
 
-	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes);
+	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) throws PortalException;
 
 	public List<CMICCommissionDocumentDTO> searchDocuments(
-		String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
-		String minimumStatementDate);
+			String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
+			String minimumStatementDate)
+		throws PortalException;
 
 }

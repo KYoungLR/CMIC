@@ -84,6 +84,14 @@ public class DefaultWebServiceExecutor implements WebServiceExecutor {
 
 	@Override
 	public String executePost(
+			String baseURL, Map<String, String> queryParameters, String bodyParameters)
+			throws PortalException {
+
+		return executePost(baseURL, new ArrayList<>(), queryParameters, bodyParameters);
+	}
+
+	@Override
+	public String executePost(
 			String baseURL, List<String> pathParameters, Map<String, String> queryParameters, String bodyParameters)
 		throws PortalException {
 

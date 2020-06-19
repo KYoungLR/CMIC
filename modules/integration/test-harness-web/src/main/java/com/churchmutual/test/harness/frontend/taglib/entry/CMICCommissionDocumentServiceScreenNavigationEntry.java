@@ -8,9 +8,12 @@ import com.churchmutual.test.harness.model.HarnessDescriptor;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -70,16 +73,16 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 			"divisionNumber", "divisionNumber", true, "35", "String");
 
 		HarnessDescriptor.Parameter documentType = new HarnessDescriptor.Parameter(
-			"documentType", "documentType", true, "Broker Stmt", "String");
+			"documentType", "documentType", true, "BROKER_STMT", "String");
 
 		HarnessDescriptor.Parameter maximumStatementDate = new HarnessDescriptor.Parameter(
 			"maximumStatementDate", "maximumStatementDate", true, "2020-01-01", "String");
 
-		HarnessDescriptor.Parameter minimumStatemenDate = new HarnessDescriptor.Parameter(
-			"minimumStatemenDate", "minimumStatemenDate", true, "2017-02-09", "String");
+		HarnessDescriptor.Parameter minimumStatementDate = new HarnessDescriptor.Parameter(
+			"minimumStatementDate", "minimumStatementDate", true, "2017-02-09", "String");
 
 		searchDocumentsDescriptor.addQueryParameters(
-			agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatemenDate);
+			agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
 
 		return ListUtil.fromArray(downloadDocumentsDescriptor, searchDocumentsDescriptor);
 	}
@@ -105,25 +108,33 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 
 		JSONArray response = JSONFactoryUtil.createJSONArray();
 
-		if (_DOWNLOAD_DOCUMENTS_ENDPOINT.equals(endpoint)) {
-			String[] ids = ParamUtil.getStringValues(portletRequest, "ids");
-			boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
+		try {
+			if (_DOWNLOAD_DOCUMENTS_ENDPOINT.equals(endpoint)) {
+				String[] ids = ParamUtil.getStringValues(portletRequest, "ids");
+				boolean includeBytes = ParamUtil.getBoolean(portletRequest, "includeBytes");
 
-			List<CMICFileDTO> files = _commissionDocumentWebService.downloadDocuments(ids, includeBytes);
+				List<CMICFileDTO> files = _commissionDocumentWebService.downloadDocuments(ids, includeBytes);
 
-			files.forEach(account -> response.put(account.toJSONObject()));
+				files.forEach(file -> response.put(file.toJSONObject()));
+			} else if (_SEARCH_DOCUMENTS_ENDPOINT.equals(endpoint)) {
+				String agentNumber = ParamUtil.getString(portletRequest, "agentNumber");
+				String divisionNumber = ParamUtil.getString(portletRequest, "divisionNumber");
+				String documentType = ParamUtil.getString(portletRequest, "documentType");
+				String maximumStatementDate = ParamUtil.getString(portletRequest, "maximumStatementDate");
+				String minimumStatementDate = ParamUtil.getString(portletRequest, "minimumStatementDate");
+
+				List<CMICCommissionDocumentDTO> commissionDocuments = _commissionDocumentWebService.searchDocuments(
+						agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
+
+				commissionDocuments.forEach(document -> response.put(document.toJSONObject()));
+			}
 		}
-		else if (_SEARCH_DOCUMENTS_ENDPOINT.equals(endpoint)) {
-			String agentNumber = ParamUtil.getString(portletRequest, "agentNumber");
-			String divisionNumber = ParamUtil.getString(portletRequest, "divisionNumber");
-			String documentType = ParamUtil.getString(portletRequest, "documentType");
-			String maximumStatementDate = ParamUtil.getString(portletRequest, "maximumStatementDate");
-			String minimumStatementDate = ParamUtil.getString(portletRequest, "minimumStatementDate");
+		catch (PortalException pe) {
+			response.put(pe.getMessage());
 
-			List<CMICCommissionDocumentDTO> commissionDocuments = _commissionDocumentWebService.searchDocuments(
-				agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
-
-			commissionDocuments.forEach(account -> response.put(account.toJSONObject()));
+			if (_log.isErrorEnabled()) {
+				_log.error("Could not get response for " + endpoint, pe);
+			}
 		}
 
 		return response.toString();
@@ -132,6 +143,8 @@ public class CMICCommissionDocumentServiceScreenNavigationEntry extends BaseTest
 	private static final String _DOWNLOAD_DOCUMENTS_ENDPOINT = "/v1/download/ids";
 
 	private static final String _SEARCH_DOCUMENTS_ENDPOINT = "/v1/search";
+
+	private static final Log _log = LogFactoryUtil.getLog(CMICCommissionDocumentServiceScreenNavigationEntry.class);
 
 	@Reference
 	private CommissionDocumentWebService _commissionDocumentWebService;

@@ -1,5 +1,6 @@
 package com.churchmutual.rest.service;
 
+import com.churchmutual.portal.ws.commons.client.executor.WebServiceExecutor;
 import com.churchmutual.rest.CommissionDocumentWebService;
 import com.churchmutual.rest.configuration.MockCommissionDocumentWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
@@ -7,13 +8,21 @@ import com.churchmutual.rest.model.CMICFileDTO;
 import com.churchmutual.rest.service.mock.MockCommissionDocumentWebServiceClient;
 
 import com.liferay.petra.lang.HashUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
-import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONDeserializer;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,32 +48,47 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 	}
 
 	@Override
-	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) {
+	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) throws PortalException {
 		if (_mockCommissionDocumentWebServiceConfiguration.enableMockDownloadDocuments()) {
 			return _mockCommissionDocumentWebServiceClient.downloadDocuments(ids, includeBytes);
 		}
 
-		//TODO CMIC-202 Implement real service
+		Map<String, String> queryParameters = new HashMap<>();
 
-		CMICFileDTO file = new CMICFileDTO();
+		queryParameters.put("include-bytes", String.valueOf(includeBytes));
 
-		file.setId("12345");
-		file.setMimeType("ACTUAL");
+		String response = _webServiceExecutor.executePost(
+			_DOWNLOAD_DOCUMENTS_URL, queryParameters, _constructIdBodyParameter(ids));
 
-		return ListUtil.toList(file);
+		JSONDeserializer<CMICFileDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICFileDTO> list = new ArrayList();
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(response);
+
+		for (String key : jsonObject.keySet()) {
+			try {
+				CMICFileDTO[] files = jsonDeserializer.deserialize(jsonObject.getString(key), CMICFileDTO[].class);
+
+				Collections.addAll(list, files);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return list;
 	}
 
 	@Override
 	public List<CMICCommissionDocumentDTO> searchDocuments(
-		String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
-		String minimumStatementDate) {
+			String agentNumber, String divisionNumber, String documentType, String maximumStatementDate,
+			String minimumStatementDate)
+		throws PortalException {
 
 		if (_mockCommissionDocumentWebServiceConfiguration.enableMockSearchDocuments()) {
 			return _mockCommissionDocumentWebServiceClient.searchDocuments(
 				agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
 		}
-
-		//TODO CMIC-202 Implement real service
 
 		SearchDocumentsKey key = new SearchDocumentsKey(
 			agentNumber, divisionNumber, documentType, maximumStatementDate, minimumStatementDate);
@@ -75,12 +99,28 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 			return cache;
 		}
 
-		CMICCommissionDocumentDTO commissionDocument = new CMICCommissionDocumentDTO();
+		Map<String, String> queryParameters = new LinkedHashMap<>();
 
-		commissionDocument.setId("12345");
-		commissionDocument.setAgentNumber("ACTUAL");
+		queryParameters.put("agentNumber", agentNumber);
+		queryParameters.put("divisionNumber", divisionNumber);
+		queryParameters.put("documentType", documentType);
+		queryParameters.put("maximumStatementDate", maximumStatementDate);
+		queryParameters.put("minimumStatementDate", minimumStatementDate);
 
-		List<CMICCommissionDocumentDTO> list = ListUtil.toList(commissionDocument);
+		String response = _webServiceExecutor.executeGet(_SEARCH_DOCUMENTS_URL, queryParameters);
+
+		JSONDeserializer<CMICCommissionDocumentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICCommissionDocumentDTO> list = new ArrayList();
+
+		try {
+			CMICCommissionDocumentDTO[] results = jsonDeserializer.deserialize(
+				response, CMICCommissionDocumentDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
 
 		_searchDocumentsPortalCache.put(key, list);
 
@@ -98,8 +138,37 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 				_SEARCH_DOCUMENTS_CACHE_NAME);
 	}
 
+	private String _constructIdBodyParameter(String[] ids) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("[ \"");
+
+		for (int i = 0; i < ids.length; i++) {
+			String id = ids[i];
+
+			sb.append(id);
+
+			if ((i + 1) < ids.length) {
+				sb.append(StringPool.QUOTE);
+				sb.append(StringPool.COMMA_AND_SPACE);
+				sb.append(StringPool.QUOTE);
+			}
+		}
+
+		sb.append("\"]");
+
+		return sb.toString();
+	}
+
+	private static final String _DOWNLOAD_DOCUMENTS_URL = "/commission-document-service/v1/download/ids";
+
 	private static final String _SEARCH_DOCUMENTS_CACHE_NAME =
 		CommissionDocumentWebServiceImpl.class.getName() + "_SEARCH_DOCUMENTS";
+
+	private static final String _SEARCH_DOCUMENTS_URL = "/commission-document-service/v1/search";
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private MockCommissionDocumentWebServiceClient _mockCommissionDocumentWebServiceClient;
@@ -109,6 +178,9 @@ public class CommissionDocumentWebServiceImpl implements CommissionDocumentWebSe
 
 	@Reference
 	private SingleVMPool _singleVMPool;
+
+	@Reference
+	private WebServiceExecutor _webServiceExecutor;
 
 	private static class SearchDocumentsKey implements Serializable {
 
