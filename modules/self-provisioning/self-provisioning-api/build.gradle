@@ -1,6 +1,0 @@
-dependencies {
-	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
-
-	compileOnly project(":modules:account:account-api")
-	compileOnly project(":modules:commons:commons-util")
-}

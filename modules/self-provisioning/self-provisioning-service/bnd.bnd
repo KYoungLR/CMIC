@@ -1,4 +1,0 @@
-Bundle-Name: CMIC Self Provisioning Service
-Bundle-SymbolicName: com.churchmutual.self.provisioning.service
-Bundle-Version: 1.0.0
-Liferay-Service: true
