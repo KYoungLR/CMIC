@@ -27,12 +27,13 @@ const Dialog = (props) => {
         }
     };
 
-    let buttonConfirm = props.confirmButtonText ? props.confirmButtonText : "Confirm";
+    const buttonConfirm = props.confirmButtonText ? props.confirmButtonText : 'Confirm';
+    const size = props.size ? props.size : 'lg';
 
     return props.visible && (
         <ClayModal
             observer={observer}
-            size="lg"
+            size={size}
             spritemap={Liferay.ThemeDisplay.getPathThemeImages() + "/lexicon/icons.svg"}
             status={props.status ? props.status : null}
         >

@@ -13,28 +13,30 @@ function UpdatePortraitModal(props) {
     setVisible={props.setVisible}
     visible={props.visible}
   >
-    <div className='container'>
-      <div className='row align-items-center'>
-        <div className='col-12' align='center'>
-          <span className='modal-body-text'>
-              {Liferay.Language.get('upload-images-no-larger-than-300kb')}
-          </span>
-        </div>
-        <div className='col-12' align='center'>
-          <UserAvatar image={props.portraitURL} className='avatar-square mt-4'/>
-          <input id='inputPortraitFile' type='file' ref={inputRef} className='hide'
-              onChange={(e) => props.handlePictureFileChanged(e)}/>
-        </div>
-        <div className='col-12 mt-4' align='center'>
-          <button className='btn btn-outline-primary'
-              onClick={() => inputRef.current.click()}>
-            {Liferay.Language.get('select')}
-          </button>
-          <ClayButton borderless='true' displayType='secondary' onClick={() => props.handleDeleteClick(true)}>
-            {Liferay.Language.get("delete")}
-          </ClayButton>
-        </div>
+    <div className="text-center">
+      <p className="mb-4">{Liferay.Language.get('upload-images-no-larger-than-300kb')}</p>
+
+      <div className="mb-4">
+        <UserAvatar shape="rounded" size="xxxl" image={props.portraitURL} />
+        <input id="inputPortraitFile" type="file" ref={inputRef} className="hide"
+          onChange={(e) => props.handlePictureFileChanged(e)} />
       </div>
+
+      <ClayButton.Group spaced>
+        <ClayButton
+          displayType="primary"
+          outline="true"
+          onClick={() => inputRef.current.click()}>
+          {Liferay.Language.get('select')}
+        </ClayButton>
+        <ClayButton
+          displayType="secondary"
+          borderless="true"
+          outline="true"
+          onClick={() => props.handleDeleteClick(true)}>
+          {Liferay.Language.get('delete')}
+        </ClayButton>
+      </ClayButton.Group>
     </div>
   </Dialog>;
 }

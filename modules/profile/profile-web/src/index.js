@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ProfileWeb from './ProfileWeb';
+import Profile from './Profile';
 
 /**
  * This is the main entry point of the portlet.
@@ -14,7 +14,7 @@ import ProfileWeb from './ProfileWeb';
  */
 export default function main({portletNamespace, contextPath, portletElementId}) {
   ReactDOM.render(
-    <ProfileWeb
+    <Profile
       portletNamespace={portletNamespace}
       contextPath={contextPath}
       portletElementId={portletElementId}
