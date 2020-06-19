@@ -223,7 +223,7 @@ class ProfileWeb extends React.Component {
                 __html: Liferay.Language.get('are-you-sure-you-want-to-delete-your-profile-picture')
               }}/>
               <p dangerouslySetInnerHTML={{
-                __html: Liferay.Language.get('deleting-your-profile-picture-is-permanent.-you-will-need-to-re-upload-a-new-image')
+                __html: Liferay.Language.get('deleting-your-profile-picture-is-permanent')
               }}/>
             </div>
           </Dialog>
