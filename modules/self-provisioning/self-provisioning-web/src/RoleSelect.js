@@ -14,8 +14,8 @@ const RoleSelect = (props) => {
 
     function isRemovingOwnerFromYourself(fieldValue) {
         return fieldValue === 'owner'
-          && !isPrimaryUser()
-          && props.primaryUser.role === 'owner';
+          && !isCurrentUser()
+          && props.currentUser.role === 'owner';
     }
 
     function onChange(e) {
@@ -24,18 +24,18 @@ const RoleSelect = (props) => {
         if (isRemovingOwnerFromYourself(fieldValue)) {
             setChangeOwnerModalVisible(true);
         } else {
-            props.handleFieldChange(props.user, fieldValue, isPrimaryUser());
+            props.handleFieldChange(props.user, fieldValue, isCurrentUser());
         }
     }
 
-    function isPrimaryUser() {
-        return props.user === props.primaryUser;
+    function isCurrentUser() {
+        return props.user === props.currentUser;
     }
 
     function confirmUpdateOwner() {
         setChangeOwnerModalVisible(false);
 
-        props.handleFieldChange(props.user, 'owner', isPrimaryUser());
+        props.handleFieldChange(props.user, 'owner', isCurrentUser());
     }
 
     function getOptions() {
@@ -47,7 +47,7 @@ const RoleSelect = (props) => {
             return [options[1], options[2]];
         }
 
-        if (props.primaryUser.role === 'owner') {
+        if (props.currentUser.role === 'owner') {
             return options;
         }
 

@@ -10,7 +10,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      primaryUser: {
+      currentUser: {
         fullName: '',
         email: '',
         role: '',
@@ -34,7 +34,7 @@ export default class extends React.Component {
   }
 
   getCurrentUser(groupId) {
-    let callback = (data) => this.updatePrimaryUser(data);
+    let callback = (data) => this.updateCurrentUser(data);
 
     let errCallback = () => this.props.displayErrorMessage('error.unable-to-retrieve-current-business-user');
 
@@ -63,19 +63,19 @@ export default class extends React.Component {
     );
   }
 
-  updatePrimaryUser(user) {
-    this.setState({primaryUser: user});
+  updateCurrentUser(user) {
+    this.setState({currentUser: user});
 
     this.props.setIsAdminOrOwner(this.isAdminOrOwner(user));
   }
 
   isAdminOrOwner(user) {
-    let primaryUserRole = user.role.toLowerCase();
+    let currentUserRole = user.role.toLowerCase();
 
-    return primaryUserRole === 'admin' || primaryUserRole === 'owner';
+    return currentUserRole === 'admin' || currentUserRole === 'owner';
   }
 
-  setNewRole(user, newRole, isPrimaryUser) {
+  setNewRole(user, newRole, isCurrentUser) {
     if (newRole === 'owner') {
       this.updateCurrentOwnerToAdmin();
     }
@@ -83,8 +83,8 @@ export default class extends React.Component {
     let updatedUser = {...user};
     updatedUser.role = newRole;
 
-    if (isPrimaryUser) {
-      this.setState({primaryUser: updatedUser});
+    if (isCurrentUser) {
+      this.setState({currentUser: updatedUser});
     } else {
       this.setState((previousState) => {
         let userList = [...previousState.userList];
@@ -102,16 +102,16 @@ export default class extends React.Component {
   updateCurrentOwnerToAdmin() {
     let ownerUser = this.getOwnerUser();
 
-    this.setNewRole(ownerUser, 'Admin', this.isPrimaryUser(ownerUser));
+    this.setNewRole(ownerUser, 'Admin', this.isCurrentUser(ownerUser));
   }
 
-  isPrimaryUser(user) {
-    return this.state.primaryUser.email === user.email;
+  isCurrentUser(user) {
+    return this.state.currentUser.email === user.email;
   }
 
   getOwnerUser() {
-    if (this.state.primaryUser.role === 'owner') {
-      return this.state.primaryUser;
+    if (this.state.currentUser.role === 'owner') {
+      return this.state.currentUser;
     } else {
       return this.state.userList.find((u) => u.role === 'owner');
     }
@@ -126,15 +126,16 @@ export default class extends React.Component {
       <RoleSelect
         value={this.getLocalization(user.role)}
         user={user}
-        primaryUser={this.state.primaryUser}
-        handleFieldChange={(user, fieldValue, isPrimaryUser) =>
-          this.setNewRole(user, fieldValue, isPrimaryUser)}
+        currentUser={this.state.currentUser}
+        roleTypes={this.props.roleTypes}
+        handleFieldChange={(user, fieldValue, isCurrentUser) =>
+          this.setNewRole(user, fieldValue, isCurrentUser)}
       />
     );
   }
 
   removeUserButton(user) {
-    if (this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) && !this.isPrimaryUser(user)) {
+    if (this.props.isEditingUsers && this.isAdminOrOwner(this.state.currentUser) && !this.isCurrentUser(user)) {
       return (
         <ClayTable.Cell>
           {!user.removed && (
@@ -231,30 +232,30 @@ export default class extends React.Component {
               <ClayTable.Cell expanded headingCell>{Liferay.Language.get('email')}</ClayTable.Cell>
               <ClayTable.Cell expanded headingCell>{Liferay.Language.get('role')}</ClayTable.Cell>
               <ClayTable.Cell headingCell>{Liferay.Language.get('status')}</ClayTable.Cell>
-              {this.props.isEditingUsers && this.isAdminOrOwner(this.state.primaryUser) ? <ClayTable.Cell/> : null}
+              {this.props.isEditingUsers && this.isAdminOrOwner(this.state.currentUser) ? <ClayTable.Cell/> : null}
             </ClayTable.Row>
           </ClayTable.Head>
 
           <ClayTable.Body>
-            <ClayTable.Row className={this.state.primaryUser.changed ? "unsaved-changes" : ""}>
+            <ClayTable.Row className={this.state.currentUser.changed ? "unsaved-changes" : ""}>
               <ClayTable.Cell className="h4">
                 <div className="flex-container align-items-center">
                   <UserAvatar
-                    image={this.state.primaryUser.portraitImageUrl}
-                    firstName={this.state.primaryUser.firstName}
-                    lastName={this.state.primaryUser.lastName}
+                    image={this.state.currentUser.portraitImageUrl}
+                    firstName={this.state.currentUser.firstName}
+                    lastName={this.state.currentUser.lastName}
                     className="mr-3"
                   />
                   <div>
-                    {this.state.primaryUser.fullName}
+                    {this.state.currentUser.fullName}
                     <small className="font-weight-normal">{" (" + Liferay.Language.get('me').toLowerCase() + ")"}</small>
                   </div>
                 </div>
               </ClayTable.Cell>
-              <ClayTable.Cell>{this.state.primaryUser.email}</ClayTable.Cell>
-              <ClayTable.Cell>{this.roleSelect(this.state.primaryUser)}</ClayTable.Cell>
-              <ClayTable.Cell>{this.getLocalization(this.state.primaryUser.status)}</ClayTable.Cell>
-              {this.removeUserButton(this.state.primaryUser)}
+              <ClayTable.Cell>{this.state.currentUser.email}</ClayTable.Cell>
+              <ClayTable.Cell>{this.roleSelect(this.state.currentUser)}</ClayTable.Cell>
+              <ClayTable.Cell>{this.getLocalization(this.state.currentUser.status)}</ClayTable.Cell>
+              {this.removeUserButton(this.state.currentUser)}
             </ClayTable.Row>
 
             {this.state.userList.map((user, index) => (
