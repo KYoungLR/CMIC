@@ -6,7 +6,7 @@ import getCN from 'classnames';
 const UserAvatar = ({shape = 'circle', size = 'lg', displayType = 'light', elevation, className, index, image, firstName, lastName, onClick}) => {
 	const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
 	const variations = ['blue', 'green', 'orange'];
-	const display = index !== undefined ? variations[index % variations.length] : displayType;
+	const display = image ? displayType : (index !== undefined ? variations[index % variations.length] : displayType);
 	const avatarClassName = getCN(
 		{
 			[`elevation-${elevation}`]: elevation
