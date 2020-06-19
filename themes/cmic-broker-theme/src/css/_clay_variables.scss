@@ -321,6 +321,12 @@ $sticker-xxl: map-merge((
 	size: 3.75rem
 ), $sticker-xxl);
 
+$sticker-xxxl: () !default;
+$sticker-xxxl: map-merge((
+	font-size: 2.5rem,
+	size: 5rem
+), $sticker-xxxl);
+
 $sticker-user-icon: () !default;
 $sticker-user-icon: map-merge((
 	box-shadow: map-get($elevation, 6)
@@ -338,6 +344,10 @@ $sticker-orange-bg: $orange;
 $sticker-orange-border-color: null;
 $sticker-orange-color: $white;
 
+$sticker-gray-dark-bg: $gray-900;
+$sticker-gray-dark-border-color: null;
+$sticker-gray-dark-color: $white;
+
 $sticker-palette: () !default;
 $sticker-palette: map-merge((
 	blue: (
@@ -354,6 +364,11 @@ $sticker-palette: map-merge((
 		bg: $sticker-orange-bg,
 		border-color: $sticker-orange-border-color,
 		color: $sticker-orange-color
+	),
+	gray-dark: (
+		bg: $sticker-gray-dark-bg,
+		border-color: $sticker-gray-dark-border-color,
+		color: $sticker-gray-dark-color
 	)
 ),$sticker-palette);
 
