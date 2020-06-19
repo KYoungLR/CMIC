@@ -5,6 +5,7 @@ import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.configuration.MockProducerWebServiceConfiguration;
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
+import com.churchmutual.rest.model.CMICRoleAssignmentDTO;
 import com.churchmutual.rest.service.mock.MockProducerWebServiceClient;
 
 import com.liferay.petra.lang.HashUtil;
@@ -158,6 +159,33 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 		return list;
 	}
 
+	@Override
+	public List<CMICRoleAssignmentDTO> getRoleAssignments(long producerId) throws PortalException {
+		if (_mockProducerWebServiceConfiguration.enableMockGetRoleAssignments()) {
+			return _mockProducerWebServiceClient.getRoleAssignments(producerId);
+		}
+
+		Map<String, String> queryParameters = new HashMap<>();
+
+		queryParameters.put("producerId", String.valueOf(producerId));
+
+		String response = _webServiceExecutor.executeGet(_GET_ROLE_ASSIGNMENTS, queryParameters);
+
+		JSONDeserializer<CMICRoleAssignmentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICRoleAssignmentDTO> list = new ArrayList();
+
+		try {
+			CMICRoleAssignmentDTO[] results = jsonDeserializer.deserialize(response, CMICRoleAssignmentDTO[].class);
+
+			Collections.addAll(list, results);
+		}
+		catch (Exception e) {
+		}
+
+		return list;
+	}
+
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
@@ -171,6 +199,8 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 		_getProducersPortalCache = (PortalCache<GetProducersKey, List<CMICProducerDTO>>)_singleVMPool.getPortalCache(
 			_GET_PRODUCERS_CACHE_NAME);
 	}
+
+	private static final String _GET_ROLE_ASSIGNMENTS = "/producer-api/v1/role-assignments";
 
 	private static final String _GET_CONTACTS = "/producer-api/v1/contacts";
 

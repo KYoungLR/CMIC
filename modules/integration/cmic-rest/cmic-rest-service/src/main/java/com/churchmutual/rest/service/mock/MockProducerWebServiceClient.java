@@ -2,6 +2,7 @@ package com.churchmutual.rest.service.mock;
 
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
+import com.churchmutual.rest.model.CMICRoleAssignmentDTO;
 import com.churchmutual.rest.service.MockResponseReaderUtil;
 
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -51,6 +52,18 @@ public class MockProducerWebServiceClient {
 		CMICProducerDTO[] cmicProducerDTOS = jsonDeserializer.deserialize(fileContent, CMICProducerDTO[].class);
 
 		return ListUtil.fromArray(cmicProducerDTOS);
+	}
+
+	public List<CMICRoleAssignmentDTO> getRoleAssignments(long producerId) {
+		String fileName = _PRODUCER_WEB_SERVICE_DIR + "getRoleAssignmentsTerritoryManagers.json";
+
+		String fileContent = MockResponseReaderUtil.readFile(fileName);
+
+		JSONDeserializer<CMICRoleAssignmentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		CMICRoleAssignmentDTO[] cmicRoleAssignmentDTOS = jsonDeserializer.deserialize(fileContent, CMICRoleAssignmentDTO[].class);
+
+		return ListUtil.fromArray(cmicRoleAssignmentDTOS);
 	}
 
 	private static final String _PRODUCER_WEB_SERVICE_DIR = "producer-web-service/";

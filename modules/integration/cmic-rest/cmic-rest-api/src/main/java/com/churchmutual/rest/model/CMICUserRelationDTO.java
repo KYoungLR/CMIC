@@ -9,7 +9,7 @@ public class CMICUserRelationDTO extends CMICObjectDTO {
 		return _accountNumber;
 	}
 
-	public String getProducerId() {
+	public long getProducerId() {
 		return _producerId;
 	}
 
@@ -17,11 +17,11 @@ public class CMICUserRelationDTO extends CMICObjectDTO {
 		_accountNumber = accountNumber;
 	}
 
-	public void setProducerId(String producerId) {
+	public void setProducerId(long producerId) {
 		_producerId = producerId;
 	}
 
 	private String _accountNumber;
-	private String _producerId;
+	private long _producerId;
 
 }

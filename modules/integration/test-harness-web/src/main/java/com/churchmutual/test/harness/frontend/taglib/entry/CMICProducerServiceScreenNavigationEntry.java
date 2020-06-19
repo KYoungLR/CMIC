@@ -3,6 +3,7 @@ package com.churchmutual.test.harness.frontend.taglib.entry;
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
+import com.churchmutual.rest.model.CMICRoleAssignmentDTO;
 import com.churchmutual.test.harness.constants.TestHarnessConstants;
 import com.churchmutual.test.harness.model.HarnessDescriptor;
 
@@ -79,7 +80,13 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 
 		getProducersDescriptor.addQueryParameters(agent, division, name, payOutOfCdms);
 
-		return ListUtil.fromArray(getContactsDescriptor, getProducerByIdDescriptor, getProducersDescriptor);
+		HarnessDescriptor getRoleAssignmentsDescriptor = new HarnessDescriptor(
+			"Gets a list of all the role assignments on a producer.", _GET_ROLE_ASSIGNMENTS_ENDPOINT, Http.Method.GET);
+
+		getRoleAssignmentsDescriptor.addQueryParameters(producerId);
+
+		return ListUtil.fromArray(
+			getContactsDescriptor, getProducerByIdDescriptor, getProducersDescriptor, getRoleAssignmentsDescriptor);
 	}
 
 	@Override
@@ -128,6 +135,13 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 
 				producers.forEach(producer -> response.put(producer.toJSONObject()));
 			}
+			else if (_GET_ROLE_ASSIGNMENTS_ENDPOINT.equals(endpoint)) {
+				long producerId = ParamUtil.getLong(portletRequest, "producerId");
+
+				List<CMICRoleAssignmentDTO> roleAssignments = _producerWebService.getRoleAssignments(producerId);
+
+				roleAssignments.forEach(roleAssignment -> response.put(roleAssignment.toJSONObject()));
+			}
 		}
 		catch (Exception pe) {
 			response.put(pe.getMessage());
@@ -145,6 +159,8 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 	private static final String _GET_PRODUCER_BY_ID_ENDPOINT = "/v1/producers/{id}";
 
 	private static final String _GET_PRODUCERS_ENDPOINT = "/v1/producers";
+
+	private static final String _GET_ROLE_ASSIGNMENTS_ENDPOINT = "/v1/role-assignments";
 
 	private static final Log _log = LogFactoryUtil.getLog(CMICProducerServiceScreenNavigationEntry.class);
 
