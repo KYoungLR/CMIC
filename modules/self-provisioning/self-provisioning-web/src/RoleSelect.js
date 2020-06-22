@@ -35,7 +35,7 @@ const RoleSelect = (props) => {
     }
 
     function getOptions() {
-        if (props.value.toLowerCase() === 'owner') {
+        if (props.value === 'owner') {
             return [options[0]];
         }
 

@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
-import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
@@ -471,42 +470,40 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		Role ownerRole = _roleLocalService.getRole(group.getCompanyId(), businessRole.getRoleName());
 
-		List<UserGroupRole> ownerUserGroupRoles = _userGroupRoleLocalService.getUserGroupRolesByGroupAndRole(
-			groupId, ownerRole.getRoleId());
-
 		long entityId = _getEntityId(groupId);
 
-		// Remove the original creator from our Owner list which has the role by default
-
-		long creatorUserId = 0;
+		List<User> groupUsers;
 
 		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
-			Organization organization = _organizationLocalService.getOrganization(entityId);
-
-			creatorUserId = organization.getUserId();
+			groupUsers = _userLocalService.getOrganizationUsers(entityId);
 		}
-		else if (BusinessPortalType.INSURED.equals(businessPortalType)) {
-			AccountEntry accountEntry = _accountEntryLocalService.getAccountEntry(entityId);
+		else {
+			List<AccountEntryUserRel> userRels =
+				_accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountEntryId(entityId);
 
-			creatorUserId = accountEntry.getUserId();
+			groupUsers = userRels.stream(
+			).map(
+				a -> _userLocalService.fetchUser(a.getAccountUserId())
+			).collect(
+				Collectors.toList()
+			);
 		}
 
-		final long creatorId = creatorUserId;
-
-		List<UserGroupRole> userGroupRoles = ownerUserGroupRoles.stream(
+		List<User> owners = groupUsers.stream(
 		).filter(
-			userGroupRole -> userGroupRole.getUserId() != creatorId
+			groupUser -> _userGroupRoleLocalService.hasUserGroupRole(
+				groupUser.getUserId(), groupId, ownerRole.getRoleId())
 		).collect(
 			Collectors.toList()
 		);
 
-		if (userGroupRoles.size() != 1) {
+		if (owners.size() != 1) {
 			throw new PortalException("Error updating roles: Business must have EXACTLY ONE user as Owner");
 		}
 
-		UserGroupRole owner = CollectionsUtil.getFirst(userGroupRoles);
+		User owner = CollectionsUtil.getFirst(owners);
 
-		return owner.getUser();
+		return owner;
 	}
 
 	private void _inviteBusinessMember(long userId, long groupId, String email) throws PortalException {
