@@ -5,6 +5,18 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import ClayTable from '@clayui/table';
 import NumberFormat from 'react-number-format';
 
+const navigate = (e, id) => {
+  // TODO - pass policy number
+
+  Liferay.Util.navigate('policy-details');
+}
+
+const download = (e, pathname) => {
+  e.stopPropagation();
+
+  // TODO - pass file path to download
+}
+
 const PolicyList = (props) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
 
@@ -50,7 +62,10 @@ const PolicyList = (props) => {
         </ClayTable.Head>
         <ClayTable.Body>
           {props.policyList.map((policy, index) => (
-            <ClayTable.Row key={index}>
+            <ClayTable.Row
+              key={index}
+              className="cursor-pointer"
+              onClick={(e) => navigate(e, policy.policyNumber)}>
               <ClayTable.Cell>
                 <h5 className="font-weight-bold mb-0">{policy.policyName}</h5>
                 <small className="text-muted">#{policy.policyNumber}</small>
@@ -64,7 +79,11 @@ const PolicyList = (props) => {
               </ClayTable.Cell>
 
               <ClayTable.Cell align="right">
-                <ClayButton displayType="unstyled" monospaced className="text-primary">
+                <ClayButton
+                  displayType="unstyled"
+                  monospaced
+                  className="text-primary"
+                  onClick={(e) => download(e)}>
                   <ClayIcon symbol={"download"} spritemap={spritemap} className="lexicon-icon-lg" />
                 </ClayButton>
               </ClayTable.Cell>
