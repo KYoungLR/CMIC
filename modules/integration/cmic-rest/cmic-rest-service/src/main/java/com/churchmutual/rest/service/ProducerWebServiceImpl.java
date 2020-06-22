@@ -15,6 +15,8 @@ import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.io.Serializable;
@@ -181,6 +183,14 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			Collections.addAll(list, results);
 		}
 		catch (Exception e) {
+			if (_log.isErrorEnabled()) {
+				_log.error(
+					String.format("Could not get role assignments for producerId, %s: %s", producerId, e.getMessage()));
+			}
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(e);
+			}
 		}
 
 		return list;
@@ -302,4 +312,5 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(ProducerWebServiceImpl.class);
 }
