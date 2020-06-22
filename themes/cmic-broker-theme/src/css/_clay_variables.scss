@@ -86,8 +86,6 @@ $elevation: (
 
 $page-header-bg: transparent;
 
-$sheet-bg: $white;
-
 
 // Typography
 
@@ -112,6 +110,21 @@ $small-font-size: 87.5%;
 $strong-font-weight: $font-weight-bold;
 
 $text-muted: $gray-700;
+
+
+// Sheets
+
+$sheet-bg: $white;
+
+$sheet-padding-left: 2rem;
+$sheet-padding-right: 2rem;
+$sheet-padding-top: 3.5rem;
+
+$sheet-section-margin-bottom: 3.5rem;
+$sheet-footer-margin-bottom: 3.5rem;
+
+$sheet-title-font-size: $h1-font-size;
+$sheet-title-font-weight: $headings-font-weight;
 
 
 // Tables
