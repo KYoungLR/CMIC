@@ -5,14 +5,14 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import ClayTable from '@clayui/table';
 import NumberFormat from 'react-number-format';
 
+const navigate = (e, id) => {
+  // TODO - pass account number
+
+  Liferay.Util.navigate('account-details');
+}
+
 const AccountList = (props) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
-
-  function navigate(e, id) {
-    // TODO - pass account number
-
-    Liferay.Util.navigate('account-details');
-  }
 
   if (props.isLoading) {
     return (<ClayLoadingIndicator />);

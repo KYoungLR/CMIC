@@ -6,6 +6,12 @@ import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import ClayTable from '@clayui/table';
 import NumberFormat from 'react-number-format';
 
+const navigate = (e, id) => {
+  // TODO - pass account number
+
+  Liferay.Util.navigate('account-details');
+}
+
 const AccountList = (props) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
   const [activePage, setActivePage] = useState(1);
@@ -74,7 +80,10 @@ const AccountList = (props) => {
           </ClayTable.Head>
           <ClayTable.Body>
             {props.accountsList.map((account, index) => (
-              <ClayTable.Row key={index}>
+              <ClayTable.Row
+                key={index}
+                className="cursor-pointer"
+                onClick={(e) => navigate(e, account.accountNumber)}>
                 <ClayTable.Cell>
                   <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
                   <small className="text-muted">#{account.accountNumber}</small>
