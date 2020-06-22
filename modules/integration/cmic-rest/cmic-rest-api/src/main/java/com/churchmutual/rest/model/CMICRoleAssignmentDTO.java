@@ -5,6 +5,22 @@ package com.churchmutual.rest.model;
  */
 public class CMICRoleAssignmentDTO extends CMICObjectDTO {
 
+	public String getEmail() {
+		return _email;
+	}
+
+	public String getEmployeeId() {
+		return _employeeId;
+	}
+
+	public long getId() {
+		return _id;
+	}
+
+	public String getJobTitle() {
+		return _jobTitle;
+	}
+
 	public String getName() {
 		return _name;
 	}
@@ -13,40 +29,12 @@ public class CMICRoleAssignmentDTO extends CMICObjectDTO {
 		return _phoneNumber;
 	}
 
-	public String getEmail() {
-		return _email;
-	}
-
-	public long getId() {
-		return _id;
-	}
-
-	public int getVersion() {
-		return _version;
-	}
-
-	public String getEmployeeId() {
-		return _employeeId;
-	}
-
-	public String getJobTitle() {
-		return _jobTitle;
-	}
-
 	public String getRole() {
 		return _role;
 	}
 
-	public void setId(long id) {
-		_id = id;
-	}
-
-	public void setName(String name) {
-		_name = name;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		_phoneNumber = phoneNumber;
+	public int getVersion() {
+		return _version;
 	}
 
 	public void setEmail(String email) {
@@ -57,8 +45,20 @@ public class CMICRoleAssignmentDTO extends CMICObjectDTO {
 		_employeeId = employeeId;
 	}
 
+	public void setId(long id) {
+		_id = id;
+	}
+
 	public void setJobTitle(String jobTitle) {
 		_jobTitle = jobTitle;
+	}
+
+	public void setName(String name) {
+		_name = name;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		_phoneNumber = phoneNumber;
 	}
 
 	public void setRole(String role) {
@@ -69,11 +69,11 @@ public class CMICRoleAssignmentDTO extends CMICObjectDTO {
 		_version = version;
 	}
 
-	private long _id;
-	private String _employeeId;
-	private String _name;
-	private String _jobTitle;
 	private String _email;
+	private String _employeeId;
+	private long _id;
+	private String _jobTitle;
+	private String _name;
 	private String _phoneNumber;
 	private String _role;
 	private int _version;

@@ -1,30 +1,30 @@
 [
 	{
-		"id": 20709,
-		"employeeId": "012644",
-		"name": "Karlie Schowalter",
-		"jobTitle": "Territory Manager",
 		"email": "kschowalter@churchmutual.com",
+		"employeeId": "012644",
+		"id": 20709,
+		"jobTitle": "Territory Manager",
+		"name": "Karlie Schowalter",
 		"phoneNumber": "715-555-5555",
 		"role": "Territory Manager",
 		"version": 1
 	},
 	{
-		"id": 20710,
-		"employeeId": "012645",
-		"name": "Doris O'Connell",
-		"jobTitle": "Underwriting Specialist",
 		"email": "doconnell@churchmutual.com",
+		"employeeId": "012645",
+		"id": 20710,
+		"jobTitle": "Underwriting Specialist",
+		"name": "Doris O'Connell",
 		"phoneNumber": "715-555-5555",
 		"role": "Underwriting Specialist",
 		"version": 2
 	},
 	{
-		"id": 20711,
-		"employeeId": "012646",
-		"name": "Elouise Hintz",
-		"jobTitle": "Division Manager",
 		"email": "ehintz@churchmutual.com",
+		"employeeId": "012646",
+		"id": 20711,
+		"jobTitle": "Division Manager",
+		"name": "Elouise Hintz",
 		"phoneNumber": "715-555-5555",
 		"role": "Division Manager",
 		"version": 3

@@ -25,6 +25,9 @@ public interface MockProducerWebServiceConfiguration {
 	@Meta.AD(deflt = "true", description = "Enable mock for Producer Service method /v1/producers", required = false)
 	public boolean enableMockGetProducers();
 
-	@Meta.AD(deflt = "true", description = "Enable mock for Producer Service method /v1/role-assignments", required = false)
+	@Meta.AD(
+		deflt = "true", description = "Enable mock for Producer Service method /v1/role-assignments", required = false
+	)
 	public boolean enableMockGetRoleAssignments();
+
 }

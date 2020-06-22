@@ -210,8 +210,6 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			_GET_PRODUCERS_CACHE_NAME);
 	}
 
-	private static final String _GET_ROLE_ASSIGNMENTS = "/producer-api/v1/role-assignments";
-
 	private static final String _GET_CONTACTS = "/producer-api/v1/contacts";
 
 	private static final String _GET_CONTACTS_CACHE_NAME = ProducerWebServiceImpl.class.getName() + "_GET_CONTACTS";
@@ -224,6 +222,10 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	private static final String _GET_PRODUCERS = "/producer-api/v1/producers";
 
 	private static final String _GET_PRODUCERS_CACHE_NAME = ProducerWebServiceImpl.class.getName() + "_GET_PRODUCERS";
+
+	private static final String _GET_ROLE_ASSIGNMENTS = "/producer-api/v1/role-assignments";
+
+	private static final Log _log = LogFactoryUtil.getLog(ProducerWebServiceImpl.class);
 
 	private PortalCache<ProducerIdKey, List<CMICContactDTO>> _getContactsPortalCache;
 	private PortalCache<ProducerIdKey, CMICProducerDTO> _getProducerByIdPortalCache;
@@ -312,5 +314,4 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(ProducerWebServiceImpl.class);
 }

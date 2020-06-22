@@ -2,8 +2,8 @@ package com.churchmutual.rest;
 
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
-
 import com.churchmutual.rest.model.CMICRoleAssignmentDTO;
+
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.util.List;
@@ -24,4 +24,5 @@ public interface ProducerWebService {
 	 * Get producer role assignments (Territory Manager)
 	 */
 	public List<CMICRoleAssignmentDTO> getRoleAssignments(long producerId) throws PortalException;
+
 }

@@ -61,7 +61,8 @@ public class MockProducerWebServiceClient {
 
 		JSONDeserializer<CMICRoleAssignmentDTO[]> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
-		CMICRoleAssignmentDTO[] cmicRoleAssignmentDTOS = jsonDeserializer.deserialize(fileContent, CMICRoleAssignmentDTO[].class);
+		CMICRoleAssignmentDTO[] cmicRoleAssignmentDTOS = jsonDeserializer.deserialize(
+			fileContent, CMICRoleAssignmentDTO[].class);
 
 		return ListUtil.fromArray(cmicRoleAssignmentDTOS);
 	}
