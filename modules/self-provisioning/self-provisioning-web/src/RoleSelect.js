@@ -4,11 +4,7 @@ import {Dialog} from 'com.churchmutual.commons.web';
 
 const RoleSelect = (props) => {
 
-    const options = [
-        { label: 'Owner', value: 'owner' },
-        { label: 'Admin', value: 'Admin' },
-        { label: 'Member', value: 'Member' }
-    ];
+    const options = props.roleTypes;
 
     const [visible, setChangeOwnerModalVisible] = useState(false);
 
@@ -64,9 +60,9 @@ const RoleSelect = (props) => {
               onChange={(e) => onChange(e)} value={props.value}>
                 {getOptions().map(item => (
                     <ClaySelect.Option
-                        key={item.value}
-                        label={item.label}
-                        value={item.value}
+                        key={item.label}
+                        label={Liferay.Language.get(item.label)}
+                        value={item.label}
                     />
                 ))}
             </ClaySelect>

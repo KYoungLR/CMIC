@@ -102,7 +102,7 @@ export default class extends React.Component {
   updateCurrentOwnerToAdmin() {
     let ownerUser = this.getOwnerUser();
 
-    this.setNewRole(ownerUser, 'Admin', this.isCurrentUser(ownerUser));
+    this.setNewRole(ownerUser, 'admin', this.isCurrentUser(ownerUser));
   }
 
   isCurrentUser(user) {
@@ -124,7 +124,7 @@ export default class extends React.Component {
 
     return (
       <RoleSelect
-        value={this.getLocalization(user.role)}
+        value={user.role}
         user={user}
         currentUser={this.state.currentUser}
         roleTypes={this.props.roleTypes}
@@ -214,14 +214,6 @@ export default class extends React.Component {
     return key && key != '' ? Liferay.Language.get(key) : key;
   }
 
-  getUserId() {
-    return Liferay.ThemeDisplay.getUserId();
-  }
-
-  getCompanyId() {
-    return Liferay.ThemeDisplay.getCompanyId();
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -247,7 +239,7 @@ export default class extends React.Component {
                     className="mr-3"
                   />
                   <div>
-                    {this.state.currentUser.fullName}
+                    {this.state.currentUser.firstName} {this.state.currentUser.lastName}
                     <small className="font-weight-normal">{" (" + Liferay.Language.get('me').toLowerCase() + ")"}</small>
                   </div>
                 </div>
@@ -293,7 +285,7 @@ export default class extends React.Component {
           <div className="lead-text" dangerouslySetInnerHTML={{
               __html: Liferay.Util.sub(
                   Liferay.Language.get('are-you-sure-you-want-to-remove-x-from-this-account'),
-                  this.state.removeUser.removingUser.fullName
+                  this.state.currentUser.firstName + ' ' + this.state.currentUser.lastName
               )
           }}/>
         </Dialog>
