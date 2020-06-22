@@ -1,6 +1,11 @@
 import React from 'react';
 import ClayBreadcrumb from '@clayui/breadcrumb';
 
+const navigate = (id) => {
+  // TODO - pass account number
+  Liferay.Util.navigate('account-details');
+}
+
 const AccountInfo = (props) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
 
@@ -18,8 +23,8 @@ const AccountInfo = (props) => {
               label: 'Accounts'
             },
             {
-              href: '#',
-              label: `${props.transaction.accountName}`
+              label: `${props.transaction.accountName}`,
+              onClick: () => navigate(props.transaction.accountNumber)
             },
             {
               active: true,

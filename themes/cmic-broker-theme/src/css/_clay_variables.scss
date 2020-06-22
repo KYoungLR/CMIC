@@ -473,5 +473,14 @@ $breadcrumb-active-font-weight: $font-weight-bold;
 $breadcrumb-link-color: $gray-700;
 $breadcrumb-link-hover-color: darken($breadcrumb-link-color, 15%);
 $breadcrumb-link-text-decoration: none;
+$breadcrumb-text-transform: none !important;
+
+$breadcrumb-link: () !default;
+$breadcrumb-link: map-merge(
+	(
+		focus-box-shadow: none
+	),
+	$breadcrumb-link
+);
 
 $breadcrumb-divider-svg-icon-height: .4em;
