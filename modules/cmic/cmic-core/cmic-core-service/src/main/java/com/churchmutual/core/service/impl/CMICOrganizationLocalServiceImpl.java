@@ -17,17 +17,11 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICProducerDTO;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,31 +44,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 	@Override
 	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
-		return cmicOrganizationPersistence.findByOrganizationId(organizationId);
-	}
-
-	@Override
-	public List<Organization> getCMICOrganizations(long userId) throws PortalException {
-		User user = _userLocalService.getUser(userId);
-
-		String cmicUUID = user.getExternalReferenceCode();
-
-		List<CMICProducerDTO> cmicProducerDTOList = _producerUserWebService.getCMICUserProducers(cmicUUID);
-
-		//TODO CMIC-273
-
-		List<Organization> organizations = _organizationLocalService.getUserOrganizations(userId);
-
-		List<CMICOrganization> cmicOrganizationList = new ArrayList<>();
-
-		for (Organization organization : organizations) {
-			CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(
-				organization.getOrganizationId());
-
-			cmicOrganizationList.add(cmicOrganization);
-		}
-
-		return organizations;
+		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
 	@Reference

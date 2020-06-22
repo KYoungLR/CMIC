@@ -35,14 +35,17 @@ public enum BusinessRole implements DisplayEnum {
 		return businessRole;
 	}
 
-	public static BusinessRole fromShortenedNameKey(String shortenedNameKey, boolean isOrganizationType) {
+	public static BusinessRole fromShortenedNameKey(String shortenedNameKey, BusinessPortalType businessPortalType) throws PortalException {
 		BusinessRole businessRole;
 
-		if (isOrganizationType) {
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
 			businessRole = ORGANIZATION_ROLE_KEY_MAP.get(shortenedNameKey);
 		}
-		else {
+		else if (BusinessPortalType.INSURED.equals(businessPortalType)) {
 			businessRole = ACCOUNT_ROLE_KEY_MAP.get(shortenedNameKey);
+		}
+		else {
+			throw new PortalException("Error: " + businessPortalType.getName() + " is not a valid portal type");
 		}
 
 		if (Validator.isNull(businessRole)) {
@@ -52,15 +55,37 @@ public enum BusinessRole implements DisplayEnum {
 		return businessRole;
 	}
 
-	public static BusinessRole[] getBusinessRoles(String businessType) throws PortalException {
-		switch (businessType) {
-			case CommonConstants.BUSINESS_TYPE_ACCOUNT:
-				return ACCOUNT_ROLES;
-			case CommonConstants.BUSINESS_TYPE_ORGANIZATION:
-				return ORGANIZATION_ROLES;
-			default:
-				throw new PortalException("Error: " + businessType + " is not a valid BusinessRole type");
+	public static BusinessRole getBusinessAdminRole(BusinessPortalType businessPortalType) throws PortalException {
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			return ORGANIZATION_ADMINISTRATOR;
 		}
+		else if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+			return ACCOUNT_ADMINISTRATOR;
+		}
+
+		throw new PortalException("Error: " + businessPortalType.getName() + " is not a valid portal type");
+	}
+
+	public static BusinessRole getBusinessOwnerRole(BusinessPortalType businessPortalType) throws PortalException {
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			return ORGANIZATION_OWNER;
+		}
+		else if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+			return ACCOUNT_OWNER;
+		}
+
+		throw new PortalException("Error: " + businessPortalType.getName() + " is not a valid portal type");
+	}
+
+	public static BusinessRole[] getBusinessRoles(BusinessPortalType businessPortalType) throws PortalException {
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			return ORGANIZATION_ROLES;
+		}
+		else if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+			return ACCOUNT_ROLES;
+		}
+
+		throw new PortalException("Error: " + businessPortalType.getName() + " is not a valid portal type");
 	}
 
 	public String getBusinessType() {
@@ -89,12 +114,12 @@ public enum BusinessRole implements DisplayEnum {
 
 	private static final Map<String, BusinessRole> ACCOUNT_ROLE_KEY_MAP = new HashMap<>();
 
-	private static final BusinessRole[] ACCOUNT_ROLES = {ACCOUNT_ADMINISTRATOR, ACCOUNT_OWNER, ACCOUNT_USER};
+	private static final BusinessRole[] ACCOUNT_ROLES = {ACCOUNT_OWNER, ACCOUNT_ADMINISTRATOR, ACCOUNT_USER};
 
 	private static final Map<String, BusinessRole> ORGANIZATION_ROLE_KEY_MAP = new HashMap<>();
 
 	private static final BusinessRole[] ORGANIZATION_ROLES = {
-		ORGANIZATION_ADMINISTRATOR, ORGANIZATION_OWNER, ORGANIZATION_MEMBER
+		ORGANIZATION_OWNER, ORGANIZATION_ADMINISTRATOR, ORGANIZATION_MEMBER
 	};
 
 	private static final Map<String, BusinessRole> ROLE_NAME_MAP = new HashMap<>();

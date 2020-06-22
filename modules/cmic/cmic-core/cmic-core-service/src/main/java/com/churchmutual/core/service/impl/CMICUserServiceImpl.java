@@ -14,16 +14,26 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.account.permissions.AccountEntryModelPermission;
+import com.churchmutual.account.permissions.OrganizationModelPermission;
 import com.churchmutual.commons.enums.BusinessPortalType;
-
 import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
+
+import com.liferay.account.constants.AccountActionKeys;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
-
-import org.osgi.service.component.annotations.Component;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.permission.GroupPermission;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Chan
@@ -40,13 +50,25 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
+	public List<Group> getBusinesses() throws PortalException {
+		return cmicUserLocalService.getBusinesses(getUserId());
+	}
+
+	@Override
 	public BusinessPortalType getBusinessPortalType(String registrationCode) throws PortalException {
 		return cmicUserLocalService.getBusinessPortalType(registrationCode);
 	}
 
 	@Override
-	public BusinessPortalType getBusinessPortalType(long userId) throws PortalException {
-		return cmicUserLocalService.getBusinessPortalType(userId);
+	public BusinessPortalType getBusinessPortalTypeByGroupId(long groupId) throws PortalException {
+		return cmicUserLocalService.getBusinessPortalTypeByGroupId(groupId);
+	}
+
+	@Override
+	public JSONArray getBusinessRoles(long groupId) throws PortalException {
+		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+
+		return cmicUserLocalService.getBusinessRoles(groupId);
 	}
 
 	@Override
@@ -55,13 +77,45 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
+	public JSONArray getGroupOtherUsers(long groupId) throws PortalException {
+		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+
+		return cmicUserLocalService.getGroupOtherUsers(getUserId(), groupId);
+	}
+
+	@Override
+	public String getPortraitImageURL() throws PortalException {
+		return cmicUserLocalService.getPortraitImageURL(getUserId());
+	}
+
+	@Override
 	public User getUser(String cmicUUID) {
 		return cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override
-	public void inviteUserToCMICOrganization(String[] emailAddresses, long cmicOrganizationId) throws PortalException {
-		cmicUserLocalService.inviteUsersToCMICOrganization(emailAddresses, cmicOrganizationId);
+	public JSONObject getUserDetails(long groupId) throws PortalException {
+		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+
+		return cmicUserLocalService.getUserDetails(getUserId(), groupId);
+	}
+
+	@Override
+	public void inviteBusinessMembers(long groupId, String emailAddresses) throws PortalException {
+		Group group = _groupService.getGroup(groupId);
+
+		BusinessPortalType businessPortalType = getBusinessPortalTypeByGroupId(groupId);
+
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			OrganizationModelPermission.check(
+				getPermissionChecker(), groupId, group.getClassPK(), AccountActionKeys.UPDATE_ORGANIZATION_USERS);
+		}
+		else {
+			AccountEntryModelPermission.check(
+				getPermissionChecker(), groupId, group.getClassPK(), AccountActionKeys.UPDATE_ACCOUNT_ENTRY_USERS);
+		}
+
+		cmicUserLocalService.inviteBusinessMembers(getUserId(), groupId, emailAddresses);
 	}
 
 	@Override
@@ -82,7 +136,35 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
+	public void updateBusinessMembers(long groupId, String updateUserRolesJSONString, String removeUsersJSONString)
+		throws PortalException {
+
+		Group group = _groupService.getGroup(groupId);
+
+		BusinessPortalType businessPortalType = getBusinessPortalTypeByGroupId(groupId);
+
+		if (BusinessPortalType.BROKER.equals(businessPortalType)) {
+			OrganizationModelPermission.check(
+				getPermissionChecker(), groupId, group.getClassPK(), AccountActionKeys.UPDATE_ORGANIZATION_USERS);
+		}
+		else {
+			AccountEntryModelPermission.check(
+				getPermissionChecker(), groupId, group.getClassPK(), AccountActionKeys.UPDATE_ACCOUNT_ENTRY_USERS);
+		}
+
+		cmicUserLocalService.updateBusinessMembers(
+			getUserId(), groupId, updateUserRolesJSONString, removeUsersJSONString);
+	}
+
+	@Override
 	public void validateUserRegistration(String registrationCode) throws PortalException {
 		cmicUserLocalService.validateUserRegistration(registrationCode);
 	}
+
+	@Reference
+	private GroupPermission _groupPermission;
+
+	@Reference
+	private GroupService _groupService;
+
 }
