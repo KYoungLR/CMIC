@@ -8,6 +8,12 @@ import NumberFormat from 'react-number-format';
 const AccountList = (props) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
 
+  function navigate(e, id) {
+    // TODO - pass account number
+
+    Liferay.Util.navigate('account-details');
+  }
+
   if (props.isLoading) {
     return (<ClayLoadingIndicator />);
   }
@@ -42,7 +48,10 @@ const AccountList = (props) => {
           </ClayTable.Head>
           <ClayTable.Body>
             {props.accountsList.map((account, index) => (
-              <ClayTable.Row key={index}>
+              <ClayTable.Row
+                key={index}
+                className="cursor-pointer"
+                onClick={(e) => navigate(e, account.accountNumber)}>
                 <ClayTable.Cell>
                   <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
                   <small className="text-muted">#{account.accountNumber}</small>
@@ -55,7 +64,7 @@ const AccountList = (props) => {
             ))}
           </ClayTable.Body>
         </ClayTable>
-        <div className="pt-2 px-2"><a href="#" className="link-action">{Liferay.Language.get('see-all-accounts')}</a></div>
+        <div className="pt-2 px-2"><a href="accounts" className="link-action">{Liferay.Language.get('see-all-accounts')}</a></div>
       </React.Fragment>
     );
   }
