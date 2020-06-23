@@ -35,22 +35,23 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserInformation();
+    this.getPortraitImageURL();
   }
 
   getUserId() {
     return Liferay.ThemeDisplay.getUserId();
   }
 
-  getUserInformation() {
-    fetch(`/o/profile/${this.getUserId()}/user-information`)
-      .then(res => res.json())
-      .then(data => this.setState({
-        email: data.email,
-        fullname: data.fullname,
-        portraitURL: data.portraitURL
-      }))
-      .catch(() => this.displayErrorMessage('your-request-failed-to-complete'));
+  getPortraitImageURL() {
+    let callback = (portraitURL) => this.setState({portraitURL: portraitURL});
+
+    let errCallback = () => this.displayErrorMessage('your-request-failed-to-complete');
+
+    Liferay.Service(
+      '/cmic.cmicuser/get-portrait-image-url',
+      callback,
+      errCallback
+    );
   }
 
   setDeletePortraitModalVisible(value) {
@@ -138,31 +139,36 @@ class Profile extends React.Component {
   }
 
   deletePortrait() {
-    fetch(`/o/profile/${this.getUserId()}/delete-portrait`,
-      {
-        method: 'POST'
-      })
-      .then(res => res.json())
-      .then(data => {
-        this.setState(
-          {
-            portraitURL: data.portraitURL,
-            updatePortraitModal: {
-              file: null,
-              previewURL: data.portraitURL,
-              visible: false,
-            }
-          }
-        );
+    let callback = () => {
+      this.getPortraitImageURL();
 
-        this.setDeletePortraitModalVisible(false);
-        this.setUpdatePortraitModalVisible(false);
-      })
-      .catch(() => this.displayErrorMessage('your-request-failed-to-complete'));
+      this.setState({
+        deletePortraitModal: {
+          visible: false
+        },
+        updatePortraitModal: {
+          file: null,
+          previewURL: null,
+          visible: false,
+        }
+      });
+    }
+
+    let errCallback = () => this.displayErrorMessage('your-request-failed-to-complete');
+
+    Liferay.Service(
+      '/user/delete-portrait',
+      {
+        userId: this.getUserId()
+      },
+      callback,
+      errCallback
+    );
   }
 
   updatePortrait() {
     let file = this.state.updatePortraitModal.file;
+    let previewImageURL = this.state.updatePortraitModal.previewURL;
 
     if (!file) {
       this.setUpdatePortraitModalVisible(false);
@@ -174,17 +180,22 @@ class Profile extends React.Component {
       return;
     }
 
-    fetch(`/o/profile/${this.getUserId()}/portrait`,
+    let callback = (portraitURL) => {
+      this.setState({portraitURL: portraitURL});
+      this.setUpdatePortraitModalVisible(false);
+    }
+
+    let errCallback = () => this.displayErrorMessage('your-request-failed-to-complete');
+
+    Liferay.Service(
+      '/cmic.cmicuser/update-portrait-image',
       {
-        method: 'POST',
-        body: file
-      })
-      .then(res => res.json())
-      .then(data => {
-        this.setState({portraitURL: data.portraitURL});
-        this.setUpdatePortraitModalVisible(false);
-      })
-      .catch(() => this.displayErrorMessage('your-request-failed-to-complete'));
+        userId: this.getUserId(),
+        imageFileString: previewImageURL
+      },
+      callback,
+      errCallback
+    );
   }
 
   displayErrorMessage(message) {
