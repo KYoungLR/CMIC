@@ -5,7 +5,6 @@ import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.commons.enums.BusinessRole;
 import com.churchmutual.commons.enums.BusinessUserStatus;
 import com.churchmutual.commons.util.CollectionsUtil;
-import com.churchmutual.core.constants.CMICUserConstants;
 import com.churchmutual.core.constants.SelfProvisioningConstants;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
@@ -27,7 +26,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
@@ -35,8 +33,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.role.RoleConstants;
-import com.liferay.portal.kernel.search.Indexable;
-import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -49,6 +45,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,13 +60,6 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(property = "model.class.name=com.churchmutual.core.model.CMICUser", service = AopService.class)
 public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
-
-	@Override
-	public User addUser(String cmicUUID, String registrationCode) throws PortalException {
-		CMICUserDTO cmicUserDTO = _portalUserWebService.validateUser(registrationCode);
-
-		return _addUser(cmicUUID, cmicUserDTO);
-	}
 
 	@Override
 	public List<Group> getBusinesses(long userId) throws PortalException {
@@ -312,41 +302,26 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
+	public String updatePortraitImage(long userId, String imageFileString) throws PortalException {
+
+		// remove file type information "data:image/png;base64," from the string
+
+		String imageString = imageFileString.substring(imageFileString.indexOf(StringPool.COMMA) + 1);
+
+		byte[] decodedImageFile = Base64.getDecoder().decode(imageString);
+
+		userLocalService.updatePortrait(userId, decodedImageFile);
+
+		return getPortraitImageURL(userId);
+	}
+
+	@Override
 	public void validateUserRegistration(String registrationCode) throws PortalException {
 		BusinessPortalType businessPortalType = getBusinessPortalType(registrationCode);
 
 		if (BusinessPortalType.INSURED.equals(businessPortalType)) {
 			throw new PortalException("User must have the Broker portal type");
 		}
-	}
-
-	@Indexable(type = IndexableType.REINDEX)
-	private User _addUser(String cmicUUID, CMICUserDTO cmicUserDTO) throws PortalException {
-		_validateCMICUserDTO(cmicUserDTO);
-
-		long companyId = _portal.getDefaultCompanyId();
-
-		Company company = _companyLocalService.getCompany(companyId);
-
-		User user = _userLocalService.fetchUserByUuidAndCompanyId(cmicUUID, companyId);
-
-		User defaultUser = company.getDefaultUser();
-
-		if (Validator.isNull(user)) {
-			user = _userLocalService.addUser(
-				defaultUser.getUserId(), companyId, CMICUserConstants.AUTO_PASSWORD, StringPool.BLANK, StringPool.BLANK,
-				CMICUserConstants.AUTO_SCREEN_NAME, StringPool.BLANK, CMICUserConstants.EMAIL, 0, StringPool.BLANK,
-				LocaleUtil.getDefault(), CMICUserConstants.FIRST_NAME, StringPool.BLANK, CMICUserConstants.LAST_NAME, 0,
-				0, CMICUserConstants.IS_MALE, CMICUserConstants.BIRTHDAY_MONTH, CMICUserConstants.BIRTHDAY_DAY,
-				CMICUserConstants.BIRTHDAY_YEAR, StringPool.BLANK, null, null, null, null,
-				CMICUserConstants.SEND_EMAIL_NOTIFICATIONS, null);
-
-			user.setExternalReferenceCode(cmicUUID);
-
-			_userLocalService.updateUser(user);
-		}
-
-		return user;
 	}
 
 	private User _createOrFetchUser(long creatorUserId, String email) throws PortalException {

@@ -45,11 +45,6 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 
 	@Override
-	public User addUser(String cmicUUID, String registrationCode) throws PortalException {
-		return cmicUserLocalService.addUser(cmicUUID, registrationCode);
-	}
-
-	@Override
 	public List<Group> getBusinesses() throws PortalException {
 		return cmicUserLocalService.getBusinesses(getUserId());
 	}
@@ -154,6 +149,11 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 
 		cmicUserLocalService.updateBusinessMembers(
 			getUserId(), groupId, updateUserRolesJSONString, removeUsersJSONString);
+	}
+
+	@Override
+	public String updatePortraitImage(String imageFileString) throws PortalException {
+		return cmicUserLocalService.updatePortraitImage(getUserId(), imageFileString);
 	}
 
 	@Override
