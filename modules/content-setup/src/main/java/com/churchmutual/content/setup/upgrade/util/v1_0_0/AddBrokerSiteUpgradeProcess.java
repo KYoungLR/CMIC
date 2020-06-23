@@ -9,8 +9,13 @@ import com.churchmutual.content.setup.upgrade.util.broker.BrokerProfilePage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerResourcesPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerUserRegistrationPage;
 import com.churchmutual.content.setup.upgrade.util.common.BaseSiteUpgradeProcess;
+import com.churchmutual.content.setup.upgrade.util.common.BrokerUpgradeConstants;
 
+import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
+import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
@@ -24,12 +29,15 @@ import com.liferay.portal.kernel.util.Portal;
 public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 	public AddBrokerSiteUpgradeProcess(
-		GroupLocalService groupLocalService, LayoutSetLocalService layoutSetLocalService,
+		CompanyLocalService companyLocalService, DDMStructureLocalService ddmStructureLocalService,
+		DDMTemplateLocalService ddmTemplateLocalService, GroupLocalService groupLocalService,
+		JournalArticleLocalService journalArticleLocalService, LayoutSetLocalService layoutSetLocalService,
 		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
 		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
 
 		super(
-			groupLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
+			companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, groupLocalService,
+			journalArticleLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
 			userLocalService, virtualHostLocalService);
 
 		this.portal = portal;
@@ -40,15 +48,21 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 	protected void doUpgradeAsAdmin() throws Exception {
 		long companyId = portal.getDefaultCompanyId();
 
-		long brokerPortalGroupId = addPortalSite(companyId, "Broker", "/broker");
+		long brokerPortalGroupId = addPortalSite(companyId, BrokerUpgradeConstants.BROKER_SITE_NAME, "/broker");
 
 		long userId = userLocalService.getDefaultUserId(companyId);
+
+		addJournalArticle(brokerPortalGroupId, BrokerUpgradeConstants.PRODUCER_CONTACT_US_WEB_CONTENT_TITLE);
 
 		_addPrivatePages(companyId, userId, brokerPortalGroupId);
 
 		_addPublicPages(companyId, userId, brokerPortalGroupId);
 	}
 
+	protected CompanyLocalService companyLocalService;
+	protected DDMStructureLocalService ddmStructureLocalService;
+	protected DDMTemplateLocalService ddmTemplateLocalService;
+	protected JournalArticleLocalService journalArticleLocalService;
 	protected Portal portal;
 	protected UserLocalService userLocalService;
 
