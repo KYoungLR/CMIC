@@ -5,7 +5,7 @@
 	<compatibility>
 		<version>7.2.0+</version>
 	</compatibility>
-	<theme id="cmic-broker-theme" name="CMIC Broker Theme">
+	<theme id="cmic-producer-theme" name="CMIC Producer Theme">
 		<template-extension>ftl</template-extension>
 		<layout-templates>
 			<custom>

@@ -23,6 +23,6 @@ public class LayoutURLKeyConstants {
 
 	public static final String LAYOUT_FURL_INSURED_USER_REGISTRATION = "/user-registration";
 
-	public static final String THEME_ID_CMIC_BROKER = "cmicbrokertheme_WAR_cmicbrokertheme";
+	public static final String THEME_ID_CMIC_PRODUCER = "cmicproducertheme_WAR_cmicproducertheme";
 
 }

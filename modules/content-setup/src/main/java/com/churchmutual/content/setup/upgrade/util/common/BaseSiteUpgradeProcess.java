@@ -69,13 +69,13 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		long groupId = group.getGroupId();
 
-		String themeId = LayoutURLKeyConstants.THEME_ID_CMIC_BROKER;
+		String producerThemeId = LayoutURLKeyConstants.THEME_ID_CMIC_PRODUCER;
 
 		// Update site theme
 
-		layoutSetLocalService.updateLookAndFeel(groupId, true, themeId, StringPool.BLANK, StringPool.BLANK);
+		layoutSetLocalService.updateLookAndFeel(groupId, true, producerThemeId, StringPool.BLANK, StringPool.BLANK);
 
-		layoutSetLocalService.updateLookAndFeel(groupId, false, themeId, StringPool.BLANK, StringPool.BLANK);
+		layoutSetLocalService.updateLookAndFeel(groupId, false, producerThemeId, StringPool.BLANK, StringPool.BLANK);
 
 		return groupId;
 	}
