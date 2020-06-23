@@ -51,23 +51,6 @@ import java.rmi.RemoteException;
  */
 public class CMICUserServiceSoap {
 
-	public static com.liferay.portal.kernel.model.User addUser(
-			String cmicUUID, String registrationCode)
-		throws RemoteException {
-
-		try {
-			com.liferay.portal.kernel.model.User returnValue =
-				CMICUserServiceUtil.addUser(cmicUUID, registrationCode);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.liferay.portal.kernel.model.Group[] getBusinesses()
 		throws RemoteException {
 
@@ -283,6 +266,22 @@ public class CMICUserServiceSoap {
 		try {
 			CMICUserServiceUtil.updateBusinessMembers(
 				groupId, updateUserRolesJSONString, removeUsersJSONString);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static String updatePortraitImage(String imageFileString)
+		throws RemoteException {
+
+		try {
+			String returnValue = CMICUserServiceUtil.updatePortraitImage(
+				imageFileString);
+
+			return returnValue;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

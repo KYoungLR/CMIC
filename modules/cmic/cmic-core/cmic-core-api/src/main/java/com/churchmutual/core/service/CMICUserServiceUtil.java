@@ -43,13 +43,6 @@ public class CMICUserServiceUtil {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICUserServiceUtil} to access the cmic user remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICUserServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public static com.liferay.portal.kernel.model.User addUser(
-			String cmicUUID, String registrationCode)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return getService().addUser(cmicUUID, registrationCode);
-	}
-
 	public static java.util.List<com.liferay.portal.kernel.model.Group>
 			getBusinesses()
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -153,6 +146,12 @@ public class CMICUserServiceUtil {
 
 		getService().updateBusinessMembers(
 			groupId, updateUserRolesJSONString, removeUsersJSONString);
+	}
+
+	public static String updatePortraitImage(String imageFileString)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().updatePortraitImage(imageFileString);
 	}
 
 	public static void validateUserRegistration(String registrationCode)

@@ -36,14 +36,6 @@ public class CMICUserServiceWrapper
 	 * Never modify or reference this interface directly. Always use {@link CMICUserServiceUtil} to access the cmic user remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICUserServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	@Override
-	public com.liferay.portal.kernel.model.User addUser(
-			String cmicUUID, String registrationCode)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cmicUserService.addUser(cmicUUID, registrationCode);
-	}
-
-	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Group> getBusinesses()
 		throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -158,6 +150,13 @@ public class CMICUserServiceWrapper
 
 		_cmicUserService.updateBusinessMembers(
 			groupId, updateUserRolesJSONString, removeUsersJSONString);
+	}
+
+	@Override
+	public String updatePortraitImage(String imageFileString)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserService.updatePortraitImage(imageFileString);
 	}
 
 	@Override
