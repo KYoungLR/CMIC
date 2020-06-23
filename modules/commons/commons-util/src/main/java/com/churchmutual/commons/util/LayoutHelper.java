@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.util.PortletKeys;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
+import java.util.List;
 
 /**
  * Helper methods to work with layouts
@@ -114,30 +115,33 @@ public class LayoutHelper {
 	}
 
 	public static Layout addLayoutWithPortlets(
-			long userId, long groupId, long parentLayoutId, String name,
-			String title, String friendlyURL, boolean hidden,
-			String[] portletKeys)
+			long userId, long groupId, LayoutConfig layoutConfig)
 		throws PortalException {
 
-		Layout autoLayout = addLayout(
-			userId, groupId, parentLayoutId, name, title, hidden, friendlyURL);
+		String name = layoutConfig.getName();
 
-		LayoutTypePortlet autoLayoutTypePortlet =
-			(LayoutTypePortlet)autoLayout.getLayoutType();
+		Layout layout = addLayout(userId, groupId, layoutConfig);
 
-		autoLayoutTypePortlet.setLayoutTemplateId(
-			userId, LayoutConstants.LAYOUT_1_COLUMN);
-
-		for (int i = 0; i < portletKeys.length; i++) {
-			autoLayoutTypePortlet.addPortletId(
-				userId, portletKeys[i], LayoutConstants.COL_ID_COLUMN_1, i);
+		if (_log.isInfoEnabled()) {
+			_log.info(String.format("Created a layout with name: %s", name));
 		}
 
-		LayoutLocalServiceUtil.updateLayout(
-			autoLayout.getGroupId(), autoLayout.isPrivateLayout(),
-			autoLayout.getLayoutId(), autoLayout.getTypeSettings());
+		LayoutTypePortlet layoutTypePortlet =
+				(LayoutTypePortlet)layout.getLayoutType();
 
-		return autoLayout;
+		layoutTypePortlet.setLayoutTemplateId(
+				userId, LayoutConstants.LAYOUT_1_COLUMN);
+
+		List<String> portletKeys = layoutConfig.getPortletsKeys();
+
+		for (int i = 0; i < portletKeys.size(); i++) {
+			layoutTypePortlet.addPortletId(
+				userId, portletKeys.get(i), LayoutConstants.COL_ID_COLUMN_1, i);
+		}
+
+		return LayoutLocalServiceUtil.updateLayout(
+			groupId, layout.isPrivateLayout(), layout.getLayoutId(),
+			layout.getTypeSettings());
 	}
 
 	public static Layout addLayoutWith2Columns(

@@ -72,7 +72,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		BrokerAccountDetailsPage.addPage(companyId, userId, groupId);
 		BrokerPolicyDetailsPage.addPage(companyId, userId, groupId);
 		BrokerResourcesPage.addPage(companyId, userId, groupId);
-		BrokerContactPage.addPage(companyId, userId, groupId);
+		BrokerContactPage.addPage(userId, groupId);
 		BrokerProfilePage.addPage(companyId, userId, groupId);
 	}
 
