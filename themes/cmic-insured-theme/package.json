@@ -6,13 +6,16 @@
 		"liferay-theme"
 	],
 	"liferayTheme": {
-		"baseTheme": "styled",
+		"baseTheme": {
+			"name": "cmic-producer-theme"
+		},
 		"fontAwesome": true,
 		"screenshot": "",
 		"templateLanguage": "ftl",
 		"version": "7.2"
 	},
 	"devDependencies": {
+		"cmic-producer-theme": "file:../cmic-producer-theme",
 		"compass-mixins": "0.12.10",
 		"gulp": "3.9.1",
 		"liferay-frontend-common-css": "1.0.4",
