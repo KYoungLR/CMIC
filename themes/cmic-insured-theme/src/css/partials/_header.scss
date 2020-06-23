@@ -1,0 +1,33 @@
+#header {
+	display: flex;
+	height: $header-height;
+	position: relative;
+	z-index: 980;
+	align-items: center;
+	justify-content: space-between;
+	background-color: $header-bg;
+	box-shadow: $header-box-shadow;
+	@extend %content-spacing-x;
+
+	.logo-icon {
+		width: $logo-width;
+	}
+
+	.nav-user-bar {
+		display: flex;
+		align-items: center;
+		min-width: 4.375rem;
+
+		@include media-breakpoint-up(lg) {
+			min-width: 3.5rem;
+		}
+	}
+
+	.user-notification {
+		margin-right: 1rem;
+	}
+
+	.user-personal-bar .sticker-primary {
+		background-color: $header-bg;
+	}
+}

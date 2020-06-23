@@ -17,17 +17,8 @@
 				/>
 			</#if>
 
-			<#if nav_item_icon_hash[nav_item.getName()?lower_case]??>
-				<#assign nav_item_icon = nav_item_icon_hash[nav_item.getName()?lower_case] />
-			</#if>
-
 			<li class="${nav_item_css_class}" id="layout_${nav_item.getLayoutId()}" role="presentation">
 				<a class="${nav_link_css_class}" aria-labelledby="layout_${nav_item.getLayoutId()}" ${nav_item_attr_has_popup} href="${nav_item.getURL()}" ${nav_item.getTarget()} role="menuitem">
-					<span class="layout-icon">
-						<svg class="nav-item-icon">
-							<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#${nav_item_icon}" />
-						</svg>
-					</span>
 					<span class="layout-name">${nav_item.getName()}</span>
 				</a>
 			</li>

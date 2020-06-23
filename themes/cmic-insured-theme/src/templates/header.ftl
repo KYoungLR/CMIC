@@ -1,6 +1,6 @@
 <header id="header" role="banner">
 	<#if has_navigation && is_setup_complete>
-		<button class="btn btn-sm link-action d-none d-md-block d-lg-none js-navigation-toggler">
+		<button class="btn btn-sm link-action d-lg-none js-navigation-toggler">
 			<@liferay.language key="menu" />
 		</button>
 	</#if>
@@ -16,13 +16,7 @@
 	</#if>
 
 	<div class="nav-user-bar">
-		<#if !is_signed_in>
-			<a data-redirect="${is_login_redirect_required?string}" href="${sign_in_url}" class="text-center" rel="nofollow" title="${sign_in_text}">
-				<svg class="lexicon-icon lexicon-icon-sign-in">
-					<use xlink:href="${themeDisplay.getPathThemeImages()}/cmic/icons.svg#sign-in" />
-				</svg>
-			</a>
-		<#else>
+		<#if is_signed_in>
 			<div class="user-notification">
 				<a href="javascript:;">
 					<svg class="lexicon-icon lexicon-icon-bell-on">

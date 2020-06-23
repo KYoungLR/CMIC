@@ -4,6 +4,7 @@
 @import 'partials/fonts';
 @import 'partials/functions';
 @import 'partials/variables';
+@import 'partials/variable-overwrites';
 @import 'partials/placeholders';
 @import 'partials/root';
 
@@ -32,3 +33,5 @@
 @import 'portlets/profile';
 @import 'portlets/self-provisioning';
 @import 'portlets/user-registration';
+
+@import 'custom-overwrites';
