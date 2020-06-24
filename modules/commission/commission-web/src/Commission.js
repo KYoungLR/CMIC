@@ -44,13 +44,12 @@ class Commission extends React.Component {
   }
 
   getStatementList() {
-    /*fetch(`/o/commission/${this.userId}`)
-      .then(res => res.json())
-      .then(data => {
-        let accounts = data;
-        this.setState({accountsList: accounts, isLoading: false});
-      })
-      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts'))*/
+    let callback = (data) => console.log(data);
+
+    Liferay.Service(
+      '/cmic.cmiccommissiondocument/get-commission-documents',
+      callback
+    );
 
     this.setState({
       statementList: [
