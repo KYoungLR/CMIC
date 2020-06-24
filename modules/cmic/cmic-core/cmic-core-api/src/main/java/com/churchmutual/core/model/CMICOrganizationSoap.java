@@ -32,8 +32,8 @@ public class CMICOrganizationSoap implements Serializable {
 
 		soapModel.setCmicOrganizationId(model.getCmicOrganizationId());
 		soapModel.setOrganizationId(model.getOrganizationId());
-		soapModel.setAgent(model.getAgent());
-		soapModel.setDivision(model.getDivision());
+		soapModel.setAgentNumber(model.getAgentNumber());
+		soapModel.setDivisionNumber(model.getDivisionNumber());
 		soapModel.setProducerId(model.getProducerId());
 		soapModel.setProducerType(model.getProducerType());
 		soapModel.setActive(model.isActive());
@@ -114,20 +114,20 @@ public class CMICOrganizationSoap implements Serializable {
 		_organizationId = organizationId;
 	}
 
-	public String getAgent() {
-		return _agent;
+	public String getAgentNumber() {
+		return _agentNumber;
 	}
 
-	public void setAgent(String agent) {
-		_agent = agent;
+	public void setAgentNumber(String agentNumber) {
+		_agentNumber = agentNumber;
 	}
 
-	public String getDivision() {
-		return _division;
+	public String getDivisionNumber() {
+		return _divisionNumber;
 	}
 
-	public void setDivision(String division) {
-		_division = division;
+	public void setDivisionNumber(String divisionNumber) {
+		_divisionNumber = divisionNumber;
 	}
 
 	public long getProducerId() {
@@ -160,8 +160,8 @@ public class CMICOrganizationSoap implements Serializable {
 
 	private long _cmicOrganizationId;
 	private long _organizationId;
-	private String _agent;
-	private String _division;
+	private String _agentNumber;
+	private String _divisionNumber;
 	private long _producerId;
 	private int _producerType;
 	private boolean _active;

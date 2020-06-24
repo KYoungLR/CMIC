@@ -11,8 +11,8 @@ create table cmic_CMICAccountEntry (
 create table cmic_CMICOrganization (
 	cmicOrganizationId LONG not null primary key,
 	organizationId LONG,
-	agent VARCHAR(75) null,
-	division VARCHAR(75) null,
+	agentNumber VARCHAR(75) null,
+	divisionNumber VARCHAR(75) null,
 	producerId LONG,
 	producerType INTEGER,
 	active_ BOOLEAN

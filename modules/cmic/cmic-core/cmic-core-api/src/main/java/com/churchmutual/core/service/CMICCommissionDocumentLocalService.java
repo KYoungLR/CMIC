@@ -14,11 +14,16 @@
 
 package com.churchmutual.core.service;
 
+import com.churchmutual.core.model.CMICCommissionDocument;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+
+import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -44,6 +49,9 @@ public interface CMICCommissionDocumentLocalService extends BaseLocalService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICCommissionDocumentLocalServiceUtil} to access the cmic commission document local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICCommissionDocumentLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICCommissionDocument> getCommissionDocuments(long userId)
+		throws PortalException;
 
 	/**
 	 * Returns the OSGi service identifier.

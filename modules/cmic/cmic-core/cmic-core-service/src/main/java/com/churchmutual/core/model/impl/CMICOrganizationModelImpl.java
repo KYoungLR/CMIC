@@ -69,7 +69,7 @@ public class CMICOrganizationModelImpl
 
 	public static final Object[][] TABLE_COLUMNS = {
 		{"cmicOrganizationId", Types.BIGINT}, {"organizationId", Types.BIGINT},
-		{"agent", Types.VARCHAR}, {"division", Types.VARCHAR},
+		{"agentNumber", Types.VARCHAR}, {"divisionNumber", Types.VARCHAR},
 		{"producerId", Types.BIGINT}, {"producerType", Types.INTEGER},
 		{"active_", Types.BOOLEAN}
 	};
@@ -80,15 +80,15 @@ public class CMICOrganizationModelImpl
 	static {
 		TABLE_COLUMNS_MAP.put("cmicOrganizationId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("agent", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("division", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("agentNumber", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("divisionNumber", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("producerId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("producerType", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("active_", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table cmic_CMICOrganization (cmicOrganizationId LONG not null primary key,organizationId LONG,agent VARCHAR(75) null,division VARCHAR(75) null,producerId LONG,producerType INTEGER,active_ BOOLEAN)";
+		"create table cmic_CMICOrganization (cmicOrganizationId LONG not null primary key,organizationId LONG,agentNumber VARCHAR(75) null,divisionNumber VARCHAR(75) null,producerId LONG,producerType INTEGER,active_ BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table cmic_CMICOrganization";
@@ -134,8 +134,8 @@ public class CMICOrganizationModelImpl
 
 		model.setCmicOrganizationId(soapModel.getCmicOrganizationId());
 		model.setOrganizationId(soapModel.getOrganizationId());
-		model.setAgent(soapModel.getAgent());
-		model.setDivision(soapModel.getDivision());
+		model.setAgentNumber(soapModel.getAgentNumber());
+		model.setDivisionNumber(soapModel.getDivisionNumber());
 		model.setProducerId(soapModel.getProducerId());
 		model.setProducerType(soapModel.getProducerType());
 		model.setActive(soapModel.isActive());
@@ -305,15 +305,18 @@ public class CMICOrganizationModelImpl
 			"organizationId",
 			(BiConsumer<CMICOrganization, Long>)
 				CMICOrganization::setOrganizationId);
-		attributeGetterFunctions.put("agent", CMICOrganization::getAgent);
+		attributeGetterFunctions.put(
+			"agentNumber", CMICOrganization::getAgentNumber);
 		attributeSetterBiConsumers.put(
-			"agent",
-			(BiConsumer<CMICOrganization, String>)CMICOrganization::setAgent);
-		attributeGetterFunctions.put("division", CMICOrganization::getDivision);
-		attributeSetterBiConsumers.put(
-			"division",
+			"agentNumber",
 			(BiConsumer<CMICOrganization, String>)
-				CMICOrganization::setDivision);
+				CMICOrganization::setAgentNumber);
+		attributeGetterFunctions.put(
+			"divisionNumber", CMICOrganization::getDivisionNumber);
+		attributeSetterBiConsumers.put(
+			"divisionNumber",
+			(BiConsumer<CMICOrganization, String>)
+				CMICOrganization::setDivisionNumber);
 		attributeGetterFunctions.put(
 			"producerId", CMICOrganization::getProducerId);
 		attributeSetterBiConsumers.put(
@@ -373,34 +376,34 @@ public class CMICOrganizationModelImpl
 
 	@JSON
 	@Override
-	public String getAgent() {
-		if (_agent == null) {
+	public String getAgentNumber() {
+		if (_agentNumber == null) {
 			return "";
 		}
 		else {
-			return _agent;
+			return _agentNumber;
 		}
 	}
 
 	@Override
-	public void setAgent(String agent) {
-		_agent = agent;
+	public void setAgentNumber(String agentNumber) {
+		_agentNumber = agentNumber;
 	}
 
 	@JSON
 	@Override
-	public String getDivision() {
-		if (_division == null) {
+	public String getDivisionNumber() {
+		if (_divisionNumber == null) {
 			return "";
 		}
 		else {
-			return _division;
+			return _divisionNumber;
 		}
 	}
 
 	@Override
-	public void setDivision(String division) {
-		_division = division;
+	public void setDivisionNumber(String divisionNumber) {
+		_divisionNumber = divisionNumber;
 	}
 
 	@JSON
@@ -492,8 +495,8 @@ public class CMICOrganizationModelImpl
 
 		cmicOrganizationImpl.setCmicOrganizationId(getCmicOrganizationId());
 		cmicOrganizationImpl.setOrganizationId(getOrganizationId());
-		cmicOrganizationImpl.setAgent(getAgent());
-		cmicOrganizationImpl.setDivision(getDivision());
+		cmicOrganizationImpl.setAgentNumber(getAgentNumber());
+		cmicOrganizationImpl.setDivisionNumber(getDivisionNumber());
 		cmicOrganizationImpl.setProducerId(getProducerId());
 		cmicOrganizationImpl.setProducerType(getProducerType());
 		cmicOrganizationImpl.setActive(isActive());
@@ -581,20 +584,20 @@ public class CMICOrganizationModelImpl
 
 		cmicOrganizationCacheModel.organizationId = getOrganizationId();
 
-		cmicOrganizationCacheModel.agent = getAgent();
+		cmicOrganizationCacheModel.agentNumber = getAgentNumber();
 
-		String agent = cmicOrganizationCacheModel.agent;
+		String agentNumber = cmicOrganizationCacheModel.agentNumber;
 
-		if ((agent != null) && (agent.length() == 0)) {
-			cmicOrganizationCacheModel.agent = null;
+		if ((agentNumber != null) && (agentNumber.length() == 0)) {
+			cmicOrganizationCacheModel.agentNumber = null;
 		}
 
-		cmicOrganizationCacheModel.division = getDivision();
+		cmicOrganizationCacheModel.divisionNumber = getDivisionNumber();
 
-		String division = cmicOrganizationCacheModel.division;
+		String divisionNumber = cmicOrganizationCacheModel.divisionNumber;
 
-		if ((division != null) && (division.length() == 0)) {
-			cmicOrganizationCacheModel.division = null;
+		if ((divisionNumber != null) && (divisionNumber.length() == 0)) {
+			cmicOrganizationCacheModel.divisionNumber = null;
 		}
 
 		cmicOrganizationCacheModel.producerId = getProducerId();
@@ -683,8 +686,8 @@ public class CMICOrganizationModelImpl
 	private long _organizationId;
 	private long _originalOrganizationId;
 	private boolean _setOriginalOrganizationId;
-	private String _agent;
-	private String _division;
+	private String _agentNumber;
+	private String _divisionNumber;
 	private long _producerId;
 	private long _originalProducerId;
 	private boolean _setOriginalProducerId;

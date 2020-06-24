@@ -43,8 +43,8 @@ public class CMICOrganizationWrapper
 
 		attributes.put("cmicOrganizationId", getCmicOrganizationId());
 		attributes.put("organizationId", getOrganizationId());
-		attributes.put("agent", getAgent());
-		attributes.put("division", getDivision());
+		attributes.put("agentNumber", getAgentNumber());
+		attributes.put("divisionNumber", getDivisionNumber());
 		attributes.put("producerId", getProducerId());
 		attributes.put("producerType", getProducerType());
 		attributes.put("active", isActive());
@@ -66,16 +66,16 @@ public class CMICOrganizationWrapper
 			setOrganizationId(organizationId);
 		}
 
-		String agent = (String)attributes.get("agent");
+		String agentNumber = (String)attributes.get("agentNumber");
 
-		if (agent != null) {
-			setAgent(agent);
+		if (agentNumber != null) {
+			setAgentNumber(agentNumber);
 		}
 
-		String division = (String)attributes.get("division");
+		String divisionNumber = (String)attributes.get("divisionNumber");
 
-		if (division != null) {
-			setDivision(division);
+		if (divisionNumber != null) {
+			setDivisionNumber(divisionNumber);
 		}
 
 		Long producerId = (Long)attributes.get("producerId");
@@ -108,13 +108,13 @@ public class CMICOrganizationWrapper
 	}
 
 	/**
-	 * Returns the agent of this cmic organization.
+	 * Returns the agent number of this cmic organization.
 	 *
-	 * @return the agent of this cmic organization
+	 * @return the agent number of this cmic organization
 	 */
 	@Override
-	public String getAgent() {
-		return model.getAgent();
+	public String getAgentNumber() {
+		return model.getAgentNumber();
 	}
 
 	/**
@@ -128,13 +128,13 @@ public class CMICOrganizationWrapper
 	}
 
 	/**
-	 * Returns the division of this cmic organization.
+	 * Returns the division number of this cmic organization.
 	 *
-	 * @return the division of this cmic organization
+	 * @return the division number of this cmic organization
 	 */
 	@Override
-	public String getDivision() {
-		return model.getDivision();
+	public String getDivisionNumber() {
+		return model.getDivisionNumber();
 	}
 
 	/**
@@ -208,13 +208,13 @@ public class CMICOrganizationWrapper
 	}
 
 	/**
-	 * Sets the agent of this cmic organization.
+	 * Sets the agent number of this cmic organization.
 	 *
-	 * @param agent the agent of this cmic organization
+	 * @param agentNumber the agent number of this cmic organization
 	 */
 	@Override
-	public void setAgent(String agent) {
-		model.setAgent(agent);
+	public void setAgentNumber(String agentNumber) {
+		model.setAgentNumber(agentNumber);
 	}
 
 	/**
@@ -228,13 +228,13 @@ public class CMICOrganizationWrapper
 	}
 
 	/**
-	 * Sets the division of this cmic organization.
+	 * Sets the division number of this cmic organization.
 	 *
-	 * @param division the division of this cmic organization
+	 * @param divisionNumber the division number of this cmic organization
 	 */
 	@Override
-	public void setDivision(String division) {
-		model.setDivision(division);
+	public void setDivisionNumber(String divisionNumber) {
+		model.setDivisionNumber(divisionNumber);
 	}
 
 	/**

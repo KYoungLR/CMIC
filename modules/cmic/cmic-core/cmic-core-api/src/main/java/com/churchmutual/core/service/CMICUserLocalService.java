@@ -15,6 +15,7 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
+import com.churchmutual.rest.model.CMICUserDTO;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -114,6 +115,9 @@ public interface CMICUserLocalService extends BaseLocalService {
 		throws PortalException;
 
 	public String updatePortraitImage(long userId, String imageFileString)
+		throws PortalException;
+
+	public void updateUserAndGroups(CMICUserDTO cmicUserDTO)
 		throws PortalException;
 
 	public void validateUserRegistration(String registrationCode)

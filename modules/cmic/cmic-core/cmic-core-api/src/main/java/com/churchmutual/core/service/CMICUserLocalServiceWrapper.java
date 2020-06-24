@@ -167,6 +167,14 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
+	public void updateUserAndGroups(
+			com.churchmutual.rest.model.CMICUserDTO cmicUserDTO)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_cmicUserLocalService.updateUserAndGroups(cmicUserDTO);
+	}
+
+	@Override
 	public void validateUserRegistration(String registrationCode)
 		throws com.liferay.portal.kernel.exception.PortalException {
 

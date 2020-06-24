@@ -39,6 +39,19 @@ public class CMICCommissionDocumentServiceUtil {
 	 */
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never modify or reference this interface directly. Always use {@link CMICCommissionDocumentServiceUtil} to access the cmic commission document remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICCommissionDocumentServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 */
+	public static java.util.List
+		<com.churchmutual.core.model.CMICCommissionDocument>
+				getCommissionDocuments()
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCommissionDocuments();
+	}
+
+	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier

@@ -194,8 +194,7 @@ public interface CMICOrganizationLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICOrganization getCMICOrganizationByOrganizationId(
-			long organizationId)
-		throws PortalException;
+		long organizationId);
 
 	/**
 	 * Returns a range of all the cmic organizations.
@@ -218,6 +217,10 @@ public interface CMICOrganizationLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCMICOrganizationsCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICOrganization> getCMICUserOrganizations(long userId)
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

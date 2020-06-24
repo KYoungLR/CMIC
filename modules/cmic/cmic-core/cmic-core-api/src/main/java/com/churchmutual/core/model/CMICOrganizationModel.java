@@ -82,34 +82,34 @@ public interface CMICOrganizationModel extends BaseModel<CMICOrganization> {
 	public void setOrganizationId(long organizationId);
 
 	/**
-	 * Returns the agent of this cmic organization.
+	 * Returns the agent number of this cmic organization.
 	 *
-	 * @return the agent of this cmic organization
+	 * @return the agent number of this cmic organization
 	 */
 	@AutoEscape
-	public String getAgent();
+	public String getAgentNumber();
 
 	/**
-	 * Sets the agent of this cmic organization.
+	 * Sets the agent number of this cmic organization.
 	 *
-	 * @param agent the agent of this cmic organization
+	 * @param agentNumber the agent number of this cmic organization
 	 */
-	public void setAgent(String agent);
+	public void setAgentNumber(String agentNumber);
 
 	/**
-	 * Returns the division of this cmic organization.
+	 * Returns the division number of this cmic organization.
 	 *
-	 * @return the division of this cmic organization
+	 * @return the division number of this cmic organization
 	 */
 	@AutoEscape
-	public String getDivision();
+	public String getDivisionNumber();
 
 	/**
-	 * Sets the division of this cmic organization.
+	 * Sets the division number of this cmic organization.
 	 *
-	 * @param division the division of this cmic organization
+	 * @param divisionNumber the division number of this cmic organization
 	 */
-	public void setDivision(String division);
+	public void setDivisionNumber(String divisionNumber);
 
 	/**
 	 * Returns the producer ID of this cmic organization.

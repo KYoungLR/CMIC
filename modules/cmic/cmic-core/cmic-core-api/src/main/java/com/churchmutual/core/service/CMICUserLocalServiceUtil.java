@@ -155,6 +155,13 @@ public class CMICUserLocalServiceUtil {
 		return getService().updatePortraitImage(userId, imageFileString);
 	}
 
+	public static void updateUserAndGroups(
+			com.churchmutual.rest.model.CMICUserDTO cmicUserDTO)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		getService().updateUserAndGroups(cmicUserDTO);
+	}
+
 	public static void validateUserRegistration(String registrationCode)
 		throws com.liferay.portal.kernel.exception.PortalException {
 

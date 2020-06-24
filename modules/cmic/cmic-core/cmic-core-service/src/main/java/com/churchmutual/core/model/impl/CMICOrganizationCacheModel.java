@@ -69,10 +69,10 @@ public class CMICOrganizationCacheModel
 		sb.append(cmicOrganizationId);
 		sb.append(", organizationId=");
 		sb.append(organizationId);
-		sb.append(", agent=");
-		sb.append(agent);
-		sb.append(", division=");
-		sb.append(division);
+		sb.append(", agentNumber=");
+		sb.append(agentNumber);
+		sb.append(", divisionNumber=");
+		sb.append(divisionNumber);
 		sb.append(", producerId=");
 		sb.append(producerId);
 		sb.append(", producerType=");
@@ -91,18 +91,18 @@ public class CMICOrganizationCacheModel
 		cmicOrganizationImpl.setCmicOrganizationId(cmicOrganizationId);
 		cmicOrganizationImpl.setOrganizationId(organizationId);
 
-		if (agent == null) {
-			cmicOrganizationImpl.setAgent("");
+		if (agentNumber == null) {
+			cmicOrganizationImpl.setAgentNumber("");
 		}
 		else {
-			cmicOrganizationImpl.setAgent(agent);
+			cmicOrganizationImpl.setAgentNumber(agentNumber);
 		}
 
-		if (division == null) {
-			cmicOrganizationImpl.setDivision("");
+		if (divisionNumber == null) {
+			cmicOrganizationImpl.setDivisionNumber("");
 		}
 		else {
-			cmicOrganizationImpl.setDivision(division);
+			cmicOrganizationImpl.setDivisionNumber(divisionNumber);
 		}
 
 		cmicOrganizationImpl.setProducerId(producerId);
@@ -119,8 +119,8 @@ public class CMICOrganizationCacheModel
 		cmicOrganizationId = objectInput.readLong();
 
 		organizationId = objectInput.readLong();
-		agent = objectInput.readUTF();
-		division = objectInput.readUTF();
+		agentNumber = objectInput.readUTF();
+		divisionNumber = objectInput.readUTF();
 
 		producerId = objectInput.readLong();
 
@@ -135,18 +135,18 @@ public class CMICOrganizationCacheModel
 
 		objectOutput.writeLong(organizationId);
 
-		if (agent == null) {
+		if (agentNumber == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(agent);
+			objectOutput.writeUTF(agentNumber);
 		}
 
-		if (division == null) {
+		if (divisionNumber == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(division);
+			objectOutput.writeUTF(divisionNumber);
 		}
 
 		objectOutput.writeLong(producerId);
@@ -158,8 +158,8 @@ public class CMICOrganizationCacheModel
 
 	public long cmicOrganizationId;
 	public long organizationId;
-	public String agent;
-	public String division;
+	public String agentNumber;
+	public String divisionNumber;
 	public long producerId;
 	public int producerType;
 	public boolean active;
