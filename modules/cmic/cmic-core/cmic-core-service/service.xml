@@ -35,8 +35,8 @@
 		<!-- Other fields -->
 
 		<column name="organizationId" type="long" />
-		<column name="agent" type="String" />
-		<column name="division" type="String" />
+		<column name="agentNumber" type="String" />
+		<column name="divisionNumber" type="String" />
 		<column name="producerId" type="long" />
 		<column name="producerType" type="int" />
 		<column name="active" type="boolean" />

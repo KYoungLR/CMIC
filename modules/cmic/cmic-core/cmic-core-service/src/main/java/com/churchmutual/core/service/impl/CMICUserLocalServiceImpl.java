@@ -10,7 +10,6 @@ import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICUserLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.model.CMICUserDTO;
 
 import com.liferay.account.model.AccountEntry;
@@ -67,7 +66,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		String cmicUUID = user.getExternalReferenceCode();
 
-		List<CMICProducerDTO> cmicProducerDTOList = _portalUserWebService.getCMICUserProducers(cmicUUID);
+		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(cmicUUID);
 
 		//TODO CMIC-273
 
@@ -308,7 +307,10 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		String imageString = imageFileString.substring(imageFileString.indexOf(StringPool.COMMA) + 1);
 
-		byte[] decodedImageFile = Base64.getDecoder().decode(imageString);
+		byte[] decodedImageFile = Base64.getDecoder(
+		).decode(
+			imageString
+		);
 
 		userLocalService.updatePortrait(userId, decodedImageFile);
 

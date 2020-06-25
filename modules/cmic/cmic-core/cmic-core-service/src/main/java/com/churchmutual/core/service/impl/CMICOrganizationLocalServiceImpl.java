@@ -17,11 +17,18 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
+import com.churchmutual.rest.model.CMICUserDTO;
+import com.churchmutual.rest.model.CMICUserRelationDTO;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -47,11 +54,36 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
+	@Override
+	public List<CMICOrganization> getCMICUserOrganizations(long userId) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(user.getExternalReferenceCode());
+
+		List<CMICUserRelationDTO> cmicUserRelationDTOList = cmicUserDTO.getUserRelations();
+
+		List<CMICOrganization> cmicOrganizations = new ArrayList<>();
+
+		for (CMICUserRelationDTO cmicUserRelationDTO : cmicUserRelationDTOList) {
+			long producerId = cmicUserRelationDTO.getProducerId();
+
+			if (Validator.isNotNull(producerId)) {
+				CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(producerId);
+
+				if (Validator.isNotNull(cmicOrganization)) {
+					cmicOrganizations.add(cmicOrganization);
+				}
+			}
+		}
+
+		return cmicOrganizations;
+	}
+
 	@Reference
 	private OrganizationLocalService _organizationLocalService;
 
 	@Reference
-	private PortalUserWebService _producerUserWebService;
+	private PortalUserWebService _portalUserWebService;
 
 	@Reference
 	private UserLocalService _userLocalService;

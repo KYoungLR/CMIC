@@ -17,9 +17,9 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.core.service.base.CMICCommissionDocumentServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
