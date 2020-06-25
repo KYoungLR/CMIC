@@ -14,6 +14,7 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.exception.NoSuchCMICCommissionDocumentException;
 import com.churchmutual.core.model.CMICCommissionDocument;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
@@ -22,12 +23,11 @@ import com.churchmutual.rest.CommissionDocumentWebService;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
 
+import com.churchmutual.rest.model.CMICFileDTO;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.ListUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -56,6 +58,17 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(property = "model.class.name=com.churchmutual.core.model.CMICCommissionDocument", service = AopService.class)
 public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocumentLocalServiceBaseImpl {
+
+	@Override
+	public CMICFileDTO downloadDocument(String id) throws PortalException {
+		List<CMICFileDTO> cmicFileDTOS = _commissionDocumentWebService.downloadDocuments(new String[] {id}, true);
+
+		if (ListUtil.isEmpty(cmicFileDTOS)) {
+			throw new NoSuchCMICCommissionDocumentException(id);
+		}
+
+		return cmicFileDTOS.get(0);
+	}
 
 	@Override
 	public List<CMICCommissionDocument> getCommissionDocuments(long userId) throws PortalException {
@@ -130,5 +143,6 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 	@Reference
 	private UserLocalService _userLocalService;
+
 
 }
