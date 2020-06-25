@@ -75,10 +75,15 @@ class Commission extends React.Component {
             <ClayCard.Description displayType="title">{Liferay.Language.get('commissions')}</ClayCard.Description>
           </div>
           <ClayCard.Body>
-            <Download
-              isLoading={this.state.isLoading}
-              statementList={this.state.statementList}
-            />
+            {(this.state.statementList.length > 0) &&
+              <Download
+                isLoading={this.state.isLoading}
+                statementList={this.state.statementList}
+              />
+            }
+            {(this.state.statementList.length == 0) &&
+              <div>{Liferay.Language.get('no-recent-commission-statements-are-available')}</div>
+            }
           </ClayCard.Body>
         </ClayCard>
 
