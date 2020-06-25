@@ -10,28 +10,35 @@ const Download = (props) => {
     return (<ClayLoadingIndicator />);
   }
   else {
-    const [activePath, setActivePath] = useState(false);
+    const [activeId, setActiveId] = useState(false);
 
     const [errorMessage, showErrorMessage] = useState(false);
 
     const downloadStatement = (e) => {
-      console.log(activePath);
+      console.log(activeId);
       showErrorMessage(false);
 
-      let id = activePath;
-
       let callback = (data) => {
-        console.log(data)
+        console.log(data);
+        const link = document.createElement('a');
+
+        link.href = data.url;
+        link.setAttribute('download', `download.${data.name}`);
+        link.target = '_blank';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
 
       let errCallback = () => {
-        showErrorMessage(true)
+        showErrorMessage(true);
       }
 
       Liferay.Service(
         '/cmic.cmiccommissiondocument/download-document',
         {
-          id: id
+          id: activeId
         },
         callback,
         errCallback
@@ -46,7 +53,10 @@ const Download = (props) => {
               <ClaySelect
                 aria-label="Select Statement"
                 id="statementSelect"
-                onChange={(e) => setActivePath(e.target.value)}
+                onChange={(e) => {
+                  setActiveId(e.target.value);
+                  showErrorMessage(false);
+                }}
                 defaultValue={0}
               >
                 <ClaySelect.Option
@@ -57,7 +67,7 @@ const Download = (props) => {
                 {props.statementList.map((statement, index) => (
                   <ClaySelect.Option
                     key={index}
-                    label={statement.label}
+                    label={statement.statementDate + " - " + statement.documentType}
                     value={statement.id}
                   />
                 ))}
@@ -73,14 +83,14 @@ const Download = (props) => {
               />
             </ClayButton>
           </ClayLayout.Col>
-        </ClayLayout.Row>
-        <ClayLayout.Row>
           {errorMessage &&
-            <ClayForm.FeedbackGroup className="has-error">
-              <ClayForm.FeedbackItem>
-                {Liferay.Language.get('error.there-was-an-issue-downloading-the-pdf-please-try-again-later')}
-              </ClayForm.FeedbackItem>
-            </ClayForm.FeedbackGroup>
+            <ClayLayout.Col size={12}>
+              <ClayForm.FeedbackGroup className="has-error mt-4 mt-md-0">
+                <ClayForm.FeedbackItem>
+                  {Liferay.Language.get('error.there-was-an-issue-downloading-the-pdf-please-try-again-later')}
+                </ClayForm.FeedbackItem>
+              </ClayForm.FeedbackGroup>
+            </ClayLayout.Col>
           }
         </ClayLayout.Row>
       </div>
