@@ -1,5 +1,6 @@
 import React from 'react';
 import ClayCard from '@clayui/card';
+import ClayIcon from '@clayui/icon';
 import {Toast} from 'com.churchmutual.commons.web';
 import Download from './Download';
 
@@ -11,6 +12,7 @@ class Commission extends React.Component {
     this.state = {
       statementList: [],
       isLoading: true,
+      receivedError: false,
       toast:  {
         displayType: '',
         message: '',
@@ -23,6 +25,29 @@ class Commission extends React.Component {
     this.getStatementList();
   }
 
+  displayStatementList() {
+    if (this.state.receivedError) {
+      return (
+        <div className="danger">
+          <ClayIcon symbol={"info-circle"} spritemap={this.getSpriteMap()} className='mr-2' />{Liferay.Language.get('error.unable-to-retrieve-commission-statements')}
+        </div>
+      );
+    }
+
+    if (this.state.statementList.length == 0) {
+      return (
+        <div>{Liferay.Language.get('no-recent-commission-statements-are-available')}</div>
+      );
+    }
+
+    return (
+      <Download
+        isLoading={this.state.isLoading}
+        statementList={this.state.statementList}
+      />
+    );
+  }
+
   displayErrorMessage(msg) {
     this.setState({
       toast: {
@@ -31,6 +56,10 @@ class Commission extends React.Component {
         title: Liferay.Language.get('error-colon')
       }
     });
+  }
+
+  getSpriteMap() {
+    return Liferay.ThemeDisplay.getPathThemeImages() + '/lexicon/icons.svg';
   }
 
   onToastClosed() {
@@ -44,26 +73,15 @@ class Commission extends React.Component {
   }
 
   getStatementList() {
-    let callback = (data) => console.log(data);
+    let callback = (data) => this.setState({statementList: data, isLoading: false});
+
+    let errCallback = () => this.setState({receivedError: true});
 
     Liferay.Service(
       '/cmic.cmiccommissiondocument/get-commission-documents',
-      callback
+      callback,
+      errCallback
     );
-
-    this.setState({
-      statementList: [
-        { label: '04/01/2020 - Commission Remittence Statement', url: '/' },
-        { label: '03/01/2020 - Commission Remittence Statement', url: '/' },
-        { label: '02/01/2020 - Commission Remittence Statement', url: '/' },
-        { label: '01/01/2020 - Commission Remittence Statement', url: '/' },
-        { label: '31/12/2019 - Commission Remittence Statement', url: '/' },
-        { label: '30/12/2019 - Commission Remittence Statement', url: '/' },
-        { label: '29/12/2019 - Commission Remittence Statement', url: '/' },
-        { label: '28/12/2019 - Commission Remittence Statement', url: '/' }
-      ],
-      isLoading: false
-    });
   }
 
   render() {
@@ -74,15 +92,7 @@ class Commission extends React.Component {
             <ClayCard.Description displayType="title">{Liferay.Language.get('commissions')}</ClayCard.Description>
           </div>
           <ClayCard.Body>
-            {(this.state.statementList.length > 0) &&
-              <Download
-                isLoading={this.state.isLoading}
-                statementList={this.state.statementList}
-              />
-            }
-            {(this.state.statementList.length == 0) &&
-              <div>{Liferay.Language.get('no-recent-commission-statements-are-available')}</div>
-            }
+            {this.displayStatementList()}
           </ClayCard.Body>
         </ClayCard>
 
