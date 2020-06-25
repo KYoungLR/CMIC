@@ -15,6 +15,12 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 public interface MockPortalUserWebServiceConfiguration {
 
 	@Meta.AD(
+		deflt = "true", description = "Enable mock for Portal User Service method /v1/get-users/details",
+		required = false
+	)
+	public boolean enableMockGetUserDetails();
+
+	@Meta.AD(
 		deflt = "true", description = "Enable mock for Portal User Service method /v1/isUserRegistered",
 		required = false
 	)

@@ -15,6 +15,16 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = MockPortalUserWebServiceClient.class)
 public class MockPortalUserWebServiceClient {
 
+	public CMICUserDTO getUserDetails(String uuid) {
+		String fileName = _PORTAL_USER_WEB_SERVICE_DIR + "getUserDetails.json";
+
+		String fileContent = MockResponseReaderUtil.readFile(fileName);
+
+		JSONDeserializer<CMICUserDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		return jsonDeserializer.deserialize(fileContent, CMICUserDTO.class);
+	}
+
 	public boolean isUserRegistered(String uuid) {
 		return true;
 	}

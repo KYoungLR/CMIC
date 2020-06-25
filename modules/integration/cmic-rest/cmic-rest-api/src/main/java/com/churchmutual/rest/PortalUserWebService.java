@@ -1,7 +1,8 @@
 package com.churchmutual.rest;
 
-import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.model.CMICUserDTO;
+
+import com.liferay.portal.kernel.exception.PortalException;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface PortalUserWebService {
 
 	public List<CMICUserDTO> getCMICOrganizationUsers(long producerId);
 
-	public List<CMICProducerDTO> getCMICUserProducers(String uuid);
+	public CMICUserDTO getUserDetails(String uuid) throws PortalException;
 
 	public void inviteUserToCMICOrganization(String emailAddress, long producerId);
 
