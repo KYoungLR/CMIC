@@ -20,12 +20,11 @@ const Download = (props) => {
 
       let callback = (data) => {
         console.log(data);
-        const bytes = new Uint8Array(data.bytes);
-        const blob = new Blob([bytes], { type: data.mimeType });
         const name = data.name ? data.name : data.url.substr(data.url.lastIndexOf('/') + 1).split('?')[0];
+        const source = `data:${data.mimeType};base64,${data.bytes}`;
         const link = document.createElement('a');
 
-        link.href = window.URL.createObjectURL(blob);
+        link.href = source;
         link.download = name;
         link.target = '_blank';
 
