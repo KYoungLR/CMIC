@@ -15,11 +15,9 @@ const Download = (props) => {
     const [errorMessage, showErrorMessage] = useState(false);
 
     const downloadStatement = (e) => {
-      console.log(activeId);
       showErrorMessage(false);
 
       let callback = (data) => {
-        console.log(data);
         const name = data.name ? data.name : data.url.substr(data.url.lastIndexOf('/') + 1).split('?')[0];
         const source = `data:${data.mimeType};base64,${data.bytes}`;
         const link = document.createElement('a');
