@@ -13,7 +13,11 @@ import com.churchmutual.content.setup.upgrade.util.common.BrokerUpgradeConstants
 
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.expando.kernel.model.ExpandoColumnConstants;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.journal.service.JournalArticleLocalService;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -30,13 +34,13 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 	public AddBrokerSiteUpgradeProcess(
 		CompanyLocalService companyLocalService, DDMStructureLocalService ddmStructureLocalService,
-		DDMTemplateLocalService ddmTemplateLocalService, GroupLocalService groupLocalService,
+		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService, ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
 		JournalArticleLocalService journalArticleLocalService, LayoutSetLocalService layoutSetLocalService,
 		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
 		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
 
 		super(
-			companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, groupLocalService,
+			companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService, expandoTableLocalService, groupLocalService,
 			journalArticleLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
 			userLocalService, virtualHostLocalService);
 
@@ -53,6 +57,8 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		long userId = userLocalService.getDefaultUserId(companyId);
 
 		addJournalArticle(brokerPortalGroupId, BrokerUpgradeConstants.PRODUCER_CONTACT_US_WEB_CONTENT_TITLE);
+
+		addExpandoColumn(companyId, User.class.getName(), "recentlyViewedAccountNumbers", ExpandoColumnConstants.STRING);
 
 		_addPrivatePages(companyId, userId, brokerPortalGroupId);
 

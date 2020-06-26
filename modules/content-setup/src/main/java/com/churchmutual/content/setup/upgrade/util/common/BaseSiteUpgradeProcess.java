@@ -8,6 +8,9 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.expando.kernel.model.ExpandoTable;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolderConstants;
 import com.liferay.journal.service.JournalArticleLocalService;
@@ -52,7 +55,7 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 	public BaseSiteUpgradeProcess(
 		CompanyLocalService companyLocalService, DDMStructureLocalService ddmStructureLocalService,
-		DDMTemplateLocalService ddmTemplateLocalService, GroupLocalService groupLocalService,
+		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService, ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
 		JournalArticleLocalService journalArticleLocalService, LayoutSetLocalService layoutSetLocalService,
 		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
 		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
@@ -62,11 +65,23 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		this.companyLocalService = companyLocalService;
 		this.ddmStructureLocalService = ddmStructureLocalService;
 		this.ddmTemplateLocalService = ddmTemplateLocalService;
+		this.expandoColumnLocalService = expandoColumnLocalService;
+		this.expandoTableLocalService = expandoTableLocalService;
 		this.groupLocalService = groupLocalService;
 		this.journalArticleLocalService = journalArticleLocalService;
 		this.layoutSetLocalService = layoutSetLocalService;
 		this.userLocalService = userLocalService;
 		this.virtualHostLocalService = virtualHostLocalService;
+	}
+
+	protected void addExpandoColumn(long companyId, String className, String columnName, int dataType) throws PortalException {
+		ExpandoTable expandoTable = expandoTableLocalService.fetchTable(companyId, portal.getClassNameId(className), _EXPANDO_TABLE_NAME);
+
+		if (Validator.isNull(expandoTable)) {
+			expandoTable = expandoTableLocalService.addTable(companyId, className, _EXPANDO_TABLE_NAME);
+		}
+
+		expandoColumnLocalService.addColumn(expandoTable.getTableId(), columnName, dataType);
 	}
 
 	protected Group addGroup(long companyId, String name, String description, int type, String friendlyURL)
@@ -195,6 +210,8 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 	protected CompanyLocalService companyLocalService;
 	protected DDMStructureLocalService ddmStructureLocalService;
 	protected DDMTemplateLocalService ddmTemplateLocalService;
+	protected ExpandoColumnLocalService expandoColumnLocalService;
+	protected ExpandoTableLocalService expandoTableLocalService;
 	protected GroupLocalService groupLocalService;
 	protected JournalArticleLocalService journalArticleLocalService;
 	protected LayoutSetLocalService layoutSetLocalService;
@@ -235,6 +252,8 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		return titleMap;
 	}
+
+	private static final String _EXPANDO_TABLE_NAME = "CMIC";
 
 	private static final String _JOURNAL_CONTENT_DIR = "/journal-content";
 

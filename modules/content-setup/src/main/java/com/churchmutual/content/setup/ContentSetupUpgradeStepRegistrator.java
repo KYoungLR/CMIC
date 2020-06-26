@@ -6,6 +6,8 @@ import com.churchmutual.user.registration.constants.UserRegistrationPortletKeys;
 
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
@@ -32,7 +34,7 @@ public class ContentSetupUpgradeStepRegistrator implements UpgradeStepRegistrato
 		registry.register(
 			"0.0.0", "1.0.0",
 			new AddBrokerSiteUpgradeProcess(
-				companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, groupLocalService,
+				companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService, expandoTableLocalService, groupLocalService,
 				journalArticleLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
 				userLocalService, virtualHostLocalService),
 			new AddRolesUpgradeProcess());
@@ -67,6 +69,12 @@ public class ContentSetupUpgradeStepRegistrator implements UpgradeStepRegistrato
 
 	@Reference
 	protected DDMTemplateLocalService ddmTemplateLocalService;
+
+	@Reference
+	protected ExpandoTableLocalService expandoTableLocalService;
+
+	@Reference
+	protected ExpandoColumnLocalService expandoColumnLocalService;
 
 	@Reference
 	protected GroupLocalService groupLocalService;
