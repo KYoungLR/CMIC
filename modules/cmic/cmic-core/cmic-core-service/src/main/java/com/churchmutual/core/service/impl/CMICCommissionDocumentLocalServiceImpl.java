@@ -14,6 +14,7 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICCommissionDocument;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICCommissionDocumentLocalServiceBaseImpl;
@@ -57,9 +58,7 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocumentLocalServiceBaseImpl {
 
 	@Override
-	public JSONArray getCommissionDocuments(long userId) throws PortalException {
-		JSONArray response = _jsonFactory.createJSONArray();
-
+	public List<CMICCommissionDocument> getCommissionDocuments(long userId) throws PortalException {
 		List<CMICCommissionDocumentDTO> cmicCommissionDocumentDTOs = new ArrayList<>();
 
 		List<CMICOrganization> userOrganizations = _cmicOrganizationLocalService.getCMICUserOrganizations(userId);
@@ -72,25 +71,27 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 			cmicCommissionDocumentDTOs.addAll(commissionDocumentDTOs);
 		}
 
-		// TODO remove this mock service call
+		// TODO CMIC-396 Update call to pull user specific commission statements
 
 		cmicCommissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
 			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK);
 
-		for (CMICCommissionDocumentDTO cmicCommissionDocumentDTO : cmicCommissionDocumentDTOs) {
-			JSONObject jsonObject = _jsonFactory.createJSONObject();
+		List<CMICCommissionDocument> cmicCommissionDocuments = new ArrayList<>();
 
+		for (CMICCommissionDocumentDTO cmicCommissionDocumentDTO : cmicCommissionDocumentDTOs) {
 			String statementDate = _getFormattedStatementDate(cmicCommissionDocumentDTO.getStatementDate());
 			String documentType = "Commission Remittance Statement";
 
-			jsonObject.put("documentId", cmicCommissionDocumentDTO.getId());
-			jsonObject.put("label", statementDate + " - " + documentType);
-			jsonObject.put("url", "/");
+			CMICCommissionDocument cmicCommissionDocument = new CMICCommissionDocument();
 
-			response.put(jsonObject);
+			cmicCommissionDocument.setDocumentId(cmicCommissionDocumentDTO.getId());
+			cmicCommissionDocument.setLabel(statementDate + " - " + documentType);
+			cmicCommissionDocument.setURL("/");
+
+			cmicCommissionDocuments.add(cmicCommissionDocument);
 		}
 
-		return response;
+		return cmicCommissionDocuments;
 	}
 
 	private String _getFormattedStatementDate(String date) {

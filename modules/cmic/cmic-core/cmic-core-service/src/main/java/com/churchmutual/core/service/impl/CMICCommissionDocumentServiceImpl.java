@@ -14,6 +14,7 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICCommissionDocument;
 import com.churchmutual.core.service.base.CMICCommissionDocumentServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
@@ -21,6 +22,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 
 import org.osgi.service.component.annotations.Component;
+
+import java.util.List;
 
 /**
  * The implementation of the cmic commission document remote service.
@@ -42,7 +45,7 @@ import org.osgi.service.component.annotations.Component;
 public class CMICCommissionDocumentServiceImpl extends CMICCommissionDocumentServiceBaseImpl {
 
 	@Override
-	public JSONArray getCommissionDocuments() throws PortalException {
+	public List<CMICCommissionDocument> getCommissionDocuments() throws PortalException {
 		return cmicCommissionDocumentLocalService.getCommissionDocuments(getUserId());
 	}
 

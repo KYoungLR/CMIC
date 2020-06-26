@@ -7,7 +7,6 @@ import com.churchmutual.commons.enums.BusinessUserStatus;
 import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.core.constants.SelfProvisioningConstants;
 import com.churchmutual.core.model.CMICOrganization;
-import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICUserLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
@@ -128,12 +127,9 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
 	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException {
-		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.getCMICOrganization(cmicOrganizationId);
-
-		List<CMICUserDTO> cmicUserDTOList = _portalUserWebService.getCMICOrganizationUsers(
-			cmicOrganization.getProducerId());
-
 		//TODO CMIC-273
+
+		CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByPrimaryKey(cmicOrganizationId);
 
 		long organizationId = cmicOrganization.getOrganizationId();
 
@@ -247,8 +243,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			String email = emailAddress.trim();
 
 			if (BusinessPortalType.BROKER.equals(businessPortalType)) {
-				CMICOrganization cmicOrganization = _cmicOrganizationLocalService.getCMICOrganizationByOrganizationId(
-					entityId);
+				CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(entityId);
 
 				if (Validator.isNotNull(cmicOrganization)) {
 					_portalUserWebService.inviteUserToCMICOrganization(email, cmicOrganization.getProducerId());
@@ -277,7 +272,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		String cmicUUID = user.getExternalReferenceCode();
 
-		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.getCMICOrganization(cmicOrganizationId);
+		CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByOrganizationId(cmicOrganizationId);
 
 		_portalUserWebService.removeUserFromCMICOrganization(cmicUUID, cmicOrganization.getProducerId());
 	}
@@ -315,6 +310,13 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		userLocalService.updatePortrait(userId, decodedImageFile);
 
 		return getPortraitImageURL(userId);
+	}
+
+	@Override
+	public void updateUserAndGroups(CMICUserDTO cmicUserDTO) throws PortalException {
+
+		//TODO CMIC-395
+
 	}
 
 	@Override
@@ -674,9 +676,6 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Reference
 	private AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
-
-	@Reference
-	private CMICOrganizationLocalService _cmicOrganizationLocalService;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;

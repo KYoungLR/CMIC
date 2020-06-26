@@ -15,20 +15,20 @@
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
-import com.churchmutual.rest.model.CMICUserRelationDTO;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,7 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServiceBaseImpl {
 
 	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) {
 		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
@@ -60,24 +60,20 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(user.getExternalReferenceCode());
 
-		List<CMICUserRelationDTO> cmicUserRelationDTOList = cmicUserDTO.getUserRelations();
+		_cmicUserLocalService.updateUserAndGroups(cmicUserDTO);
 
-		List<CMICOrganization> cmicOrganizations = new ArrayList<>();
+		List<Organization> organizations = _organizationLocalService.getUserOrganizations(userId);
 
-		for (CMICUserRelationDTO cmicUserRelationDTO : cmicUserRelationDTOList) {
-			long producerId = cmicUserRelationDTO.getProducerId();
-
-			if (Validator.isNotNull(producerId)) {
-				CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(producerId);
-
-				if (Validator.isNotNull(cmicOrganization)) {
-					cmicOrganizations.add(cmicOrganization);
-				}
-			}
-		}
-
-		return cmicOrganizations;
+		return organizations.stream(
+		).map(
+			org -> getCMICOrganizationByOrganizationId(org.getOrganizationId())
+		).collect(
+			Collectors.toList()
+		);
 	}
+
+	@Reference
+	private CMICUserLocalService _cmicUserLocalService;
 
 	@Reference
 	private OrganizationLocalService _organizationLocalService;
