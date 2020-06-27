@@ -6,16 +6,20 @@ import com.churchmutual.commons.enums.BusinessRole;
 import com.churchmutual.commons.enums.BusinessUserStatus;
 import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.core.constants.SelfProvisioningConstants;
+import com.churchmutual.core.model.CMICAccountEntry;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.base.CMICUserLocalServiceBaseImpl;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICUserDTO;
 
 import com.liferay.account.model.AccountEntry;
+import com.liferay.account.model.AccountEntryModel;
 import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
+import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -44,6 +48,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +63,33 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(property = "model.class.name=com.churchmutual.core.model.CMICUser", service = AopService.class)
 public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
+
+	@Override
+	public void addRecentlyViewedAccountNumber(long userId, String accountNumber) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		ExpandoBridge expandoBridge = user.getExpandoBridge();
+
+		String recentlyViewedAccountNumbers = (String)expandoBridge.getAttribute("recentlyViewedAccountNumbers");
+
+		if (Validator.isNotNull(recentlyViewedAccountNumbers)) {
+			List<String> recentAccountNumbers = StringUtil.split(recentlyViewedAccountNumbers);
+
+			recentAccountNumbers.remove(accountNumber);
+
+			recentAccountNumbers.add(0, accountNumber);
+
+			if (recentAccountNumbers.size() > 5) {
+				recentAccountNumbers = recentAccountNumbers.subList(0, 5);
+			}
+
+			expandoBridge.setAttribute(
+				"recentlyViewedAccountNumbers", StringUtil.merge(recentAccountNumbers, StringPool.COMMA));
+		}
+		else {
+			expandoBridge.setAttribute("recentlyViewedAccountNumbers", accountNumber);
+		}
+	}
 
 	@Override
 	public List<Group> getBusinesses(long userId) throws PortalException {
@@ -182,6 +214,58 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			_portal.getPathImage(), user.isMale(), user.getPortraitId(), user.getUserUuid());
 
 		return portraitURL + "&timestamp=" + new Date().getTime();
+	}
+
+	@Override
+	public List<String> getRecentlyViewedAccountNumbers(long userId) throws PortalException {
+		User user = _userLocalService.getUser(userId);
+
+		ExpandoBridge expandoBridge = user.getExpandoBridge();
+
+		String recentlyViewedAccountNumbers = (String)expandoBridge.getAttribute("recentlyViewedAccountNumbers");
+
+		List<String> recentAccountNumbers;
+
+		if (Validator.isNotNull(recentlyViewedAccountNumbers)) {
+			recentAccountNumbers = StringUtil.split(recentlyViewedAccountNumbers);
+		}
+		else {
+			recentAccountNumbers = new ArrayList<>();
+		}
+
+		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(user.getExternalReferenceCode());
+
+		updateUserAndGroups(cmicUserDTO);
+
+		List<AccountEntry> accountEntries = _accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(
+			userId
+		).stream(
+		).map(
+			a -> _accountEntryLocalService.fetchAccountEntry(a.getAccountEntryId())
+		).sorted(
+			Comparator.comparing(AccountEntryModel::getName)
+		).collect(
+			Collectors.toList()
+		);
+
+		int accountNumbersSize = recentAccountNumbers.size();
+
+		List<AccountEntry> entriesSublist = accountEntries.subList(0, 5 - accountNumbersSize);
+
+		for (AccountEntry accountEntry : entriesSublist) {
+			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAccountEntryId(
+				accountEntry.getAccountEntryId());
+
+			String accountNumber = cmicAccountEntry.getAccountNumber();
+
+			if (!recentAccountNumbers.contains(accountNumber)) {
+				recentAccountNumbers.add(cmicAccountEntry.getAccountNumber());
+			}
+		}
+
+		expandoBridge.setAttribute("recentlyViewedAccountNumbers", StringUtil.merge(recentAccountNumbers, StringPool.COMMA));
+
+		return recentAccountNumbers;
 	}
 
 	@Override

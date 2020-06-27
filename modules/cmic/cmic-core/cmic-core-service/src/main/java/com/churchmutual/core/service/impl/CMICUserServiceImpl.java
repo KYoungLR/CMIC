@@ -45,6 +45,11 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 
 	@Override
+	public void addRecentlyViewedAccountNumber(String accountNumber) throws PortalException {
+		cmicUserLocalService.addRecentlyViewedAccountNumber(getUserId(), accountNumber);
+	}
+
+	@Override
 	public List<Group> getBusinesses() throws PortalException {
 		return cmicUserLocalService.getBusinesses(getUserId());
 	}
@@ -81,6 +86,11 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	@Override
 	public String getPortraitImageURL() throws PortalException {
 		return cmicUserLocalService.getPortraitImageURL(getUserId());
+	}
+
+	@Override
+	public List<String> getRecentlyViewedAccountNumbers() throws PortalException {
+		return cmicUserLocalService.getRecentlyViewedAccountNumbers(getUserId());
 	}
 
 	@Override

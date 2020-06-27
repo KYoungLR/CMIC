@@ -107,9 +107,11 @@ public class CMICAccountEntryModelImpl
 
 	public static final String TX_MANAGER = "liferayTransactionManager";
 
-	public static final long ACCOUNTNUMBER_COLUMN_BITMASK = 1L;
+	public static final long ACCOUNTENTRYID_COLUMN_BITMASK = 1L;
 
-	public static final long CMICACCOUNTENTRYID_COLUMN_BITMASK = 2L;
+	public static final long ACCOUNTNUMBER_COLUMN_BITMASK = 2L;
+
+	public static final long CMICACCOUNTENTRYID_COLUMN_BITMASK = 4L;
 
 	public static void setEntityCacheEnabled(boolean entityCacheEnabled) {
 		_entityCacheEnabled = entityCacheEnabled;
@@ -361,7 +363,19 @@ public class CMICAccountEntryModelImpl
 
 	@Override
 	public void setAccountEntryId(long accountEntryId) {
+		_columnBitmask |= ACCOUNTENTRYID_COLUMN_BITMASK;
+
+		if (!_setOriginalAccountEntryId) {
+			_setOriginalAccountEntryId = true;
+
+			_originalAccountEntryId = _accountEntryId;
+		}
+
 		_accountEntryId = accountEntryId;
+	}
+
+	public long getOriginalAccountEntryId() {
+		return _originalAccountEntryId;
 	}
 
 	@JSON
@@ -544,6 +558,11 @@ public class CMICAccountEntryModelImpl
 	public void resetOriginalValues() {
 		CMICAccountEntryModelImpl cmicAccountEntryModelImpl = this;
 
+		cmicAccountEntryModelImpl._originalAccountEntryId =
+			cmicAccountEntryModelImpl._accountEntryId;
+
+		cmicAccountEntryModelImpl._setOriginalAccountEntryId = false;
+
 		cmicAccountEntryModelImpl._originalAccountNumber =
 			cmicAccountEntryModelImpl._accountNumber;
 
@@ -662,6 +681,8 @@ public class CMICAccountEntryModelImpl
 
 	private long _cmicAccountEntryId;
 	private long _accountEntryId;
+	private long _originalAccountEntryId;
+	private boolean _setOriginalAccountEntryId;
 	private String _accountNumber;
 	private String _originalAccountNumber;
 	private int _numExpiredPolicies;
