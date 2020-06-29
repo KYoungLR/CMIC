@@ -14,9 +14,8 @@
 
 package com.churchmutual.core.service.impl;
 
-import com.churchmutual.core.model.CMICCommissionDocument;
+import com.churchmutual.core.model.CMICCommissionDocumentDisplay;
 import com.churchmutual.core.service.base.CMICCommissionDocumentServiceBaseImpl;
-import com.churchmutual.rest.model.CMICFileDTO;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -39,17 +38,18 @@ import org.osgi.service.component.annotations.Component;
  * @see CMICCommissionDocumentServiceBaseImpl
  */
 @Component(
-	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICCommissionDocument"},
+	property = {"json.web.service.context.name=cmic", "json.web.service.context.path=CMICCommissionDocumentDisplay"},
 	service = AopService.class
 )
 public class CMICCommissionDocumentServiceImpl extends CMICCommissionDocumentServiceBaseImpl {
 
-	public CMICFileDTO downloadDocument(String id) throws PortalException {
+	@Override
+	public CMICCommissionDocumentDisplay downloadDocument(String id) throws PortalException {
 		return cmicCommissionDocumentLocalService.downloadDocument(id);
 	}
 
 	@Override
-	public List<CMICCommissionDocument> getCommissionDocuments() throws PortalException {
+	public List<CMICCommissionDocumentDisplay> getCommissionDocuments() throws PortalException {
 		return cmicCommissionDocumentLocalService.getCommissionDocuments(getUserId());
 	}
 

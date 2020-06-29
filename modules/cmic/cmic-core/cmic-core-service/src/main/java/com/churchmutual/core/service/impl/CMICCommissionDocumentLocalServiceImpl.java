@@ -15,7 +15,7 @@
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.core.exception.NoSuchCMICCommissionDocumentException;
-import com.churchmutual.core.model.CMICCommissionDocument;
+import com.churchmutual.core.model.CMICCommissionDocumentDisplay;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICCommissionDocumentLocalServiceBaseImpl;
@@ -28,15 +28,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 
-import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,22 +50,24 @@ import org.osgi.service.component.annotations.Reference;
  * @author Kayleen Lim
  * @see CMICCommissionDocumentLocalServiceBaseImpl
  */
-@Component(property = "model.class.name=com.churchmutual.core.model.CMICCommissionDocument", service = AopService.class)
+@Component(
+	property = "model.class.name=com.churchmutual.core.model.CMICCommissionDocumentDisplay", service = AopService.class
+)
 public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocumentLocalServiceBaseImpl {
 
 	@Override
-	public CMICFileDTO downloadDocument(String id) throws PortalException {
+	public CMICCommissionDocumentDisplay downloadDocument(String id) throws PortalException {
 		List<CMICFileDTO> cmicFileDTOS = _commissionDocumentWebService.downloadDocuments(new String[] {id}, true);
 
 		if (ListUtil.isEmpty(cmicFileDTOS)) {
 			throw new NoSuchCMICCommissionDocumentException(id);
 		}
 
-		return cmicFileDTOS.get(0);
+		return new CMICCommissionDocumentDisplay(cmicFileDTOS.get(0));
 	}
 
 	@Override
-	public List<CMICCommissionDocument> getCommissionDocuments(long userId) throws PortalException {
+	public List<CMICCommissionDocumentDisplay> getCommissionDocuments(long userId) throws PortalException {
 		List<CMICCommissionDocumentDTO> cmicCommissionDocumentDTOs = new ArrayList<>();
 
 		List<CMICOrganization> userOrganizations = _cmicOrganizationLocalService.getCMICUserOrganizations(userId);
@@ -88,44 +85,14 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 		cmicCommissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
 			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK);
 
-		List<CMICCommissionDocument> cmicCommissionDocuments = new ArrayList<>();
+		List<CMICCommissionDocumentDisplay> cmicCommissionDocumentDisplays = new ArrayList<>();
 
 		for (CMICCommissionDocumentDTO cmicCommissionDocumentDTO : cmicCommissionDocumentDTOs) {
-			String statementDate = _getFormattedStatementDate(cmicCommissionDocumentDTO.getStatementDate());
-			String documentType = cmicCommissionDocumentDTO.getDocumentType();
-
-			CMICCommissionDocument cmicCommissionDocument = new CMICCommissionDocument();
-
-			cmicCommissionDocument.setDocumentId(cmicCommissionDocumentDTO.getId());
-			cmicCommissionDocument.setLabel(statementDate + " - " + documentType);
-
-			cmicCommissionDocuments.add(cmicCommissionDocument);
+			cmicCommissionDocumentDisplays.add(new CMICCommissionDocumentDisplay(cmicCommissionDocumentDTO));
 		}
 
-		return cmicCommissionDocuments;
+		return cmicCommissionDocumentDisplays;
 	}
-
-	private String _getFormattedStatementDate(String date) {
-		SimpleDateFormat format1 = new SimpleDateFormat(_FORMAT_YYYY_MM_DD);
-		SimpleDateFormat format2 = new SimpleDateFormat(_FORMAT_MM_DD_YYYY);
-
-		try {
-			Date statementDate = format1.parse(date);
-
-			return format2.format(statementDate);
-		}
-		catch (Exception e) {
-			_log.warn(e);
-
-			return date;
-		}
-	}
-
-	private static final String _FORMAT_MM_DD_YYYY = "MM/dd/yyyy";
-
-	private static final String _FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
-
-	private static final Log _log = LogFactoryUtil.getLog(CMICCommissionDocumentLocalServiceImpl.class);
 
 	@Reference
 	private CMICOrganizationLocalService _cmicOrganizationLocalService;
