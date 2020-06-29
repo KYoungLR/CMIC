@@ -8,7 +8,9 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
+import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoTable;
+import com.liferay.expando.kernel.model.ExpandoTableConstants;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.journal.model.JournalArticle;
@@ -37,6 +39,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TreeMapBuilder;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
@@ -74,14 +77,25 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		this.virtualHostLocalService = virtualHostLocalService;
 	}
 
-	protected void addExpandoColumn(long companyId, String className, String columnName, int dataType) throws PortalException {
-		ExpandoTable expandoTable = expandoTableLocalService.fetchTable(companyId, portal.getClassNameId(className), _EXPANDO_TABLE_NAME);
+	protected void addExpandoColumn(
+			long companyId, String className, String columnName, int dataType, UnicodeProperties properties)
+		throws PortalException {
+		ExpandoTable expandoTable = expandoTableLocalService.fetchTable(
+			companyId, portal.getClassNameId(className), ExpandoTableConstants.DEFAULT_TABLE_NAME);
 
 		if (Validator.isNull(expandoTable)) {
-			expandoTable = expandoTableLocalService.addTable(companyId, className, _EXPANDO_TABLE_NAME);
+			expandoTable = expandoTableLocalService.addTable(companyId, className, ExpandoTableConstants.DEFAULT_TABLE_NAME);
 		}
 
-		expandoColumnLocalService.addColumn(expandoTable.getTableId(), columnName, dataType);
+		ExpandoColumn expandoColumn = expandoColumnLocalService.addColumn(expandoTable.getTableId(), columnName, dataType);
+
+		expandoColumn.setTypeSettingsProperties(properties);
+
+		expandoColumnLocalService.updateExpandoColumn(expandoColumn);
+
+		if (_log.isInfoEnabled()) {
+			_log.info(String.format("Added an expando column for className, %s, with name %s", className, columnName));
+		}
 	}
 
 	protected Group addGroup(long companyId, String name, String description, int type, String friendlyURL)
@@ -252,8 +266,6 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 		return titleMap;
 	}
-
-	private static final String _EXPANDO_TABLE_NAME = "CMIC";
 
 	private static final String _JOURNAL_CONTENT_DIR = "/journal-content";
 

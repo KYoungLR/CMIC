@@ -1,5 +1,6 @@
 package com.churchmutual.content.setup.upgrade.util.v1_0_0;
 
+import com.churchmutual.commons.constants.ExpandoConstants;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountDetailsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerContactPage;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.VirtualHostLocalService;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 
 /**
  * @author Matthew Chan
@@ -58,7 +60,12 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 		addJournalArticle(brokerPortalGroupId, BrokerUpgradeConstants.PRODUCER_CONTACT_US_WEB_CONTENT_TITLE);
 
-		addExpandoColumn(companyId, User.class.getName(), "recentlyViewedAccountNumbers", ExpandoColumnConstants.STRING);
+		UnicodeProperties properties = new UnicodeProperties();
+
+		properties.put(ExpandoColumnConstants.PROPERTY_HIDDEN, "true");
+
+		addExpandoColumn(
+			companyId, User.class.getName(), ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, ExpandoColumnConstants.STRING, properties);
 
 		_addPrivatePages(companyId, userId, brokerPortalGroupId);
 
