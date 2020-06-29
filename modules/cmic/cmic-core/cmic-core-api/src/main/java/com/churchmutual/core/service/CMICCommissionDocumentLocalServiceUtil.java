@@ -43,8 +43,15 @@ public class CMICCommissionDocumentLocalServiceUtil {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICCommissionDocumentLocalServiceUtil} to access the cmic commission document local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICCommissionDocumentLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public static com.churchmutual.core.model.CMICCommissionDocumentDisplay
+			downloadDocument(String id)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().downloadDocument(id);
+	}
+
 	public static java.util.List
-		<com.churchmutual.core.model.CMICCommissionDocument>
+		<com.churchmutual.core.model.CMICCommissionDocumentDisplay>
 				getCommissionDocuments(long userId)
 			throws com.liferay.portal.kernel.exception.PortalException {
 

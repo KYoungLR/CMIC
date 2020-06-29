@@ -52,8 +52,46 @@ import com.liferay.portal.kernel.util.MethodKey;
  */
 public class CMICCommissionDocumentServiceHttp {
 
+	public static com.churchmutual.core.model.CMICCommissionDocumentDisplay
+			downloadDocument(HttpPrincipal httpPrincipal, String id)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CMICCommissionDocumentServiceUtil.class, "downloadDocument",
+				_downloadDocumentParameterTypes0);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey, id);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					e);
+			}
+
+			return (com.churchmutual.core.model.CMICCommissionDocumentDisplay)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	public static java.util.List
-		<com.churchmutual.core.model.CMICCommissionDocument>
+		<com.churchmutual.core.model.CMICCommissionDocumentDisplay>
 				getCommissionDocuments(HttpPrincipal httpPrincipal)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -61,7 +99,7 @@ public class CMICCommissionDocumentServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CMICCommissionDocumentServiceUtil.class,
 				"getCommissionDocuments",
-				_getCommissionDocumentsParameterTypes0);
+				_getCommissionDocumentsParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -83,7 +121,8 @@ public class CMICCommissionDocumentServiceHttp {
 			}
 
 			return (java.util.List
-				<com.churchmutual.core.model.CMICCommissionDocument>)returnObj;
+				<com.churchmutual.core.model.CMICCommissionDocumentDisplay>)
+					returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);
@@ -95,7 +134,9 @@ public class CMICCommissionDocumentServiceHttp {
 	private static Log _log = LogFactoryUtil.getLog(
 		CMICCommissionDocumentServiceHttp.class);
 
-	private static final Class<?>[] _getCommissionDocumentsParameterTypes0 =
+	private static final Class<?>[] _downloadDocumentParameterTypes0 =
+		new Class[] {String.class};
+	private static final Class<?>[] _getCommissionDocumentsParameterTypes1 =
 		new Class[] {};
 
 }

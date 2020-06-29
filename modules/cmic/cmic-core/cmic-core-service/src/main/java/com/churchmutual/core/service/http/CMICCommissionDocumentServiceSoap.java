@@ -51,17 +51,38 @@ import java.rmi.RemoteException;
  */
 public class CMICCommissionDocumentServiceSoap {
 
-	public static com.churchmutual.core.model.CMICCommissionDocumentSoap[]
+	public static com.churchmutual.core.model.CMICCommissionDocumentDisplay
+			downloadDocument(String id)
+		throws RemoteException {
+
+		try {
+			com.churchmutual.core.model.CMICCommissionDocumentDisplay
+				returnValue =
+					CMICCommissionDocumentServiceUtil.downloadDocument(id);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.churchmutual.core.model.CMICCommissionDocumentDisplay[]
 			getCommissionDocuments()
 		throws RemoteException {
 
 		try {
-			java.util.List<com.churchmutual.core.model.CMICCommissionDocument>
-				returnValue =
-					CMICCommissionDocumentServiceUtil.getCommissionDocuments();
+			java.util.List
+				<com.churchmutual.core.model.CMICCommissionDocumentDisplay>
+					returnValue =
+						CMICCommissionDocumentServiceUtil.
+							getCommissionDocuments();
 
-			return com.churchmutual.core.model.CMICCommissionDocumentSoap.
-				toSoapModels(returnValue);
+			return returnValue.toArray(
+				new com.churchmutual.core.model.CMICCommissionDocumentDisplay
+					[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

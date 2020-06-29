@@ -14,7 +14,7 @@
 
 package com.churchmutual.core.service;
 
-import com.churchmutual.core.model.CMICCommissionDocument;
+import com.churchmutual.core.model.CMICCommissionDocumentDisplay;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -49,8 +49,12 @@ public interface CMICCommissionDocumentLocalService extends BaseLocalService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICCommissionDocumentLocalServiceUtil} to access the cmic commission document local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICCommissionDocumentLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public CMICCommissionDocumentDisplay downloadDocument(String id)
+		throws PortalException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CMICCommissionDocument> getCommissionDocuments(long userId)
+	public List<CMICCommissionDocumentDisplay> getCommissionDocuments(
+			long userId)
 		throws PortalException;
 
 	/**
