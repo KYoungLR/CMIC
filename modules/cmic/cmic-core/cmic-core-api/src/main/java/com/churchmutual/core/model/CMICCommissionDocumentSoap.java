@@ -13,11 +13,8 @@ public class CMICCommissionDocumentSoap {
 		return soapModel;
 	}
 
-	public static CMICCommissionDocument[] toSoapModels(
-		List<CMICCommissionDocument> models) {
-
-		CMICCommissionDocument[] soapModels =
-			new CMICCommissionDocument[models.size()];
+	public static CMICCommissionDocument[] toSoapModels(List<CMICCommissionDocument> models) {
+		CMICCommissionDocument[] soapModels = new CMICCommissionDocument[models.size()];
 
 		for (int i = 0; i < models.size(); i++) {
 			soapModels[i] = toSoapModel(models.get(i));

@@ -20,4 +20,5 @@ public class CMICCommissionDocument extends CMICCommissionDocumentSoap {
 
 	private String _documentId;
 	private String _label;
+
 }

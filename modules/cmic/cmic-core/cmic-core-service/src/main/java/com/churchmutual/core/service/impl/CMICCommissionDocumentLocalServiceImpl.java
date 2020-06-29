@@ -22,8 +22,8 @@ import com.churchmutual.core.service.base.CMICCommissionDocumentLocalServiceBase
 import com.churchmutual.rest.CommissionDocumentWebService;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
-
 import com.churchmutual.rest.model.CMICFileDTO;
+
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.ListUtil;
 
 import java.text.SimpleDateFormat;
 
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.liferay.portal.kernel.util.ListUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -141,6 +141,5 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 	@Reference
 	private UserLocalService _userLocalService;
-
 
 }

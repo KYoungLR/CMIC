@@ -11,13 +11,13 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 public class MockCommissionDocumentWebServiceClient {
 
 	public List<CMICFileDTO> downloadDocuments(String[] ids, boolean includeBytes) {
-		if (ids.length == 1 && Validator.isBlank(ids[0])) {
+		if ((ids.length == 1) && Validator.isBlank(ids[0])) {
 			return new ArrayList<>();
 		}
 
