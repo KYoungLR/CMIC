@@ -15,6 +15,7 @@
 
 		<column name="accountEntryId" type="long" />
 		<column name="accountNumber" type="String" />
+		<column name="companyNumber" type="String" />
 		<column name="numExpiredPolicies" type="int" />
 		<column name="numFuturePolicies" type="int" />
 		<column name="numInForcePolicies" type="int" />
