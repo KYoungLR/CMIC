@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ListUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -93,13 +92,12 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 		for (CMICCommissionDocumentDTO cmicCommissionDocumentDTO : cmicCommissionDocumentDTOs) {
 			String statementDate = _getFormattedStatementDate(cmicCommissionDocumentDTO.getStatementDate());
-			String documentType = "Commission Remittance Statement";
+			String documentType = cmicCommissionDocumentDTO.getDocumentType();
 
 			CMICCommissionDocument cmicCommissionDocument = new CMICCommissionDocument();
 
 			cmicCommissionDocument.setDocumentId(cmicCommissionDocumentDTO.getId());
 			cmicCommissionDocument.setLabel(statementDate + " - " + documentType);
-			cmicCommissionDocument.setURL("/");
 
 			cmicCommissionDocuments.add(cmicCommissionDocument);
 		}

@@ -10,10 +10,6 @@ public class CMICCommissionDocument extends CMICCommissionDocumentSoap {
 		return _label;
 	}
 
-	public String getURL() {
-		return _url;
-	}
-
 	public void setDocumentId(String documentId) {
 		_documentId = documentId;
 	}
@@ -22,11 +18,6 @@ public class CMICCommissionDocument extends CMICCommissionDocumentSoap {
 		_label = label;
 	}
 
-	public void setURL(String url) {
-		_url = url;
-	}
-
 	private String _documentId;
 	private String _label;
-	private String _url;
 }

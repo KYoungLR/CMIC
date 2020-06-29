@@ -9,7 +9,6 @@ public class CMICCommissionDocumentSoap {
 
 		soapModel.setDocumentId(model.getDocumentId());
 		soapModel.setLabel(model.getLabel());
-		soapModel.setURL(model.getURL());
 
 		return soapModel;
 	}
