@@ -19,6 +19,8 @@ public class BrokerUserRegistrationPage {
 			UserRegistrationPortletKeys.USER_REGISTRATION_WEB
 		).setPrivatePage(
 			false
+		).setHiddenPage(
+			true
 		);
 
 		LayoutHelper.addLayoutWithPortlet(userId, groupId, layoutConfig);
