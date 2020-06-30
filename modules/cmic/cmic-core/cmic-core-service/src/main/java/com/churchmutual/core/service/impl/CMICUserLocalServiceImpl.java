@@ -1,5 +1,6 @@
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.commons.constants.ExpandoConstants;
 import com.churchmutual.commons.enums.BusinessCompanyRole;
 import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.commons.enums.BusinessRole;
@@ -65,29 +66,31 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
-	public void addRecentlyViewedAccountNumber(long userId, String accountNumber) throws PortalException {
+	public void addRecentlyViewedCMICAccountEntryId(long userId, String cmicAccountEntryId) throws PortalException {
 		User user = _userLocalService.getUser(userId);
 
 		ExpandoBridge expandoBridge = user.getExpandoBridge();
 
-		String recentlyViewedAccountNumbers = (String)expandoBridge.getAttribute("recentlyViewedAccountNumbers");
+		String recentlyViewedCmicAccountEntryIds = (String)expandoBridge.getAttribute(
+			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS);
 
-		if (Validator.isNotNull(recentlyViewedAccountNumbers)) {
-			List<String> recentAccountNumbers = StringUtil.split(recentlyViewedAccountNumbers);
+		if (Validator.isNotNull(recentlyViewedCmicAccountEntryIds)) {
+			List<String> recentAccountEntryIds = StringUtil.split(recentlyViewedCmicAccountEntryIds);
 
-			recentAccountNumbers.remove(accountNumber);
+			recentAccountEntryIds.remove(cmicAccountEntryId);
 
-			recentAccountNumbers.add(0, accountNumber);
+			recentAccountEntryIds.add(0, cmicAccountEntryId);
 
-			if (recentAccountNumbers.size() > 5) {
-				recentAccountNumbers = recentAccountNumbers.subList(0, 5);
+			if (recentAccountEntryIds.size() > 5) {
+				recentAccountEntryIds = recentAccountEntryIds.subList(0, 5);
 			}
 
 			expandoBridge.setAttribute(
-				"recentlyViewedAccountNumbers", StringUtil.merge(recentAccountNumbers, StringPool.COMMA));
+				ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
+				StringUtil.merge(recentAccountEntryIds, StringPool.COMMA));
 		}
 		else {
-			expandoBridge.setAttribute("recentlyViewedAccountNumbers", accountNumber);
+			expandoBridge.setAttribute(ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId);
 		}
 	}
 
@@ -217,25 +220,27 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public List<String> getRecentlyViewedAccountNumbers(long userId) throws PortalException {
+	public List<String> getRecentlyViewedCMICAccountEntryIds(long userId) throws PortalException {
 		User user = _userLocalService.getUser(userId);
 
 		ExpandoBridge expandoBridge = user.getExpandoBridge();
 
-		String recentlyViewedAccountNumbers = (String)expandoBridge.getAttribute("recentlyViewedAccountNumbers");
+		String recentlyViewedAccountEntryIds = (String)expandoBridge.getAttribute(
+			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS);
 
-		List<String> recentAccountNumbers;
+		List<String> recentAccountEntryIds = new ArrayList<>();
 
-		if (Validator.isNotNull(recentlyViewedAccountNumbers)) {
-			recentAccountNumbers = StringUtil.split(recentlyViewedAccountNumbers);
-		}
-		else {
-			recentAccountNumbers = new ArrayList<>();
+		if (Validator.isNotNull(recentlyViewedAccountEntryIds)) {
+			recentAccountEntryIds = StringUtil.split(recentlyViewedAccountEntryIds);
 		}
 
-		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(user.getExternalReferenceCode());
+		if (recentAccountEntryIds.size() == 5) {
+			return recentAccountEntryIds;
+		}
 
-		updateUserAndGroups(cmicUserDTO);
+		// TODO CMIC-373 call CMICUserLocalServiceImpl.getCMICAccountEntriesByUserId which will do similar as the following
+
+		getUserDetails(userId);
 
 		List<AccountEntry> accountEntries = _accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(
 			userId
@@ -248,24 +253,33 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			Collectors.toList()
 		);
 
-		int accountNumbersSize = recentAccountNumbers.size();
+		int additionalAccountNumbersSize = 5 - recentAccountEntryIds.size();
 
-		List<AccountEntry> entriesSublist = accountEntries.subList(0, 5 - accountNumbersSize);
+		List<AccountEntry> entriesSublist;
+
+		if (accountEntries.size() <= additionalAccountNumbersSize) {
+			entriesSublist = accountEntries;
+		}
+		else {
+			entriesSublist = accountEntries.subList(0, additionalAccountNumbersSize);
+		}
 
 		for (AccountEntry accountEntry : entriesSublist) {
 			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAccountEntryId(
 				accountEntry.getAccountEntryId());
 
-			String accountNumber = cmicAccountEntry.getAccountNumber();
+			String cmicAccountEntryId = String.valueOf(cmicAccountEntry.getCmicAccountEntryId());
 
-			if (!recentAccountNumbers.contains(accountNumber)) {
-				recentAccountNumbers.add(cmicAccountEntry.getAccountNumber());
+			if (!recentAccountEntryIds.contains(cmicAccountEntryId)) {
+				recentAccountEntryIds.add(cmicAccountEntryId);
 			}
 		}
 
-		expandoBridge.setAttribute("recentlyViewedAccountNumbers", StringUtil.merge(recentAccountNumbers, StringPool.COMMA));
+		expandoBridge.setAttribute(
+			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
+			StringUtil.merge(recentAccountEntryIds, StringPool.COMMA));
 
-		return recentAccountNumbers;
+		return recentAccountEntryIds;
 	}
 
 	@Override
@@ -280,6 +294,18 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			));
 
 		return CollectionsUtil.getFirst(_userLocalService.dynamicQuery(dynamicQuery));
+	}
+
+	public JSONObject getUserDetails(long userId) throws PortalException {
+		User user = userLocalService.getUser(userId);
+
+		String cmicUUID = user.getExternalReferenceCode();
+
+		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(cmicUUID);
+
+		updateUserAndGroups(cmicUserDTO);
+
+		return cmicUserDTO.toJSONObject();
 	}
 
 	@Override
