@@ -56,6 +56,9 @@ public interface CMICUserService extends BaseService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICUserServiceUtil} to access the cmic user remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICUserServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public void addRecentlyViewedCMICAccountEntryId(String cmicAccountEntryId)
+		throws PortalException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Group> getBusinesses() throws PortalException;
 
@@ -86,6 +89,10 @@ public interface CMICUserService extends BaseService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public String getPortraitImageURL() throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<String> getRecentlyViewedAccountNumbers()
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public User getUser(String cmicUUID);

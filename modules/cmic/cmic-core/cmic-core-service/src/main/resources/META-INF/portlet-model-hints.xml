@@ -5,6 +5,7 @@
 		<field name="cmicAccountEntryId" type="long" />
 		<field name="accountEntryId" type="long" />
 		<field name="accountNumber" type="String" />
+		<field name="companyNumber" type="String" />
 		<field name="numExpiredPolicies" type="int" />
 		<field name="numFuturePolicies" type="int" />
 		<field name="numInForcePolicies" type="int" />

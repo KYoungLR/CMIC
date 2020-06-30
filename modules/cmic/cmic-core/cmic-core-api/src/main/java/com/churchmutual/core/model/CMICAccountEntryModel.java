@@ -97,6 +97,21 @@ public interface CMICAccountEntryModel extends BaseModel<CMICAccountEntry> {
 	public void setAccountNumber(String accountNumber);
 
 	/**
+	 * Returns the company number of this cmic account entry.
+	 *
+	 * @return the company number of this cmic account entry
+	 */
+	@AutoEscape
+	public String getCompanyNumber();
+
+	/**
+	 * Sets the company number of this cmic account entry.
+	 *
+	 * @param companyNumber the company number of this cmic account entry
+	 */
+	public void setCompanyNumber(String companyNumber);
+
+	/**
 	 * Returns the num expired policies of this cmic account entry.
 	 *
 	 * @return the num expired policies of this cmic account entry

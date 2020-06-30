@@ -70,7 +70,8 @@ public class CMICAccountEntryModelImpl
 
 	public static final Object[][] TABLE_COLUMNS = {
 		{"cmicAccountEntryId", Types.BIGINT}, {"accountEntryId", Types.BIGINT},
-		{"accountNumber", Types.VARCHAR}, {"numExpiredPolicies", Types.INTEGER},
+		{"accountNumber", Types.VARCHAR}, {"companyNumber", Types.VARCHAR},
+		{"numExpiredPolicies", Types.INTEGER},
 		{"numFuturePolicies", Types.INTEGER},
 		{"numInForcePolicies", Types.INTEGER},
 		{"totalBilledPremium", Types.VARCHAR}
@@ -83,6 +84,7 @@ public class CMICAccountEntryModelImpl
 		TABLE_COLUMNS_MAP.put("cmicAccountEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("accountEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("accountNumber", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("companyNumber", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("numExpiredPolicies", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("numFuturePolicies", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("numInForcePolicies", Types.INTEGER);
@@ -90,7 +92,7 @@ public class CMICAccountEntryModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table cmic_CMICAccountEntry (cmicAccountEntryId LONG not null primary key,accountEntryId LONG,accountNumber VARCHAR(75) null,numExpiredPolicies INTEGER,numFuturePolicies INTEGER,numInForcePolicies INTEGER,totalBilledPremium VARCHAR(75) null)";
+		"create table cmic_CMICAccountEntry (cmicAccountEntryId LONG not null primary key,accountEntryId LONG,accountNumber VARCHAR(75) null,companyNumber VARCHAR(75) null,numExpiredPolicies INTEGER,numFuturePolicies INTEGER,numInForcePolicies INTEGER,totalBilledPremium VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table cmic_CMICAccountEntry";
@@ -137,6 +139,7 @@ public class CMICAccountEntryModelImpl
 		model.setCmicAccountEntryId(soapModel.getCmicAccountEntryId());
 		model.setAccountEntryId(soapModel.getAccountEntryId());
 		model.setAccountNumber(soapModel.getAccountNumber());
+		model.setCompanyNumber(soapModel.getCompanyNumber());
 		model.setNumExpiredPolicies(soapModel.getNumExpiredPolicies());
 		model.setNumFuturePolicies(soapModel.getNumFuturePolicies());
 		model.setNumInForcePolicies(soapModel.getNumInForcePolicies());
@@ -314,6 +317,12 @@ public class CMICAccountEntryModelImpl
 			(BiConsumer<CMICAccountEntry, String>)
 				CMICAccountEntry::setAccountNumber);
 		attributeGetterFunctions.put(
+			"companyNumber", CMICAccountEntry::getCompanyNumber);
+		attributeSetterBiConsumers.put(
+			"companyNumber",
+			(BiConsumer<CMICAccountEntry, String>)
+				CMICAccountEntry::setCompanyNumber);
+		attributeGetterFunctions.put(
 			"numExpiredPolicies", CMICAccountEntry::getNumExpiredPolicies);
 		attributeSetterBiConsumers.put(
 			"numExpiredPolicies",
@@ -406,6 +415,22 @@ public class CMICAccountEntryModelImpl
 
 	@JSON
 	@Override
+	public String getCompanyNumber() {
+		if (_companyNumber == null) {
+			return "";
+		}
+		else {
+			return _companyNumber;
+		}
+	}
+
+	@Override
+	public void setCompanyNumber(String companyNumber) {
+		_companyNumber = companyNumber;
+	}
+
+	@JSON
+	@Override
 	public int getNumExpiredPolicies() {
 		return _numExpiredPolicies;
 	}
@@ -492,6 +517,7 @@ public class CMICAccountEntryModelImpl
 		cmicAccountEntryImpl.setCmicAccountEntryId(getCmicAccountEntryId());
 		cmicAccountEntryImpl.setAccountEntryId(getAccountEntryId());
 		cmicAccountEntryImpl.setAccountNumber(getAccountNumber());
+		cmicAccountEntryImpl.setCompanyNumber(getCompanyNumber());
 		cmicAccountEntryImpl.setNumExpiredPolicies(getNumExpiredPolicies());
 		cmicAccountEntryImpl.setNumFuturePolicies(getNumFuturePolicies());
 		cmicAccountEntryImpl.setNumInForcePolicies(getNumInForcePolicies());
@@ -584,6 +610,14 @@ public class CMICAccountEntryModelImpl
 
 		if ((accountNumber != null) && (accountNumber.length() == 0)) {
 			cmicAccountEntryCacheModel.accountNumber = null;
+		}
+
+		cmicAccountEntryCacheModel.companyNumber = getCompanyNumber();
+
+		String companyNumber = cmicAccountEntryCacheModel.companyNumber;
+
+		if ((companyNumber != null) && (companyNumber.length() == 0)) {
+			cmicAccountEntryCacheModel.companyNumber = null;
 		}
 
 		cmicAccountEntryCacheModel.numExpiredPolicies = getNumExpiredPolicies();
@@ -685,6 +719,7 @@ public class CMICAccountEntryModelImpl
 	private boolean _setOriginalAccountEntryId;
 	private String _accountNumber;
 	private String _originalAccountNumber;
+	private String _companyNumber;
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;

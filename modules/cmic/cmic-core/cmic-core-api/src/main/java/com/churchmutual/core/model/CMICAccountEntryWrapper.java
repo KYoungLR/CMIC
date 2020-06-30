@@ -44,6 +44,7 @@ public class CMICAccountEntryWrapper
 		attributes.put("cmicAccountEntryId", getCmicAccountEntryId());
 		attributes.put("accountEntryId", getAccountEntryId());
 		attributes.put("accountNumber", getAccountNumber());
+		attributes.put("companyNumber", getCompanyNumber());
 		attributes.put("numExpiredPolicies", getNumExpiredPolicies());
 		attributes.put("numFuturePolicies", getNumFuturePolicies());
 		attributes.put("numInForcePolicies", getNumInForcePolicies());
@@ -70,6 +71,12 @@ public class CMICAccountEntryWrapper
 
 		if (accountNumber != null) {
 			setAccountNumber(accountNumber);
+		}
+
+		String companyNumber = (String)attributes.get("companyNumber");
+
+		if (companyNumber != null) {
+			setCompanyNumber(companyNumber);
 		}
 
 		Integer numExpiredPolicies = (Integer)attributes.get(
@@ -129,6 +136,16 @@ public class CMICAccountEntryWrapper
 	@Override
 	public long getCmicAccountEntryId() {
 		return model.getCmicAccountEntryId();
+	}
+
+	/**
+	 * Returns the company number of this cmic account entry.
+	 *
+	 * @return the company number of this cmic account entry
+	 */
+	@Override
+	public String getCompanyNumber() {
+		return model.getCompanyNumber();
 	}
 
 	/**
@@ -219,6 +236,16 @@ public class CMICAccountEntryWrapper
 	@Override
 	public void setCmicAccountEntryId(long cmicAccountEntryId) {
 		model.setCmicAccountEntryId(cmicAccountEntryId);
+	}
+
+	/**
+	 * Sets the company number of this cmic account entry.
+	 *
+	 * @param companyNumber the company number of this cmic account entry
+	 */
+	@Override
+	public void setCompanyNumber(String companyNumber) {
+		model.setCompanyNumber(companyNumber);
 	}
 
 	/**

@@ -33,6 +33,7 @@ public class CMICAccountEntrySoap implements Serializable {
 		soapModel.setCmicAccountEntryId(model.getCmicAccountEntryId());
 		soapModel.setAccountEntryId(model.getAccountEntryId());
 		soapModel.setAccountNumber(model.getAccountNumber());
+		soapModel.setCompanyNumber(model.getCompanyNumber());
 		soapModel.setNumExpiredPolicies(model.getNumExpiredPolicies());
 		soapModel.setNumFuturePolicies(model.getNumFuturePolicies());
 		soapModel.setNumInForcePolicies(model.getNumInForcePolicies());
@@ -122,6 +123,14 @@ public class CMICAccountEntrySoap implements Serializable {
 		_accountNumber = accountNumber;
 	}
 
+	public String getCompanyNumber() {
+		return _companyNumber;
+	}
+
+	public void setCompanyNumber(String companyNumber) {
+		_companyNumber = companyNumber;
+	}
+
 	public int getNumExpiredPolicies() {
 		return _numExpiredPolicies;
 	}
@@ -157,6 +166,7 @@ public class CMICAccountEntrySoap implements Serializable {
 	private long _cmicAccountEntryId;
 	private long _accountEntryId;
 	private String _accountNumber;
+	private String _companyNumber;
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;

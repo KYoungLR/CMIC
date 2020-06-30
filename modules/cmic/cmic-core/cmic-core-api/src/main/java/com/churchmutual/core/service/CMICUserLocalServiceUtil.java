@@ -43,6 +43,14 @@ public class CMICUserLocalServiceUtil {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICUserLocalServiceUtil} to access the cmic user local service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICUserLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public static void addRecentlyViewedCMICAccountEntryId(
+			long userId, String cmicAccountEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		getService().addRecentlyViewedCMICAccountEntryId(
+			userId, cmicAccountEntryId);
+	}
+
 	public static java.util.List<com.liferay.portal.kernel.model.Group>
 			getBusinesses(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -98,6 +106,13 @@ public class CMICUserLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getPortraitImageURL(userId);
+	}
+
+	public static java.util.List<String> getRecentlyViewedCMICAccountEntryIds(
+			long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getRecentlyViewedCMICAccountEntryIds(userId);
 	}
 
 	public static com.liferay.portal.kernel.model.User getUser(

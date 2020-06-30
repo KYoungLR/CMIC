@@ -43,6 +43,51 @@ public interface CMICAccountEntryPersistence
 	 */
 
 	/**
+	 * Returns the cmic account entry where accountEntryId = &#63; or throws a <code>NoSuchCMICAccountEntryException</code> if it could not be found.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @return the matching cmic account entry
+	 * @throws NoSuchCMICAccountEntryException if a matching cmic account entry could not be found
+	 */
+	public CMICAccountEntry findByAccountEntryId(long accountEntryId)
+		throws NoSuchCMICAccountEntryException;
+
+	/**
+	 * Returns the cmic account entry where accountEntryId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @return the matching cmic account entry, or <code>null</code> if a matching cmic account entry could not be found
+	 */
+	public CMICAccountEntry fetchByAccountEntryId(long accountEntryId);
+
+	/**
+	 * Returns the cmic account entry where accountEntryId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching cmic account entry, or <code>null</code> if a matching cmic account entry could not be found
+	 */
+	public CMICAccountEntry fetchByAccountEntryId(
+		long accountEntryId, boolean useFinderCache);
+
+	/**
+	 * Removes the cmic account entry where accountEntryId = &#63; from the database.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @return the cmic account entry that was removed
+	 */
+	public CMICAccountEntry removeByAccountEntryId(long accountEntryId)
+		throws NoSuchCMICAccountEntryException;
+
+	/**
+	 * Returns the number of cmic account entries where accountEntryId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @return the number of matching cmic account entries
+	 */
+	public int countByAccountEntryId(long accountEntryId);
+
+	/**
 	 * Returns the cmic account entry where accountNumber = &#63; or throws a <code>NoSuchCMICAccountEntryException</code> if it could not be found.
 	 *
 	 * @param accountNumber the account number

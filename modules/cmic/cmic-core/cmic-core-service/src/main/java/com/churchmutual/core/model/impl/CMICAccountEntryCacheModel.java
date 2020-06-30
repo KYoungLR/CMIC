@@ -63,7 +63,7 @@ public class CMICAccountEntryCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{cmicAccountEntryId=");
 		sb.append(cmicAccountEntryId);
@@ -71,6 +71,8 @@ public class CMICAccountEntryCacheModel
 		sb.append(accountEntryId);
 		sb.append(", accountNumber=");
 		sb.append(accountNumber);
+		sb.append(", companyNumber=");
+		sb.append(companyNumber);
 		sb.append(", numExpiredPolicies=");
 		sb.append(numExpiredPolicies);
 		sb.append(", numFuturePolicies=");
@@ -98,6 +100,13 @@ public class CMICAccountEntryCacheModel
 			cmicAccountEntryImpl.setAccountNumber(accountNumber);
 		}
 
+		if (companyNumber == null) {
+			cmicAccountEntryImpl.setCompanyNumber("");
+		}
+		else {
+			cmicAccountEntryImpl.setCompanyNumber(companyNumber);
+		}
+
 		cmicAccountEntryImpl.setNumExpiredPolicies(numExpiredPolicies);
 		cmicAccountEntryImpl.setNumFuturePolicies(numFuturePolicies);
 		cmicAccountEntryImpl.setNumInForcePolicies(numInForcePolicies);
@@ -120,6 +129,7 @@ public class CMICAccountEntryCacheModel
 
 		accountEntryId = objectInput.readLong();
 		accountNumber = objectInput.readUTF();
+		companyNumber = objectInput.readUTF();
 
 		numExpiredPolicies = objectInput.readInt();
 
@@ -142,6 +152,13 @@ public class CMICAccountEntryCacheModel
 			objectOutput.writeUTF(accountNumber);
 		}
 
+		if (companyNumber == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(companyNumber);
+		}
+
 		objectOutput.writeInt(numExpiredPolicies);
 
 		objectOutput.writeInt(numFuturePolicies);
@@ -159,6 +176,7 @@ public class CMICAccountEntryCacheModel
 	public long cmicAccountEntryId;
 	public long accountEntryId;
 	public String accountNumber;
+	public String companyNumber;
 	public int numExpiredPolicies;
 	public int numFuturePolicies;
 	public int numInForcePolicies;

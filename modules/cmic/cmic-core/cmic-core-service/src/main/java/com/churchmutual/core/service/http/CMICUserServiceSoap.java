@@ -51,6 +51,21 @@ import java.rmi.RemoteException;
  */
 public class CMICUserServiceSoap {
 
+	public static void addRecentlyViewedCMICAccountEntryId(
+			String cmicAccountEntryId)
+		throws RemoteException {
+
+		try {
+			CMICUserServiceUtil.addRecentlyViewedCMICAccountEntryId(
+				cmicAccountEntryId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.portal.kernel.model.Group[] getBusinesses()
 		throws RemoteException {
 
@@ -156,6 +171,22 @@ public class CMICUserServiceSoap {
 			String returnValue = CMICUserServiceUtil.getPortraitImageURL();
 
 			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static String[] getRecentlyViewedAccountNumbers()
+		throws RemoteException {
+
+		try {
+			java.util.List<String> returnValue =
+				CMICUserServiceUtil.getRecentlyViewedAccountNumbers();
+
+			return returnValue.toArray(new String[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
