@@ -7,9 +7,12 @@ import com.churchmutual.test.harness.model.HarnessDescriptor;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -42,12 +45,25 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 
 	@Override
 	public List<HarnessDescriptor> getHarnessDescriptors() {
-		HarnessDescriptor isUserRegisteredDescriptor = new HarnessDescriptor(
-			"Find out if a user is registered using UUID. False at first", _IS_USER_REGISTERED_ENDPOINT,
-			Http.Method.GET);
+		HarnessDescriptor getProducerEntityUsersDescriptor = new HarnessDescriptor(
+			"get List of Producer users by producerID.", _GET_PRODUCER_ENTITY_USERS_ENDPOINT, Http.Method.POST);
+
+		HarnessDescriptor.Parameter producerId = new HarnessDescriptor.Parameter(
+			"producer id", "producerID", true, 4002L, Long.class.getName());
+
+		getProducerEntityUsersDescriptor.addQueryParameters(producerId);
+
+		HarnessDescriptor getUserDetailsDescriptor = new HarnessDescriptor(
+			"load user details by UUID after login.", _GET_USER_DETAILS_ENDPOINT, Http.Method.POST);
 
 		HarnessDescriptor.Parameter uuid = new HarnessDescriptor.Parameter(
 			"uuid", "uuid", true, "e7575932-9235-4829-8399-88d08d4c7542", "String");
+
+		getUserDetailsDescriptor.addQueryParameters(uuid);
+
+		HarnessDescriptor isUserRegisteredDescriptor = new HarnessDescriptor(
+			"Find out if a user is registered using UUID. False at first", _IS_USER_REGISTERED_ENDPOINT,
+			Http.Method.GET);
 
 		isUserRegisteredDescriptor.addQueryParameters(uuid);
 
@@ -79,8 +95,8 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 		validateUserRegistrationDescriptor.addQueryParameters(registrationCode);
 
 		return ListUtil.fromArray(
-			isUserRegisteredDescriptor, isUserValidDescriptor, validateUserDescriptor,
-			validateUserRegistrationDescriptor);
+			getProducerEntityUsersDescriptor, getUserDetailsDescriptor, isUserRegisteredDescriptor,
+			isUserValidDescriptor, validateUserDescriptor, validateUserRegistrationDescriptor);
 	}
 
 	@Override
@@ -104,40 +120,68 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 
 		JSONArray response = JSONFactoryUtil.createJSONArray();
 
-		if (_IS_USER_REGISTERED_ENDPOINT.equals(endpoint)) {
-			String uuid = ParamUtil.getString(portletRequest, "uuid");
+		try {
+			if (_GET_PRODUCER_ENTITY_USERS_ENDPOINT.equals(endpoint)) {
+				long producerId = ParamUtil.getLong(portletRequest, "producerID");
 
-			boolean userRegistered = _portalUserWebService.isUserRegistered(uuid);
+				List<CMICUserDTO> users = _portalUserWebService.getProducerEntityUsers(producerId);
 
-			response.put(userRegistered);
+				users.forEach(user -> response.put(user.toJSONObject()));
+			}
+			else if (_GET_USER_DETAILS_ENDPOINT.equals(endpoint)) {
+				String uuid = ParamUtil.getString(portletRequest, "uuid");
+
+				CMICUserDTO user = _portalUserWebService.getUserDetails(uuid);
+
+				response.put(user.toJSONObject());
+			}
+			else if (_IS_USER_REGISTERED_ENDPOINT.equals(endpoint)) {
+				String uuid = ParamUtil.getString(portletRequest, "uuid");
+
+				boolean userRegistered = _portalUserWebService.isUserRegistered(uuid);
+
+				response.put(userRegistered);
+			}
+			else if (_IS_USER_VALID_ENDPOINT.equals(endpoint)) {
+				String agentNumber = ParamUtil.getString(portletRequest, "agentNumber");
+				String divisionNumber = ParamUtil.getString(portletRequest, "divisionNumber");
+				String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
+				String uuid = ParamUtil.getString(portletRequest, "uuid");
+
+				boolean userValid = _portalUserWebService.isUserValid(
+					agentNumber, divisionNumber, registrationCode, uuid);
+
+				response.put(userValid);
+			}
+			else if (_VALIDATE_USER_ENDPOINT.equals(endpoint)) {
+				String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
+
+				CMICUserDTO user = _portalUserWebService.validateUser(registrationCode);
+
+				response.put(user.toJSONObject());
+			}
+			else if (_VALIDATE_USER_REGISTRATION_ENDPOINT.equals(endpoint)) {
+				String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
+
+				CMICUserDTO user = _portalUserWebService.validateUserRegistration(registrationCode);
+
+				response.put(user.toJSONObject());
+			}
 		}
-		else if (_IS_USER_VALID_ENDPOINT.equals(endpoint)) {
-			String agentNumber = ParamUtil.getString(portletRequest, "agentNumber");
-			String divisionNumber = ParamUtil.getString(portletRequest, "divisionNumber");
-			String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
-			String uuid = ParamUtil.getString(portletRequest, "uuid");
+		catch (PortalException pe) {
+			response.put(pe.getMessage());
 
-			boolean userValid = _portalUserWebService.isUserValid(agentNumber, divisionNumber, registrationCode, uuid);
-
-			response.put(userValid);
-		}
-		else if (_VALIDATE_USER_ENDPOINT.equals(endpoint)) {
-			String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
-
-			CMICUserDTO user = _portalUserWebService.validateUser(registrationCode);
-
-			response.put(user.toJSONObject());
-		}
-		else if (_VALIDATE_USER_REGISTRATION_ENDPOINT.equals(endpoint)) {
-			String registrationCode = ParamUtil.getString(portletRequest, "registrationCode");
-
-			CMICUserDTO user = _portalUserWebService.validateUserRegistration(registrationCode);
-
-			response.put(user.toJSONObject());
+			if (_log.isErrorEnabled()) {
+				_log.error("Could not get response for " + endpoint, pe);
+			}
 		}
 
 		return response.toString();
 	}
+
+	private static final String _GET_PRODUCER_ENTITY_USERS_ENDPOINT = "/v1/get-users/producer-entity";
+
+	private static final String _GET_USER_DETAILS_ENDPOINT = "/v1/get-users/details";
 
 	private static final String _IS_USER_REGISTERED_ENDPOINT = "/v1/isUserRegistered";
 
@@ -146,6 +190,8 @@ public class CMICPortalUserServiceScreenNavigationEntry extends BaseTestHarnessS
 	private static final String _VALIDATE_USER_ENDPOINT = "/v1/validateUser";
 
 	private static final String _VALIDATE_USER_REGISTRATION_ENDPOINT = "/v1/validateUserRegistration";
+
+	private static final Log _log = LogFactoryUtil.getLog(CMICPortalUserServiceScreenNavigationEntry.class);
 
 	@Reference
 	private JSPRenderer _jspRenderer;
