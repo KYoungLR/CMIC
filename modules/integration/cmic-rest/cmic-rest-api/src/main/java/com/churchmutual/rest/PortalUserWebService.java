@@ -13,6 +13,8 @@ public interface PortalUserWebService {
 
 	public List<CMICUserDTO> getCMICOrganizationUsers(long producerId);
 
+	public List<CMICUserDTO> getProducerEntityUsers(long producerId) throws PortalException;
+
 	public CMICUserDTO getUserDetails(String uuid) throws PortalException;
 
 	public void inviteUserToCMICOrganization(String emailAddress, long producerId);

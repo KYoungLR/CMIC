@@ -3,6 +3,7 @@ package com.churchmutual.rest.service;
 import com.churchmutual.portal.ws.commons.client.executor.WebServiceExecutor;
 import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.configuration.MockPortalUserWebServiceConfiguration;
+import com.churchmutual.rest.model.CMICProducerUsersDTO;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.rest.service.mock.MockPortalUserWebServiceClient;
 
@@ -10,6 +11,8 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +42,39 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 	}
 
 	@Override
+	public List<CMICUserDTO> getProducerEntityUsers(long producerId) throws PortalException {
+		if (_mockPortalUserWebServiceConfiguration.enableMockGetProducerEntityUsers()) {
+			return _mockPortalUserWebServiceClient.getProducerEntityUsers(producerId);
+		}
+
+		Map<String, String> queryParameters = new HashMap<>();
+
+		queryParameters.put("producerID", String.valueOf(producerId));
+
+		String response = _webServiceExecutor.executePost(_GET_PRODUCER_ENTITY_USERS_URL, queryParameters);
+
+		JSONDeserializer<CMICProducerUsersDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		List<CMICUserDTO> list = new ArrayList();
+
+		try {
+			CMICProducerUsersDTO results = jsonDeserializer.deserialize(response, CMICProducerUsersDTO.class);
+
+			list = results.getProducerUsers();
+		}
+		catch (Exception e) {
+			_log.error(
+				String.format("Could not get producer users for producerId, %s: %s", producerId, e.getMessage()));
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(e);
+			}
+		}
+
+		return list;
+	}
+
+	@Override
 	public CMICUserDTO getUserDetails(String uuid) throws PortalException {
 		if (_mockPortalUserWebServiceConfiguration.enableMockGetUserDetails()) {
 			return _mockPortalUserWebServiceClient.getUserDetails(uuid);
@@ -48,7 +84,7 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 
 		queryParameters.put("uuid", uuid);
 
-		String response = _webServiceExecutor.executeGet(_GET_USER_DETAILS_URL, queryParameters);
+		String response = _webServiceExecutor.executePost(_GET_USER_DETAILS_URL, queryParameters);
 
 		JSONDeserializer<CMICUserDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
 
@@ -142,7 +178,11 @@ public class PortalUserWebServiceImpl implements PortalUserWebService {
 			MockPortalUserWebServiceConfiguration.class, properties);
 	}
 
+	private static final String _GET_PRODUCER_ENTITY_USERS_URL = "/portal-user-service/v1/get-users/producer-entity";
+
 	private static final String _GET_USER_DETAILS_URL = "/portal-user-service/v1/get-users/details";
+
+	private static final Log _log = LogFactoryUtil.getLog(PortalUserWebServiceImpl.class);
 
 	@Reference
 	private JSONFactory _jsonFactory;

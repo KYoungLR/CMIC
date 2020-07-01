@@ -1,0 +1,24 @@
+[
+	{
+		"createdAt": "2020-05-19T18:36:51.041+0000",
+		"id": 1037,
+		"registrationCode": "Kjh9vTJU",
+		"registrationExpirationDate": "2020-06-19",
+		"registrationStatus": null,
+		"updatedAt": null,
+		"userRole": "producer",
+		"uuid": "f202c57a-bd9c-41f2-8ef4-831359f9dbdf",
+		"valid": false
+	},
+	{
+		"createdAt": "2020-05-19T18:36:51.041+0000",
+		"id": 1080,
+		"registrationCode": "Kjh9vTJL",
+		"registrationExpirationDate": "2020-08-19",
+		"registrationStatus": null,
+		"updatedAt": "2020-06-19T18:36:51.041+0000",
+		"userRole": "producer",
+		"uuid": "8b6899dd-4f4d-4536-bf5f-780ebdb7701d",
+		"valid": false
+	}
+]

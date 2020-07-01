@@ -9,6 +9,18 @@ public class CMICUserRelationDTO extends CMICObjectDTO {
 		return _accountNumber;
 	}
 
+	public String getAgentNumber() {
+		return _agentNumber;
+	}
+
+	public String getCompanyNumber() {
+		return _companyNumber;
+	}
+
+	public String getDivisionNumber() {
+		return _divisionNumber;
+	}
+
 	public long getProducerId() {
 		return _producerId;
 	}
@@ -17,11 +29,26 @@ public class CMICUserRelationDTO extends CMICObjectDTO {
 		_accountNumber = accountNumber;
 	}
 
+	public void setAgentNumber(String agentNumber) {
+		_agentNumber = agentNumber;
+	}
+
+	public void setCompanyNumber(String companyNumber) {
+		_companyNumber = companyNumber;
+	}
+
+	public void setDivisionNumber(String divisionNumber) {
+		_divisionNumber = divisionNumber;
+	}
+
 	public void setProducerId(long producerId) {
 		_producerId = producerId;
 	}
 
 	private String _accountNumber;
+	private String _agentNumber;
+	private String _companyNumber;
+	private String _divisionNumber;
 	private long _producerId;
 
 }

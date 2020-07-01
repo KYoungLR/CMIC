@@ -11,16 +11,16 @@ public class CMICUserDTO extends CMICObjectDTO {
 		return _id;
 	}
 
+	public List<CMICUserRelationDTO> getOrganizationList() {
+		return _organizationList;
+	}
+
 	public String getRegistrationCode() {
 		return _registrationCode;
 	}
 
 	public String getRegistrationExpirationDate() {
 		return _registrationExpirationDate;
-	}
-
-	public List<CMICUserRelationDTO> getUserRelations() {
-		return _userRelations;
 	}
 
 	public String getUserRole() {
@@ -39,16 +39,16 @@ public class CMICUserDTO extends CMICObjectDTO {
 		_id = id;
 	}
 
+	public void setOrganizationList(List<CMICUserRelationDTO> userRelations) {
+		_organizationList = userRelations;
+	}
+
 	public void setRegistrationCode(String registrationCode) {
 		_registrationCode = registrationCode;
 	}
 
 	public void setRegistrationExpirationDate(String registrationExpirationDate) {
 		_registrationExpirationDate = registrationExpirationDate;
-	}
-
-	public void setUserRelations(List<CMICUserRelationDTO> userRelations) {
-		_userRelations = userRelations;
 	}
 
 	public void setUserRole(String userRole) {
@@ -64,9 +64,9 @@ public class CMICUserDTO extends CMICObjectDTO {
 	}
 
 	private int _id;
+	private List<CMICUserRelationDTO> _organizationList;
 	private String _registrationCode;
 	private String _registrationExpirationDate;
-	private List<CMICUserRelationDTO> _userRelations;
 	private String _userRole;
 	private String _userStatusText;
 	private String _uuid;
