@@ -1,3 +1,7 @@
+//@group globals
+
+$enable-scaling-components: true;
+
 // Color system
 
 $white: #fff;
@@ -103,6 +107,13 @@ $h3-font-size: $font-size-base * 1.25;
 $h4-font-size: $font-size-base * 1.125;
 $h5-font-size: $font-size-base * 1;
 $h6-font-size: $font-size-base * .875;
+
+$h1-font-size-mobile: $font-size-base * 1.625;
+$h2-font-size-mobile: $font-size-base * 1.438;
+$h3-font-size-mobile: $font-size-base * 1.25;
+$h4-font-size-mobile: $font-size-base * 1.125;
+$h5-font-size-mobile: $font-size-base * 1.063;
+$h6-font-size-mobile: $font-size-base * .875;
 
 $headings-font-weight: $font-weight-bolder;
 
