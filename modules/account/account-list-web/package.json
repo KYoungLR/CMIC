@@ -3,28 +3,32 @@
 	"version": "1.0.0",
 	"description": "CMIC Account List Web",
 	"devDependencies": {
-		"liferay-npm-bundler": "^2.18.5",
-		"liferay-npm-build-support": "^2.18.5",
-		"copy-webpack-plugin": "4.6.0",
-		"webpack": "4.29.6",
-		"webpack-cli": "3.3.0",
-		"webpack-dev-server": "3.2.1",
 		"babel-cli": "6.26.0",
+		"babel-loader": "7.1.5",
 		"babel-preset-env": "1.7.0",
 		"babel-preset-react": "6.24.1",
-		"babel-loader": "7.1.5"
+		"babel-preset-stage-0": "^6.24.1",
+		"copy-webpack-plugin": "4.6.0",
+		"liferay-npm-build-support": "^2.18.5",
+		"liferay-npm-bundler": "^2.18.5",
+		"webpack": "4.29.6",
+		"webpack-cli": "3.3.0",
+		"webpack-dev-server": "3.2.1"
 	},
 	"dependencies": {
 		"@clayui/button": "^3.3.1",
 		"@clayui/card": "^3.2.1",
+		"@clayui/css": "^3.13.0",
 		"@clayui/form": "^3.8.0",
 		"@clayui/icon": "^3.0.5",
 		"@clayui/loading-indicator": "^3.1.0",
 		"@clayui/pagination-bar": "^3.1.4",
 		"@clayui/table": "^3.0.7",
+		"@clayui/tooltip": "^3.3.1",
 		"react": "16.8.6",
 		"react-dom": "16.8.6",
-		"react-number-format": "^4.4.1"
+		"react-number-format": "^4.4.1",
+		"react-table": "^7.2.2"
 	},
 	"scripts": {
 		"build": "babel --source-maps -d build src && npm run copy-assets && liferay-npm-bundler",

@@ -65,7 +65,14 @@
 		}
 	}
 
-	.user-personal-bar .sticker-primary {
-		background-color: $header-bg;
+	.user-personal-bar {
+
+		.portlet {
+			margin-bottom: 0;
+		}
+
+		.sticker-primary {
+			background-color: $header-bg;
+		}
 	}
 }

@@ -1,9 +1,21 @@
 .account-list-portlet {
 
+	.card-title {
+		font-size: $h1-font-size;
+	}
+
 	.card-header .input-group {
 
 		@include media-breakpoint-up(md) {
 			min-width: 28.75rem;
 		}
+	}
+
+	.toggle-sort {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 }
