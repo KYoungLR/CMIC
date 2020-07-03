@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 
 const spritemap = themeDisplay.getPathThemeImages() + '/clay/icons.svg';
 
-const tableColumns = [
+const TableColumns = [
   {
     Header: Liferay.Language.get('name'),
     accessor: 'accountName',
@@ -105,4 +105,4 @@ const tableColumns = [
   },
 ];
 
-export default tableColumns;
+export default TableColumns;
