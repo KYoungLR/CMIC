@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
@@ -142,6 +143,26 @@ public class LayoutHelper {
 		return LayoutLocalServiceUtil.updateLayout(
 			groupId, layout.isPrivateLayout(), layout.getLayoutId(),
 			layout.getTypeSettings());
+	}
+
+	public static Layout addLayoutWithURL(
+			long userId, long groupId, LayoutConfig layoutConfig, String url)
+		throws PortalException {
+
+		Layout layout = addLayout(
+			userId, groupId, layoutConfig.getParentLayoutId(), layoutConfig.getName(), layoutConfig.getName(),
+			layoutConfig.isPrivatePage(), layoutConfig.isHiddenPage(), layoutConfig.getFriendlyURL(),
+			com.liferay.portal.kernel.model.LayoutConstants.TYPE_URL);
+
+		UnicodeProperties unicodeProperties = new UnicodeProperties();
+
+		unicodeProperties.setProperty("layoutUpdateable", "true");
+		unicodeProperties.setProperty("url", url);
+
+		layout.setTypeSettingsProperties(unicodeProperties);
+
+		return LayoutLocalServiceUtil.updateLayout(
+			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(), layout.getTypeSettings());
 	}
 
 	public static Layout addLayoutWith2Columns(

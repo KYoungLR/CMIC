@@ -6,6 +6,7 @@ import com.churchmutual.content.setup.upgrade.util.broker.BrokerAccountsPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerContactPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerDashboardPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerPolicyDetailsPage;
+import com.churchmutual.content.setup.upgrade.util.broker.BrokerProfileLinks;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerProfilePage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerResourcesPage;
 import com.churchmutual.content.setup.upgrade.util.broker.BrokerUserRegistrationPage;
@@ -36,15 +37,16 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 	public AddBrokerSiteUpgradeProcess(
 		CompanyLocalService companyLocalService, DDMStructureLocalService ddmStructureLocalService,
-		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService, ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
+		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService,
+		ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
 		JournalArticleLocalService journalArticleLocalService, LayoutSetLocalService layoutSetLocalService,
 		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
 		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
 
 		super(
-			companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService, expandoTableLocalService, groupLocalService,
-			journalArticleLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
-			userLocalService, virtualHostLocalService);
+			companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService,
+			expandoTableLocalService, groupLocalService, journalArticleLocalService, layoutSetLocalService,
+			permissionCheckerFactory, portal, roleLocalService, userLocalService, virtualHostLocalService);
 
 		this.portal = portal;
 		this.userLocalService = userLocalService;
@@ -65,7 +67,8 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 		properties.put(ExpandoColumnConstants.PROPERTY_HIDDEN, "true");
 
 		addExpandoColumn(
-			companyId, User.class.getName(), ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, ExpandoColumnConstants.STRING, properties);
+			companyId, User.class.getName(), ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
+			ExpandoColumnConstants.STRING, properties);
 
 		_addPrivatePages(companyId, userId, brokerPortalGroupId);
 
@@ -91,6 +94,7 @@ public class AddBrokerSiteUpgradeProcess extends BaseSiteUpgradeProcess {
 
 	private void _addPublicPages(long companyId, long userId, long groupId) throws Exception {
 		BrokerUserRegistrationPage.addPage(companyId, userId, groupId);
+		BrokerProfileLinks.addLinks(companyId, userId, groupId);
 	}
 
 }
