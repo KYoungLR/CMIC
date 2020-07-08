@@ -47,6 +47,7 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	@Deactivate
 	public void deactivate() {
 		_singleVMPool.removePortalCache(_GET_CONTACTS_CACHE_NAME);
+		_singleVMPool.removePortalCache(_GET_PRIMARY_CONTACT_CACHE_NAME);
 		_singleVMPool.removePortalCache(_GET_PRODUCER_BY_ID_CACHE_NAME);
 		_singleVMPool.removePortalCache(_GET_PRODUCERS_CACHE_NAME);
 	}
@@ -86,6 +87,43 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 		_getContactsPortalCache.put(key, list);
 
 		return list;
+	}
+
+	@Override
+	public CMICContactDTO getPrimaryContact(long producerId) throws PortalException {
+		if (_mockProducerWebServiceConfiguration.enableMockGetPrimaryContact()) {
+			return _mockProducerWebServiceClient.getPrimaryContact(producerId);
+		}
+
+		ProducerIdKey key = new ProducerIdKey(producerId);
+
+		CMICContactDTO cache = _getPrimaryContactPortalCache.get(key);
+
+		if (cache != null) {
+			return cache;
+		}
+
+		Map<String, String> queryParameters = new HashMap<>();
+
+		queryParameters.put("producerId", String.valueOf(producerId));
+
+		String response = _webServiceExecutor.executeGet(_GET_PRIMARY_CONTACT, queryParameters);
+
+		JSONDeserializer<CMICContactDTO> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+		CMICContactDTO result = null;
+
+		try {
+			result = jsonDeserializer.deserialize(response, CMICContactDTO.class);
+		}
+		catch (Exception e) {
+			throw new PortalException(
+				String.format("Primary contact for producer %s could not be found", producerId), e);
+		}
+
+		_getPrimaryContactPortalCache.put(key, result);
+
+		return result;
 	}
 
 	@Override
@@ -206,6 +244,8 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 
 		_getContactsPortalCache = (PortalCache<ProducerIdKey, List<CMICContactDTO>>)_singleVMPool.getPortalCache(
 			_GET_CONTACTS_CACHE_NAME);
+		_getPrimaryContactPortalCache = (PortalCache<ProducerIdKey, CMICContactDTO>)_singleVMPool.getPortalCache(
+			_GET_PRIMARY_CONTACT_CACHE_NAME);
 		_getProducerByIdPortalCache = (PortalCache<ProducerIdKey, CMICProducerDTO>)_singleVMPool.getPortalCache(
 			_GET_PRODUCER_BY_ID_CACHE_NAME);
 		_getProducersPortalCache = (PortalCache<GetProducersKey, List<CMICProducerDTO>>)_singleVMPool.getPortalCache(
@@ -215,6 +255,11 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	private static final String _GET_CONTACTS = "/producer-api/v1/contacts";
 
 	private static final String _GET_CONTACTS_CACHE_NAME = ProducerWebServiceImpl.class.getName() + "_GET_CONTACTS";
+
+	private static final String _GET_PRIMARY_CONTACT = "/producer-api/v1/contacts/with-assignment";
+
+	private static final String _GET_PRIMARY_CONTACT_CACHE_NAME =
+		ProducerWebServiceImpl.class.getName() + "_GET_PRIMARY_CONTACT";
 
 	private static final String _GET_PRODUCER_BY_ID = "/producer-api/v1/producers";
 
@@ -230,6 +275,7 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	private static final Log _log = LogFactoryUtil.getLog(ProducerWebServiceImpl.class);
 
 	private PortalCache<ProducerIdKey, List<CMICContactDTO>> _getContactsPortalCache;
+	private PortalCache<ProducerIdKey, CMICContactDTO> _getPrimaryContactPortalCache;
 	private PortalCache<ProducerIdKey, CMICProducerDTO> _getProducerByIdPortalCache;
 	private PortalCache<GetProducersKey, List<CMICProducerDTO>> _getProducersPortalCache;
 
