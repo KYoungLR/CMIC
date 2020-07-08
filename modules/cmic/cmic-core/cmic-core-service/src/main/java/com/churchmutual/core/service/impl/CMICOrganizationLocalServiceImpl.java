@@ -16,6 +16,8 @@ package com.churchmutual.core.service.impl;
 
 import com.churchmutual.core.constants.ProducerType;
 import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.model.CMICOrganizationDisplay;
+import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.model.CMICProducerDTO;
@@ -25,6 +27,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.OrganizationConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -75,6 +78,21 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	@Override
 	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId) throws PortalException {
 		return cmicOrganizationPersistence.fetchByProducerId(producerId);
+	}
+
+	@Override
+	public List<CMICOrganizationDisplay> getCMICOrganizations(long userId) throws PortalException {
+		List<CMICOrganization> organizations = getCMICUserOrganizations(userId);
+
+		List<CMICOrganizationDisplay> cmicOrganizationDisplayList = new ArrayList<>();
+
+		for (CMICOrganization cmicOrganization: organizations) {
+			CMICOrganizationDisplay cmicOrganizationDisplay = new CMICOrganizationDisplay(cmicOrganization);
+
+			cmicOrganizationDisplayList.add(cmicOrganizationDisplay);
+		}
+
+		return cmicOrganizationDisplayList;
 	}
 
 	@Override
