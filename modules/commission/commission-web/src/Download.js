@@ -67,7 +67,7 @@ const Download = (props) => {
                 {props.statementList.map((statement, index) => (
                   <ClaySelect.Option
                     key={index}
-                    label={statement.label}
+                    label={statement.name}
                     value={statement.documentId}
                   />
                 ))}

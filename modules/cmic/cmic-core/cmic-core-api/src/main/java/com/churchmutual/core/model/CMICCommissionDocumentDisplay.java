@@ -1,10 +1,13 @@
 package com.churchmutual.core.model;
 
+import com.churchmutual.core.constants.CommissionDocumentType;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
 import com.churchmutual.rest.model.CMICFileDTO;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.text.SimpleDateFormat;
 
@@ -12,19 +15,46 @@ import java.util.Date;
 
 public class CMICCommissionDocumentDisplay {
 
-	public CMICCommissionDocumentDisplay(CMICCommissionDocumentDTO cmicCommissionDocumentDTO) {
+	public CMICCommissionDocumentDisplay(CMICCommissionDocumentDTO cmicCommissionDocumentDTO, String producerId) {
 		String statementDate = _getFormattedStatementDate(cmicCommissionDocumentDTO.getStatementDate());
 
 		_documentId = cmicCommissionDocumentDTO.getId();
-		_label = statementDate + " - " + cmicCommissionDocumentDTO.getDocumentType();
+
+		String documentType = cmicCommissionDocumentDTO.getDocumentType();
+
+		CommissionDocumentType commissionDocumentType = CommissionDocumentType.fromCmicName(
+			cmicCommissionDocumentDTO.getDocumentType());
+
+		if (commissionDocumentType != null) {
+			documentType = commissionDocumentType.getName();
+		}
+
+		if (Validator.isBlank(producerId)) {
+			_name = String.format("%s - %s", statementDate, documentType);
+		}
+		else {
+			_name = String.format("%s - %s - %s", statementDate, producerId, documentType);
+		}
 	}
 
 	public CMICCommissionDocumentDisplay(CMICFileDTO cmicFileDTO) {
 		_bytes = cmicFileDTO.getBytes();
 		_documentId = cmicFileDTO.getId();
 		_mimeType = cmicFileDTO.getMimeType();
-		_name = cmicFileDTO.getName();
-		_url = cmicFileDTO.getUrl();
+
+		String name = cmicFileDTO.getName();
+
+		if (Validator.isBlank(name)) {
+			String url = cmicFileDTO.getUrl();
+
+			int fileNameStart = url.lastIndexOf(CharPool.FORWARD_SLASH) + 1;
+
+			int fileNameEnd = url.indexOf(CharPool.QUESTION);
+
+			name = url.substring(fileNameStart, fileNameEnd);
+		}
+
+		_name = name;
 	}
 
 	public String getBytes() {
@@ -35,20 +65,12 @@ public class CMICCommissionDocumentDisplay {
 		return _documentId;
 	}
 
-	public String getLabel() {
-		return _label;
-	}
-
 	public String getMimeType() {
 		return _mimeType;
 	}
 
 	public String getName() {
 		return _name;
-	}
-
-	public String getUrl() {
-		return _url;
 	}
 
 	private String _getFormattedStatementDate(String date) {
@@ -75,9 +97,7 @@ public class CMICCommissionDocumentDisplay {
 
 	private String _bytes;
 	private String _documentId;
-	private String _label;
 	private String _mimeType;
 	private String _name;
-	private String _url;
 
 }
