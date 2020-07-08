@@ -18,12 +18,11 @@ const Download = (props) => {
       showErrorMessage(false);
 
       let callback = (data) => {
-        const name = data.name ? data.name : data.url.substr(data.url.lastIndexOf('/') + 1).split('?')[0];
         const source = `data:${data.mimeType};base64,${data.bytes}`;
         const link = document.createElement('a');
 
         link.href = source;
-        link.download = name;
+        link.download = data.name;
         link.target = '_blank';
 
         document.body.appendChild(link);
