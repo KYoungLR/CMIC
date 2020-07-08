@@ -14,6 +14,7 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.constants.CommissionDocumentType;
 import com.churchmutual.core.exception.NoSuchCMICCommissionDocumentException;
 import com.churchmutual.core.model.CMICCommissionDocumentDisplay;
 import com.churchmutual.core.model.CMICOrganization;
@@ -24,12 +25,14 @@ import com.churchmutual.rest.PortalUserWebService;
 import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
 import com.churchmutual.rest.model.CMICFileDTO;
 
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,27 +71,35 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 	@Override
 	public List<CMICCommissionDocumentDisplay> getCommissionDocuments(long userId) throws PortalException {
-		List<CMICCommissionDocumentDTO> cmicCommissionDocumentDTOs = new ArrayList<>();
+		List<CMICCommissionDocumentDisplay> cmicCommissionDocumentDisplays = new ArrayList<>();
 
 		List<CMICOrganization> userOrganizations = _cmicOrganizationLocalService.getCMICUserOrganizations(userId);
 
+		LocalDate now = LocalDate.now();
+
+		LocalDate thirteenMonthsPrior = now.minusMonths(13);
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		String maximumStatementDate = now.format(formatter);
+		String minimumStatementDate = thirteenMonthsPrior.format(formatter);
+
 		for (CMICOrganization cmicOrganization : userOrganizations) {
-			List<CMICCommissionDocumentDTO> commissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
-				cmicOrganization.getAgentNumber(), cmicOrganization.getDivisionNumber(), StringPool.BLANK,
-				StringPool.BLANK, StringPool.BLANK);
+			for (CommissionDocumentType documentType : CommissionDocumentType.values()) {
+				List<CMICCommissionDocumentDTO> commissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
+					cmicOrganization.getAgentNumber(), cmicOrganization.getDivisionNumber(), documentType.toString(),
+					maximumStatementDate, minimumStatementDate);
 
-			cmicCommissionDocumentDTOs.addAll(commissionDocumentDTOs);
-		}
+				long producerId = cmicOrganization.getProducerId();
 
-		// TODO CMIC-396 Update call to pull user specific commission statements
-
-		cmicCommissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
-			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.BLANK);
-
-		List<CMICCommissionDocumentDisplay> cmicCommissionDocumentDisplays = new ArrayList<>();
-
-		for (CMICCommissionDocumentDTO cmicCommissionDocumentDTO : cmicCommissionDocumentDTOs) {
-			cmicCommissionDocumentDisplays.add(new CMICCommissionDocumentDisplay(cmicCommissionDocumentDTO));
+				commissionDocumentDTOs.stream(
+				).forEach(
+					commissionDocumentDTO -> {
+						cmicCommissionDocumentDisplays.add(
+							new CMICCommissionDocumentDisplay(commissionDocumentDTO, String.valueOf(producerId)));
+					}
+				);
+			}
 		}
 
 		return cmicCommissionDocumentDisplays;

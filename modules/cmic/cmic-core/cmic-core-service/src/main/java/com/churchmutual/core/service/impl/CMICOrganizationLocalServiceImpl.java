@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
@@ -67,6 +68,8 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		return organizations.stream(
 		).map(
 			org -> getCMICOrganizationByOrganizationId(org.getOrganizationId())
+		).filter(
+			Objects::nonNull
 		).collect(
 			Collectors.toList()
 		);
