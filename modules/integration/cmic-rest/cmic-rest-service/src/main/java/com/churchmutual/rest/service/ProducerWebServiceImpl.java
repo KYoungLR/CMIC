@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -120,7 +121,7 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 	}
 
 	@Override
-	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms)
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, Boolean payOutOfCdms)
 		throws PortalException {
 
 		if (_mockProducerWebServiceConfiguration.enableMockGetProducers()) {
@@ -140,7 +141,10 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 		queryParameters.put("agent", agent);
 		queryParameters.put("division", division);
 		queryParameters.put("name", name);
-		queryParameters.put("payOutOfCdms", String.valueOf(payOutOfCdms));
+
+		if (payOutOfCdms != null) {
+			queryParameters.put("payOutOfCdms", String.valueOf(payOutOfCdms));
+		}
 
 		String response = _webServiceExecutor.executeGet(_GET_PRODUCERS, queryParameters);
 

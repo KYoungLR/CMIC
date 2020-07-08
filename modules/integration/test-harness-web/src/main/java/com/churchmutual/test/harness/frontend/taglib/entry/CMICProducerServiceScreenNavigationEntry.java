@@ -129,7 +129,7 @@ public class CMICProducerServiceScreenNavigationEntry extends BaseTestHarnessScr
 				String agent = ParamUtil.getString(portletRequest, "agent");
 				String division = ParamUtil.getString(portletRequest, "division");
 				String name = ParamUtil.getString(portletRequest, "name");
-				boolean payOutOfCdms = ParamUtil.getBoolean(portletRequest, "payOutOfCdms");
+				Boolean payOutOfCdms = ParamUtil.getBoolean(portletRequest, "payOutOfCdms");
 
 				List<CMICProducerDTO> producers = _producerWebService.getProducers(agent, division, name, payOutOfCdms);
 

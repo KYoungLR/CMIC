@@ -17,7 +17,7 @@ public interface ProducerWebService {
 
 	public CMICProducerDTO getProducerById(long id) throws PortalException;
 
-	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms)
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, Boolean payOutOfCdms)
 		throws PortalException;
 
 	/**
