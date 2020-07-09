@@ -122,16 +122,27 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.model.User getUser(String cmicUUID) {
+	public com.liferay.portal.kernel.model.User getUser(String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
 		return _cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override
-	public com.liferay.portal.kernel.json.JSONObject getUserDetails(
-			long userId, long groupId)
+	public com.churchmutual.core.model.CMICUserDisplay getUserDetails(
+			long userId, boolean useCache)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserLocalService.getUserDetails(userId, groupId);
+		return _cmicUserLocalService.getUserDetails(userId, useCache);
+	}
+
+	@Override
+	public com.churchmutual.core.model.CMICUserDisplay
+			getUserDetailsWithRoleAndStatus(long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.getUserDetailsWithRoleAndStatus(
+			userId, groupId);
 	}
 
 	@Override
@@ -182,14 +193,6 @@ public class CMICUserLocalServiceWrapper
 
 		return _cmicUserLocalService.updatePortraitImage(
 			userId, imageFileString);
-	}
-
-	@Override
-	public void updateUserAndGroups(
-			com.churchmutual.rest.model.CMICUserDTO cmicUserDTO)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		_cmicUserLocalService.updateUserAndGroups(cmicUserDTO);
 	}
 
 	@Override

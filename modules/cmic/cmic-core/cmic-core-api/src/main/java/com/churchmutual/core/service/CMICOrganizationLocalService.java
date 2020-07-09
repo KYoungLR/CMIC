@@ -72,6 +72,9 @@ public interface CMICOrganizationLocalService
 	public CMICOrganization addCMICOrganization(
 		CMICOrganization cmicOrganization);
 
+	public CMICOrganization addCMICOrganization(long userId, long producerId)
+		throws PortalException;
+
 	/**
 	 * Creates a new cmic organization with the primary key. Does not add the cmic organization to the database.
 	 *
@@ -179,6 +182,10 @@ public interface CMICOrganizationLocalService
 	public CMICOrganization fetchCMICOrganization(long cmicOrganizationId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	/**
@@ -219,8 +226,7 @@ public interface CMICOrganizationLocalService
 	public int getCMICOrganizationsCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CMICOrganization> getCMICUserOrganizations(long userId)
-		throws PortalException;
+	public List<CMICOrganization> getCMICUserOrganizations(long userId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

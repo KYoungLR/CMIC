@@ -390,7 +390,8 @@ public class CMICUserServiceHttp {
 	}
 
 	public static com.liferay.portal.kernel.model.User getUser(
-		HttpPrincipal httpPrincipal, String cmicUUID) {
+			HttpPrincipal httpPrincipal, String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
@@ -405,6 +406,13 @@ public class CMICUserServiceHttp {
 				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
 				throw new com.liferay.portal.kernel.exception.SystemException(
 					e);
 			}
@@ -418,14 +426,53 @@ public class CMICUserServiceHttp {
 		}
 	}
 
-	public static com.liferay.portal.kernel.json.JSONObject getUserDetails(
-			HttpPrincipal httpPrincipal, long groupId)
+	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
+			HttpPrincipal httpPrincipal, boolean useCache)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "getUserDetails",
 				_getUserDetailsParameterTypes10);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, useCache);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					e);
+			}
+
+			return (com.churchmutual.core.model.CMICUserDisplay)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
+	public static com.churchmutual.core.model.CMICUserDisplay
+			getUserDetailsWithRoleAndStatus(
+				HttpPrincipal httpPrincipal, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CMICUserServiceUtil.class, "getUserDetailsWithRoleAndStatus",
+				_getUserDetailsWithRoleAndStatusParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId);
 
@@ -446,7 +493,7 @@ public class CMICUserServiceHttp {
 					e);
 			}
 
-			return (com.liferay.portal.kernel.json.JSONObject)returnObj;
+			return (com.churchmutual.core.model.CMICUserDisplay)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);
@@ -462,7 +509,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "inviteBusinessMembers",
-				_inviteBusinessMembersParameterTypes11);
+				_inviteBusinessMembersParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, emailAddresses);
@@ -495,7 +542,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "isUserRegistered",
-				_isUserRegisteredParameterTypes12);
+				_isUserRegisteredParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cmicUUID);
@@ -526,7 +573,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "isUserValid",
-				_isUserValidParameterTypes13);
+				_isUserValidParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, businessZipCode, divisionAgentNumber,
@@ -558,7 +605,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "removeUserFromCMICOrganization",
-				_removeUserFromCMICOrganizationParameterTypes14);
+				_removeUserFromCMICOrganizationParameterTypes15);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, userId, cmicOrganizationId);
@@ -593,7 +640,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "updateBusinessMembers",
-				_updateBusinessMembersParameterTypes15);
+				_updateBusinessMembersParameterTypes16);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, updateUserRolesJSONString,
@@ -628,7 +675,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "updatePortraitImage",
-				_updatePortraitImageParameterTypes16);
+				_updatePortraitImageParameterTypes17);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, imageFileString);
@@ -666,7 +713,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "validateUserRegistration",
-				_validateUserRegistrationParameterTypes17);
+				_validateUserRegistrationParameterTypes18);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, registrationCode);
@@ -721,23 +768,27 @@ public class CMICUserServiceHttp {
 		String.class
 	};
 	private static final Class<?>[] _getUserDetailsParameterTypes10 =
-		new Class[] {long.class};
-	private static final Class<?>[] _inviteBusinessMembersParameterTypes11 =
+		new Class[] {boolean.class};
+	private static final Class<?>[]
+		_getUserDetailsWithRoleAndStatusParameterTypes11 = new Class[] {
+			long.class
+		};
+	private static final Class<?>[] _inviteBusinessMembersParameterTypes12 =
 		new Class[] {long.class, String.class};
-	private static final Class<?>[] _isUserRegisteredParameterTypes12 =
+	private static final Class<?>[] _isUserRegisteredParameterTypes13 =
 		new Class[] {String.class};
-	private static final Class<?>[] _isUserValidParameterTypes13 = new Class[] {
+	private static final Class<?>[] _isUserValidParameterTypes14 = new Class[] {
 		String.class, String.class, String.class, String.class
 	};
 	private static final Class<?>[]
-		_removeUserFromCMICOrganizationParameterTypes14 = new Class[] {
+		_removeUserFromCMICOrganizationParameterTypes15 = new Class[] {
 			long.class, long.class
 		};
-	private static final Class<?>[] _updateBusinessMembersParameterTypes15 =
+	private static final Class<?>[] _updateBusinessMembersParameterTypes16 =
 		new Class[] {long.class, String.class, String.class};
-	private static final Class<?>[] _updatePortraitImageParameterTypes16 =
+	private static final Class<?>[] _updatePortraitImageParameterTypes17 =
 		new Class[] {String.class};
-	private static final Class<?>[] _validateUserRegistrationParameterTypes17 =
+	private static final Class<?>[] _validateUserRegistrationParameterTypes18 =
 		new Class[] {String.class};
 
 }

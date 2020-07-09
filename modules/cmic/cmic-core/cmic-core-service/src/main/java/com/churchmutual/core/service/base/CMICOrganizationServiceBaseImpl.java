@@ -132,6 +132,14 @@ public abstract class CMICOrganizationServiceBaseImpl
 		classNameService;
 
 	@Reference
+	protected com.liferay.portal.kernel.service.OrganizationLocalService
+		organizationLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.OrganizationService
+		organizationService;
+
+	@Reference
 	protected com.liferay.portal.kernel.service.ResourceLocalService
 		resourceLocalService;
 

@@ -115,16 +115,26 @@ public class CMICUserServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.model.User getUser(String cmicUUID) {
+	public com.liferay.portal.kernel.model.User getUser(String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
 		return _cmicUserService.getUser(cmicUUID);
 	}
 
 	@Override
-	public com.liferay.portal.kernel.json.JSONObject getUserDetails(
-			long groupId)
+	public com.churchmutual.core.model.CMICUserDisplay getUserDetails(
+			boolean useCache)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserService.getUserDetails(groupId);
+		return _cmicUserService.getUserDetails(useCache);
+	}
+
+	@Override
+	public com.churchmutual.core.model.CMICUserDisplay
+			getUserDetailsWithRoleAndStatus(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserService.getUserDetailsWithRoleAndStatus(groupId);
 	}
 
 	@Override

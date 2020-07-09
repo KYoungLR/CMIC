@@ -63,6 +63,15 @@ public interface CMICAccountEntryLocalService
 	 */
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>CMICAccountEntryLocalServiceUtil</code>.
+	 */
+	public CMICAccountEntry addAccountEntry(
+			long userId, String accountNumber, String companyNumber)
+		throws PortalException;
+
+	/**
 	 * Adds the cmic account entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param cmicAccountEntry the cmic account entry
@@ -176,6 +185,10 @@ public interface CMICAccountEntryLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICAccountEntry fetchAccountEntry(
+		String accountNumber, String companyNumber);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICAccountEntry fetchCMICAccountEntry(long cmicAccountEntryId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -228,6 +241,9 @@ public interface CMICAccountEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICAccountEntry> getUserAccountEntries(long userId);
 
 	/**
 	 * Updates the cmic account entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

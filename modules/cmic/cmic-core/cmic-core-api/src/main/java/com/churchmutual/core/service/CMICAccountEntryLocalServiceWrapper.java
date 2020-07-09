@@ -34,6 +34,20 @@ public class CMICAccountEntryLocalServiceWrapper
 	}
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>CMICAccountEntryLocalServiceUtil</code>.
+	 */
+	@Override
+	public com.churchmutual.core.model.CMICAccountEntry addAccountEntry(
+			long userId, String accountNumber, String companyNumber)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicAccountEntryLocalService.addAccountEntry(
+			userId, accountNumber, companyNumber);
+	}
+
+	/**
 	 * Adds the cmic account entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param cmicAccountEntry the cmic account entry
@@ -195,6 +209,14 @@ public class CMICAccountEntryLocalServiceWrapper
 	}
 
 	@Override
+	public com.churchmutual.core.model.CMICAccountEntry fetchAccountEntry(
+		String accountNumber, String companyNumber) {
+
+		return _cmicAccountEntryLocalService.fetchAccountEntry(
+			accountNumber, companyNumber);
+	}
+
+	@Override
 	public com.churchmutual.core.model.CMICAccountEntry fetchCMICAccountEntry(
 		long cmicAccountEntryId) {
 
@@ -277,6 +299,13 @@ public class CMICAccountEntryLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cmicAccountEntryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List<com.churchmutual.core.model.CMICAccountEntry>
+		getUserAccountEntries(long userId) {
+
+		return _cmicAccountEntryLocalService.getUserAccountEntries(userId);
 	}
 
 	/**

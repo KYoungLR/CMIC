@@ -116,11 +116,31 @@ public abstract class CMICUserLocalServiceBaseImpl
 		classNameLocalService;
 
 	@Reference
+	protected com.liferay.portal.kernel.service.GroupLocalService
+		groupLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.OrganizationLocalService
+		organizationLocalService;
+
+	@Reference
 	protected com.liferay.portal.kernel.service.ResourceLocalService
 		resourceLocalService;
 
 	@Reference
+	protected com.liferay.portal.kernel.service.RoleLocalService
+		roleLocalService;
+
+	@Reference
 	protected com.liferay.portal.kernel.service.UserLocalService
 		userLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.UserGroupLocalService
+		userGroupLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.UserGroupRoleLocalService
+		userGroupRoleLocalService;
 
 }

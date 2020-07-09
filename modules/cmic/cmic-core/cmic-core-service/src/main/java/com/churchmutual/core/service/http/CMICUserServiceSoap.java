@@ -211,12 +211,32 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static String getUserDetails(long groupId) throws RemoteException {
-		try {
-			com.liferay.portal.kernel.json.JSONObject returnValue =
-				CMICUserServiceUtil.getUserDetails(groupId);
+	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
+			boolean useCache)
+		throws RemoteException {
 
-			return returnValue.toString();
+		try {
+			com.churchmutual.core.model.CMICUserDisplay returnValue =
+				CMICUserServiceUtil.getUserDetails(useCache);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.churchmutual.core.model.CMICUserDisplay
+			getUserDetailsWithRoleAndStatus(long groupId)
+		throws RemoteException {
+
+		try {
+			com.churchmutual.core.model.CMICUserDisplay returnValue =
+				CMICUserServiceUtil.getUserDetailsWithRoleAndStatus(groupId);
+
+			return returnValue;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

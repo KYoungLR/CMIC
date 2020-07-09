@@ -113,17 +113,24 @@ public class CMICUserServiceUtil {
 		return getService().getRecentlyViewedAccountNumbers();
 	}
 
-	public static com.liferay.portal.kernel.model.User getUser(
-		String cmicUUID) {
+	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getUser(cmicUUID);
 	}
 
-	public static com.liferay.portal.kernel.json.JSONObject getUserDetails(
-			long groupId)
+	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
+			boolean useCache)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().getUserDetails(groupId);
+		return getService().getUserDetails(useCache);
+	}
+
+	public static com.churchmutual.core.model.CMICUserDisplay
+			getUserDetailsWithRoleAndStatus(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getUserDetailsWithRoleAndStatus(groupId);
 	}
 
 	public static void inviteBusinessMembers(

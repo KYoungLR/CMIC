@@ -15,11 +15,11 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
+import com.churchmutual.core.model.CMICUserDisplay;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -95,10 +95,15 @@ public interface CMICUserService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public User getUser(String cmicUUID);
+	public User getUser(String cmicUUID) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public JSONObject getUserDetails(long groupId) throws PortalException;
+	public CMICUserDisplay getUserDetails(boolean useCache)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICUserDisplay getUserDetailsWithRoleAndStatus(long groupId)
+		throws PortalException;
 
 	public void inviteBusinessMembers(long groupId, String emailAddresses)
 		throws PortalException;

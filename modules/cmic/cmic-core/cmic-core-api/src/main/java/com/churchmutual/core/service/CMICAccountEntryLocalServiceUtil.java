@@ -39,6 +39,19 @@ public class CMICAccountEntryLocalServiceUtil {
 	 */
 
 	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>CMICAccountEntryLocalService</code> via injection or a <code>ServiceTracker</code> or use <code>CMICAccountEntryLocalServiceUtil</code>.
+	 */
+	public static com.churchmutual.core.model.CMICAccountEntry addAccountEntry(
+			long userId, String accountNumber, String companyNumber)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().addAccountEntry(
+			userId, accountNumber, companyNumber);
+	}
+
+	/**
 	 * Adds the cmic account entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param cmicAccountEntry the cmic account entry
@@ -187,6 +200,12 @@ public class CMICAccountEntryLocalServiceUtil {
 	}
 
 	public static com.churchmutual.core.model.CMICAccountEntry
+		fetchAccountEntry(String accountNumber, String companyNumber) {
+
+		return getService().fetchAccountEntry(accountNumber, companyNumber);
+	}
+
+	public static com.churchmutual.core.model.CMICAccountEntry
 		fetchCMICAccountEntry(long cmicAccountEntryId) {
 
 		return getService().fetchCMICAccountEntry(cmicAccountEntryId);
@@ -259,6 +278,12 @@ public class CMICAccountEntryLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.util.List<com.churchmutual.core.model.CMICAccountEntry>
+		getUserAccountEntries(long userId) {
+
+		return getService().getUserAccountEntries(userId);
 	}
 
 	/**
