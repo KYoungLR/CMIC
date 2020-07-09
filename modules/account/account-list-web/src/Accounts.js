@@ -1,7 +1,15 @@
 import React from 'react';
 import ClayCard from '@clayui/card';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {Toast} from 'com.churchmutual.commons.web';
 import AccountList from './AccountList';
+
+/* TODO - when service is ready
+Remove generateData reference
+Delete GenerateData.js file
+Remove "chance" from dependencies in package.json
+*/
+import generateData from './GenerateData';
 
 class Accounts extends React.Component {
 
@@ -56,23 +64,7 @@ class Accounts extends React.Component {
       .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts'))*/
 
     this.setState({
-      accountsList: [
-        { accountName: 'First Baptist Green Bay', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-001', inForcePolicies: 24, futurePolicies: 22, expiredPolicies: 17, policyPremium: 54428.21 },
-        { accountName: 'Merrill School District', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-002', inForcePolicies: 24, futurePolicies: 20, expiredPolicies: 9, policyPremium: 27594.21 },
-        { accountName: 'Lucy’s Daycare', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-003', inForcePolicies: 14, futurePolicies: 17, expiredPolicies: 3, policyPremium: 16750.21 },
-        { accountName: 'St. John’s Cathedral', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-004', inForcePolicies: 17, futurePolicies: 1, expiredPolicies: 7, policyPremium: 83300.21 },
-        { accountName: 'Trinity United Methodist', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-005', inForcePolicies: 32, futurePolicies: 8, expiredPolicies: 20, policyPremium: 2460.21 },
-        { accountName: 'First Baptist Green Bay', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-006', inForcePolicies: 24, futurePolicies: 22, expiredPolicies: 17, policyPremium: 54428.21 },
-        { accountName: 'Merrill School District', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-001', inForcePolicies: 24, futurePolicies: 20, expiredPolicies: 9, policyPremium: 27594.21 },
-        { accountName: 'Lucy’s Daycare', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-007', inForcePolicies: 14, futurePolicies: 17, expiredPolicies: 3, policyPremium: 16750.21 },
-        { accountName: 'St. John’s Cathedral', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-008', inForcePolicies: 17, futurePolicies: 1, expiredPolicies: 7, policyPremium: 83300.21 },
-        { accountName: 'Trinity United Methodist', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-009', inForcePolicies: 32, futurePolicies: 8, expiredPolicies: 20, policyPremium: 2460.21 },
-        { accountName: 'First Baptist Green Bay', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-001', inForcePolicies: 24, futurePolicies: 22, expiredPolicies: 17, policyPremium: 54428.21 },
-        { accountName: 'Merrill School District', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-002', inForcePolicies: 24, futurePolicies: 20, expiredPolicies: 9, policyPremium: 27594.21 },
-        { accountName: 'Lucy’s Daycare', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-003', inForcePolicies: 14, futurePolicies: 17, expiredPolicies: 3, policyPremium: 16750.21 },
-        { accountName: 'St. John’s Cathedral', accountNumber: '1AJNS1981', producerEntity: 'Brown & Brown', producerEntityCode: '35-004', inForcePolicies: 17, futurePolicies: 1, expiredPolicies: 7, policyPremium: 83300.21 },
-        { accountName: 'Trinity United Methodist', accountNumber: '1AJNS1981', producerEntity: 'XYZ Insurance', producerEntityCode: '35-005', inForcePolicies: 32, futurePolicies: 8, expiredPolicies: 20, policyPremium: 2460.21 }
-      ],
+      accountsList: generateData(1000),
       isLoading: false
     });
   }
@@ -81,10 +73,11 @@ class Accounts extends React.Component {
     return (
       <div className="account-list-portlet">
         <ClayCard>
-          <AccountList
-            accountsList={this.state.accountsList}
-            isLoading={this.state.isLoading}
-          />
+          {this.state.isLoading ? (
+            <ClayLoadingIndicator />
+          ) : (
+            <AccountList accountsList={this.state.accountsList} />
+          )}
         </ClayCard>
 
         <Toast

@@ -1,119 +1,130 @@
-import React, {useState, useMemo} from 'react';
-import ClayButton from '@clayui/button';
+import React, {useState, useMemo, useRef} from 'react';
 import ClayCard from '@clayui/card';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import ClayTable from '@clayui/table';
-import {useTable, useSortBy, useGlobalFilter} from 'react-table';
-import AccountSearch from './AccountSearch';
+import {ClayTooltipProvider} from '@clayui/tooltip';
+import NumberFormat from 'react-number-format';
+import AccountPagination from './AccountPagination';
+import {AccountSearch, AccoutSearchFilter} from './AccountSearch';
 import EmptyState from './EmptyState';
-import TableColumns from './AccountTableColumns';
+import {Navigate, Render, TableHeadings, TableSort} from './AccountTableHelpers';
 
-const navigate = (e, id) => {
-  // TODO - pass account number
+import ReactBigList, {withCustomFilters} from 'react-big-list';
+import {customFilterMap, filterOptions} from './AccountFilters';
 
-  Liferay.Util.navigate('account-details');
-}
+let Enhanced = withCustomFilters(ReactBigList, customFilterMap);
 
 const AccountList = (props) => {
+  const [pageSize, setPageSize] = useState(10);
 
-  if (props.isLoading) {
-    return (<ClayLoadingIndicator />);
-  }
-  else {
-    const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
-    const columns = useMemo(() => TableColumns, []);
-    const data = useMemo(() => props.accountsList, []);
-
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      rows,
-      state,
-      prepareRow,
-      setGlobalFilter,
-    } = useTable({
-        columns,
-        data,
-      },
-      useGlobalFilter,
-      useSortBy,
-    );
-
-    return (
-      <React.Fragment>
-        <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
-          <ClayCard.Description displayType="title">{Liferay.Language.get('accounts')} ({rows.length})</ClayCard.Description>
-          <div className="mt-4 mt-md-0">
-            <AccountSearch
-              globalFilter={state.globalFilter}
-              setGlobalFilter={setGlobalFilter}
-            />
+  return (
+    <Enhanced
+      members={props.accountsList}
+      paginationProps={{pageSize}}
+      queryStringFilter={AccoutSearchFilter}>
+      {({
+          activeFilters,
+          activePage,
+          displayedCount,
+          displayedMembers,
+          displayingFrom,
+          displayingTo,
+          filteredCount,
+          initialCount,
+          numPages,
+          queryString,
+          sortColumn,
+          sortDirection,
+          setPageNumber,
+          setQueryString,
+          setSort,
+          toggleFilter,
+        }) => (
+        <React.Fragment>
+          <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
+            <ClayCard.Description displayType="title">{Liferay.Language.get('accounts')} ({filteredCount})</ClayCard.Description>
+            <div className="mt-4 mt-md-0">
+              <AccountSearch
+                activePage={activePage}
+                queryString={queryString}
+                setPageNumber={setPageNumber}
+                setQueryString={setQueryString}
+              />
+            </div>
           </div>
-        </div>
-        <ClayCard.Body>
-          {(() => {
-            if (!rows.length) {
-              return (<EmptyState />);
-            }
-            else {
-              return (
-                <ClayTable className="table-sticky" {...getTableProps()}>
-                  <ClayTable.Head>
-                    {headerGroups.map(headerGroup => (
-                      <ClayTable.Row {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
-                          <ClayTable.Cell headingCell {...column.getHeaderProps({
-                            ...column.headerProps
-                          })}>
-                            <span className="toggle-sort" {...column.getSortByToggleProps()}>
-                              {column.render('Header')}
 
-                              {column.isSorted
-                                ? column.isSortedDesc
-                                  ? <ClayIcon symbol={"sort-descending"} spritemap={spritemap} className="text-primary" />
-                                  : <ClayIcon symbol={"sort-ascending"} spritemap={spritemap} className="text-primary" />
-                                : <ClayIcon symbol={"sort"} spritemap={spritemap} className="text-muted" />
-                              }
-                            </span>
-                          </ClayTable.Cell>
-                        ))}
-                      </ClayTable.Row>
-                    ))}
+          <ClayCard.Body>
+            {!filteredCount ? (
+              <EmptyState />
+            ) : (
+              <React.Fragment>
+                <ClayTable className="table-sticky">
+                  <ClayTable.Head>
+                    <ClayTable.Row>
+                      {TableHeadings.map((heading, i) => (
+                        <ClayTable.Cell key={i} headingCell {...heading.props}>
+                          <TableSort
+                            sortable={heading.sortable}
+                            sortBy={heading.sortBy}
+                            setSort={setSort}
+                            sortColumn={sortColumn}
+                            sortDirection={sortDirection}
+                          >
+                            {Render(heading.text)}
+                          </TableSort>
+                        </ClayTable.Cell>
+                      ))}
+                    </ClayTable.Row>
                   </ClayTable.Head>
 
                   <ClayTable.Body>
-                    {rows.map((row, i) => {
-                      prepareRow(row)
-                      return (
-                        <ClayTable.Row
-                          className="cursor-pointer"
-                          onClick={(e) => navigate(e, row.original.accountNumber)}
-                          {...row.getRowProps()}>
+                    {displayedMembers.map((account, i) => (
+                      <ClayTable.Row
+                        className="cursor-pointer"
+                        key={i}
+                        onClick={() => Navigate(account.accountNumber)}
+                      >
+                        <ClayTable.Cell>
+                          <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
+                          <small className="text-muted">#{account.accountNumber}</small>
+                        </ClayTable.Cell>
 
-                          {row.cells.map(cell => {
-                            return (
-                              <ClayTable.Cell {...cell.getCellProps({
-                                ...cell.column.cellProps
-                              })}>
-                                {cell.render('Cell')}
-                              </ClayTable.Cell>
-                            )
-                          })}
-                        </ClayTable.Row>
-                      )
-                    })}
+                        <ClayTable.Cell>
+                          <h5 className="font-weight-normal mb-0">{account.producerName}</h5>
+                          <small className="text-muted">{account.producerCode}</small>
+                        </ClayTable.Cell>
+
+                        <ClayTable.Cell align="center">{account.inForcePolicy}</ClayTable.Cell>
+                        <ClayTable.Cell align="center">{account.futurePolicy}</ClayTable.Cell>
+                        <ClayTable.Cell align="center">{account.expiredPolicy}</ClayTable.Cell>
+
+                        <ClayTable.Cell align="right" className="h3 font-weight-bold">
+                          <NumberFormat value={account.totalBilledPremium} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                        </ClayTable.Cell>
+                      </ClayTable.Row>
+                    ))}
                   </ClayTable.Body>
                 </ClayTable>
-              )
-            }
-          })()}
-        </ClayCard.Body>
-      </React.Fragment>
-    );
-  }
+                <hr/>
+                <AccountPagination
+                  activePage={activePage}
+                  displayingFrom={displayingFrom}
+                  displayingTo={displayingTo}
+                  filteredCount={filteredCount}
+                  numPages={numPages}
+                  pageSize={pageSize}
+                  setPageNumber={setPageNumber}
+                  setPageSize={setPageSize}
+                />
+              </React.Fragment>
+            )}
+          </ClayCard.Body>
+        </React.Fragment>
+      )}
+    </Enhanced>
+  );
 };
 
 export default AccountList;

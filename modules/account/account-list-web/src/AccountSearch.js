@@ -4,9 +4,8 @@ import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 
-const AccountSearch = ({globalFilter, setGlobalFilter}) => {
+export const AccountSearch = ({activePage, queryString, setPageNumber, setQueryString}) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
-  const [value, setValue] = useState(globalFilter);
 
   return (
     <ClayInput.Group>
@@ -24,12 +23,15 @@ const AccountSearch = ({globalFilter, setGlobalFilter}) => {
         <ClayInput
           aria-label="Search"
           className="input-group-inset input-group-inset-after"
-          type="text"
           onChange={e => {
-            setValue(e.target.value);
-            setGlobalFilter(e.target.value || undefined);
+            setQueryString(e.target.value);
+            if (activePage != 1) {
+              setPageNumber(1);
+            }
           }}
           placeholder={Liferay.Language.get('search')}
+          type="text"
+          value={queryString}
         />
         <ClayInput.GroupInsetItem after tag="span">
           <ClayIcon
@@ -51,4 +53,12 @@ const AccountSearch = ({globalFilter, setGlobalFilter}) => {
   );
 };
 
-export default AccountSearch;
+export const AccoutSearchFilter = (member, queryString) => {
+  queryString = queryString.trim().toLowerCase();
+
+  return (
+    member.accountName.toLowerCase().includes(queryString) ||
+    member.accountNumber.includes(queryString) ||
+    member.producerCode.includes(queryString)
+  );
+};
