@@ -52,7 +52,7 @@ class Profile extends React.Component {
     let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-producer-organizations');
 
     Liferay.Service(
-      '/cmic.cmicorganization/get-cmic-organizations',
+      '/cmic.cmicorganization/get-cmic-organization-displays',
       callback,
       errCallback
     );
