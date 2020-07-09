@@ -50,8 +50,8 @@ public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl
 	}
 
 	@Override
-	public List<CMICOrganizationDisplay> getCMICOrganizations() throws PortalException {
-		return cmicOrganizationLocalService.getCMICOrganizations(getUserId());
+	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays() throws PortalException {
+		return cmicOrganizationLocalService.getCMICOrganizationDisplays(getUserId());
 	}
 
 }

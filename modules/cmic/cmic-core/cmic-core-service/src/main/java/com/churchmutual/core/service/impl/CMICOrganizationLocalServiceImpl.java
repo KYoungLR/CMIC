@@ -81,7 +81,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Override
-	public List<CMICOrganizationDisplay> getCMICOrganizations(long userId) throws PortalException {
+	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays(long userId) throws PortalException {
 		List<CMICOrganization> cmicOrganizations = getCMICUserOrganizations(userId);
 
 		List<CMICOrganizationDisplay> cmicOrganizationDisplayList = new ArrayList<>();
