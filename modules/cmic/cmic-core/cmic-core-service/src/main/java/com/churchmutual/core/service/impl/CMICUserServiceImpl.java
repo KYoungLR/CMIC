@@ -17,18 +17,19 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.account.permissions.AccountEntryModelPermission;
 import com.churchmutual.account.permissions.OrganizationModelPermission;
 import com.churchmutual.commons.enums.BusinessPortalType;
-import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
+import com.churchmutual.core.model.CMICUserDisplay;
 
+import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
 import com.liferay.account.constants.AccountActionKeys;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.permission.GroupPermission;
+import com.liferay.portal.kernel.service.permission.UserPermission;
 
 import java.util.List;
 
@@ -94,20 +95,29 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public User getUser(String cmicUUID) {
+	public User getUser(String cmicUUID) throws PortalException {
 		return cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override
-	public JSONObject getUserDetails(long groupId) throws PortalException {
+	public CMICUserDisplay getUserDetails(boolean useCache) throws PortalException {
+		long userId = getUserId();
+
+		_userPermission.check(getPermissionChecker(), userId, ActionKeys.VIEW);
+
+		return cmicUserLocalService.getUserDetails(userId, useCache);
+	}
+
+	@Override
+	public CMICUserDisplay getUserDetailsWithRoleAndStatus(long groupId) throws PortalException {
 		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
 
-		return cmicUserLocalService.getUserDetails(getUserId(), groupId);
+		return cmicUserLocalService.getUserDetailsWithRoleAndStatus(getUserId(), groupId);
 	}
 
 	@Override
 	public void inviteBusinessMembers(long groupId, String emailAddresses) throws PortalException {
-		Group group = _groupService.getGroup(groupId);
+		Group group = groupService.getGroup(groupId);
 
 		BusinessPortalType businessPortalType = getBusinessPortalTypeByGroupId(groupId);
 
@@ -144,7 +154,7 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	public void updateBusinessMembers(long groupId, String updateUserRolesJSONString, String removeUsersJSONString)
 		throws PortalException {
 
-		Group group = _groupService.getGroup(groupId);
+		Group group = groupService.getGroup(groupId);
 
 		BusinessPortalType businessPortalType = getBusinessPortalTypeByGroupId(groupId);
 
@@ -172,9 +182,9 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Reference
-	private GroupPermission _groupPermission;
+	protected GroupPermission _groupPermission;
 
 	@Reference
-	private GroupService _groupService;
+	protected UserPermission _userPermission;
 
 }

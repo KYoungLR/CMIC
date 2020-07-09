@@ -14,18 +14,16 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.constants.ProducerType;
 import com.churchmutual.core.model.CMICOrganization;
-import com.churchmutual.core.service.CMICUserLocalService;
 import com.churchmutual.core.service.base.CMICOrganizationLocalServiceBaseImpl;
-import com.churchmutual.rest.PortalUserWebService;
-import com.churchmutual.rest.model.CMICUserDTO;
+import com.churchmutual.rest.ProducerWebService;
+import com.churchmutual.rest.model.CMICProducerDTO;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.model.OrganizationConstants;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,19 +49,42 @@ import org.osgi.service.component.annotations.Reference;
 public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServiceBaseImpl {
 
 	@Override
+	public CMICOrganization addCMICOrganization(long userId, long producerId) throws PortalException {
+		CMICProducerDTO producer = producerWebService.getProducerById(producerId);
+
+		Organization organization = organizationLocalService.addOrganization(
+			userId, OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID, producer.getName(), false);
+
+		long cmicOrganizationId = counterLocalService.increment(CMICOrganization.class.getName());
+
+		CMICOrganization cmicOrganization = createCMICOrganization(cmicOrganizationId);
+
+		cmicOrganization.setOrganizationId(organization.getOrganizationId());
+		cmicOrganization.setProducerId(producerId);
+		cmicOrganization.setAgentNumber(producer.getAgent());
+		cmicOrganization.setDivisionNumber(producer.getDivision());
+
+		int producerType = ProducerType.getTypeFromName(producer.getProducerType());
+
+		cmicOrganization.setProducerType(producerType);
+		cmicOrganization.setActive(true);
+
+		return cmicOrganizationPersistence.update(cmicOrganization);
+	}
+
+	@Override
+	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId) throws PortalException {
+		return cmicOrganizationPersistence.fetchByProducerId(producerId);
+	}
+
+	@Override
 	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) {
 		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
 	@Override
-	public List<CMICOrganization> getCMICUserOrganizations(long userId) throws PortalException {
-		User user = _userLocalService.getUser(userId);
-
-		CMICUserDTO cmicUserDTO = _portalUserWebService.getUserDetails(user.getExternalReferenceCode());
-
-		_cmicUserLocalService.updateUserAndGroups(cmicUserDTO);
-
-		List<Organization> organizations = _organizationLocalService.getUserOrganizations(userId);
+	public List<CMICOrganization> getCMICUserOrganizations(long userId) {
+		List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
 
 		return organizations.stream(
 		).map(
@@ -76,15 +97,6 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Reference
-	private CMICUserLocalService _cmicUserLocalService;
-
-	@Reference
-	private OrganizationLocalService _organizationLocalService;
-
-	@Reference
-	private PortalUserWebService _portalUserWebService;
-
-	@Reference
-	private UserLocalService _userLocalService;
+	protected ProducerWebService producerWebService;
 
 }

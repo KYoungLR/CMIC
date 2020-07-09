@@ -73,7 +73,7 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 	public List<CMICCommissionDocumentDisplay> getCommissionDocuments(long userId) throws PortalException {
 		List<CMICCommissionDocumentDisplay> cmicCommissionDocumentDisplays = new ArrayList<>();
 
-		List<CMICOrganization> userOrganizations = _cmicOrganizationLocalService.getCMICUserOrganizations(userId);
+		List<CMICOrganization> userOrganizations = cmicOrganizationLocalService.getCMICUserOrganizations(userId);
 
 		LocalDate now = LocalDate.now();
 
@@ -106,18 +106,18 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 	}
 
 	@Reference
-	private CMICOrganizationLocalService _cmicOrganizationLocalService;
+	protected CMICOrganizationLocalService cmicOrganizationLocalService;
 
 	@Reference
-	private CommissionDocumentWebService _commissionDocumentWebService;
+	protected CommissionDocumentWebService _commissionDocumentWebService;
 
 	@Reference
-	private JSONFactory _jsonFactory;
+	protected JSONFactory _jsonFactory;
 
 	@Reference
-	private PortalUserWebService _portalUserWebService;
+	protected PortalUserWebService _portalUserWebService;
 
 	@Reference
-	private UserLocalService _userLocalService;
+	protected UserLocalService _userLocalService;
 
 }

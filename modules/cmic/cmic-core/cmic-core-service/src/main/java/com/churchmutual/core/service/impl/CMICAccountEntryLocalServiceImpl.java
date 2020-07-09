@@ -14,11 +14,29 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICAccountEntry;
+import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICAccountEntryLocalServiceBaseImpl;
+import com.churchmutual.rest.AccountWebService;
+import com.churchmutual.rest.ProducerWebService;
+import com.churchmutual.rest.model.CMICAccountDTO;
 
+import com.churchmutual.rest.model.CMICProducerDTO;
+import com.liferay.account.model.AccountEntry;
+import com.liferay.account.model.AccountEntryUserRel;
+import com.liferay.account.service.AccountEntryUserRelLocalService;
+import com.liferay.account.service.business.AccountEntryBusinessService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * The implementation of the cmic account entry local service.
@@ -41,5 +59,78 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	 *
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil</code>.
 	 */
+	@Override
+	public CMICAccountEntry addAccountEntry(long userId, String accountNumber, String companyNumber)
+		throws PortalException {
 
+		CMICAccountDTO cmicAccountDTO = _accountWebService.getAccounts(accountNumber);
+
+		String name = cmicAccountDTO.getAccountName();
+
+		// 5 digit producerCode = 2 digit divisionNumber + 3 digit agentNumber
+
+		String producerCode = cmicAccountDTO.getProducerCode();
+
+		String agentNumber = producerCode.substring(0,2);
+
+		String divisionNumber = producerCode.substring(2);
+
+		List<CMICProducerDTO> cmicProducerDTOs = _producerWebService.getProducers(
+			agentNumber, divisionNumber, StringPool.BLANK, null);
+
+		if (cmicProducerDTOs.size() != 1) {
+			throw new PortalException(String.format("Producer with producerCode %s could not be found", producerCode));
+		}
+
+		CMICProducerDTO cmicProducerDTO = cmicProducerDTOs.get(0);
+
+		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.addCMICOrganization(
+			userId, cmicProducerDTO.getId());
+
+		AccountEntry accountEntry = _accountEntryBusinessService.createAccountEntry(
+			userId, name, userId, cmicOrganization.getOrganizationId());
+
+		long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
+
+		CMICAccountEntry cmicAccountEntry = createCMICAccountEntry(cmicAccountEntryId);
+
+		cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
+		cmicAccountEntry.setAccountNumber(accountNumber);
+		cmicAccountEntry.setCompanyNumber(companyNumber);
+
+		return cmicAccountEntryPersistence.update(cmicAccountEntry);
+	}
+
+	@Override
+	public CMICAccountEntry fetchAccountEntry(String accountNumber, String companyNumber) {
+		return cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
+	}
+
+	public List<CMICAccountEntry> getUserAccountEntries(long userId) {
+		List<AccountEntryUserRel> accountEntryUserRels =
+			_accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(userId);
+
+		return accountEntryUserRels.stream().map(
+			accountEntryUserRel -> cmicAccountEntryPersistence.fetchByAccountEntryId(accountEntryUserRel.getAccountEntryId())
+		).filter(
+			Objects::nonNull
+		).collect(
+			Collectors.toList()
+		);
+	}
+
+	@Reference
+	protected AccountEntryBusinessService _accountEntryBusinessService;
+
+	@Reference
+	protected AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
+
+	@Reference
+	protected AccountWebService _accountWebService;
+
+	@Reference
+	protected CMICOrganizationLocalService _cmicOrganizationLocalService;
+
+	@Reference
+	protected ProducerWebService _producerWebService;
 }
