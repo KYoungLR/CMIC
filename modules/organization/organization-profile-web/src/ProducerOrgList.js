@@ -32,6 +32,19 @@ const ProducerOrgList = (props) => {
             <a className="link-action" href="javascript:;">{Liferay.Language.get('show-all')}</a>
           </div>
         }
+
+        {props.producerOrgList.length == 0 &&
+          <div className="well well-lg justify-content-around">
+            <div className="empty-state">
+              <h3 className="text-muted">
+                {Liferay.Language.get('error.you-are-currently-not-associated-with-any-producer-organizations')}
+              </h3>
+              <div>
+                {Liferay.Language.get('contact-your-organizations-administrator-to-be-invited-to-the-organization')}
+              </div>
+            </div>
+          </div>
+        }
       </React.Fragment>
     );
   }
