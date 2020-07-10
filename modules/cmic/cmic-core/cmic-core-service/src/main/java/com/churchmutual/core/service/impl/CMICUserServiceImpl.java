@@ -18,8 +18,8 @@ import com.churchmutual.account.permissions.AccountEntryModelPermission;
 import com.churchmutual.account.permissions.OrganizationModelPermission;
 import com.churchmutual.commons.enums.BusinessPortalType;
 import com.churchmutual.core.model.CMICUserDisplay;
-
 import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
+
 import com.liferay.account.constants.AccountActionKeys;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.permission.GroupPermission;
 import com.liferay.portal.kernel.service.permission.UserPermission;
 
@@ -67,7 +66,7 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 
 	@Override
 	public JSONArray getBusinessRoles(long groupId) throws PortalException {
-		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+		groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
 
 		return cmicUserLocalService.getBusinessRoles(groupId);
 	}
@@ -78,8 +77,8 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public JSONArray getGroupOtherUsers(long groupId) throws PortalException {
-		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+	public List<CMICUserDisplay> getGroupOtherUsers(long groupId) throws PortalException {
+		groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
 
 		return cmicUserLocalService.getGroupOtherUsers(getUserId(), groupId);
 	}
@@ -103,14 +102,14 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	public CMICUserDisplay getUserDetails(boolean useCache) throws PortalException {
 		long userId = getUserId();
 
-		_userPermission.check(getPermissionChecker(), userId, ActionKeys.VIEW);
+		userPermission.check(getPermissionChecker(), userId, ActionKeys.VIEW);
 
 		return cmicUserLocalService.getUserDetails(userId, useCache);
 	}
 
 	@Override
 	public CMICUserDisplay getUserDetailsWithRoleAndStatus(long groupId) throws PortalException {
-		_groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
+		groupPermission.check(getPermissionChecker(), groupId, ActionKeys.VIEW);
 
 		return cmicUserLocalService.getUserDetailsWithRoleAndStatus(getUserId(), groupId);
 	}
@@ -182,9 +181,9 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Reference
-	protected GroupPermission _groupPermission;
+	protected GroupPermission groupPermission;
 
 	@Reference
-	protected UserPermission _userPermission;
+	protected UserPermission userPermission;
 
 }
