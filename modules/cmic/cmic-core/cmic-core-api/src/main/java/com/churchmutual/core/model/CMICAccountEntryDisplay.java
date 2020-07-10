@@ -45,8 +45,8 @@ public class CMICAccountEntryDisplay {
 		return _numInForcePolicies;
 	}
 
-	public long getProducerId() {
-		return _producerId;
+	public String getProducerCode() {
+		return _producerCode;
 	}
 
 	public String getProducerName() {
@@ -61,8 +61,8 @@ public class CMICAccountEntryDisplay {
 		_name = name;
 	}
 
-	public void setProducerId(long producerId) {
-		_producerId = producerId;
+	public void setProducerCode(String producerCode) {
+		_producerCode = producerCode;
 	}
 
 	public void setProducerName(String producerName) {
@@ -77,7 +77,7 @@ public class CMICAccountEntryDisplay {
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;
-	private long _producerId;
+	private String _producerCode;
 	private String _producerName;
 	private String _totalBilledPremium;
 

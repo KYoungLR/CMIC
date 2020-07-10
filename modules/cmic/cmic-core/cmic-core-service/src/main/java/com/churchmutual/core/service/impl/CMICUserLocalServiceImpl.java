@@ -8,6 +8,7 @@ import com.churchmutual.commons.enums.BusinessUserStatus;
 import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.core.constants.SelfProvisioningConstants;
 import com.churchmutual.core.model.CMICAccountEntry;
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.model.CMICUserDisplay;
 import com.churchmutual.core.service.CMICAccountEntryLocalService;
@@ -248,7 +249,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public List<String> getRecentlyViewedCMICAccountEntryIds(long userId) throws PortalException {
+	public List<CMICAccountEntryDisplay> getRecentlyViewedCMICAccountEntryDisplays(long userId) throws PortalException {
 		User user = userLocalService.getUser(userId);
 
 		ExpandoBridge expandoBridge = user.getExpandoBridge();
@@ -263,10 +264,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		}
 
 		if (recentAccountEntryIds.size() == 5) {
-			return recentAccountEntryIds;
+			return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 		}
-
-		// TODO CMIC-373 call CMICUserLocalServiceImpl.getCMICAccountEntriesByUserId which will do similar as the following
 
 		getUserDetails(userId, false);
 
@@ -307,7 +306,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
 			StringUtil.merge(recentAccountEntryIds, StringPool.COMMA));
 
-		return recentAccountEntryIds;
+		return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 	}
 
 	@Override

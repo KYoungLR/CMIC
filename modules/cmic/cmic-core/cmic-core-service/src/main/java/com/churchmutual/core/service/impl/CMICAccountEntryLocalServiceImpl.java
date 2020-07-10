@@ -15,6 +15,7 @@
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.core.model.CMICAccountEntry;
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICAccountEntryLocalServiceBaseImpl;
@@ -25,15 +26,18 @@ import com.churchmutual.rest.model.CMICAccountDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryUserRel;
+import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.account.service.business.AccountEntryBusinessService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -106,6 +110,21 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		return cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
 	}
 
+	@Override
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(List<String> recentCMICAccountEntryIds) {
+		List<CMICAccountEntryDisplay> cmicAccountEntryDisplays = new ArrayList<>();
+
+		for (String cmicAccountEntryId: recentCMICAccountEntryIds) {
+			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByPrimaryKey(cmicAccountEntryId);
+
+			if (Validator.isNotNull(cmicAccountEntry)) {
+				cmicAccountEntryDisplays.add(new CMICAccountEntryDisplay(cmicAccountEntry));
+			}
+		}
+
+		return cmicAccountEntryDisplays;
+	}
+
 	public List<CMICAccountEntry> getUserAccountEntries(long userId) {
 		List<AccountEntryUserRel> accountEntryUserRels =
 			_accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(userId);
@@ -121,6 +140,9 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 	@Reference
 	protected AccountEntryBusinessService _accountEntryBusinessService;
+
+	@Reference
+	protected AccountEntryLocalService _accountEntryLocalService;
 
 	@Reference
 	protected AccountEntryUserRelLocalService _accountEntryUserRelLocalService;

@@ -17,6 +17,7 @@ package com.churchmutual.core.service.impl;
 import com.churchmutual.account.permissions.AccountEntryModelPermission;
 import com.churchmutual.account.permissions.OrganizationModelPermission;
 import com.churchmutual.commons.enums.BusinessPortalType;
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICUserDisplay;
 import com.churchmutual.core.service.base.CMICUserServiceBaseImpl;
 
@@ -89,8 +90,8 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public List<String> getRecentlyViewedAccountNumbers() throws PortalException {
-		return cmicUserLocalService.getRecentlyViewedCMICAccountEntryIds(getUserId());
+	public List<CMICAccountEntryDisplay> getRecentlyViewedAccountNumbers() throws PortalException {
+		return cmicUserLocalService.getRecentlyViewedCMICAccountEntryDisplays(getUserId());
 	}
 
 	@Override
