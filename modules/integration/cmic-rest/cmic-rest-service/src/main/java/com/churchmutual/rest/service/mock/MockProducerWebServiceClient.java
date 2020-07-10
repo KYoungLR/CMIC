@@ -52,7 +52,7 @@ public class MockProducerWebServiceClient {
 		return jsonDeserializer.deserialize(fileContent, CMICProducerDTO.class);
 	}
 
-	public List<CMICProducerDTO> getProducers(String agent, String division, String name, boolean payOutOfCdms) {
+	public List<CMICProducerDTO> getProducers(String agent, String division, String name, Boolean payOutOfCdms) {
 		String fileName = _PRODUCER_WEB_SERVICE_DIR + "getProducers.json";
 
 		String fileContent = MockResponseReaderUtil.readFile(fileName);

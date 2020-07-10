@@ -27,10 +27,6 @@ public class CMICTransactionAccountSummaryDTO extends CMICObjectDTO {
 		return _totalBilledPremium;
 	}
 
-	public void set_totalBilledPremium(BigDecimal totalBilledPremium) {
-		_totalBilledPremium = totalBilledPremium;
-	}
-
 	public void setAccountNumber(String accountNumber) {
 		_accountNumber = accountNumber;
 	}
@@ -45,6 +41,10 @@ public class CMICTransactionAccountSummaryDTO extends CMICObjectDTO {
 
 	public void setNumInForcePolicies(int numInForcePolicies) {
 		_numInForcePolicies = numInForcePolicies;
+	}
+
+	public void setTotalBilledPremium(BigDecimal totalBilledPremium) {
+		_totalBilledPremium = totalBilledPremium;
 	}
 
 	private String _accountNumber;

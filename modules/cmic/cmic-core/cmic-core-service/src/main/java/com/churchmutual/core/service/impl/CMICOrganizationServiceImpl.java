@@ -46,7 +46,7 @@ public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl
 
 	@Override
 	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
-		return cmicOrganizationLocalService.getCMICOrganizationByOrganizationId(organizationId);
+		return cmicOrganizationLocalService.fetchCMICOrganizationByOrganizationId(organizationId);
 	}
 
 	@Override

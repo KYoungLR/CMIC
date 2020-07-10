@@ -73,7 +73,7 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 	public List<CMICCommissionDocumentDisplay> getCommissionDocuments(long userId) throws PortalException {
 		List<CMICCommissionDocumentDisplay> cmicCommissionDocumentDisplays = new ArrayList<>();
 
-		List<CMICOrganization> userOrganizations = cmicOrganizationLocalService.getCMICUserOrganizations(userId);
+		List<CMICOrganization> userOrganizations = cmicOrganizationLocalService.getCMICOrganizationsByUserId(userId);
 
 		LocalDate now = LocalDate.now();
 

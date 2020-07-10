@@ -14,12 +14,13 @@ import com.churchmutual.core.model.CMICUserDisplay;
 import com.churchmutual.core.service.CMICAccountEntryLocalService;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICUserLocalServiceBaseImpl;
+import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.PortalUserWebService;
+import com.churchmutual.rest.model.CMICAccountDTO;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.rest.model.CMICUserRelationDTO;
 
 import com.liferay.account.model.AccountEntry;
-import com.liferay.account.model.AccountEntryModel;
 import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
@@ -51,7 +52,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -269,29 +269,11 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		getUserDetails(userId, false);
 
-		List<AccountEntry> accountEntries = accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(
-			userId
-		).stream(
-		).map(
-			a -> accountEntryLocalService.fetchAccountEntry(a.getAccountEntryId())
-		).sorted(
-			Comparator.comparing(AccountEntryModel::getName)
-		).collect(
-			Collectors.toList()
-		);
-
 		int additionalAccountNumbersSize = 5 - recentAccountEntryIds.size();
 
-		List<AccountEntry> entriesSublist;
+		List<AccountEntry> accountEntries = cmicAccountEntryLocalService.getAccountEntriesByUserIdOrderedByName(userId, 0, additionalAccountNumbersSize);
 
-		if (accountEntries.size() <= additionalAccountNumbersSize) {
-			entriesSublist = accountEntries;
-		}
-		else {
-			entriesSublist = accountEntries.subList(0, additionalAccountNumbersSize);
-		}
-
-		for (AccountEntry accountEntry : entriesSublist) {
+		for (AccountEntry accountEntry : accountEntries) {
 			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAccountEntryId(
 				accountEntry.getAccountEntryId());
 
@@ -484,25 +466,30 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 				newUserOganizations.add(cmicOrganization);
 			}
-			else {
-				String accountNumber = userRelation.getAccountNumber();
-				String companyNumber = userRelation.getCompanyNumber();
+		}
 
-				CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.fetchAccountEntry(
-					accountNumber, companyNumber);
+		String[] producerCodes = userRelations.stream().map(rel -> rel.getDivisionNumber() + rel.getAgentNumber()).toArray(String[]::new);
 
-				if (cmicAccountEntry == null) {
-					cmicAccountEntry = cmicAccountEntryLocalService.addAccountEntry(
-						userId, accountNumber, companyNumber);
-				}
+		List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(producerCodes);
 
-				newUserAccountEntries.add(cmicAccountEntry);
+		for (CMICAccountDTO cmicAccountDTO: cmicAccountDTOs) {
+			String accountNumber = cmicAccountDTO.getAccountNumber();
+			String companyNumber = cmicAccountDTO.getCompanyNumber();
+
+			CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.fetchAccountEntry(
+				accountNumber, companyNumber);
+
+			if (cmicAccountEntry == null) {
+				cmicAccountEntry = cmicAccountEntryLocalService.addAccountEntry(
+					userId, accountNumber, companyNumber, cmicAccountDTO);
 			}
+
+			newUserAccountEntries.add(cmicAccountEntry);
 		}
 
 		// Compare the user's memberships for organizations and/or accounts, and if it's different, update
 
-		List<CMICOrganization> existingUserOrganizations = cmicOrganizationLocalService.getCMICUserOrganizations(
+		List<CMICOrganization> existingUserOrganizations = cmicOrganizationLocalService.getCMICOrganizationsByUserId(
 			userId);
 
 		if (!existingUserOrganizations.containsAll(newUserOganizations) ||
@@ -516,7 +503,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			organizationLocalService.setUserOrganizations(userId, organizationIds);
 		}
 
-		List<CMICAccountEntry> existingUserAccountEntries = cmicAccountEntryLocalService.getUserAccountEntries(userId);
+		List<CMICAccountEntry> existingUserAccountEntries = cmicAccountEntryLocalService.getCMICAccountEntriesByUserId(userId);
 
 		if (!existingUserAccountEntries.containsAll(newUserAccountEntries) ||
 			!newUserAccountEntries.containsAll(existingUserAccountEntries)) {
@@ -526,15 +513,15 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				cmicAccountEntry -> cmicAccountEntry.getAccountEntryId()
 			).toArray();
 
-			long[] existingAccountEntryIds = existingUserAccountEntries.stream(
+			long[] deleteAccountEntryIds = existingUserAccountEntries.stream(
 			).mapToLong(
 				cmicAccountEntry -> cmicAccountEntry.getAccountEntryId()
 			).filter(
-				accountEntryId -> ArrayUtil.contains(newAccountEntryIds, accountEntryId)
+				accountEntryId -> !ArrayUtil.contains(newAccountEntryIds, accountEntryId)
 			).toArray();
 
 			accountEntryUserRelLocalService.updateAccountEntryUserRels(
-				newAccountEntryIds, existingAccountEntryIds, userId);
+				newAccountEntryIds, deleteAccountEntryIds, userId);
 		}
 	}
 
@@ -543,6 +530,9 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Reference
 	protected AccountEntryUserRelLocalService accountEntryUserRelLocalService;
+
+	@Reference
+	protected  AccountWebService accountWebService;
 
 	@Reference
 	protected CMICAccountEntryLocalService cmicAccountEntryLocalService;

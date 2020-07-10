@@ -90,7 +90,7 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public List<CMICAccountEntryDisplay> getRecentlyViewedAccountNumbers() throws PortalException {
+	public List<CMICAccountEntryDisplay> getRecentlyViewedCMICAccountEntryDisplays() throws PortalException {
 		return cmicUserLocalService.getRecentlyViewedCMICAccountEntryDisplays(getUserId());
 	}
 

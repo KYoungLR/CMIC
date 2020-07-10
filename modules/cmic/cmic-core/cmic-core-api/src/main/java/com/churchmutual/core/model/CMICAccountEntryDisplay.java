@@ -1,8 +1,10 @@
 package com.churchmutual.core.model;
 
+import com.liferay.account.model.AccountEntry;
+
 public class CMICAccountEntryDisplay {
 
-	public CMICAccountEntryDisplay(CMICAccountEntry cmicAccountEntry) {
+	public CMICAccountEntryDisplay(CMICAccountEntry cmicAccountEntry, AccountEntry accountEntry) {
 		_accountEntryId = cmicAccountEntry.getAccountEntryId();
 		_accountNumber = cmicAccountEntry.getAccountNumber();
 		_cmicAccountEntryId = cmicAccountEntry.getCmicAccountEntryId();
@@ -11,6 +13,8 @@ public class CMICAccountEntryDisplay {
 		_numFuturePolicies = cmicAccountEntry.getNumFuturePolicies();
 		_numInForcePolicies = cmicAccountEntry.getNumInForcePolicies();
 		_totalBilledPremium = cmicAccountEntry.getTotalBilledPremium();
+
+		_name = accountEntry.getName();
 	}
 
 	public long getAccountEntryId() {

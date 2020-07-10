@@ -101,7 +101,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 	@Override
 	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays(long userId) throws PortalException {
-		List<CMICOrganization> cmicOrganizations = getCMICUserOrganizations(userId);
+		List<CMICOrganization> cmicOrganizations = getCMICOrganizationsByUserId(userId);
 
 		List<CMICOrganizationDisplay> cmicOrganizationDisplayList = new ArrayList<>();
 
@@ -120,12 +120,12 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Override
-	public List<CMICOrganization> getCMICUserOrganizations(long userId) {
+	public List<CMICOrganization> getCMICOrganizationsByUserId(long userId) {
 		List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
 
 		return organizations.stream(
 		).map(
-			org -> getCMICOrganizationByOrganizationId(org.getOrganizationId())
+			org -> fetchCMICOrganizationByOrganizationId(org.getOrganizationId())
 		).filter(
 			Objects::nonNull
 		).collect(

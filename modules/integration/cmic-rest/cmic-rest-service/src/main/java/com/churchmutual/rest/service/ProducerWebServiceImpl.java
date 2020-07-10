@@ -178,7 +178,10 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 
 		queryParameters.put("agent", agent);
 		queryParameters.put("division", division);
-		queryParameters.put("name", name);
+
+		if (Validator.isNotNull(name)) {
+			queryParameters.put("name", name);
+		}
 
 		if (payOutOfCdms != null) {
 			queryParameters.put("payOutOfCdms", String.valueOf(payOutOfCdms));
@@ -318,7 +321,7 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 			return HashUtil.hash(hashCode, _payOutOfCdms);
 		}
 
-		private GetProducersKey(String agent, String division, String name, boolean payOutOfCdms) {
+		private GetProducersKey(String agent, String division, String name, Boolean payOutOfCdms) {
 			_agent = agent;
 			_division = division;
 			_name = name;
@@ -330,7 +333,7 @@ public class ProducerWebServiceImpl implements ProducerWebService {
 		private final String _agent;
 		private final String _division;
 		private final String _name;
-		private final boolean _payOutOfCdms;
+		private final Boolean _payOutOfCdms;
 
 	}
 

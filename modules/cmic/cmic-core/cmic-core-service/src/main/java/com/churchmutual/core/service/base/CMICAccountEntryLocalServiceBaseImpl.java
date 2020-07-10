@@ -310,7 +310,7 @@ public abstract class CMICAccountEntryLocalServiceBaseImpl
 	 * @return the range of cmic account entries
 	 */
 	@Override
-	public List<CMICAccountEntry> getCMICAccountEntries(int start, int end) {
+	public List<CMICAccountEntry> getCMICAccountEntriesByUserId(int start, int end) {
 		return cmicAccountEntryPersistence.findAll(start, end);
 	}
 

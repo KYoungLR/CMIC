@@ -50,7 +50,7 @@ class Accounts extends React.Component {
     let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts');
 
     Liferay.Service(
-      '/cmic.cmicuser/get-recently-viewed-account-numbers',
+      '/cmic.cmicuser/get-recently-viewed-cmic-account-entry-displays',
       callback,
       errCallback
     );
