@@ -109,16 +109,20 @@ public class CMICUserDisplay {
 	}
 
 	public void setBusinessRole(BusinessRole businessRole) {
-		_role = businessRole.getShortenedNameKey();
+		if (businessRole != null) {
+			_role = businessRole.getShortenedNameKey();
+		}
 	}
 
 	public void setBusinessUserStatus(BusinessUserStatus businessUserStatus) {
-		_status = businessUserStatus.getUserStatusName();
-		_statusKey = businessUserStatus.getMessageKey();
+		if (businessUserStatus != null) {
+			_status = businessUserStatus.getUserStatusName();
+			_statusKey = businessUserStatus.getMessageKey();
 
-		if (BusinessUserStatus.INVITED.equals(businessUserStatus)) {
-			_firstName = StringPool.DOUBLE_DASH;
-			_lastName = StringPool.DOUBLE_DASH;
+			if (BusinessUserStatus.INVITED.equals(businessUserStatus)) {
+				_firstName = StringPool.DOUBLE_DASH;
+				_lastName = StringPool.DOUBLE_DASH;
+			}
 		}
 	}
 
