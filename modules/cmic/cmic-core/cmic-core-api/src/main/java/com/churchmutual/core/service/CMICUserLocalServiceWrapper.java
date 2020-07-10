@@ -88,8 +88,8 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.json.JSONArray getGroupOtherUsers(
-			long userId, long groupId)
+	public java.util.List<com.churchmutual.core.model.CMICUserDisplay>
+			getGroupOtherUsers(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _cmicUserLocalService.getGroupOtherUsers(userId, groupId);

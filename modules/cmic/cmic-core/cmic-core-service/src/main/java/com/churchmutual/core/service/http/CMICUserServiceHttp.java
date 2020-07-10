@@ -279,8 +279,8 @@ public class CMICUserServiceHttp {
 		}
 	}
 
-	public static com.liferay.portal.kernel.json.JSONArray getGroupOtherUsers(
-			HttpPrincipal httpPrincipal, long groupId)
+	public static java.util.List<com.churchmutual.core.model.CMICUserDisplay>
+			getGroupOtherUsers(HttpPrincipal httpPrincipal, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -307,7 +307,8 @@ public class CMICUserServiceHttp {
 					e);
 			}
 
-			return (com.liferay.portal.kernel.json.JSONArray)returnObj;
+			return (java.util.List<com.churchmutual.core.model.CMICUserDisplay>)
+				returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);

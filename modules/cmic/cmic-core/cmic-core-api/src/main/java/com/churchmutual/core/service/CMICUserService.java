@@ -78,7 +78,8 @@ public interface CMICUserService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public JSONArray getGroupOtherUsers(long groupId) throws PortalException;
+	public List<CMICUserDisplay> getGroupOtherUsers(long groupId)
+		throws PortalException;
 
 	/**
 	 * Returns the OSGi service identifier.

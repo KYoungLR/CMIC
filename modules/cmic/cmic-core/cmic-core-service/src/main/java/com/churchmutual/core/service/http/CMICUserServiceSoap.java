@@ -150,14 +150,17 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static String getGroupOtherUsers(long groupId)
+	public static com.churchmutual.core.model.CMICUserDisplay[]
+			getGroupOtherUsers(long groupId)
 		throws RemoteException {
 
 		try {
-			com.liferay.portal.kernel.json.JSONArray returnValue =
-				CMICUserServiceUtil.getGroupOtherUsers(groupId);
+			java.util.List<com.churchmutual.core.model.CMICUserDisplay>
+				returnValue = CMICUserServiceUtil.getGroupOtherUsers(groupId);
 
-			return returnValue.toString();
+			return returnValue.toArray(
+				new com.churchmutual.core.model.CMICUserDisplay
+					[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

@@ -86,8 +86,8 @@ public class CMICUserLocalServiceUtil {
 		return getService().getCMICOrganizationUsers(cmicOrganizationId);
 	}
 
-	public static com.liferay.portal.kernel.json.JSONArray getGroupOtherUsers(
-			long userId, long groupId)
+	public static java.util.List<com.churchmutual.core.model.CMICUserDisplay>
+			getGroupOtherUsers(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getGroupOtherUsers(userId, groupId);

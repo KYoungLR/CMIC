@@ -76,7 +76,7 @@ public interface CMICUserLocalService extends BaseLocalService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public JSONArray getGroupOtherUsers(long userId, long groupId)
+	public List<CMICUserDisplay> getGroupOtherUsers(long userId, long groupId)
 		throws PortalException;
 
 	/**
