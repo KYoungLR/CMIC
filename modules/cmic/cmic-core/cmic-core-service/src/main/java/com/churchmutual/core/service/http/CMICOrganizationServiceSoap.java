@@ -81,6 +81,25 @@ public class CMICOrganizationServiceSoap {
 		}
 	}
 
+	public static com.churchmutual.core.model.CMICOrganizationDisplaySoap[]
+			getCMICOrganizationDisplays()
+		throws RemoteException {
+
+		try {
+			java.util.List<com.churchmutual.core.model.CMICOrganizationDisplay>
+				returnValue =
+					CMICOrganizationServiceUtil.getCMICOrganizationDisplays();
+
+			return com.churchmutual.core.model.CMICOrganizationDisplaySoap.
+				toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(
 		CMICOrganizationServiceSoap.class);
 

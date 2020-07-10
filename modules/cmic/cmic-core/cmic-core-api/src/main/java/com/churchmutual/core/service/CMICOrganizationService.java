@@ -15,6 +15,7 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.model.CMICOrganizationDisplay;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -24,6 +25,8 @@ import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+
+import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -53,6 +56,10 @@ public interface CMICOrganizationService extends BaseService {
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICOrganization getCMICOrganizationByOrganizationId(
 			long organizationId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays()
 		throws PortalException;
 
 	/**

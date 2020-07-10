@@ -47,6 +47,14 @@ public class CMICOrganizationServiceWrapper
 			organizationId);
 	}
 
+	@Override
+	public java.util.List<com.churchmutual.core.model.CMICOrganizationDisplay>
+			getCMICOrganizationDisplays()
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicOrganizationService.getCMICOrganizationDisplays();
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

@@ -92,6 +92,46 @@ public class CMICOrganizationServiceHttp {
 		}
 	}
 
+	public static java.util.List
+		<com.churchmutual.core.model.CMICOrganizationDisplay>
+				getCMICOrganizationDisplays(HttpPrincipal httpPrincipal)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CMICOrganizationServiceUtil.class,
+				"getCMICOrganizationDisplays",
+				_getCMICOrganizationDisplaysParameterTypes1);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					e);
+			}
+
+			return (java.util.List
+				<com.churchmutual.core.model.CMICOrganizationDisplay>)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(
 		CMICOrganizationServiceHttp.class);
 
@@ -99,5 +139,7 @@ public class CMICOrganizationServiceHttp {
 		_getCMICOrganizationByOrganizationIdParameterTypes0 = new Class[] {
 			long.class
 		};
+	private static final Class<?>[]
+		_getCMICOrganizationDisplaysParameterTypes1 = new Class[] {};
 
 }
