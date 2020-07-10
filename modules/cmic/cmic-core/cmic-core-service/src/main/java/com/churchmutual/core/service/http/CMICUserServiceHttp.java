@@ -353,14 +353,17 @@ public class CMICUserServiceHttp {
 		}
 	}
 
-	public static java.util.List<String> getRecentlyViewedAccountNumbers(
-			HttpPrincipal httpPrincipal)
-		throws com.liferay.portal.kernel.exception.PortalException {
+	public static java.util.List
+		<com.churchmutual.core.model.CMICAccountEntryDisplay>
+				getRecentlyViewedCMICAccountEntryDisplays(
+					HttpPrincipal httpPrincipal)
+			throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
-				CMICUserServiceUtil.class, "getRecentlyViewedAccountNumbers",
-				_getRecentlyViewedAccountNumbersParameterTypes8);
+				CMICUserServiceUtil.class,
+				"getRecentlyViewedCMICAccountEntryDisplays",
+				_getRecentlyViewedCMICAccountEntryDisplaysParameterTypes8);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -381,7 +384,8 @@ public class CMICUserServiceHttp {
 					e);
 			}
 
-			return (java.util.List<String>)returnObj;
+			return (java.util.List
+				<com.churchmutual.core.model.CMICAccountEntryDisplay>)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);
@@ -764,7 +768,8 @@ public class CMICUserServiceHttp {
 	private static final Class<?>[] _getPortraitImageURLParameterTypes7 =
 		new Class[] {};
 	private static final Class<?>[]
-		_getRecentlyViewedAccountNumbersParameterTypes8 = new Class[] {};
+		_getRecentlyViewedCMICAccountEntryDisplaysParameterTypes8 =
+			new Class[] {};
 	private static final Class<?>[] _getUserParameterTypes9 = new Class[] {
 		String.class
 	};

@@ -63,13 +63,13 @@ import java.rmi.RemoteException;
 public class CMICOrganizationServiceSoap {
 
 	public static com.churchmutual.core.model.CMICOrganizationSoap
-			getCMICOrganizationByOrganizationId(long organizationId)
+			fetchCMICOrganizationByOrganizationId(long organizationId)
 		throws RemoteException {
 
 		try {
 			com.churchmutual.core.model.CMICOrganization returnValue =
-				CMICOrganizationServiceUtil.getCMICOrganizationByOrganizationId(
-					organizationId);
+				CMICOrganizationServiceUtil.
+					fetchCMICOrganizationByOrganizationId(organizationId);
 
 			return com.churchmutual.core.model.CMICOrganizationSoap.toSoapModel(
 				returnValue);

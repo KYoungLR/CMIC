@@ -183,6 +183,10 @@ public interface CMICOrganizationLocalService
 	public CMICOrganization fetchCMICOrganization(long cmicOrganizationId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICOrganization fetchCMICOrganizationByOrganizationId(
+		long organizationId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId)
 		throws PortalException;
 
@@ -199,10 +203,6 @@ public interface CMICOrganizationLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICOrganization getCMICOrganization(long cmicOrganizationId)
 		throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICOrganization getCMICOrganizationByOrganizationId(
-		long organizationId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays(
@@ -223,6 +223,9 @@ public interface CMICOrganizationLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CMICOrganization> getCMICOrganizations(int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICOrganization> getCMICOrganizationsByUserId(long userId);
+
 	/**
 	 * Returns the number of cmic organizations.
 	 *
@@ -230,9 +233,6 @@ public interface CMICOrganizationLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCMICOrganizationsCount();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CMICOrganization> getCMICUserOrganizations(long userId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

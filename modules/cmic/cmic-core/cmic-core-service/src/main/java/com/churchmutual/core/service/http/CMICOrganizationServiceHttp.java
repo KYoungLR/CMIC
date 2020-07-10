@@ -53,15 +53,15 @@ import com.liferay.portal.kernel.util.MethodKey;
 public class CMICOrganizationServiceHttp {
 
 	public static com.churchmutual.core.model.CMICOrganization
-			getCMICOrganizationByOrganizationId(
+			fetchCMICOrganizationByOrganizationId(
 				HttpPrincipal httpPrincipal, long organizationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICOrganizationServiceUtil.class,
-				"getCMICOrganizationByOrganizationId",
-				_getCMICOrganizationByOrganizationIdParameterTypes0);
+				"fetchCMICOrganizationByOrganizationId",
+				_fetchCMICOrganizationByOrganizationIdParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, organizationId);
@@ -136,7 +136,7 @@ public class CMICOrganizationServiceHttp {
 		CMICOrganizationServiceHttp.class);
 
 	private static final Class<?>[]
-		_getCMICOrganizationByOrganizationIdParameterTypes0 = new Class[] {
+		_fetchCMICOrganizationByOrganizationIdParameterTypes0 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]

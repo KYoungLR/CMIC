@@ -15,6 +15,7 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.commons.enums.BusinessPortalType;
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICUserDisplay;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -92,7 +93,8 @@ public interface CMICUserService extends BaseService {
 	public String getPortraitImageURL() throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<String> getRecentlyViewedAccountNumbers()
+	public List<CMICAccountEntryDisplay>
+			getRecentlyViewedCMICAccountEntryDisplays()
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

@@ -182,14 +182,19 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static String[] getRecentlyViewedAccountNumbers()
+	public static com.churchmutual.core.model.CMICAccountEntryDisplay[]
+			getRecentlyViewedCMICAccountEntryDisplays()
 		throws RemoteException {
 
 		try {
-			java.util.List<String> returnValue =
-				CMICUserServiceUtil.getRecentlyViewedAccountNumbers();
+			java.util.List<com.churchmutual.core.model.CMICAccountEntryDisplay>
+				returnValue =
+					CMICUserServiceUtil.
+						getRecentlyViewedCMICAccountEntryDisplays();
 
-			return returnValue.toArray(new String[returnValue.size()]);
+			return returnValue.toArray(
+				new com.churchmutual.core.model.CMICAccountEntryDisplay
+					[returnValue.size()]);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

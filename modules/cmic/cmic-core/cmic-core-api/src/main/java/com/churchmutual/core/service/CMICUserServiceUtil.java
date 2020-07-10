@@ -107,10 +107,12 @@ public class CMICUserServiceUtil {
 		return getService().getPortraitImageURL();
 	}
 
-	public static java.util.List<String> getRecentlyViewedAccountNumbers()
-		throws com.liferay.portal.kernel.exception.PortalException {
+	public static java.util.List
+		<com.churchmutual.core.model.CMICAccountEntryDisplay>
+				getRecentlyViewedCMICAccountEntryDisplays()
+			throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().getRecentlyViewedAccountNumbers();
+		return getService().getRecentlyViewedCMICAccountEntryDisplays();
 	}
 
 	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)

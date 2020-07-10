@@ -54,7 +54,7 @@ public interface CMICOrganizationService extends BaseService {
 	 * Never modify or reference this interface directly. Always use {@link CMICOrganizationServiceUtil} to access the cmic organization remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICOrganizationServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICOrganization getCMICOrganizationByOrganizationId(
+	public CMICOrganization fetchCMICOrganizationByOrganizationId(
 			long organizationId)
 		throws PortalException;
 

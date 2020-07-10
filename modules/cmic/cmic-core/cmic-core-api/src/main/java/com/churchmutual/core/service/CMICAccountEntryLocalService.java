@@ -15,6 +15,7 @@
 package com.churchmutual.core.service;
 
 import com.churchmutual.core.model.CMICAccountEntry;
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -208,6 +209,13 @@ public interface CMICAccountEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CMICAccountEntry> getCMICAccountEntries(int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICAccountEntry> getCMICAccountEntriesByUserId(long userId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICAccountEntry> getCMICAccountEntriesByUserIdOrderedByName(
+		long userId, int start, int end);
+
 	/**
 	 * Returns the number of cmic account entries.
 	 *
@@ -228,6 +236,10 @@ public interface CMICAccountEntryLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(
+		List<String> cmicAccountEntryIds);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**
@@ -241,9 +253,6 @@ public interface CMICAccountEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CMICAccountEntry> getUserAccountEntries(long userId);
 
 	/**
 	 * Updates the cmic account entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

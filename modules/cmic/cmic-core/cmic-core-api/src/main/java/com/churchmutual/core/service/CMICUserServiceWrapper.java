@@ -108,10 +108,11 @@ public class CMICUserServiceWrapper
 	}
 
 	@Override
-	public java.util.List<String> getRecentlyViewedAccountNumbers()
+	public java.util.List<com.churchmutual.core.model.CMICAccountEntryDisplay>
+			getRecentlyViewedCMICAccountEntryDisplays()
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserService.getRecentlyViewedAccountNumbers();
+		return _cmicUserService.getRecentlyViewedCMICAccountEntryDisplays();
 	}
 
 	@Override

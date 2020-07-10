@@ -200,6 +200,13 @@ public class CMICOrganizationLocalServiceUtil {
 	}
 
 	public static com.churchmutual.core.model.CMICOrganization
+		fetchCMICOrganizationByOrganizationId(long organizationId) {
+
+		return getService().fetchCMICOrganizationByOrganizationId(
+			organizationId);
+	}
+
+	public static com.churchmutual.core.model.CMICOrganization
 			fetchCMICOrganizationByProducerId(long producerId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -224,12 +231,6 @@ public class CMICOrganizationLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getCMICOrganization(cmicOrganizationId);
-	}
-
-	public static com.churchmutual.core.model.CMICOrganization
-		getCMICOrganizationByOrganizationId(long organizationId) {
-
-		return getService().getCMICOrganizationByOrganizationId(organizationId);
 	}
 
 	public static java.util.List
@@ -257,6 +258,12 @@ public class CMICOrganizationLocalServiceUtil {
 		return getService().getCMICOrganizations(start, end);
 	}
 
+	public static java.util.List<com.churchmutual.core.model.CMICOrganization>
+		getCMICOrganizationsByUserId(long userId) {
+
+		return getService().getCMICOrganizationsByUserId(userId);
+	}
+
 	/**
 	 * Returns the number of cmic organizations.
 	 *
@@ -264,12 +271,6 @@ public class CMICOrganizationLocalServiceUtil {
 	 */
 	public static int getCMICOrganizationsCount() {
 		return getService().getCMICOrganizationsCount();
-	}
-
-	public static java.util.List<com.churchmutual.core.model.CMICOrganization>
-		getCMICUserOrganizations(long userId) {
-
-		return getService().getCMICUserOrganizations(userId);
 	}
 
 	public static

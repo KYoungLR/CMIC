@@ -234,6 +234,20 @@ public class CMICAccountEntryLocalServiceUtil {
 		return getService().getCMICAccountEntries(start, end);
 	}
 
+	public static java.util.List<com.churchmutual.core.model.CMICAccountEntry>
+		getCMICAccountEntriesByUserId(long userId) {
+
+		return getService().getCMICAccountEntriesByUserId(userId);
+	}
+
+	public static java.util.List<com.churchmutual.core.model.CMICAccountEntry>
+		getCMICAccountEntriesByUserIdOrderedByName(
+			long userId, int start, int end) {
+
+		return getService().getCMICAccountEntriesByUserIdOrderedByName(
+			userId, start, end);
+	}
+
 	/**
 	 * Returns the number of cmic account entries.
 	 *
@@ -257,6 +271,14 @@ public class CMICAccountEntryLocalServiceUtil {
 		return getService().getCMICAccountEntry(cmicAccountEntryId);
 	}
 
+	public static java.util.List
+		<com.churchmutual.core.model.CMICAccountEntryDisplay>
+			getCMICAccountEntryDisplays(
+				java.util.List<String> cmicAccountEntryIds) {
+
+		return getService().getCMICAccountEntryDisplays(cmicAccountEntryIds);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {
@@ -278,12 +300,6 @@ public class CMICAccountEntryLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
-	}
-
-	public static java.util.List<com.churchmutual.core.model.CMICAccountEntry>
-		getUserAccountEntries(long userId) {
-
-		return getService().getUserAccountEntries(userId);
 	}
 
 	/**
