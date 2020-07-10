@@ -53,12 +53,12 @@ const AccountList = (props) => {
                 className="cursor-pointer"
                 onClick={(e) => navigate(e, account.accountNumber)}>
                 <ClayTable.Cell>
-                  <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
+                  <h5 className="font-weight-bold mb-0">{account.name}</h5>
                   <small className="text-muted">#{account.accountNumber}</small>
                 </ClayTable.Cell>
-                <ClayTable.Cell align="center">{account.inForcePolicies}</ClayTable.Cell>
+                <ClayTable.Cell align="center">{account.numInForcePolicies}</ClayTable.Cell>
                 <ClayTable.Cell align="right" className="h3 font-weight-bold">
-                  <NumberFormat value={account.amountBilled} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  <NumberFormat value={account.totalBilledPremium} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                 </ClayTable.Cell>
               </ClayTable.Row>
             ))}
