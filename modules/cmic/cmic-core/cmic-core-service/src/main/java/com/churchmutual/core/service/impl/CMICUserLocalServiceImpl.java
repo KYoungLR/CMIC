@@ -478,6 +478,10 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				if (cmicOrganization == null) {
 					cmicOrganization = cmicOrganizationLocalService.addCMICOrganization(userId, producerId);
 				}
+				else {
+					cmicOrganization = cmicOrganizationLocalService.updateCMICOrganizationContactInfo(
+						userId, producerId);
+				}
 
 				newUserOganizations.add(cmicOrganization);
 			}

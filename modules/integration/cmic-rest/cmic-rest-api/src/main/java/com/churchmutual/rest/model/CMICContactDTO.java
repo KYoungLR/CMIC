@@ -17,6 +17,10 @@ public class CMICContactDTO extends CMICObjectDTO {
 		return _city;
 	}
 
+	public String getCountry() {
+		return _country;
+	}
+
 	public String getDepartment() {
 		return _department;
 	}
@@ -65,6 +69,10 @@ public class CMICContactDTO extends CMICObjectDTO {
 		_city = city;
 	}
 
+	public void setCountry(String country) {
+		_country = country;
+	}
+
 	public void setDepartment(String department) {
 		_department = department;
 	}
@@ -104,6 +112,7 @@ public class CMICContactDTO extends CMICObjectDTO {
 	private String _addressLine1;
 	private String _addressLine2;
 	private String _city;
+	private String _country;
 	private String _department;
 	private String _email;
 	private String _firstName;

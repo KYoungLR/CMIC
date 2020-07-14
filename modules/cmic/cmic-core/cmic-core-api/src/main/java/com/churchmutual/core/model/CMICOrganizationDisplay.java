@@ -1,11 +1,14 @@
 package com.churchmutual.core.model;
 
-import com.churchmutual.rest.model.CMICContactDTO;
+import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.Phone;
 
 public class CMICOrganizationDisplay {
 
-	public CMICOrganizationDisplay(CMICOrganization cmicOrganization, CMICContactDTO cmicContactDTO, Organization organization) {
+	public CMICOrganizationDisplay(
+		CMICOrganization cmicOrganization, Organization organization, Address address, Phone phone) {
+
 		_active = cmicOrganization.getActive();
 		_agentNumber = cmicOrganization.getAgentNumber();
 		_cmicOrganizationId = cmicOrganization.getCmicOrganizationId();
@@ -14,12 +17,14 @@ public class CMICOrganizationDisplay {
 		_producerId = cmicOrganization.getProducerId();
 		_producerType = cmicOrganization.getProducerType();
 
-		_addressLine1 = cmicContactDTO.getAddressLine1();
-		_addressLine2 = cmicContactDTO.getAddressLine2();
-		_city = cmicContactDTO.getCity();
-		_state = cmicContactDTO.getState();
-		_phoneNumber = cmicContactDTO.getPhoneNumber();
-		_postalCode = cmicContactDTO.getPostalCode();
+		_addressLine1 = address.getStreet1();
+		_addressLine2 = address.getStreet2();
+		_city = address.getCity();
+		_state = address.getRegion(
+		).getRegionCode();
+		_postalCode = address.getZip();
+
+		_phoneNumber = phone.getNumber();
 
 		_name = organization.getName();
 	}

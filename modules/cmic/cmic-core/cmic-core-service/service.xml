@@ -54,7 +54,10 @@
 		<finder name="ProducerId" return-type="CMICOrganization">
 			<finder-column name="producerId" />
 		</finder>
+		<reference entity="Address" package-path="com.liferay.portal" />
+		<reference entity="ListType" package-path="com.liferay.portal" />
 		<reference entity="Organization" package-path="com.liferay.portal" />
+		<reference entity="Phone" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="CMICCommissionDocument" remote-service="true" />
 	<entity local-service="true" name="CMICContact" remote-service="true" />

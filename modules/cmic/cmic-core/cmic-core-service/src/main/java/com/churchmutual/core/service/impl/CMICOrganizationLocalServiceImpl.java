@@ -22,10 +22,20 @@ import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.model.CMICContactDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Address;
+import com.liferay.portal.kernel.model.Country;
+import com.liferay.portal.kernel.model.ListType;
+import com.liferay.portal.kernel.model.ListTypeConstants;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.OrganizationConstants;
+import com.liferay.portal.kernel.model.Phone;
+import com.liferay.portal.kernel.model.Region;
+import com.liferay.portal.kernel.service.CountryService;
+import com.liferay.portal.kernel.service.RegionService;
+import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +82,11 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		cmicOrganization.setProducerType(producerType);
 		cmicOrganization.setActive(true);
 
-		return cmicOrganizationPersistence.update(cmicOrganization);
+		cmicOrganization = cmicOrganizationPersistence.update(cmicOrganization);
+
+		updateCMICOrganizationContactInfo(userId, producerId);
+
+		return cmicOrganization;
 	}
 
 	@Override
@@ -81,27 +95,28 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Override
+	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) {
+		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
+	}
+
+	@Override
 	public List<CMICOrganizationDisplay> getCMICOrganizationDisplays(long userId) throws PortalException {
 		List<CMICOrganization> cmicOrganizations = getCMICUserOrganizations(userId);
 
 		List<CMICOrganizationDisplay> cmicOrganizationDisplayList = new ArrayList<>();
 
-		for (CMICOrganization cmicOrganization: cmicOrganizations) {
+		for (CMICOrganization cmicOrganization : cmicOrganizations) {
 			Organization organization = organizationLocalService.getOrganization(cmicOrganization.getOrganizationId());
 
-			CMICContactDTO cmicContactDTO = producerWebService.getPrimaryContact(cmicOrganization.getProducerId());
+			Phone phone = _fetchPrimaryPhone(organization);
 
-			CMICOrganizationDisplay cmicOrganizationDisplay = new CMICOrganizationDisplay(cmicOrganization, cmicContactDTO, organization);
+			CMICOrganizationDisplay cmicOrganizationDisplay = new CMICOrganizationDisplay(
+				cmicOrganization, organization, organization.getAddress(), phone);
 
 			cmicOrganizationDisplayList.add(cmicOrganizationDisplay);
 		}
 
 		return cmicOrganizationDisplayList;
-	}
-
-	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) {
-		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
 	@Override
@@ -118,7 +133,138 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		);
 	}
 
+	public CMICOrganization updateCMICOrganizationContactInfo(long userId, long producerId) throws PortalException {
+		CMICOrganization cmicOrganization = fetchCMICOrganizationByProducerId(producerId);
+
+		Organization organization = organizationLocalService.getOrganization(cmicOrganization.getOrganizationId());
+
+		CMICContactDTO cmicContactDTO = producerWebService.getPrimaryContact(cmicOrganization.getProducerId());
+
+		Address primaryAddress = _fetchPrimaryAddress(organization);
+
+		if (primaryAddress == null) {
+			_addAddress(userId, cmicContactDTO, organization);
+		}
+		else {
+			_updateAddress(primaryAddress, cmicContactDTO);
+		}
+
+		Phone primaryPhone = _fetchPrimaryPhone(organization);
+
+		if (primaryPhone == null) {
+			_addPhone(userId, cmicContactDTO, organization);
+		}
+		else {
+			_updatePhone(primaryPhone, cmicContactDTO);
+		}
+
+		return cmicOrganization;
+	}
+
+	@Reference
+	protected CountryService countryService;
+
 	@Reference
 	protected ProducerWebService producerWebService;
+
+	@Reference
+	protected RegionService regionService;
+
+	private void _addAddress(long userId, CMICContactDTO cmicContactDTO, Organization organization)
+		throws PortalException {
+
+		long countryId = 0L;
+		long regionId = 0L;
+
+		Country country = countryService.getCountryByA3(cmicContactDTO.getCountry());
+
+		if (country != null) {
+			countryId = country.getCountryId();
+			regionService.getRegion(countryId, cmicContactDTO.getState());
+		}
+
+		long typeId = _toListTypeId("other", ListTypeConstants.ORGANIZATION_ADDRESS);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		addressLocalService.addAddress(
+			userId, Organization.class.getName(), organization.getOrganizationId(), cmicContactDTO.getAddressLine1(),
+			cmicContactDTO.getAddressLine2(), StringPool.BLANK, cmicContactDTO.getCity(),
+			cmicContactDTO.getPostalCode(), regionId, countryId, typeId, true, true, serviceContext);
+	}
+
+	private void _addPhone(long userId, CMICContactDTO cmicContactDTO, Organization organization)
+		throws PortalException {
+
+		long typeId = _toListTypeId("other", ListTypeConstants.ORGANIZATION_PHONE);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		phoneLocalService.addPhone(
+			userId, Organization.class.getName(), organization.getOrganizationId(), cmicContactDTO.getPhoneNumber(),
+			StringPool.BLANK, typeId, true, serviceContext);
+	}
+
+	private Address _fetchPrimaryAddress(Organization organization) {
+		List<Address> addresses = organization.getAddresses();
+
+		for (Address address : addresses) {
+			if (address.isPrimary()) {
+				return address;
+			}
+		}
+
+		return null;
+	}
+
+	private Phone _fetchPrimaryPhone(Organization organization) {
+		List<Phone> phones = phoneLocalService.getPhones(
+			organization.getCompanyId(), Organization.class.getName(), organization.getOrganizationId());
+
+		for (Phone phone : phones) {
+			if (phone.isPrimary()) {
+				return phone;
+			}
+		}
+
+		return null;
+	}
+
+	private long _toListTypeId(String name, String type) {
+		ListType listType = listTypeLocalService.getListType(name, type);
+
+		if (listType != null) {
+			return listType.getListTypeId();
+		}
+
+		return 0;
+	}
+
+	private void _updateAddress(Address address, CMICContactDTO cmicContactDTO) throws PortalException {
+		long countryId = 0L;
+		long regionId = 0L;
+
+		Country country = countryService.fetchCountryByA3(cmicContactDTO.getCountry());
+
+		if (country != null) {
+			countryId = country.getCountryId();
+
+			Region region = regionService.fetchRegion(countryId, cmicContactDTO.getState());
+
+			if (region != null) {
+				regionId = region.getRegionId();
+			}
+		}
+
+		addressLocalService.updateAddress(
+			address.getAddressId(), cmicContactDTO.getAddressLine1(), cmicContactDTO.getAddressLine2(),
+			StringPool.BLANK, cmicContactDTO.getCity(), cmicContactDTO.getPostalCode(), regionId, countryId,
+			address.getTypeId(), address.getMailing(), true);
+	}
+
+	private void _updatePhone(Phone phone, CMICContactDTO cmicContactDTO) throws PortalException {
+		phoneLocalService.updatePhone(
+			phone.getPhoneId(), cmicContactDTO.getPhoneNumber(), StringPool.BLANK, phone.getTypeId(), true);
+	}
 
 }
