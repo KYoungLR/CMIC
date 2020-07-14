@@ -259,4 +259,8 @@ public interface CMICOrganizationLocalService
 	public CMICOrganization updateCMICOrganization(
 		CMICOrganization cmicOrganization);
 
+	public CMICOrganization updateCMICOrganizationContactInfo(
+			long userId, long producerId)
+		throws PortalException;
+
 }

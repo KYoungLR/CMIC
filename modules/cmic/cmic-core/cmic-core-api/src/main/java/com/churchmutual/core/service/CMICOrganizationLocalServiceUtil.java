@@ -308,6 +308,14 @@ public class CMICOrganizationLocalServiceUtil {
 		return getService().updateCMICOrganization(cmicOrganization);
 	}
 
+	public static com.churchmutual.core.model.CMICOrganization
+			updateCMICOrganizationContactInfo(long userId, long producerId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().updateCMICOrganizationContactInfo(
+			userId, producerId);
+	}
+
 	public static CMICOrganizationLocalService getService() {
 		return _serviceTracker.getService();
 	}

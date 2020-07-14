@@ -124,6 +124,13 @@ public abstract class CMICOrganizationServiceBaseImpl
 		counterLocalService;
 
 	@Reference
+	protected com.liferay.portal.kernel.service.AddressLocalService
+		addressLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.AddressService addressService;
+
+	@Reference
 	protected com.liferay.portal.kernel.service.ClassNameLocalService
 		classNameLocalService;
 
@@ -132,12 +139,26 @@ public abstract class CMICOrganizationServiceBaseImpl
 		classNameService;
 
 	@Reference
+	protected com.liferay.portal.kernel.service.ListTypeLocalService
+		listTypeLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.ListTypeService listTypeService;
+
+	@Reference
 	protected com.liferay.portal.kernel.service.OrganizationLocalService
 		organizationLocalService;
 
 	@Reference
 	protected com.liferay.portal.kernel.service.OrganizationService
 		organizationService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.PhoneLocalService
+		phoneLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.PhoneService phoneService;
 
 	@Reference
 	protected com.liferay.portal.kernel.service.ResourceLocalService

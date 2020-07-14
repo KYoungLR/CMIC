@@ -336,6 +336,15 @@ public class CMICOrganizationLocalServiceWrapper
 	}
 
 	@Override
+	public com.churchmutual.core.model.CMICOrganization
+			updateCMICOrganizationContactInfo(long userId, long producerId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicOrganizationLocalService.updateCMICOrganizationContactInfo(
+			userId, producerId);
+	}
+
+	@Override
 	public CMICOrganizationLocalService getWrappedService() {
 		return _cmicOrganizationLocalService;
 	}
