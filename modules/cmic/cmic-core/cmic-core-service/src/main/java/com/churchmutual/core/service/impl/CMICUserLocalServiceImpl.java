@@ -83,8 +83,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 			recentAccountEntryIds.add(0, cmicAccountEntryId);
 
-			if (recentAccountEntryIds.size() > 5) {
-				recentAccountEntryIds = recentAccountEntryIds.subList(0, 5);
+			if (recentAccountEntryIds.size() > RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
+				recentAccountEntryIds = recentAccountEntryIds.subList(0, RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
 			}
 
 			expandoBridge.setAttribute(
@@ -263,19 +263,20 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			recentAccountEntryIds = StringUtil.split(recentlyViewedAccountEntryIds);
 		}
 
-		if (recentAccountEntryIds.size() == 5) {
+		if (recentAccountEntryIds.size() == RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
 			return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 		}
 
 		getUserDetails(userId, false);
 
-		int additionalAccountNumbersSize = 5 - recentAccountEntryIds.size();
+		int start = 0;
+		int index = 0;
 
-		List<AccountEntry> accountEntries = cmicAccountEntryLocalService.getAccountEntriesByUserIdOrderedByName(userId, 0, additionalAccountNumbersSize);
+		List<CMICAccountEntry> cmicAccountEntries =
+			cmicAccountEntryLocalService.getCMICAccountEntriesByUserIdOrderedByName(userId, start, RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
 
-		for (AccountEntry accountEntry : accountEntries) {
-			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAccountEntryId(
-				accountEntry.getAccountEntryId());
+		while (index < cmicAccountEntries.size() && recentAccountEntryIds.size() < RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
+			CMICAccountEntry cmicAccountEntry = cmicAccountEntries.get(index++);
 
 			String cmicAccountEntryId = String.valueOf(cmicAccountEntry.getCmicAccountEntryId());
 
@@ -472,7 +473,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(producerCodes);
 
-		for (CMICAccountDTO cmicAccountDTO: cmicAccountDTOs) {
+		for (CMICAccountDTO cmicAccountDTO : cmicAccountDTOs) {
 			String accountNumber = cmicAccountDTO.getAccountNumber();
 			String companyNumber = cmicAccountDTO.getCompanyNumber();
 
@@ -480,8 +481,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				accountNumber, companyNumber);
 
 			if (cmicAccountEntry == null) {
-				cmicAccountEntry = cmicAccountEntryLocalService.addAccountEntry(
-					userId, accountNumber, companyNumber, cmicAccountDTO);
+				cmicAccountEntry = cmicAccountEntryLocalService.addAccountEntry(userId, accountNumber, companyNumber);
 			}
 
 			newUserAccountEntries.add(cmicAccountEntry);
@@ -891,6 +891,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			throw new PortalException("Error: received invalid cmicUser information");
 		}
 	}
+
+	private static final int RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
 
 	private static final Log _log = LogFactoryUtil.getLog(CMICUserLocalServiceImpl.class);
 

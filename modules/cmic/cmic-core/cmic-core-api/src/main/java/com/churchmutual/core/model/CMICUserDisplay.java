@@ -53,7 +53,7 @@ public class CMICUserDisplay {
 			long[] organizationIds = user.getOrganizationIds();
 
 			for (long organizationId : organizationIds) {
-				CMICOrganization cmicOrganization = CMICOrganizationLocalServiceUtil.getCMICOrganizationByOrganizationId(organizationId);
+				CMICOrganization cmicOrganization = CMICOrganizationLocalServiceUtil.fetchCMICOrganizationByOrganizationId(organizationId);
 
 				_organizationList.add(new CMICUserRelationDisplay(cmicOrganization));
 			}

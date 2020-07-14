@@ -45,7 +45,7 @@ import java.util.List;
 public class CMICOrganizationServiceImpl extends CMICOrganizationServiceBaseImpl {
 
 	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
+	public CMICOrganization fetchCMICOrganizationByOrganizationId(long organizationId) throws PortalException {
 		return cmicOrganizationLocalService.fetchCMICOrganizationByOrganizationId(organizationId);
 	}
 

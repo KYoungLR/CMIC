@@ -19,6 +19,7 @@ import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICAccountEntryLocalServiceBaseImpl;
+import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.TransactionWebService;
 import com.churchmutual.rest.model.CMICAccountDTO;
@@ -26,7 +27,6 @@ import com.churchmutual.rest.model.CMICAccountDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
 import com.liferay.account.model.AccountEntry;
-import com.liferay.account.model.AccountEntryModel;
 import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
@@ -41,7 +41,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,14 +67,16 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil</code>.
 	 */
 	@Override
-	public CMICAccountEntry addAccountEntry(long userId, String accountNumber, String companyNumber, CMICAccountDTO account)
+	public CMICAccountEntry addAccountEntry(long userId, String accountNumber, String companyNumber)
 		throws PortalException {
 
-		String name = account.getAccountName();
+		CMICAccountDTO cmicAccountDTO = _accountWebService.getAccounts(accountNumber);
+
+		String name = cmicAccountDTO.getAccountName();
 
 		// 5 digit producerCode = 2 digit agentNumber + 3 digit divisionNumber
 
-		String producerCode = account.getProducerCode();
+		String producerCode = cmicAccountDTO.getProducerCode();
 
 		String agentNumber = producerCode.substring(0,2);
 
@@ -84,7 +85,7 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		List<CMICProducerDTO> cmicProducerDTOs = _producerWebService.getProducers(
 			agentNumber, divisionNumber, StringPool.BLANK, null);
 
-		if (cmicProducerDTOs.size() != 1) {
+		if (cmicProducerDTOs.isEmpty()) {
 			throw new PortalException(String.format("Producer with producerCode %s could not be found", producerCode));
 		}
 
@@ -93,7 +94,7 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
 			_transactionWebService.getTransactionAccountSummaryByAccounts(new String[]{accountNumber});
 
-		if (cmicTransactionAccountSummaryDTOs.size() != 1) {
+		if (cmicTransactionAccountSummaryDTOs.isEmpty()) {
 			throw new PortalException(String.format("Transaction summary with accountNumber %s could not be found", accountNumber));
 		}
 
@@ -135,36 +136,19 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
-	public List<AccountEntry> getAccountEntriesByUserIdOrderedByName(long userId, int start, int end) {
-		return _accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(
-			userId
-		).stream(
-		).map(
-			a -> _accountEntryLocalService.fetchAccountEntry(a.getAccountEntryId())
-		).sorted(
-			Comparator.comparing(AccountEntryModel::getName)
-		).skip(
-			start
-		).limit(
-			end - start + 1
-		).collect(
-			Collectors.toList()
-		);
+	public List<CMICAccountEntry> getCMICAccountEntriesByUserIdOrderedByName(long userId, int start, int end) {
+		return cmicAccountEntryFinder.findByUserIdOrderedByName(userId, start, end);
 	}
 
 	@Override
-	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(List<String> recentCMICAccountEntryIds) {
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(List<String> cmicAccountEntryIds) {
 		List<CMICAccountEntryDisplay> cmicAccountEntryDisplays = new ArrayList<>();
 
-		for (String recentCMICAccountEntryId: recentCMICAccountEntryIds) {
-			long cmicAccountEntryId = GetterUtil.getLong(recentCMICAccountEntryId);
-
-			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByPrimaryKey(cmicAccountEntryId);
-
-			AccountEntry accountEntry = _accountEntryLocalService.fetchAccountEntry(cmicAccountEntry.getAccountEntryId());
+		for (String cmicAccountEntryId : cmicAccountEntryIds) {
+			CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByPrimaryKey(GetterUtil.getLong(cmicAccountEntryId));
 
 			if (Validator.isNotNull(cmicAccountEntry)) {
-				cmicAccountEntryDisplays.add(new CMICAccountEntryDisplay(cmicAccountEntry, accountEntry));
+				cmicAccountEntryDisplays.add(new CMICAccountEntryDisplay(cmicAccountEntry));
 			}
 		}
 
@@ -193,6 +177,9 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 	@Reference
 	protected AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
+
+	@Reference
+	protected AccountWebService _accountWebService;
 
 	@Reference
 	protected CMICOrganizationLocalService _cmicOrganizationLocalService;

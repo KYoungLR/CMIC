@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -63,21 +64,27 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 	@Override
 	public CMICOrganization addCMICOrganization(long userId, long producerId) throws PortalException {
-		CMICProducerDTO producer = producerWebService.getProducerById(producerId);
+		CMICProducerDTO cmicProducerDTO = producerWebService.getProducerById(producerId);
+
+		CMICOrganization cmicOrganization = fetchCMICOrganizationByProducerId(producerId);
+
+		if (Validator.isNotNull(cmicOrganization)) {
+			return cmicOrganization;
+		}
 
 		Organization organization = organizationLocalService.addOrganization(
-			userId, OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID, producer.getName(), false);
+			userId, OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID, cmicProducerDTO.getName(), false);
 
 		long cmicOrganizationId = counterLocalService.increment(CMICOrganization.class.getName());
 
-		CMICOrganization cmicOrganization = createCMICOrganization(cmicOrganizationId);
+		cmicOrganization = createCMICOrganization(cmicOrganizationId);
 
 		cmicOrganization.setOrganizationId(organization.getOrganizationId());
 		cmicOrganization.setProducerId(producerId);
-		cmicOrganization.setAgentNumber(producer.getAgent());
-		cmicOrganization.setDivisionNumber(producer.getDivision());
+		cmicOrganization.setAgentNumber(cmicProducerDTO.getAgent());
+		cmicOrganization.setDivisionNumber(cmicProducerDTO.getDivision());
 
-		int producerType = ProducerType.getTypeFromName(producer.getProducerType());
+		int producerType = ProducerType.getTypeFromName(cmicProducerDTO.getProducerType());
 
 		cmicOrganization.setProducerType(producerType);
 		cmicOrganization.setActive(true);
@@ -95,7 +102,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Override
-	public CMICOrganization getCMICOrganizationByOrganizationId(long organizationId) {
+	public CMICOrganization fetchCMICOrganizationByOrganizationId(long organizationId) {
 		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
