@@ -97,7 +97,7 @@ const AccountList = (props) => {
                         <ClayTable.Cell align="center">{account.expiredPolicy}</ClayTable.Cell>
 
                         <ClayTable.Cell align="right" className="h3 font-weight-bold">
-                          <NumberFormat value={account.totalBilledPremium} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                          <NumberFormat decimalScale={2} displayType={'text'} fixedDecimalScale={true} prefix={'$'} thousandSeparator={true} value={account.totalBilledPremium} />
                         </ClayTable.Cell>
                       </ClayTable.Row>
                     ))}
