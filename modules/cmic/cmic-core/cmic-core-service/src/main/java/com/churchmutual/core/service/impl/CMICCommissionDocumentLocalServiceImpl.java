@@ -90,13 +90,11 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 					cmicOrganization.getAgentNumber(), cmicOrganization.getDivisionNumber(), documentType.toString(),
 					maximumStatementDate, minimumStatementDate);
 
-				long producerId = cmicOrganization.getProducerId();
-
 				commissionDocumentDTOs.stream(
 				).forEach(
 					commissionDocumentDTO -> {
 						cmicCommissionDocumentDisplays.add(
-							new CMICCommissionDocumentDisplay(commissionDocumentDTO, String.valueOf(producerId)));
+							new CMICCommissionDocumentDisplay(commissionDocumentDTO));
 					}
 				);
 			}
