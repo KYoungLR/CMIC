@@ -10,8 +10,6 @@ import {AccountSearch, AccoutSearchFilter} from './AccountSearch';
 import {Navigate, Render, TableHeadings, TableSort} from './AccountTableHelpers';
 import EmptyState from './EmptyState';
 
-import generateData from './GenerateData';
-
 const AccountList = (props) => {
   const [pageSize, setPageSize] = useState(10);
   const [filterCount, setFilterCount] = useState(0);
