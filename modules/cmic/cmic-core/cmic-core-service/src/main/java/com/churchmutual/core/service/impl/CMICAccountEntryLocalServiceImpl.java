@@ -94,12 +94,6 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
 			_transactionWebService.getTransactionAccountSummaryByAccounts(new String[]{accountNumber});
 
-		if (cmicTransactionAccountSummaryDTOs.isEmpty()) {
-			throw new PortalException(String.format("Transaction summary with accountNumber %s could not be found", accountNumber));
-		}
-
-		CMICTransactionAccountSummaryDTO cmicTransactionAccountSummaryDTO = cmicTransactionAccountSummaryDTOs.get(0);
-
 		CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(cmicProducerDTO.getId());
 
 		if (cmicOrganization == null) {
@@ -122,10 +116,15 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
 		cmicAccountEntry.setAccountNumber(accountNumber);
 		cmicAccountEntry.setCompanyNumber(companyNumber);
-		cmicAccountEntry.setNumExpiredPolicies(cmicTransactionAccountSummaryDTO.getNumExpiredPolicies());
-		cmicAccountEntry.setNumFuturePolicies(cmicTransactionAccountSummaryDTO.getNumFuturePolicies());
-		cmicAccountEntry.setNumInForcePolicies(cmicTransactionAccountSummaryDTO.getNumInForcePolicies());
-		cmicAccountEntry.setTotalBilledPremium(cmicTransactionAccountSummaryDTO.getTotalBilledPremium().toString());
+
+		if (!cmicTransactionAccountSummaryDTOs.isEmpty()) {
+			CMICTransactionAccountSummaryDTO cmicTransactionAccountSummaryDTO = cmicTransactionAccountSummaryDTOs.get(0);
+
+			cmicAccountEntry.setNumExpiredPolicies(cmicTransactionAccountSummaryDTO.getNumExpiredPolicies());
+			cmicAccountEntry.setNumFuturePolicies(cmicTransactionAccountSummaryDTO.getNumFuturePolicies());
+			cmicAccountEntry.setNumInForcePolicies(cmicTransactionAccountSummaryDTO.getNumInForcePolicies());
+			cmicAccountEntry.setTotalBilledPremium(cmicTransactionAccountSummaryDTO.getTotalBilledPremium().toString());
+		}
 
 		return cmicAccountEntryPersistence.update(cmicAccountEntry);
 	}
