@@ -261,9 +261,3 @@ const ActiveLabels = ({items, toggleLabel}) => {
     </ClayLabel>
   ));
 };
-
-export const customFilterMap = {
-  filterMap: {
-    'Less than 10': member => member.accountName.length < 10,
-  }
-};

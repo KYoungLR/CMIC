@@ -20,14 +20,11 @@ const AccountList = (props) => {
 
   return (
     <ReactBigList
-      customFilterProps={customFilterMap}
       members={data}
       paginationProps={{pageSize}}
       queryStringFilter={AccoutSearchFilter}>
       {({
-          activeFilters,
           activePage,
-          clearFilters,
           displayedCount,
           displayedMembers,
           displayingFrom,
@@ -43,7 +40,6 @@ const AccountList = (props) => {
           setPageNumber,
           setQueryString,
           setSort,
-          toggleFilter,
         }) => (
         <React.Fragment>
           <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
