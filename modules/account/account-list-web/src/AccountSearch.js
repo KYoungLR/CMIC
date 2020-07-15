@@ -1,10 +1,11 @@
 import React from 'react';
-import {ClayButtonWithIcon} from '@clayui/button';
+import ClayBadge from '@clayui/badge';
+import ClayButton from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 
-export const AccountSearch = ({activePage, queryString, setPageNumber, setQueryString}) => {
+export const AccountSearch = ({activePage, filterCount, filterVisible, queryString, setFilterVisible, setPageNumber, setQueryString}) => {
   const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
 
   return (
@@ -42,12 +43,17 @@ export const AccountSearch = ({activePage, queryString, setPageNumber, setQueryS
         </ClayInput.GroupInsetItem>
       </ClayInput.GroupItem>
       <ClayInput.GroupItem shrink>
-        <ClayButtonWithIcon
+        <ClayButton
+          className="align-self-center text-secondary"
           displayType="unstyled"
-          spritemap={spritemap}
-          symbol="filter"
-          className="btn-lg text-secondary"
-        />
+          monospaced={true}
+          onClick={() => setFilterVisible(!filterVisible)}
+        >
+          <ClayIcon spritemap={spritemap} symbol="filter" />
+          {filterCount > 0 &&
+            <ClayBadge displayType="danger" label={filterCount} className="position-absolute" />
+          }
+        </ClayButton>
       </ClayInput.GroupItem>
     </ClayInput.Group>
   );

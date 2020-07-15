@@ -1,34 +1,41 @@
 import React, {useState} from 'react';
+import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayCard from '@clayui/card';
 import ClayTable from '@clayui/table';
 import NumberFormat from 'react-number-format';
+import ReactBigList from 'react-big-list';
+import {AccountFilter, customFilterMap} from './AccountFilter';
 import AccountPagination from './AccountPagination';
 import {AccountSearch, AccoutSearchFilter} from './AccountSearch';
-import EmptyState from './EmptyState';
 import {Navigate, Render, TableHeadings, TableSort} from './AccountTableHelpers';
+import EmptyState from './EmptyState';
 
-import ReactBigList, {withCustomFilters} from 'react-big-list';
-import {customFilterMap, filterOptions} from './AccountFilters';
-
-let Enhanced = withCustomFilters(ReactBigList, customFilterMap);
+import generateData from './GenerateData';
 
 const AccountList = (props) => {
   const [pageSize, setPageSize] = useState(10);
+  const [filterCount, setFilterCount] = useState(0);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [data, setData] = useState(props.accountsList);
 
   return (
-    <Enhanced
-      members={props.accountsList}
+    <ReactBigList
+      customFilterProps={customFilterMap}
+      members={data}
       paginationProps={{pageSize}}
       queryStringFilter={AccoutSearchFilter}>
       {({
           activeFilters,
           activePage,
+          clearFilters,
           displayedCount,
           displayedMembers,
           displayingFrom,
           displayingTo,
           filteredCount,
+          filteredMembers,
           initialCount,
+          members,
           numPages,
           queryString,
           sortColumn,
@@ -39,12 +46,35 @@ const AccountList = (props) => {
           toggleFilter,
         }) => (
         <React.Fragment>
+          <pre><code>{JSON.stringify({
+            filterVisible,
+            activeFilters,
+            activePage,
+            clearFilters,
+            displayedCount,
+            displayingFrom,
+            displayingTo,
+            filteredCount,
+            initialCount,
+            members,
+            numPages,
+            queryString,
+            sortColumn,
+            sortDirection,
+            setPageNumber,
+            setQueryString,
+            setSort,
+            toggleFilter,
+          }, null, 2)}</code></pre>
           <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
             <ClayCard.Description displayType="title">{Liferay.Language.get('accounts')} ({filteredCount})</ClayCard.Description>
             <div className="mt-4 mt-md-0">
               <AccountSearch
                 activePage={activePage}
+                filterCount={filterCount}
+                filterVisible={filterVisible}
                 queryString={queryString}
+                setFilterVisible={setFilterVisible}
                 setPageNumber={setPageNumber}
                 setQueryString={setQueryString}
               />
@@ -56,6 +86,15 @@ const AccountList = (props) => {
               <EmptyState />
             ) : (
               <React.Fragment>
+                <AccountFilter
+                  filteredMembers={filteredMembers}
+                  filterVisible={filterVisible}
+                  members={data}
+                  originalMembers={props.accountsList}
+                  queryString={queryString}
+                  setFilterCount={setFilterCount}
+                  setMembers={setData}
+                />
                 <ClayTable className="table-sticky">
                   <ClayTable.Head>
                     <ClayTable.Row>
@@ -119,7 +158,7 @@ const AccountList = (props) => {
           </ClayCard.Body>
         </React.Fragment>
       )}
-    </Enhanced>
+    </ReactBigList>
   );
 };
 
