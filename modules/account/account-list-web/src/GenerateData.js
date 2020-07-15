@@ -13,7 +13,7 @@ const newData = () => {
   	accountName: new Chance().company(),
   	accountNumber: new Chance().string({ length: 8, numeric: true }),
   	producerName: new Chance().company(),
-  	producerCode: new Chance().string({ length: 4, numeric: true }),
+  	producerCode: new Chance().string({ length: 2, numeric: true }) + '-' + new Chance().string({ length: 3, numeric: true }),
   	inForcePolicy: new Chance().integer({ min: 9, max: 100 }),
   	futurePolicy: new Chance().integer({ min: 9, max: 100 }),
   	expiredPolicy: new Chance().integer({ min: 9, max: 100 }),

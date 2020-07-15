@@ -15,7 +15,7 @@ export const TableHeadings = [
     },
   },
   {
-    text: Liferay.Language.get('producer-entity'),
+    text: Liferay.Language.get('producer-org'),
     sortBy: 'producerName',
     sortable: true,
     props: {
@@ -80,7 +80,7 @@ export const TableHeadings = [
 ];
 
 export const TableSort = ({setSort, sortColumn, sortDirection, sortable, sortBy, children}) => {
-  
+
   return (sortable
     ? <span
         className="toggle-sort cursor-pointer"
