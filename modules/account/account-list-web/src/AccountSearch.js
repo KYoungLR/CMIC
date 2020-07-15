@@ -36,7 +36,7 @@ export const AccountSearch = ({activePage, filterCount, filterVisible, queryStri
         />
         <ClayInput.GroupInsetItem after tag="span">
           <ClayIcon
-            className="icon-monospaced text-secondary"
+            className={`icon-monospaced ${queryString ? "text-primary" : "text-secondary"}`}
             symbol="search"
             spritemap={spritemap}
           />
@@ -44,7 +44,7 @@ export const AccountSearch = ({activePage, filterCount, filterVisible, queryStri
       </ClayInput.GroupItem>
       <ClayInput.GroupItem shrink>
         <ClayButton
-          className="align-self-center text-secondary"
+          className={`align-self-center ${(filterVisible || filterCount > 0) ? "bg-primary-light text-primary" : "text-secondary"}`}
           displayType="unstyled"
           monospaced={true}
           onClick={() => setFilterVisible(!filterVisible)}
