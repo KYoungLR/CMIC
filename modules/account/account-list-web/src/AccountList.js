@@ -46,26 +46,6 @@ const AccountList = (props) => {
           toggleFilter,
         }) => (
         <React.Fragment>
-          <pre><code>{JSON.stringify({
-            filterVisible,
-            activeFilters,
-            activePage,
-            clearFilters,
-            displayedCount,
-            displayingFrom,
-            displayingTo,
-            filteredCount,
-            initialCount,
-            members,
-            numPages,
-            queryString,
-            sortColumn,
-            sortDirection,
-            setPageNumber,
-            setQueryString,
-            setSort,
-            toggleFilter,
-          }, null, 2)}</code></pre>
           <div className="card-header flex-container flex-container-stacked-xs justify-content-between align-items-md-center">
             <ClayCard.Description displayType="title">{Liferay.Language.get('accounts')} ({filteredCount})</ClayCard.Description>
             <div className="mt-4 mt-md-0">
@@ -82,19 +62,21 @@ const AccountList = (props) => {
           </div>
 
           <ClayCard.Body>
+            <AccountFilter
+              filteredCount={filteredCount}
+              filteredMembers={filteredMembers}
+              filterVisible={filterVisible}
+              members={data}
+              originalMembers={props.accountsList}
+              queryString={queryString}
+              setFilterCount={setFilterCount}
+              setFilteredMembers={setData}
+            />
+
             {!filteredCount ? (
               <EmptyState />
             ) : (
               <React.Fragment>
-                <AccountFilter
-                  filteredMembers={filteredMembers}
-                  filterVisible={filterVisible}
-                  members={data}
-                  originalMembers={props.accountsList}
-                  queryString={queryString}
-                  setFilterCount={setFilterCount}
-                  setMembers={setData}
-                />
                 <ClayTable className="table-sticky">
                   <ClayTable.Head>
                     <ClayTable.Row>

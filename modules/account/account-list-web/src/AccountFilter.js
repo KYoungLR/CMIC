@@ -40,6 +40,10 @@ export class AccountFilter extends React.Component {
     if (prevProps.filteredMembers !== this.props.filteredMembers) {
       this.setMembers();
     }
+
+    if(prevState.filters !== this.state.filters) {
+      this.setFilteredMembers();
+    }
   }
 
   clearLabels() {
@@ -61,6 +65,25 @@ export class AccountFilter extends React.Component {
     this.setState({
       labels: labels,
     });
+  }
+
+  setFilteredMembers() {
+    const filters = this.state.filters;
+    const originalMembers = this.props.originalMembers;
+    let filteredMembers;
+
+    if (filters.length) {
+      filteredMembers = originalMembers.filter(item => {
+        return filters.some(filter => {
+          return filter.value.includes(item[filter.id]);
+        });
+      });
+    }
+    else {
+      filteredMembers = originalMembers;
+    }
+
+    this.props.setFilteredMembers(filteredMembers);
   }
 
   setFilters() {
@@ -118,18 +141,13 @@ export class AccountFilter extends React.Component {
 
   render() {
     const filterVisible = this.props.filterVisible;
+    const filteredCount = this.props.filteredCount;
 
     return (
       <React.Fragment>
-        {filterVisible
+        {filterVisible && filteredCount
           ? (
             <React.Fragment>
-              <pre>{JSON.stringify(
-                this.state.filters,
-              null, 2)}</pre>
-              <pre>{JSON.stringify(
-                this.state.labels,
-              null, 2)}</pre>
               <ClayForm.Group>
                 <ClayInput.Group>
                   <ClayInput.GroupItem shrink>
