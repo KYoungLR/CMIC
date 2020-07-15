@@ -10,6 +10,7 @@ import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.kernel.model.Portlet;
+import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -34,9 +35,9 @@ public class ContentSetupUpgradeStepRegistrator implements UpgradeStepRegistrato
 		registry.register(
 			"0.0.0", "1.0.0",
 			new AddBrokerSiteUpgradeProcess(
-				companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService, expandoTableLocalService, groupLocalService,
-				journalArticleLocalService, layoutSetLocalService, permissionCheckerFactory, portal, roleLocalService,
-				userLocalService, virtualHostLocalService),
+				companyLocalService, ddmStructureLocalService, ddmTemplateLocalService, expandoColumnLocalService,
+				expandoTableLocalService, groupLocalService, journalArticleLocalService, layoutSetLocalService,
+				permissionCheckerFactory, portal, roleLocalService, userLocalService, virtualHostLocalService),
 			new AddRolesUpgradeProcess());
 	}
 
@@ -71,10 +72,10 @@ public class ContentSetupUpgradeStepRegistrator implements UpgradeStepRegistrato
 	protected DDMTemplateLocalService ddmTemplateLocalService;
 
 	@Reference
-	protected ExpandoTableLocalService expandoTableLocalService;
+	protected ExpandoColumnLocalService expandoColumnLocalService;
 
 	@Reference
-	protected ExpandoColumnLocalService expandoColumnLocalService;
+	protected ExpandoTableLocalService expandoTableLocalService;
 
 	@Reference
 	protected GroupLocalService groupLocalService;
@@ -107,6 +108,12 @@ public class ContentSetupUpgradeStepRegistrator implements UpgradeStepRegistrato
 
 	@Reference(target = "(javax.portlet.name=com_churchmutual_profile_web_portlet_ProfileWebPortlet)")
 	protected Portlet profileWebPortlet;
+
+	@Reference(
+		target = "(&(release.bundle.symbolic.name=com.liferay.adaptive.media.document.library.thumbnails)(release.schema.version>=1.0.1))",
+		unbind = "-"
+	)
+	protected Release release;
 
 	@Reference
 	protected RoleLocalService roleLocalService;
