@@ -4,13 +4,6 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {Toast} from 'com.churchmutual.commons.web';
 import AccountList from './AccountList';
 
-/* TODO - when service is ready
-Remove generateData reference
-Delete GenerateData.js file
-Remove "chance" from dependencies in package.json
-*/
-import generateData from './GenerateData';
-
 class Accounts extends React.Component {
 
   constructor(props) {
@@ -64,11 +57,6 @@ class Accounts extends React.Component {
       callback,
       errCallback
     );
-
-    // this.setState({
-    //   accountsList: generateData(1000),
-    //   isLoading: false
-    // });
   }
 
   render() {

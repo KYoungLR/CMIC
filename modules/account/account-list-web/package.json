@@ -29,7 +29,6 @@
 		"@clayui/pagination-bar": "^3.1.4",
 		"@clayui/table": "^3.0.7",
 		"@clayui/tooltip": "^3.3.1",
-		"chance": "^1.1.6",
 		"lodash.groupby": "^4.6.0",
 		"lodash.map": "^4.6.0",
 		"react": "16.8.6",
