@@ -14,11 +14,15 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.commons.util.CollectionsUtil;
 import com.churchmutual.core.model.CMICAccountEntry;
 import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.model.CMICOrganization;
+import com.churchmutual.core.service.CMICAccountEntryLocalService;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
+import com.churchmutual.core.service.CMICOrganizationLocalServiceUtil;
 import com.churchmutual.core.service.base.CMICAccountEntryLocalServiceBaseImpl;
+import com.churchmutual.core.service.http.CMICCommissionDocumentServiceSoap;
 import com.churchmutual.rest.AccountWebService;
 import com.churchmutual.rest.ProducerWebService;
 import com.churchmutual.rest.TransactionWebService;
@@ -27,16 +31,25 @@ import com.churchmutual.rest.model.CMICAccountDTO;
 import com.churchmutual.rest.model.CMICProducerDTO;
 import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
 import com.liferay.account.model.AccountEntry;
+import com.liferay.account.model.AccountEntryOrganizationRel;
 import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalService;
+import com.liferay.account.service.AccountEntryLocalServiceUtil;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
+import com.liferay.account.service.AccountEntryOrganizationRelLocalServiceUtil;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.account.service.business.AccountEntryBusinessService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -138,6 +151,21 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
+	public String getAccountEntryName(CMICAccountEntry cmicAccountEntry) {
+		AccountEntry accountEntry = _accountEntryLocalService.fetchAccountEntry(
+			cmicAccountEntry.getAccountEntryId());
+
+		if (accountEntry == null) {
+			_log.error(
+				String.format("Account Entry with id %d could not be found", cmicAccountEntry.getAccountEntryId()));
+
+			return StringPool.BLANK;
+		}
+
+		return accountEntry.getName();
+	}
+
+	@Override
 	public List<CMICAccountEntry> getCMICAccountEntriesByUserIdOrderedByName(long userId, int start, int end) {
 		return cmicAccountEntryFinder.findByUserIdOrderedByName(userId, start, end);
 	}
@@ -184,6 +212,62 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		);
 	}
 
+	@Override
+	public String getOrganizationName(CMICAccountEntry cmicAccountEntry) {
+		List<AccountEntryOrganizationRel> accountEntryOrganizationRels =
+			_accountEntryOrganizationRelLocalService.getAccountEntryOrganizationRels(
+				cmicAccountEntry.getAccountEntryId());
+
+		AccountEntryOrganizationRel accountEntryOrganizationRel = CollectionsUtil.getFirst(
+				accountEntryOrganizationRels);
+
+		if (accountEntryOrganizationRel == null) {
+			_log.error(String.format("Account Entry %d is not related to an organization", cmicAccountEntry.getAccountEntryId()));
+
+			return StringPool.BLANK;
+		}
+
+		Organization organization = OrganizationLocalServiceUtil.fetchOrganization(
+				accountEntryOrganizationRel.getOrganizationId());
+
+		if (organization == null) {
+			_log.error(
+				String.format(
+					"Organization with id %d could not be found", accountEntryOrganizationRel.getOrganizationId()));
+
+			return StringPool.BLANK;
+		}
+
+		 return organization.getName();
+	}
+
+	@Override
+	public String getProducerCode(CMICAccountEntry cmicAccountEntry) {
+		long companyId = PortalUtil.getDefaultCompanyId();
+
+		Organization organization = _organizationLocalService.fetchOrganization(companyId, getOrganizationName(cmicAccountEntry));
+
+		if (organization == null) {
+			return StringPool.BLANK;
+		}
+
+		CMICOrganization cmicOrganization = _cmicOrganizationLocalService.fetchCMICOrganizationByOrganizationId(
+			organization.getOrganizationId());
+
+		if (cmicOrganization == null) {
+			_log.error(
+				String.format(
+					"CMICOrganization with organization id %d could not be found", organization.getOrganizationId()));
+
+			return StringPool.BLANK;
+		}
+
+		String divisionNumber = cmicOrganization.getDivisionNumber();
+		String agentNumber = cmicOrganization.getAgentNumber();
+
+		return divisionNumber + agentNumber;
+	}
+
 	@Reference
 	protected AccountEntryBusinessService _accountEntryBusinessService;
 
@@ -203,9 +287,13 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	protected CMICOrganizationLocalService _cmicOrganizationLocalService;
 
 	@Reference
+	protected OrganizationLocalService _organizationLocalService;
+
+	@Reference
 	protected ProducerWebService _producerWebService;
 
 	@Reference
 	protected TransactionWebService _transactionWebService;
 
+	private static Log _log = LogFactoryUtil.getLog(CMICAccountEntryLocalServiceImpl.class);
 }

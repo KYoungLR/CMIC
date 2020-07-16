@@ -30,7 +30,6 @@ import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -187,21 +186,23 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 			for (CMICUserDTO cmicUserDTO : cmicUserDTOs) {
 				try {
-					User user = getUser(cmicUserDTO.getUuid());
+					User user = fetchUserByCmicUUID(cmicUserDTO.getUuid());
 
-					String shortenedNameKey = cmicUserDTO.getUserRole();
+					if (Validator.isNotNull(user)) {
+						String shortenedNameKey = cmicUserDTO.getUserRole();
 
-					BusinessRole businessRole = BusinessRole.fromShortenedNameKey(shortenedNameKey, businessPortalType);
+						BusinessRole businessRole = BusinessRole.fromShortenedNameKey(shortenedNameKey, businessPortalType);
 
-					Role role = roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
+						Role role = roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
 
-					long curUserId = user.getUserId();
+						long curUserId = user.getUserId();
 
-					userGroupRoleLocalService.addUserGroupRoles(curUserId, groupId, new long[] {role.getRoleId()});
+						userGroupRoleLocalService.addUserGroupRoles(curUserId, groupId, new long[]{role.getRoleId()});
 
-					newUserGroupRoleUserIds.add(curUserId);
+						newUserGroupRoleUserIds.add(curUserId);
 
-					groupUsers.add(user);
+						groupUsers.add(user);
+					}
 				}
 				catch (PortalException pe) {
 					_log.error(pe);
@@ -293,7 +294,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public User getUser(String cmicUUID) throws PortalException {
+	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException {
 		DynamicQuery dynamicQuery = userLocalService.dynamicQuery();
 
 		dynamicQuery.add(
@@ -304,10 +305,6 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			));
 
 		User user = CollectionsUtil.getFirst(userLocalService.dynamicQuery(dynamicQuery));
-
-		if (user == null) {
-			throw new NoSuchUserException("No user for cmicUUID: " + cmicUUID);
-		}
 
 		return user;
 	}
@@ -440,7 +437,13 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	protected void updateUserAndGroups(CMICUserDTO cmicUserDTO) throws PortalException {
 		String uuid = cmicUserDTO.getUuid();
 
-		User user = getUser(uuid);
+		User user = fetchUserByCmicUUID(uuid);
+
+		if (Validator.isNull(user)) {
+			_log.error(String.format("User with uuid %s was not found", uuid));
+
+			return;
+		}
 
 		long userId = user.getUserId();
 
@@ -532,7 +535,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	protected AccountEntryUserRelLocalService accountEntryUserRelLocalService;
 
 	@Reference
-	protected  AccountWebService accountWebService;
+	protected AccountWebService accountWebService;
 
 	@Reference
 	protected CMICAccountEntryLocalService cmicAccountEntryLocalService;
