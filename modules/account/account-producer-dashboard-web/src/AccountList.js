@@ -3,6 +3,7 @@ import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import ClayTable from '@clayui/table';
+import {ClayTooltipProvider} from '@clayui/tooltip';
 import NumberFormat from 'react-number-format';
 
 const navigate = (e, id) => {
@@ -11,8 +12,9 @@ const navigate = (e, id) => {
   Liferay.Util.navigate('account-details');
 }
 
+const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
+
 const AccountList = (props) => {
-  const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/cmic/icons.svg';
 
   if (props.isLoading) {
     return (<ClayLoadingIndicator />);
@@ -25,23 +27,23 @@ const AccountList = (props) => {
             <ClayTable.Row>
               <ClayTable.Cell expanded headingCell>
                 {Liferay.Language.get('name')}
-                <a href="javascript:;" className="text-muted">
-                  <ClayIcon symbol={"sort"} spritemap={spritemap} />
-                </a>
               </ClayTable.Cell>
 
               <ClayTable.Cell expanded headingCell align="center" className="table-cell-expand-smallest">
                 {Liferay.Language.get('in-force-policies')}
-                <a href="javascript:;" className="text-muted">
-                  <ClayIcon symbol={"sort"} spritemap={spritemap} />
-                </a>
               </ClayTable.Cell>
 
               <ClayTable.Cell headingCell align="right" className="table-cell-ws-nowrap">
-                {Liferay.Language.get('amount-billed')}
-                <a href="javascript:;" className="text-muted">
-                  <ClayIcon symbol={"sort"} spritemap={spritemap} />
-                </a>
+                <ClayTooltipProvider delay="100">
+                  <ClayIcon
+                    className="text-secondary mr-2"
+                    data-tooltip-align="bottom-right"
+                    symbol="info-circle-open"
+                    spritemap={spritemap}
+                    title={Liferay.Language.get('this-value-is-an-estimate')}
+                  />
+                </ClayTooltipProvider>
+                {Liferay.Language.get('policy-premium')}
               </ClayTable.Cell>
 
             </ClayTable.Row>
@@ -58,7 +60,7 @@ const AccountList = (props) => {
                 </ClayTable.Cell>
                 <ClayTable.Cell align="center">{account.numInForcePolicies}</ClayTable.Cell>
                 <ClayTable.Cell align="right" className="h3 font-weight-bold">
-                  <NumberFormat value={account.totalBilledPremium} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  <NumberFormat decimalScale={2} displayType={'text'} fixedDecimalScale={true} prefix={'$'} thousandSeparator={true} value={account.totalBilledPremium} />
                 </ClayTable.Cell>
               </ClayTable.Row>
             ))}
