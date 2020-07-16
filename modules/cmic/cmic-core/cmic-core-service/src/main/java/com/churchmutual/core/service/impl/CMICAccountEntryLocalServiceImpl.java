@@ -81,37 +81,13 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil</code>.
 	 */
 	@Override
-	public CMICAccountEntry addAccountEntry(long userId, String accountNumber, String companyNumber)
+	public CMICAccountEntry addCMICAccountEntry(long userId, String accountNumber, String companyNumber, String accountName, long producerId, String producerCode)
 		throws PortalException {
 
-		CMICAccountDTO cmicAccountDTO = _accountWebService.getAccounts(accountNumber);
-
-		String name = cmicAccountDTO.getAccountName();
-
-		// 5 digit producerCode = 2 digit agentNumber + 3 digit divisionNumber
-
-		String producerCode = cmicAccountDTO.getProducerCode();
-
-		String agentNumber = producerCode.substring(0,2);
-
-		String divisionNumber = producerCode.substring(2,5);
-
-		List<CMICProducerDTO> cmicProducerDTOs = _producerWebService.getProducers(
-			agentNumber, divisionNumber, StringPool.BLANK, null);
-
-		if (cmicProducerDTOs.isEmpty()) {
-			throw new PortalException(String.format("Producer with producerCode %s could not be found", producerCode));
-		}
-
-		CMICProducerDTO cmicProducerDTO = cmicProducerDTOs.get(0);
-
-		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
-			_transactionWebService.getTransactionAccountSummaryByAccounts(new String[]{accountNumber});
-
-		CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(cmicProducerDTO.getId());
+		CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(producerId);
 
 		if (cmicOrganization == null) {
-			cmicOrganization = _cmicOrganizationLocalService.addCMICOrganization(userId, cmicProducerDTO.getId());
+			cmicOrganization = _cmicOrganizationLocalService.addCMICOrganization(userId, producerId);
 		}
 
 		CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
@@ -121,9 +97,11 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		}
 
 		AccountEntry accountEntry = _accountEntryBusinessService.createAccountEntry(
-			userId, name, userId, cmicOrganization.getOrganizationId());
+			userId, accountName, userId, cmicOrganization.getOrganizationId());
 
-		_accountEntryOrganizationRelLocalService.addAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
+		if (!_accountEntryOrganizationRelLocalService.hasAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId())) {
+			_accountEntryOrganizationRelLocalService.addAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
+		}
 
 		long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
 
@@ -132,6 +110,9 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
 		cmicAccountEntry.setAccountNumber(accountNumber);
 		cmicAccountEntry.setCompanyNumber(companyNumber);
+
+		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
+			_transactionWebService.getTransactionAccountSummaryByAccounts(new String[]{accountNumber});
 
 		if (!cmicTransactionAccountSummaryDTOs.isEmpty()) {
 			CMICTransactionAccountSummaryDTO cmicTransactionAccountSummaryDTO = cmicTransactionAccountSummaryDTOs.get(0);

@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.role.RoleConstants;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -439,13 +440,16 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		User user = fetchUserByCmicUUID(uuid);
 
-		if (Validator.isNull(user)) {
-			_log.error(String.format("User with uuid %s was not found", uuid));
+		// uncomment this when sample user with uuid e7575932-9235-4829-8399-88d08d4c7542 is generated on startup
 
-			return;
-		}
+		// if (Validator.isNull(user)) {
+			// _log.error(String.format("User with uuid %s was not found", uuid));
+			// return;
+		// }
 
-		long userId = user.getUserId();
+		// long userId = user.getUserId();
+
+		long userId = PrincipalThreadLocal.getUserId();
 
 		List<CMICUserRelationDTO> userRelations = cmicUserDTO.getOrganizationList();
 
@@ -455,6 +459,9 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		for (CMICUserRelationDTO userRelation : userRelations) {
 			if (userRelation.isProducer()) {
+				String agentNumber = userRelation.getAgentNumber();
+				String divisionNumber = userRelation.getDivisionNumber();
+				String producerCode = divisionNumber + agentNumber;
 				long producerId = userRelation.getProducerId();
 
 				CMICOrganization cmicOrganization = cmicOrganizationLocalService.fetchCMICOrganizationByProducerId(
@@ -469,25 +476,25 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				}
 
 				newUserOganizations.add(cmicOrganization);
+
+				List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(new String[]{producerCode});
+
+				for (CMICAccountDTO cmicAccountDTO : cmicAccountDTOs) {
+					String accountName = cmicAccountDTO.getAccountName();
+					String accountNumber = cmicAccountDTO.getAccountNumber();
+					String companyNumber = cmicAccountDTO.getCompanyNumber();
+
+					CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.fetchAccountEntry(
+							accountNumber, companyNumber);
+
+					if (cmicAccountEntry == null) {
+						cmicAccountEntry = cmicAccountEntryLocalService.addCMICAccountEntry(
+							userId, accountNumber, companyNumber, accountName, producerId, producerCode);
+					}
+
+					newUserAccountEntries.add(cmicAccountEntry);
+				}
 			}
-		}
-
-		String[] producerCodes = userRelations.stream().map(rel -> rel.getDivisionNumber() + rel.getAgentNumber()).toArray(String[]::new);
-
-		List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(producerCodes);
-
-		for (CMICAccountDTO cmicAccountDTO : cmicAccountDTOs) {
-			String accountNumber = cmicAccountDTO.getAccountNumber();
-			String companyNumber = cmicAccountDTO.getCompanyNumber();
-
-			CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.fetchAccountEntry(
-				accountNumber, companyNumber);
-
-			if (cmicAccountEntry == null) {
-				cmicAccountEntry = cmicAccountEntryLocalService.addAccountEntry(userId, accountNumber, companyNumber);
-			}
-
-			newUserAccountEntries.add(cmicAccountEntry);
 		}
 
 		// Compare the user's memberships for organizations and/or accounts, and if it's different, update
