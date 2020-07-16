@@ -14,11 +14,15 @@
 
 package com.churchmutual.core.service.impl;
 
+import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.service.base.CMICAccountEntryServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import org.osgi.service.component.annotations.Component;
+
+import java.util.List;
 
 /**
  * The implementation of the cmic account entry remote service.
@@ -39,10 +43,9 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CMICAccountEntryServiceImpl extends CMICAccountEntryServiceBaseImpl {
 
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Always use <code>com.churchmutual.core.service.CMICAccountEntryServiceUtil</code> to access the cmic account entry remote service.
-	 */
+	@Override
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays() throws PortalException {
+		return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(getUserId());
+	}
 
 }

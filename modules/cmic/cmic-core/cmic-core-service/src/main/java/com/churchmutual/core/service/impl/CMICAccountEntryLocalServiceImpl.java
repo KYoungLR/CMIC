@@ -29,6 +29,7 @@ import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryUserRel;
 import com.liferay.account.service.AccountEntryLocalService;
+import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.account.service.business.AccountEntryBusinessService;
 import com.liferay.petra.string.StringPool;
@@ -109,6 +110,8 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		AccountEntry accountEntry = _accountEntryBusinessService.createAccountEntry(
 			userId, name, userId, cmicOrganization.getOrganizationId());
 
+		_accountEntryOrganizationRelLocalService.addAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
+
 		long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
 
 		cmicAccountEntry = createCMICAccountEntry(cmicAccountEntryId);
@@ -155,6 +158,19 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(long userId) {
+		List<CMICAccountEntry> cmicAccountEntries = getCMICAccountEntriesByUserId(userId);
+
+		List<CMICAccountEntryDisplay> cmicAccountEntryDisplays = new ArrayList<>();
+
+		for (CMICAccountEntry cmicAccountEntry : cmicAccountEntries) {
+			cmicAccountEntryDisplays.add(new CMICAccountEntryDisplay(cmicAccountEntry));
+		}
+
+		return cmicAccountEntryDisplays;
+	}
+
+	@Override
 	public List<CMICAccountEntry> getCMICAccountEntriesByUserId(long userId) {
 		List<AccountEntryUserRel> accountEntryUserRels =
 			_accountEntryUserRelLocalService.getAccountEntryUserRelsByAccountUserId(userId);
@@ -173,6 +189,9 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 	@Reference
 	protected AccountEntryLocalService _accountEntryLocalService;
+
+	@Reference
+	protected AccountEntryOrganizationRelLocalService _accountEntryOrganizationRelLocalService;
 
 	@Reference
 	protected AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
