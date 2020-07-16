@@ -14,9 +14,9 @@ const newData = () => {
   	accountNumber: new Chance().string({ length: 8, numeric: true }),
   	producerName: new Chance().company(),
   	producerCode: new Chance().string({ length: 2, numeric: true }) + '-' + new Chance().string({ length: 3, numeric: true }),
-  	inForcePolicy: new Chance().integer({ min: 9, max: 100 }),
-  	futurePolicy: new Chance().integer({ min: 9, max: 100 }),
-  	expiredPolicy: new Chance().integer({ min: 9, max: 100 }),
+  	numInForcePolicies: new Chance().integer({ min: 9, max: 100 }),
+  	numFuturePolicies: new Chance().integer({ min: 9, max: 100 }),
+  	numExpiredPolicies: new Chance().integer({ min: 9, max: 100 }),
   	totalBilledPremium: new Chance().floating({ min: 0, max: 100000, fixed: 2 }),
   }
 }

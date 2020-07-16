@@ -107,9 +107,9 @@ const AccountList = (props) => {
                           <small className="text-muted">{account.producerCode}</small>
                         </ClayTable.Cell>
 
-                        <ClayTable.Cell align="center">{account.inForcePolicy}</ClayTable.Cell>
-                        <ClayTable.Cell align="center">{account.futurePolicy}</ClayTable.Cell>
-                        <ClayTable.Cell align="center">{account.expiredPolicy}</ClayTable.Cell>
+                        <ClayTable.Cell align="center">{account.numInForcePolicies}</ClayTable.Cell>
+                        <ClayTable.Cell align="center">{account.numFuturePolicies}</ClayTable.Cell>
+                        <ClayTable.Cell align="center">{account.numExpiredPolicies}</ClayTable.Cell>
 
                         <ClayTable.Cell align="right" className="h3 font-weight-bold">
                           <NumberFormat decimalScale={2} displayType={'text'} fixedDecimalScale={true} prefix={'$'} thousandSeparator={true} value={account.totalBilledPremium} />

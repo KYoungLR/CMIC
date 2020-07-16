@@ -55,18 +55,20 @@ class Accounts extends React.Component {
   }
 
   getAccountsList() {
-    /*fetch(`/o/account/accounts/${this.userId}`)
-      .then(res => res.json())
-      .then(data => {
-        let accounts = data;
-        this.setState({accountsList: accounts, isLoading: false});
-      })
-      .catch(() => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts'))*/
+    let callback = (data) => this.setState({accountsList: data, isLoading: false});
 
-    this.setState({
-      accountsList: generateData(1000),
-      isLoading: false
-    });
+    let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-list-of-accounts');
+
+    Liferay.Service(
+      '/cmic.cmicaccountentry/get-cmic-account-entry-displays',
+      callback,
+      errCallback
+    );
+
+    // this.setState({
+    //   accountsList: generateData(1000),
+    //   isLoading: false
+    // });
   }
 
   render() {

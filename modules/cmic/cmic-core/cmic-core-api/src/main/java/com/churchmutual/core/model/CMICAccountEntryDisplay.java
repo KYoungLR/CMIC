@@ -1,7 +1,18 @@
 package com.churchmutual.core.model;
 
+import com.churchmutual.commons.util.CollectionsUtil;
+import com.churchmutual.core.service.CMICOrganizationLocalServiceUtil;
+
 import com.liferay.account.model.AccountEntry;
+import com.liferay.account.model.AccountEntryOrganizationRel;
 import com.liferay.account.service.AccountEntryLocalServiceUtil;
+import com.liferay.account.service.AccountEntryOrganizationRelLocalServiceUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+
+import java.util.List;
 
 public class CMICAccountEntryDisplay {
 
@@ -15,13 +26,15 @@ public class CMICAccountEntryDisplay {
 		_numInForcePolicies = cmicAccountEntry.getNumInForcePolicies();
 		_totalBilledPremium = cmicAccountEntry.getTotalBilledPremium();
 
-		AccountEntry accountEntry = AccountEntryLocalServiceUtil.fetchAccountEntry(cmicAccountEntry.getAccountEntryId());
-
-		_name = accountEntry.getName();
+		_populateFields(cmicAccountEntry);
 	}
 
 	public long getAccountEntryId() {
 		return _accountEntryId;
+	}
+
+	public String getAccountName() {
+		return _accountName;
 	}
 
 	public String getAccountNumber() {
@@ -34,10 +47,6 @@ public class CMICAccountEntryDisplay {
 
 	public String getCompanyNumber() {
 		return _companyNumber;
-	}
-
-	public String getName() {
-		return _name;
 	}
 
 	public int getNumExpiredPolicies() {
@@ -64,23 +73,69 @@ public class CMICAccountEntryDisplay {
 		return _totalBilledPremium;
 	}
 
-	public void setName(String name) {
-		_name = name;
+	private void _populateFields(CMICAccountEntry cmicAccountEntry) {
+		AccountEntry accountEntry = AccountEntryLocalServiceUtil.fetchAccountEntry(
+			cmicAccountEntry.getAccountEntryId());
+
+		if (accountEntry == null) {
+			_log.warn(
+				String.format("Account Entry with id %d could not be found", cmicAccountEntry.getAccountEntryId()));
+
+			return;
+		}
+
+		_accountName = accountEntry.getName();
+
+		List<AccountEntryOrganizationRel> accountEntryOrganizationRels =
+			AccountEntryOrganizationRelLocalServiceUtil.getAccountEntryOrganizationRels(
+				accountEntry.getAccountEntryId());
+
+		AccountEntryOrganizationRel accountEntryOrganizationRel = CollectionsUtil.getFirst(
+			accountEntryOrganizationRels);
+
+		if (accountEntryOrganizationRel == null) {
+			_log.warn(
+				String.format(
+					"Account Entry %d is not related to an organization", cmicAccountEntry.getAccountEntryId()));
+
+			return;
+		}
+
+		Organization organization = OrganizationLocalServiceUtil.fetchOrganization(
+			accountEntryOrganizationRel.getOrganizationId());
+
+		_producerName = organization.getName();
+
+		if (organization == null) {
+			_log.warn(
+				String.format(
+					"Organization with id %d could not be found", accountEntryOrganizationRel.getOrganizationId()));
+
+			return;
+		}
+
+		CMICOrganization cmicOrganization = CMICOrganizationLocalServiceUtil.fetchCMICOrganizationByOrganizationId(
+			organization.getOrganizationId());
+
+		if (cmicOrganization == null) {
+			_log.warn(
+				String.format(
+					"CMICOrganization with organization id %d could not be found", organization.getOrganizationId()));
+		}
+
+		String divisionNumber = cmicOrganization.getDivisionNumber();
+		String agentNumber = cmicOrganization.getAgentNumber();
+
+		_producerCode = divisionNumber + agentNumber;
 	}
 
-	public void setProducerCode(String producerCode) {
-		_producerCode = producerCode;
-	}
-
-	public void setProducerName(String producerName) {
-		_producerName = producerName;
-	}
+	private static final Log _log = LogFactoryUtil.getLog(CMICAccountEntryDisplay.class);
 
 	private long _accountEntryId;
+	private String _accountName;
 	private String _accountNumber;
 	private long _cmicAccountEntryId;
 	private String _companyNumber;
-	private String _name;
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;

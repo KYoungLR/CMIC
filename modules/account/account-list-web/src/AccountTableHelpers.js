@@ -24,7 +24,7 @@ export const TableHeadings = [
   },
   {
     text: Liferay.Language.get('in-force-policies'),
-    sortBy: 'inForcePolicy',
+    sortBy: 'numInForcePolicies',
     sortable: true,
     props: {
       expanded: true,
@@ -34,7 +34,7 @@ export const TableHeadings = [
   },
   {
     text: Liferay.Language.get('future-policies'),
-    sortBy: 'futurePolicy',
+    sortBy: 'numFuturePolicies',
     sortable: true,
     props: {
       expanded: true,
@@ -44,7 +44,7 @@ export const TableHeadings = [
   },
   {
     text: Liferay.Language.get('expired-policies'),
-    sortBy: 'expiredPolicy',
+    sortBy: 'numExpiredPolicies',
     sortable: true,
     props: {
       expanded: true,
