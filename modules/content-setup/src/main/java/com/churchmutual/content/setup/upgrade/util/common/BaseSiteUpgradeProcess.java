@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.churchmutual.content.setup.upgrade.util.common;
 
 import com.churchmutual.commons.constants.LayoutURLKeyConstants;
@@ -59,7 +73,8 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 
 	public BaseSiteUpgradeProcess(
 		CompanyLocalService companyLocalService, DDMStructureLocalService ddmStructureLocalService,
-		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService, ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
+		DDMTemplateLocalService ddmTemplateLocalService, ExpandoColumnLocalService expandoColumnLocalService,
+		ExpandoTableLocalService expandoTableLocalService, GroupLocalService groupLocalService,
 		JournalArticleLocalService journalArticleLocalService, LayoutSetLocalService layoutSetLocalService,
 		PermissionCheckerFactory permissionCheckerFactory, Portal portal, RoleLocalService roleLocalService,
 		UserLocalService userLocalService, VirtualHostLocalService virtualHostLocalService) {
@@ -81,14 +96,17 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 	protected void addExpandoColumn(
 			long companyId, String className, String columnName, int dataType, UnicodeProperties properties)
 		throws PortalException {
+
 		ExpandoTable expandoTable = expandoTableLocalService.fetchTable(
 			companyId, portal.getClassNameId(className), ExpandoTableConstants.DEFAULT_TABLE_NAME);
 
-		if (Validator.isNull(expandoTable)) {
-			expandoTable = expandoTableLocalService.addTable(companyId, className, ExpandoTableConstants.DEFAULT_TABLE_NAME);
+		if (expandoTable == null) {
+			expandoTable = expandoTableLocalService.addTable(
+				companyId, className, ExpandoTableConstants.DEFAULT_TABLE_NAME);
 		}
 
-		ExpandoColumn expandoColumn = expandoColumnLocalService.addColumn(expandoTable.getTableId(), columnName, dataType);
+		ExpandoColumn expandoColumn = expandoColumnLocalService.addColumn(
+			expandoTable.getTableId(), columnName, dataType);
 
 		expandoColumn.setTypeSettingsProperties(properties);
 
@@ -197,7 +215,10 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		return groupId;
 	}
 
-	protected User addUser(long companyId, long defaultUserId, String firstName, String lastName, String externalReferenceCode) throws PortalException {
+	protected User addUser(
+			long companyId, long defaultUserId, String firstName, String lastName, String externalReferenceCode)
+		throws PortalException {
+
 		String emailAddress = String.format("%s.%s@liferay.com", firstName, lastName);
 
 		User user = userLocalService.addUser(
