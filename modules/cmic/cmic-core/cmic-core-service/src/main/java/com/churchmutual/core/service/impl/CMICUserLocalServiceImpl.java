@@ -110,17 +110,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException {
-		DynamicQuery dynamicQuery = userLocalService.dynamicQuery();
-
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName(
-				"externalReferenceCode"
-			).like(
-				cmicUUID
-			));
-
-		return CollectionsUtil.getFirst(userLocalService.dynamicQuery(dynamicQuery));
+	public User fetchUserByCmicUUID(long companyId, String cmicUUID) throws PortalException {
+		return userLocalService.fetchUserByReferenceCode(companyId, cmicUUID);
 	}
 
 	@Override
@@ -212,7 +203,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 			for (CMICUserDTO cmicUserDTO : cmicUserDTOs) {
 				try {
-					User user = fetchUserByCmicUUID(cmicUserDTO.getUuid());
+					User user = fetchUserByCmicUUID(group.getCompanyId(), cmicUserDTO.getUuid());
 
 					if (user != null) {
 						String shortenedNameKey = cmicUserDTO.getUserRole();

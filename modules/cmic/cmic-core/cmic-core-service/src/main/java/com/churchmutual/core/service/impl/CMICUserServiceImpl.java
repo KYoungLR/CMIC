@@ -95,11 +95,6 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public User getUser(String cmicUUID) throws PortalException {
-		return cmicUserLocalService.fetchUserByCmicUUID(cmicUUID);
-	}
-
-	@Override
 	public CMICUserDisplay getUserDetails() throws PortalException {
 		long userId = getUserId();
 
