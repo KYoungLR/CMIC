@@ -139,15 +139,8 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
-	public String getAccountEntryName(CMICAccountEntry cmicAccountEntry) {
-		AccountEntry accountEntry = accountEntryLocalService.fetchAccountEntry(cmicAccountEntry.getAccountEntryId());
-
-		if (accountEntry == null) {
-			_log.error(
-				String.format("Account Entry with id %d could not be found", cmicAccountEntry.getAccountEntryId()));
-
-			return StringPool.BLANK;
-		}
+	public String getAccountEntryName(CMICAccountEntry cmicAccountEntry) throws PortalException {
+		AccountEntry accountEntry = accountEntryLocalService.getAccountEntry(cmicAccountEntry.getAccountEntryId());
 
 		return accountEntry.getName();
 	}
@@ -203,7 +196,7 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
-	public String getOrganizationName(CMICAccountEntry cmicAccountEntry) {
+	public String getOrganizationName(CMICAccountEntry cmicAccountEntry) throws PortalException {
 		List<AccountEntryOrganizationRel> accountEntryOrganizationRels =
 			accountEntryOrganizationRelLocalService.getAccountEntryOrganizationRels(
 				cmicAccountEntry.getAccountEntryId());
@@ -212,48 +205,25 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 			accountEntryOrganizationRels);
 
 		if (accountEntryOrganizationRel == null) {
-			_log.error(
+			throw new PortalException(
 				String.format(
 					"Account Entry %d is not related to an organization", cmicAccountEntry.getAccountEntryId()));
-
-			return StringPool.BLANK;
 		}
 
-		Organization organization = OrganizationLocalServiceUtil.fetchOrganization(
-			accountEntryOrganizationRel.getOrganizationId());
-
-		if (organization == null) {
-			_log.error(
-				String.format(
-					"Organization with id %d could not be found", accountEntryOrganizationRel.getOrganizationId()));
-
-			return StringPool.BLANK;
-		}
+		Organization organization = organizationLocalService.getOrganization(accountEntryOrganizationRel.getOrganizationId());
 
 		return organization.getName();
 	}
 
 	@Override
-	public String getProducerCode(CMICAccountEntry cmicAccountEntry) {
+	public String getProducerCode(CMICAccountEntry cmicAccountEntry) throws PortalException {
 		long companyId = PortalUtil.getDefaultCompanyId();
 
-		Organization organization = organizationLocalService.fetchOrganization(
+		Organization organization = organizationLocalService.getOrganization(
 			companyId, getOrganizationName(cmicAccountEntry));
 
-		if (organization == null) {
-			return StringPool.BLANK;
-		}
-
-		CMICOrganization cmicOrganization = cmicOrganizationLocalService.fetchCMICOrganizationByOrganizationId(
+		CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByOrganizationId(
 			organization.getOrganizationId());
-
-		if (cmicOrganization == null) {
-			_log.error(
-				String.format(
-					"CMICOrganization with organization id %d could not be found", organization.getOrganizationId()));
-
-			return StringPool.BLANK;
-		}
 
 		String divisionNumber = cmicOrganization.getDivisionNumber();
 		String agentNumber = cmicOrganization.getAgentNumber();

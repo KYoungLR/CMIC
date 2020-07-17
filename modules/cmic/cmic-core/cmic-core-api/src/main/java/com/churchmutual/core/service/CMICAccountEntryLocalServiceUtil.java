@@ -215,7 +215,8 @@ public class CMICAccountEntryLocalServiceUtil {
 	}
 
 	public static String getAccountEntryName(
-		com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry) {
+			com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getAccountEntryName(cmicAccountEntry);
 	}
@@ -303,7 +304,8 @@ public class CMICAccountEntryLocalServiceUtil {
 	}
 
 	public static String getOrganizationName(
-		com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry) {
+			com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getOrganizationName(cmicAccountEntry);
 	}
@@ -325,7 +327,8 @@ public class CMICAccountEntryLocalServiceUtil {
 	}
 
 	public static String getProducerCode(
-		com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry) {
+			com.churchmutual.core.model.CMICAccountEntry cmicAccountEntry)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getProducerCode(cmicAccountEntry);
 	}
