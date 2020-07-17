@@ -21,9 +21,9 @@ import com.churchmutual.core.model.CMICOrganization;
 import com.churchmutual.core.service.CMICOrganizationLocalService;
 import com.churchmutual.core.service.base.CMICAccountEntryLocalServiceBaseImpl;
 import com.churchmutual.rest.AccountWebService;
+import com.churchmutual.rest.PolicyWebService;
 import com.churchmutual.rest.ProducerWebService;
-import com.churchmutual.rest.TransactionWebService;
-import com.churchmutual.rest.model.CMICTransactionAccountSummaryDTO;
+import com.churchmutual.rest.model.CMICPolicyAccountSummaryDTO;
 
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryOrganizationRel;
@@ -32,14 +32,10 @@ import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
 import com.liferay.account.service.AccountEntryUserRelLocalService;
 import com.liferay.account.service.business.AccountEntryBusinessService;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
@@ -115,18 +111,18 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 				accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
 		}
 
-		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
-			transactionWebService.getTransactionAccountSummaryByAccounts(new String[] {accountNumber});
+		List<CMICPolicyAccountSummaryDTO> cmicPolicyAccountSummaryDTOs =
+			policyWebService.getPolicyAccountSummariesByAccounts(new String[] {accountNumber});
 
-		if (!cmicTransactionAccountSummaryDTOs.isEmpty()) {
-			CMICTransactionAccountSummaryDTO cmicTransactionAccountSummaryDTO = cmicTransactionAccountSummaryDTOs.get(
+		if (!cmicPolicyAccountSummaryDTOs.isEmpty()) {
+			CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO = cmicPolicyAccountSummaryDTOs.get(
 				0);
 
-			cmicAccountEntry.setNumExpiredPolicies(cmicTransactionAccountSummaryDTO.getNumExpiredPolicies());
-			cmicAccountEntry.setNumFuturePolicies(cmicTransactionAccountSummaryDTO.getNumFuturePolicies());
-			cmicAccountEntry.setNumInForcePolicies(cmicTransactionAccountSummaryDTO.getNumInForcePolicies());
+			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
+			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
+			cmicAccountEntry.setNumInForcePolicies(cmicPolicyAccountSummaryDTO.getNumInForcePolicies());
 			cmicAccountEntry.setTotalBilledPremium(
-				cmicTransactionAccountSummaryDTO.getTotalBilledPremium(
+				cmicPolicyAccountSummaryDTO.getTotalBilledPremium(
 				).toString());
 		}
 
@@ -256,8 +252,6 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	protected ProducerWebService producerWebService;
 
 	@Reference
-	protected TransactionWebService transactionWebService;
-
-	private static Log _log = LogFactoryUtil.getLog(CMICAccountEntryLocalServiceImpl.class);
+	protected PolicyWebService policyWebService;
 
 }
