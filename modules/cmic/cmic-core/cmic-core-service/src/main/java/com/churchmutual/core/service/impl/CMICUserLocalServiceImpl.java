@@ -326,11 +326,13 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	public CMICUserDisplay getUserDetails(long userId, boolean useCache) throws PortalException {
 		User user = userLocalService.getUser(userId);
 
-		CMICUserDTO cmicUserDTO = null;
-
 		if (!useCache) {
 			updateUserBusinesses(userId);
 		}
+
+		String cmicUUID = user.getExternalReferenceCode();
+
+		CMICUserDTO cmicUserDTO = portalUserWebService.getUserDetails(cmicUUID);
 
 		return new CMICUserDisplay(cmicUserDTO, user, getPortraitImageURL(userId));
 	}
