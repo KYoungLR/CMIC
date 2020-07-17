@@ -47,6 +47,14 @@ public class CMICUserLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.model.User fetchUserByCmicUUID(
+			String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicUserLocalService.fetchUserByCmicUUID(cmicUUID);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Group> getBusinesses(
 			long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -119,13 +127,6 @@ public class CMICUserLocalServiceWrapper
 
 		return _cmicUserLocalService.getRecentlyViewedCMICAccountEntryDisplays(
 			userId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.model.User getUser(String cmicUUID)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cmicUserLocalService.getUser(cmicUUID);
 	}
 
 	@Override

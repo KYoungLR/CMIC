@@ -64,15 +64,6 @@ public interface CMICAccountEntryLocalService
 	 */
 
 	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Use <code>CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>CMICAccountEntryLocalServiceUtil</code>.
-	 */
-	public CMICAccountEntry addAccountEntry(
-			long userId, String accountNumber, String companyNumber)
-		throws PortalException;
-
-	/**
 	 * Adds the cmic account entry to the database. Also notifies the appropriate model listeners.
 	 *
 	 * @param cmicAccountEntry the cmic account entry
@@ -81,6 +72,16 @@ public interface CMICAccountEntryLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public CMICAccountEntry addCMICAccountEntry(
 		CMICAccountEntry cmicAccountEntry);
+
+	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Use <code>CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>CMICAccountEntryLocalServiceUtil</code>.
+	 */
+	public CMICAccountEntry addOrUpdateCMICAccountEntry(
+			long userId, String accountNumber, String companyNumber,
+			String accountName, long producerId, String producerCode)
+		throws PortalException;
 
 	/**
 	 * Creates a new cmic account entry with the primary key. Does not add the cmic account entry to the database.
@@ -193,6 +194,9 @@ public interface CMICAccountEntryLocalService
 	public CMICAccountEntry fetchCMICAccountEntry(long cmicAccountEntryId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public String getAccountEntryName(CMICAccountEntry cmicAccountEntry);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	/**
@@ -240,7 +244,14 @@ public interface CMICAccountEntryLocalService
 		List<String> cmicAccountEntryIds);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(
+		long userId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public String getOrganizationName(CMICAccountEntry cmicAccountEntry);
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -253,6 +264,9 @@ public interface CMICAccountEntryLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public String getProducerCode(CMICAccountEntry cmicAccountEntry);
 
 	/**
 	 * Updates the cmic account entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

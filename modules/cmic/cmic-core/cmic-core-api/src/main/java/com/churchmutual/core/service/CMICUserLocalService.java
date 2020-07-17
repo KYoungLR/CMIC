@@ -59,6 +59,9 @@ public interface CMICUserLocalService extends BaseLocalService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Group> getBusinesses(long userId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -94,9 +97,6 @@ public interface CMICUserLocalService extends BaseLocalService {
 	public List<CMICAccountEntryDisplay>
 			getRecentlyViewedCMICAccountEntryDisplays(long userId)
 		throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public User getUser(String cmicUUID) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICUserDisplay getUserDetails(long userId, boolean useCache)

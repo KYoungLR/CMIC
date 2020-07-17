@@ -51,6 +51,13 @@ public class CMICUserLocalServiceUtil {
 			userId, cmicAccountEntryId);
 	}
 
+	public static com.liferay.portal.kernel.model.User fetchUserByCmicUUID(
+			String cmicUUID)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().fetchUserByCmicUUID(cmicUUID);
+	}
+
 	public static java.util.List<com.liferay.portal.kernel.model.Group>
 			getBusinesses(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -114,12 +121,6 @@ public class CMICUserLocalServiceUtil {
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getRecentlyViewedCMICAccountEntryDisplays(userId);
-	}
-
-	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return getService().getUser(cmicUUID);
 	}
 
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
