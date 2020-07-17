@@ -80,29 +80,29 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 		CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
 
+		CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByProducerId(producerId);
+
+		AccountEntry accountEntry = null;
+
 		if (cmicAccountEntry == null) {
 			long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
 
 			cmicAccountEntry = createCMICAccountEntry(cmicAccountEntryId);
-		}
 
-		CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(producerId);
-
-		if (cmicOrganization == null) {
-			_log.error(String.format("CMICOrganization with producer id %d could not be found", producerId));
-
-			return cmicAccountEntry;
-		}
-
-		List<AccountEntry> accountEntries = accountEntryLocalService.getAccountEntryByName(accountName);
-
-		AccountEntry accountEntry = CollectionsUtil.getFirst(accountEntries);
-
-		if (accountEntry == null) {
 			accountEntry = accountEntryBusinessService.createAccountEntry(
 				userId, accountName, userId, cmicOrganization.getOrganizationId());
+
+			cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
+			cmicAccountEntry.setAccountNumber(accountNumber);
+			cmicAccountEntry.setCompanyNumber(companyNumber);
 		}
 		else {
+			accountEntry = accountEntryLocalService.getAccountEntry(cmicAccountEntry.getAccountEntryId());
+
+			accountEntry.setName(accountName);
+
+			accountEntryLocalService.updateAccountEntry(accountEntry);
+
 			List<AccountEntryOrganizationRel> accountEntryOrganizationRels =
 				accountEntryOrganizationRelLocalService.getAccountEntryOrganizationRels(
 					accountEntry.getAccountEntryId());
@@ -114,10 +114,6 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 			accountEntryOrganizationRelLocalService.addAccountEntryOrganizationRel(
 				accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
 		}
-
-		cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
-		cmicAccountEntry.setAccountNumber(accountNumber);
-		cmicAccountEntry.setCompanyNumber(companyNumber);
 
 		List<CMICTransactionAccountSummaryDTO> cmicTransactionAccountSummaryDTOs =
 			transactionWebService.getTransactionAccountSummaryByAccounts(new String[] {accountNumber});
