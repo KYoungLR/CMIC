@@ -203,22 +203,6 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)
-		throws RemoteException {
-
-		try {
-			com.liferay.portal.kernel.model.User returnValue =
-				CMICUserServiceUtil.getUser(cmicUUID);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws RemoteException {
 

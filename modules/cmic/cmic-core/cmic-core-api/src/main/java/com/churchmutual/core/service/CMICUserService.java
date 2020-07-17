@@ -98,9 +98,6 @@ public interface CMICUserService extends BaseService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public User getUser(String cmicUUID) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICUserDisplay getUserDetails() throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

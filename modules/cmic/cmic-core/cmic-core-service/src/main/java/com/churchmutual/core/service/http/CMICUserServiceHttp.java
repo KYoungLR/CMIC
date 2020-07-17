@@ -394,43 +394,6 @@ public class CMICUserServiceHttp {
 		}
 	}
 
-	public static com.liferay.portal.kernel.model.User getUser(
-			HttpPrincipal httpPrincipal, String cmicUUID)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		try {
-			MethodKey methodKey = new MethodKey(
-				CMICUserServiceUtil.class, "getUser", _getUserParameterTypes9);
-
-			MethodHandler methodHandler = new MethodHandler(
-				methodKey, cmicUUID);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof
-						com.liferay.portal.kernel.exception.PortalException) {
-
-					throw (com.liferay.portal.kernel.exception.PortalException)
-						e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(
-					e);
-			}
-
-			return (com.liferay.portal.kernel.model.User)returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
 			HttpPrincipal httpPrincipal)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -438,7 +401,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "getUserDetails",
-				_getUserDetailsParameterTypes10);
+				_getUserDetailsParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -476,7 +439,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "getUserDetailsWithRoleAndStatus",
-				_getUserDetailsWithRoleAndStatusParameterTypes11);
+				_getUserDetailsWithRoleAndStatusParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId);
 
@@ -513,7 +476,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "inviteBusinessMembers",
-				_inviteBusinessMembersParameterTypes12);
+				_inviteBusinessMembersParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, emailAddresses);
@@ -546,7 +509,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "isUserRegistered",
-				_isUserRegisteredParameterTypes13);
+				_isUserRegisteredParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cmicUUID);
@@ -577,7 +540,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "isUserValid",
-				_isUserValidParameterTypes14);
+				_isUserValidParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, businessZipCode, divisionAgentNumber,
@@ -609,7 +572,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "removeUserFromCMICOrganization",
-				_removeUserFromCMICOrganizationParameterTypes15);
+				_removeUserFromCMICOrganizationParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, userId, cmicOrganizationId);
@@ -644,7 +607,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "updateBusinessMembers",
-				_updateBusinessMembersParameterTypes16);
+				_updateBusinessMembersParameterTypes15);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, updateUserRolesJSONString,
@@ -679,7 +642,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "updatePortraitImage",
-				_updatePortraitImageParameterTypes17);
+				_updatePortraitImageParameterTypes16);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, imageFileString);
@@ -717,7 +680,7 @@ public class CMICUserServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				CMICUserServiceUtil.class, "validateUserRegistration",
-				_validateUserRegistrationParameterTypes18);
+				_validateUserRegistrationParameterTypes17);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, registrationCode);
@@ -769,31 +732,28 @@ public class CMICUserServiceHttp {
 	private static final Class<?>[]
 		_getRecentlyViewedCMICAccountEntryDisplaysParameterTypes8 =
 			new Class[] {};
-	private static final Class<?>[] _getUserParameterTypes9 = new Class[] {
-		String.class
-	};
-	private static final Class<?>[] _getUserDetailsParameterTypes10 =
+	private static final Class<?>[] _getUserDetailsParameterTypes9 =
 		new Class[] {};
 	private static final Class<?>[]
-		_getUserDetailsWithRoleAndStatusParameterTypes11 = new Class[] {
+		_getUserDetailsWithRoleAndStatusParameterTypes10 = new Class[] {
 			long.class
 		};
-	private static final Class<?>[] _inviteBusinessMembersParameterTypes12 =
+	private static final Class<?>[] _inviteBusinessMembersParameterTypes11 =
 		new Class[] {long.class, String.class};
-	private static final Class<?>[] _isUserRegisteredParameterTypes13 =
+	private static final Class<?>[] _isUserRegisteredParameterTypes12 =
 		new Class[] {String.class};
-	private static final Class<?>[] _isUserValidParameterTypes14 = new Class[] {
+	private static final Class<?>[] _isUserValidParameterTypes13 = new Class[] {
 		String.class, String.class, String.class, String.class
 	};
 	private static final Class<?>[]
-		_removeUserFromCMICOrganizationParameterTypes15 = new Class[] {
+		_removeUserFromCMICOrganizationParameterTypes14 = new Class[] {
 			long.class, long.class
 		};
-	private static final Class<?>[] _updateBusinessMembersParameterTypes16 =
+	private static final Class<?>[] _updateBusinessMembersParameterTypes15 =
 		new Class[] {long.class, String.class, String.class};
-	private static final Class<?>[] _updatePortraitImageParameterTypes17 =
+	private static final Class<?>[] _updatePortraitImageParameterTypes16 =
 		new Class[] {String.class};
-	private static final Class<?>[] _validateUserRegistrationParameterTypes18 =
+	private static final Class<?>[] _validateUserRegistrationParameterTypes17 =
 		new Class[] {String.class};
 
 }

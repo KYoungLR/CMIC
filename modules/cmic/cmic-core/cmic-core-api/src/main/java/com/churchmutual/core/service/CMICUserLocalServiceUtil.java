@@ -52,10 +52,10 @@ public class CMICUserLocalServiceUtil {
 	}
 
 	public static com.liferay.portal.kernel.model.User fetchUserByCmicUUID(
-			String cmicUUID)
+			long companyId, String cmicUUID)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().fetchUserByCmicUUID(cmicUUID);
+		return getService().fetchUserByCmicUUID(companyId, cmicUUID);
 	}
 
 	public static java.util.List<com.liferay.portal.kernel.model.Group>

@@ -116,13 +116,6 @@ public class CMICUserServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.model.User getUser(String cmicUUID)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _cmicUserService.getUser(cmicUUID);
-	}
-
-	@Override
 	public com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws com.liferay.portal.kernel.exception.PortalException {
 

@@ -59,7 +59,8 @@ public interface CMICUserLocalService extends BaseLocalService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException;
+	public User fetchUserByCmicUUID(long companyId, String cmicUUID)
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Group> getBusinesses(long userId) throws PortalException;

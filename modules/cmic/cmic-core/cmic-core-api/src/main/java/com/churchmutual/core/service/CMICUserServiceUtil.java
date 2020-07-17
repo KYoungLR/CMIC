@@ -115,12 +115,6 @@ public class CMICUserServiceUtil {
 		return getService().getRecentlyViewedCMICAccountEntryDisplays();
 	}
 
-	public static com.liferay.portal.kernel.model.User getUser(String cmicUUID)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return getService().getUser(cmicUUID);
-	}
-
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws com.liferay.portal.kernel.exception.PortalException {
 

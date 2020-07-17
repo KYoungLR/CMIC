@@ -48,10 +48,10 @@ public class CMICUserLocalServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.User fetchUserByCmicUUID(
-			String cmicUUID)
+			long companyId, String cmicUUID)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserLocalService.fetchUserByCmicUUID(cmicUUID);
+		return _cmicUserLocalService.fetchUserByCmicUUID(companyId, cmicUUID);
 	}
 
 	@Override
