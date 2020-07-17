@@ -1,0 +1,18 @@
+[
+	{
+		"accountNumber": "0000015",
+		"numExpiredPolicies": 962,
+		"numFuturePolicies": 109,
+		"numInForcePolicies": 379,
+		"sourceSystem": "QSCMIC",
+		"totalBilledPremium": 523739930.4300
+	},
+	{
+		"accountNumber": "0017522",
+		"numExpiredPolicies": 279,
+		"numFuturePolicies": 0,
+		"numInForcePolicies": 5,
+		"sourceSystem": "QSCMIC",
+		"totalBilledPremium": 1632450.6200
+	}
+]
