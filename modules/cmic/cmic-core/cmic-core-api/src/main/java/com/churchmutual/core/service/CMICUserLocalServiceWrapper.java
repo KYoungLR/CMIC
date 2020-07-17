@@ -131,10 +131,10 @@ public class CMICUserLocalServiceWrapper
 
 	@Override
 	public com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			long userId, boolean useCache)
+			long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserLocalService.getUserDetails(userId, useCache);
+		return _cmicUserLocalService.getUserDetails(userId);
 	}
 
 	@Override

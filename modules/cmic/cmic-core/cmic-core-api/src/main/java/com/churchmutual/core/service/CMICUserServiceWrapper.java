@@ -123,11 +123,10 @@ public class CMICUserServiceWrapper
 	}
 
 	@Override
-	public com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			boolean useCache)
+	public com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _cmicUserService.getUserDetails(useCache);
+		return _cmicUserService.getUserDetails();
 	}
 
 	@Override

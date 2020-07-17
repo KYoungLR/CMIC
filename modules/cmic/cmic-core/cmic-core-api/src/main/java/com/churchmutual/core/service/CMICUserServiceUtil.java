@@ -121,11 +121,10 @@ public class CMICUserServiceUtil {
 		return getService().getUser(cmicUUID);
 	}
 
-	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			boolean useCache)
+	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().getUserDetails(useCache);
+		return getService().getUserDetails();
 	}
 
 	public static com.churchmutual.core.model.CMICUserDisplay

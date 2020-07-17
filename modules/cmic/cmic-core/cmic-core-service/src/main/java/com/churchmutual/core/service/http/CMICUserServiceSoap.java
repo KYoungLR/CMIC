@@ -219,13 +219,12 @@ public class CMICUserServiceSoap {
 		}
 	}
 
-	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			boolean useCache)
+	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails()
 		throws RemoteException {
 
 		try {
 			com.churchmutual.core.model.CMICUserDisplay returnValue =
-				CMICUserServiceUtil.getUserDetails(useCache);
+				CMICUserServiceUtil.getUserDetails();
 
 			return returnValue;
 		}

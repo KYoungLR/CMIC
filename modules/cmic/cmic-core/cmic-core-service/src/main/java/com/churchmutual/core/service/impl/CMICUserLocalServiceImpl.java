@@ -124,7 +124,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
 	public List<Group> getBusinesses(long userId) throws PortalException {
-		getUserDetails(userId, false);
+		updateUserBusinesses(userId);
 
 		List<Organization> organizations = organizationLocalService.getUserOrganizations(userId);
 
@@ -294,7 +294,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 		}
 
-		getUserDetails(userId, false);
+		updateUserBusinesses(userId);
 
 		int start = 0;
 		int index = 0;
@@ -323,12 +323,10 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public CMICUserDisplay getUserDetails(long userId, boolean useCache) throws PortalException {
+	public CMICUserDisplay getUserDetails(long userId) throws PortalException {
 		User user = userLocalService.getUser(userId);
 
-		if (!useCache) {
-			updateUserBusinesses(userId);
-		}
+		updateUserBusinesses(userId);
 
 		String cmicUUID = user.getExternalReferenceCode();
 
@@ -339,7 +337,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
 	public CMICUserDisplay getUserDetailsWithRoleAndStatus(long userId, long groupId) throws PortalException {
-		CMICUserDisplay cmicUserDisplay = getUserDetails(userId, true);
+		CMICUserDisplay cmicUserDisplay = getUserDetails(userId);
 
 		BusinessRole businessRole = _getBusinessRole(userId, groupId);
 

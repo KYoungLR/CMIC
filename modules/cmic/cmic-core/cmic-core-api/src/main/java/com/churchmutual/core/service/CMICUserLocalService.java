@@ -99,8 +99,7 @@ public interface CMICUserLocalService extends BaseLocalService {
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICUserDisplay getUserDetails(long userId, boolean useCache)
-		throws PortalException;
+	public CMICUserDisplay getUserDetails(long userId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICUserDisplay getUserDetailsWithRoleAndStatus(

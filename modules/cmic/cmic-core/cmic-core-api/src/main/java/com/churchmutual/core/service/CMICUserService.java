@@ -101,8 +101,7 @@ public interface CMICUserService extends BaseService {
 	public User getUser(String cmicUUID) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICUserDisplay getUserDetails(boolean useCache)
-		throws PortalException;
+	public CMICUserDisplay getUserDetails() throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICUserDisplay getUserDetailsWithRoleAndStatus(long groupId)

@@ -432,7 +432,7 @@ public class CMICUserServiceHttp {
 	}
 
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			HttpPrincipal httpPrincipal, boolean useCache)
+			HttpPrincipal httpPrincipal)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -440,8 +440,7 @@ public class CMICUserServiceHttp {
 				CMICUserServiceUtil.class, "getUserDetails",
 				_getUserDetailsParameterTypes10);
 
-			MethodHandler methodHandler = new MethodHandler(
-				methodKey, useCache);
+			MethodHandler methodHandler = new MethodHandler(methodKey);
 
 			Object returnObj = null;
 
@@ -774,7 +773,7 @@ public class CMICUserServiceHttp {
 		String.class
 	};
 	private static final Class<?>[] _getUserDetailsParameterTypes10 =
-		new Class[] {boolean.class};
+		new Class[] {};
 	private static final Class<?>[]
 		_getUserDetailsWithRoleAndStatusParameterTypes11 = new Class[] {
 			long.class

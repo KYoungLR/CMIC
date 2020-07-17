@@ -100,12 +100,12 @@ public class CMICUserServiceImpl extends CMICUserServiceBaseImpl {
 	}
 
 	@Override
-	public CMICUserDisplay getUserDetails(boolean useCache) throws PortalException {
+	public CMICUserDisplay getUserDetails() throws PortalException {
 		long userId = getUserId();
 
 		userPermission.check(getPermissionChecker(), userId, ActionKeys.VIEW);
 
-		return cmicUserLocalService.getUserDetails(userId, useCache);
+		return cmicUserLocalService.getUserDetails(userId);
 	}
 
 	@Override

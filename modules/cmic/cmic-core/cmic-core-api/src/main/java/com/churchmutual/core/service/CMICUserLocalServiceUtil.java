@@ -124,10 +124,10 @@ public class CMICUserLocalServiceUtil {
 	}
 
 	public static com.churchmutual.core.model.CMICUserDisplay getUserDetails(
-			long userId, boolean useCache)
+			long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return getService().getUserDetails(userId, useCache);
+		return getService().getUserDetails(userId);
 	}
 
 	public static com.churchmutual.core.model.CMICUserDisplay
