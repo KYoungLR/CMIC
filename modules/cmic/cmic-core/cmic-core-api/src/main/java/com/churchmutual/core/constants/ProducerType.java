@@ -21,4 +21,5 @@ public enum ProducerType {
 
 	private String _name;
 	private int _type;
+
 }

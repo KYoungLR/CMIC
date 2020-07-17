@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -68,7 +67,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 		CMICOrganization cmicOrganization = fetchCMICOrganizationByProducerId(producerId);
 
-		if (Validator.isNotNull(cmicOrganization)) {
+		if (cmicOrganization != null) {
 			return cmicOrganization;
 		}
 
@@ -87,6 +86,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 		int producerType = ProducerType.getTypeFromName(cmicProducerDTO.getProducerType());
 
 		cmicOrganization.setProducerType(producerType);
+
 		cmicOrganization.setActive(true);
 
 		cmicOrganization = cmicOrganizationPersistence.update(cmicOrganization);
@@ -97,13 +97,13 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 	}
 
 	@Override
-	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId) throws PortalException {
-		return cmicOrganizationPersistence.fetchByProducerId(producerId);
+	public CMICOrganization fetchCMICOrganizationByOrganizationId(long organizationId) {
+		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
 	}
 
 	@Override
-	public CMICOrganization fetchCMICOrganizationByOrganizationId(long organizationId) {
-		return cmicOrganizationPersistence.fetchByOrganizationId(organizationId);
+	public CMICOrganization fetchCMICOrganizationByProducerId(long producerId) throws PortalException {
+		return cmicOrganizationPersistence.fetchByProducerId(producerId);
 	}
 
 	@Override
@@ -187,6 +187,7 @@ public class CMICOrganizationLocalServiceImpl extends CMICOrganizationLocalServi
 
 		if (country != null) {
 			countryId = country.getCountryId();
+
 			regionService.getRegion(countryId, cmicContactDTO.getState());
 		}
 

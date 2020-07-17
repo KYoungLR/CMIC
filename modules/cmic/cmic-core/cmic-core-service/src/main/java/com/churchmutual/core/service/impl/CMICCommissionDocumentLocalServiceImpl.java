@@ -28,7 +28,6 @@ import com.churchmutual.rest.model.CMICFileDTO;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.time.LocalDate;
@@ -60,7 +59,7 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 	@Override
 	public CMICCommissionDocumentDisplay downloadDocument(String id) throws PortalException {
-		List<CMICFileDTO> cmicFileDTOS = _commissionDocumentWebService.downloadDocuments(new String[] {id}, true);
+		List<CMICFileDTO> cmicFileDTOS = commissionDocumentWebService.downloadDocuments(new String[] {id}, true);
 
 		if (ListUtil.isEmpty(cmicFileDTOS)) {
 			throw new NoSuchCMICCommissionDocumentException(id);
@@ -86,16 +85,14 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 
 		for (CMICOrganization cmicOrganization : userOrganizations) {
 			for (CommissionDocumentType documentType : CommissionDocumentType.values()) {
-				List<CMICCommissionDocumentDTO> commissionDocumentDTOs = _commissionDocumentWebService.searchDocuments(
+				List<CMICCommissionDocumentDTO> commissionDocumentDTOs = commissionDocumentWebService.searchDocuments(
 					cmicOrganization.getAgentNumber(), cmicOrganization.getDivisionNumber(), documentType.toString(),
 					maximumStatementDate, minimumStatementDate);
 
 				commissionDocumentDTOs.stream(
 				).forEach(
-					commissionDocumentDTO -> {
-						cmicCommissionDocumentDisplays.add(
-							new CMICCommissionDocumentDisplay(commissionDocumentDTO));
-					}
+					commissionDocumentDTO -> cmicCommissionDocumentDisplays.add(
+						new CMICCommissionDocumentDisplay(commissionDocumentDTO))
 				);
 			}
 		}
@@ -107,15 +104,12 @@ public class CMICCommissionDocumentLocalServiceImpl extends CMICCommissionDocume
 	protected CMICOrganizationLocalService cmicOrganizationLocalService;
 
 	@Reference
-	protected CommissionDocumentWebService _commissionDocumentWebService;
+	protected CommissionDocumentWebService commissionDocumentWebService;
 
 	@Reference
-	protected JSONFactory _jsonFactory;
+	protected JSONFactory jsonFactory;
 
 	@Reference
-	protected PortalUserWebService _portalUserWebService;
-
-	@Reference
-	protected UserLocalService _userLocalService;
+	protected PortalUserWebService portalUserWebService;
 
 }

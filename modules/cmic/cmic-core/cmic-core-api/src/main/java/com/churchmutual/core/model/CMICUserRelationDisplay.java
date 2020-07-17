@@ -1,9 +1,14 @@
 package com.churchmutual.core.model;
 
 import com.churchmutual.rest.model.CMICUserRelationDTO;
-import com.liferay.portal.kernel.model.Organization;
 
 public class CMICUserRelationDisplay {
+
+	public CMICUserRelationDisplay(CMICOrganization organization) {
+		_agentNumber = organization.getAgentNumber();
+		_divisionNumber = organization.getDivisionNumber();
+		_producerId = organization.getProducerId();
+	}
 
 	public CMICUserRelationDisplay(CMICUserRelationDTO cmicUserRelationDTO) {
 		_accountNumber = cmicUserRelationDTO.getAccountNumber();
@@ -11,12 +16,6 @@ public class CMICUserRelationDisplay {
 		_companyNumber = cmicUserRelationDTO.getCompanyNumber();
 		_divisionNumber = cmicUserRelationDTO.getDivisionNumber();
 		_producerId = cmicUserRelationDTO.getProducerId();
-	}
-
-	public CMICUserRelationDisplay(CMICOrganization organization) {
-		_agentNumber = organization.getAgentNumber();
-		_divisionNumber = organization.getDivisionNumber();
-		_producerId = organization.getProducerId();
 	}
 
 	public String getAccountNumber() {
@@ -44,7 +43,11 @@ public class CMICUserRelationDisplay {
 	}
 
 	public boolean isProducer() {
-		return _producerId > 0;
+		if (_producerId > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private String _accountNumber;

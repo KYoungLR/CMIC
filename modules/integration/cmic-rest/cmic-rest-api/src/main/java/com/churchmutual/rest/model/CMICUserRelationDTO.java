@@ -26,7 +26,11 @@ public class CMICUserRelationDTO extends CMICObjectDTO {
 	}
 
 	public boolean isProducer() {
-		return _producerId > 0;
+		if (_producerId > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public void setAccountNumber(String accountNumber) {

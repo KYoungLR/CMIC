@@ -3,27 +3,19 @@ package com.churchmutual.core.model;
 import com.churchmutual.commons.enums.BusinessRole;
 import com.churchmutual.commons.enums.BusinessUserStatus;
 import com.churchmutual.core.service.CMICOrganizationLocalServiceUtil;
-import com.churchmutual.rest.model.CMICCommissionDocumentDTO;
-import com.churchmutual.rest.model.CMICFileDTO;
 import com.churchmutual.rest.model.CMICUserDTO;
 import com.churchmutual.rest.model.CMICUserRelationDTO;
+
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
-import com.liferay.portal.kernel.util.Validator;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CMICUserDisplay {
-	public CMICUserDisplay(
-		CMICUserDTO cmicUserDTO, User user, String portraitImageURL) throws PortalException {
 
+	public CMICUserDisplay(CMICUserDTO cmicUserDTO, User user, String portraitImageURL) throws PortalException {
 		if (user == null) {
 			throw new PortalException("User cannot be null");
 		}
@@ -53,7 +45,8 @@ public class CMICUserDisplay {
 			long[] organizationIds = user.getOrganizationIds();
 
 			for (long organizationId : organizationIds) {
-				CMICOrganization cmicOrganization = CMICOrganizationLocalServiceUtil.fetchCMICOrganizationByOrganizationId(organizationId);
+				CMICOrganization cmicOrganization =
+					CMICOrganizationLocalServiceUtil.fetchCMICOrganizationByOrganizationId(organizationId);
 
 				_organizationList.add(new CMICUserRelationDisplay(cmicOrganization));
 			}

@@ -18,11 +18,11 @@ import com.churchmutual.core.model.CMICAccountEntryDisplay;
 import com.churchmutual.core.service.base.CMICAccountEntryServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
-
 import com.liferay.portal.kernel.exception.PortalException;
-import org.osgi.service.component.annotations.Component;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * The implementation of the cmic account entry remote service.

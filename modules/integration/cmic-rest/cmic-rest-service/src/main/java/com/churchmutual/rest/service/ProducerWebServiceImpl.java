@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
@@ -28,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;

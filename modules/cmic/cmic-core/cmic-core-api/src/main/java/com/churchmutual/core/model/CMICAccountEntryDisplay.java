@@ -2,9 +2,6 @@ package com.churchmutual.core.model;
 
 import com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-
 public class CMICAccountEntryDisplay {
 
 	public CMICAccountEntryDisplay(CMICAccountEntry cmicAccountEntry) {

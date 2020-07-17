@@ -21,9 +21,9 @@ import com.churchmutual.core.service.base.CMICOrganizationServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 
-import org.osgi.service.component.annotations.Component;
-
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * The implementation of the cmic organization remote service.

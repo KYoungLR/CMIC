@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.churchmutual.core.service.impl;
 
 import com.churchmutual.commons.constants.ExpandoConstants;
@@ -44,11 +58,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.role.RoleConstants;
-import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -76,15 +88,15 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		String recentlyViewedCmicAccountEntryIds = (String)expandoBridge.getAttribute(
 			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS);
 
-		if (Validator.isNotNull(recentlyViewedCmicAccountEntryIds)) {
+		if (recentlyViewedCmicAccountEntryIds != null) {
 			List<String> recentAccountEntryIds = StringUtil.split(recentlyViewedCmicAccountEntryIds);
 
 			recentAccountEntryIds.remove(cmicAccountEntryId);
 
 			recentAccountEntryIds.add(0, cmicAccountEntryId);
 
-			if (recentAccountEntryIds.size() > RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
-				recentAccountEntryIds = recentAccountEntryIds.subList(0, RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
+			if (recentAccountEntryIds.size() > _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
+				recentAccountEntryIds = recentAccountEntryIds.subList(0, _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
 			}
 
 			expandoBridge.setAttribute(
@@ -94,6 +106,20 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		else {
 			expandoBridge.setAttribute(ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId);
 		}
+	}
+
+	@Override
+	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException {
+		DynamicQuery dynamicQuery = userLocalService.dynamicQuery();
+
+		dynamicQuery.add(
+			PropertyFactoryUtil.forName(
+				"externalReferenceCode"
+			).like(
+				cmicUUID
+			));
+
+		return CollectionsUtil.getFirst(userLocalService.dynamicQuery(dynamicQuery));
 	}
 
 	@Override
@@ -160,9 +186,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	public List<User> getCMICOrganizationUsers(long cmicOrganizationId) throws PortalException {
 		CMICOrganization cmicOrganization = cmicOrganizationPersistence.findByPrimaryKey(cmicOrganizationId);
 
-		long organizationId = cmicOrganization.getOrganizationId();
-
-		return userLocalService.getOrganizationUsers(organizationId);
+		return userLocalService.getOrganizationUsers(cmicOrganization.getOrganizationId());
 	}
 
 	@Override
@@ -189,16 +213,17 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				try {
 					User user = fetchUserByCmicUUID(cmicUserDTO.getUuid());
 
-					if (Validator.isNotNull(user)) {
+					if (user != null) {
 						String shortenedNameKey = cmicUserDTO.getUserRole();
 
-						BusinessRole businessRole = BusinessRole.fromShortenedNameKey(shortenedNameKey, businessPortalType);
+						BusinessRole businessRole = BusinessRole.fromShortenedNameKey(
+							shortenedNameKey, businessPortalType);
 
 						Role role = roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
 
 						long curUserId = user.getUserId();
 
-						userGroupRoleLocalService.addUserGroupRoles(curUserId, groupId, new long[]{role.getRoleId()});
+						userGroupRoleLocalService.addUserGroupRoles(curUserId, groupId, new long[] {role.getRoleId()});
 
 						newUserGroupRoleUserIds.add(curUserId);
 
@@ -261,11 +286,11 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		List<String> recentAccountEntryIds = new ArrayList<>();
 
-		if (Validator.isNotNull(recentlyViewedAccountEntryIds)) {
+		if (recentlyViewedAccountEntryIds != null) {
 			recentAccountEntryIds = StringUtil.split(recentlyViewedAccountEntryIds);
 		}
 
-		if (recentAccountEntryIds.size() == RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
+		if (recentAccountEntryIds.size() == _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
 			return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 		}
 
@@ -275,9 +300,12 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		int index = 0;
 
 		List<CMICAccountEntry> cmicAccountEntries =
-			cmicAccountEntryLocalService.getCMICAccountEntriesByUserIdOrderedByName(userId, start, RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
+			cmicAccountEntryLocalService.getCMICAccountEntriesByUserIdOrderedByName(
+				userId, start, _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT);
 
-		while (index < cmicAccountEntries.size() && recentAccountEntryIds.size() < RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT) {
+		while ((index < cmicAccountEntries.size()) &&
+			   (recentAccountEntryIds.size() < _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT)) {
+
 			CMICAccountEntry cmicAccountEntry = cmicAccountEntries.get(index++);
 
 			String cmicAccountEntryId = String.valueOf(cmicAccountEntry.getCmicAccountEntryId());
@@ -295,26 +323,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	@Override
-	public User fetchUserByCmicUUID(String cmicUUID) throws PortalException {
-		DynamicQuery dynamicQuery = userLocalService.dynamicQuery();
-
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName(
-				"externalReferenceCode"
-			).like(
-				cmicUUID
-			));
-
-		User user = CollectionsUtil.getFirst(userLocalService.dynamicQuery(dynamicQuery));
-
-		return user;
-	}
-
-	@Override
 	public CMICUserDisplay getUserDetails(long userId, boolean useCache) throws PortalException {
 		User user = userLocalService.getUser(userId);
-
-		String cmicUUID = user.getExternalReferenceCode();
 
 		CMICUserDTO cmicUserDTO = null;
 
@@ -354,7 +364,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			if (BusinessPortalType.BROKER.equals(businessPortalType)) {
 				CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByOrganizationId(entityId);
 
-				if (Validator.isNotNull(cmicOrganization)) {
+				if (cmicOrganization != null) {
 					portalUserWebService.inviteUserToCMICOrganization(email, cmicOrganization.getProducerId());
 				}
 			}
@@ -423,9 +433,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 	@Override
 	public void validateUserRegistration(String registrationCode) throws PortalException {
-		BusinessPortalType businessPortalType = getBusinessPortalType(registrationCode);
-
-		if (BusinessPortalType.INSURED.equals(businessPortalType)) {
+		if (BusinessPortalType.INSURED.equals(getBusinessPortalType(registrationCode))) {
 			throw new PortalException("User must have the Broker portal type");
 		}
 	}
@@ -450,7 +458,9 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			if (userRelation.isProducer()) {
 				String agentNumber = userRelation.getAgentNumber();
 				String divisionNumber = userRelation.getDivisionNumber();
+
 				String producerCode = divisionNumber + agentNumber;
+
 				long producerId = userRelation.getProducerId();
 
 				CMICOrganization cmicOrganization = cmicOrganizationLocalService.fetchCMICOrganizationByProducerId(
@@ -466,15 +476,13 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 				newUserOganizations.add(cmicOrganization);
 
-				List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(new String[]{producerCode});
+				List<CMICAccountDTO> cmicAccountDTOs = accountWebService.getAccountsSearchByProducer(
+					new String[] {producerCode});
 
 				for (CMICAccountDTO cmicAccountDTO : cmicAccountDTOs) {
-					String accountName = cmicAccountDTO.getAccountName();
-					String accountNumber = cmicAccountDTO.getAccountNumber();
-					String companyNumber = cmicAccountDTO.getCompanyNumber();
-
 					CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.addOrUpdateCMICAccountEntry(
-						userId, accountNumber, companyNumber, accountName, producerId, producerCode);
+						userId, cmicAccountDTO.getAccountNumber(), cmicAccountDTO.getCompanyNumber(),
+						cmicAccountDTO.getAccountName(), producerId, producerCode);
 
 					newUserAccountEntries.add(cmicAccountEntry);
 				}
@@ -497,7 +505,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			organizationLocalService.setUserOrganizations(userId, organizationIds);
 		}
 
-		List<CMICAccountEntry> existingUserAccountEntries = cmicAccountEntryLocalService.getCMICAccountEntriesByUserId(userId);
+		List<CMICAccountEntry> existingUserAccountEntries = cmicAccountEntryLocalService.getCMICAccountEntriesByUserId(
+			userId);
 
 		if (!existingUserAccountEntries.containsAll(newUserAccountEntries) ||
 			!newUserAccountEntries.containsAll(existingUserAccountEntries)) {
@@ -548,7 +557,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		User invitedUser = userLocalService.fetchUserByEmailAddress(creatorUser.getCompanyId(), email);
 
-		if (Validator.isNull(invitedUser)) {
+		if (invitedUser == null) {
 			invitedUser = userLocalService.addUser(
 				creatorUserId, creatorUser.getCompanyId(), SelfProvisioningConstants.AUTO_PASSWORD, StringPool.BLANK,
 				StringPool.BLANK, SelfProvisioningConstants.AUTO_SCREEN_NAME, StringPool.BLANK, email, 0,
@@ -695,9 +704,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			throw new PortalException("Error updating roles: Business must have EXACTLY ONE user as Owner");
 		}
 
-		User owner = CollectionsUtil.getFirst(owners);
-
-		return owner;
+		return CollectionsUtil.getFirst(owners);
 	}
 
 	private void _inviteBusinessMember(long userId, long groupId, String email) throws PortalException {
@@ -747,7 +754,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		BusinessUserStatus businessUserStatus = _getBusinessUserStatus(invitedUserId, groupId);
 
-		if (Validator.isNull(businessRole)) {
+		if (businessRole == null) {
 			_updateBusinessUserRole(invitedUser.getUserId(), groupId, adminRole.getRoleId());
 
 			_updateBusinessUserStatus(invitedUser.getUserId(), groupId, BusinessUserStatus.INVITED);
@@ -814,7 +821,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		BusinessRole businessRole = _getBusinessRole(userId, groupId);
 
-		if (Validator.isNotNull(businessRole)) {
+		if (businessRole != null) {
 			Role prevRole = roleLocalService.getRole(user.getCompanyId(), businessRole.getRoleName());
 
 			userGroupRoleLocalService.deleteUserGroupRoles(userId, groupId, new long[] {prevRole.getRoleId()});
@@ -881,12 +888,12 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	}
 
 	private void _validateCMICUserDTO(CMICUserDTO cmicUserDTO) throws PortalException {
-		if (Validator.isNull(cmicUserDTO)) {
+		if (cmicUserDTO == null) {
 			throw new PortalException("Error: received invalid cmicUser information");
 		}
 	}
 
-	private static final int RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
+	private static final int _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
 
 	private static final Log _log = LogFactoryUtil.getLog(CMICUserLocalServiceImpl.class);
 
