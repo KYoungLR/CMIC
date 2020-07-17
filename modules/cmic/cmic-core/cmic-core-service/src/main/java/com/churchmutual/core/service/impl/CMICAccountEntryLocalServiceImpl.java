@@ -81,31 +81,44 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	 * Never reference this class directly. Use <code>com.churchmutual.core.service.CMICAccountEntryLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil</code>.
 	 */
 	@Override
-	public CMICAccountEntry addCMICAccountEntry(long userId, String accountNumber, String companyNumber, String accountName, long producerId, String producerCode)
+	public CMICAccountEntry addOrUpdateCMICAccountEntry(long userId, String accountNumber, String companyNumber, String accountName, long producerId, String producerCode)
 		throws PortalException {
+
+		CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
+
+		if (cmicAccountEntry == null) {
+			long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
+
+			cmicAccountEntry = createCMICAccountEntry(cmicAccountEntryId);
+		}
 
 		CMICOrganization cmicOrganization = cmicOrganizationPersistence.fetchByProducerId(producerId);
 
 		if (cmicOrganization == null) {
-			cmicOrganization = _cmicOrganizationLocalService.addCMICOrganization(userId, producerId);
-		}
+			_log.error(
+				String.format(
+					"CMICOrganization with producer id %d could not be found", producerId));
 
-		CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
-
-		if (cmicAccountEntry != null) {
 			return cmicAccountEntry;
 		}
 
-		AccountEntry accountEntry = _accountEntryBusinessService.createAccountEntry(
-			userId, accountName, userId, cmicOrganization.getOrganizationId());
+		List<AccountEntry> accountEntries = _accountEntryLocalService.getAccountEntryByName(accountName);
 
-		if (!_accountEntryOrganizationRelLocalService.hasAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId())) {
+		AccountEntry accountEntry = CollectionsUtil.getFirst(accountEntries);
+
+		if (accountEntry == null) {
+			accountEntry = _accountEntryBusinessService.createAccountEntry(
+				userId, accountName, userId, cmicOrganization.getOrganizationId());
+		}
+		else {
+			List<AccountEntryOrganizationRel> accountEntryOrganizationRels = _accountEntryOrganizationRelLocalService.getAccountEntryOrganizationRels(accountEntry.getAccountEntryId());
+
+			for (AccountEntryOrganizationRel accountEntryOrganizationRel: accountEntryOrganizationRels) {
+				_accountEntryOrganizationRelLocalService.deleteAccountEntryOrganizationRel(accountEntryOrganizationRel);
+			}
+
 			_accountEntryOrganizationRelLocalService.addAccountEntryOrganizationRel(accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
 		}
-
-		long cmicAccountEntryId = counterLocalService.increment(CMICAccountEntry.class.getName());
-
-		cmicAccountEntry = createCMICAccountEntry(cmicAccountEntryId);
 
 		cmicAccountEntry.setAccountEntryId(accountEntry.getAccountEntryId());
 		cmicAccountEntry.setAccountNumber(accountNumber);

@@ -319,9 +319,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		CMICUserDTO cmicUserDTO = null;
 
 		if (!useCache) {
-			cmicUserDTO = portalUserWebService.getUserDetails(cmicUUID);
-
-			updateUserAndGroups(cmicUserDTO);
+			updateUserBusinesses(userId);
 		}
 
 		return new CMICUserDisplay(cmicUserDTO, user, getPortraitImageURL(userId));
@@ -435,21 +433,12 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 	/**
 	 * Update the user's organizations (Producer Organizations) and/or accounts (Businesses)
 	 */
-	protected void updateUserAndGroups(CMICUserDTO cmicUserDTO) throws PortalException {
-		String uuid = cmicUserDTO.getUuid();
+	protected void updateUserBusinesses(long userId) throws PortalException {
+		User user = userLocalService.getUser(userId);
 
-		User user = fetchUserByCmicUUID(uuid);
+		String cmicUUID = user.getExternalReferenceCode();
 
-		// uncomment this when sample user with uuid e7575932-9235-4829-8399-88d08d4c7542 is generated on startup
-
-		// if (Validator.isNull(user)) {
-			// _log.error(String.format("User with uuid %s was not found", uuid));
-			// return;
-		// }
-
-		// long userId = user.getUserId();
-
-		long userId = PrincipalThreadLocal.getUserId();
+		CMICUserDTO cmicUserDTO = portalUserWebService.getUserDetails(cmicUUID);
 
 		List<CMICUserRelationDTO> userRelations = cmicUserDTO.getOrganizationList();
 
@@ -484,13 +473,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 					String accountNumber = cmicAccountDTO.getAccountNumber();
 					String companyNumber = cmicAccountDTO.getCompanyNumber();
 
-					CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.fetchAccountEntry(
-							accountNumber, companyNumber);
-
-					if (cmicAccountEntry == null) {
-						cmicAccountEntry = cmicAccountEntryLocalService.addCMICAccountEntry(
-							userId, accountNumber, companyNumber, accountName, producerId, producerCode);
-					}
+					CMICAccountEntry cmicAccountEntry = cmicAccountEntryLocalService.addOrUpdateCMICAccountEntry(
+						userId, accountNumber, companyNumber, accountName, producerId, producerCode);
 
 					newUserAccountEntries.add(cmicAccountEntry);
 				}
