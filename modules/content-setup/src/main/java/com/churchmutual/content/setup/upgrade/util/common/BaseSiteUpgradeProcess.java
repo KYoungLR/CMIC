@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.LayoutSet;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -194,6 +195,22 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 		layoutSetLocalService.updateLookAndFeel(groupId, false, insuredThemeId, StringPool.BLANK, StringPool.BLANK);
 
 		return groupId;
+	}
+
+	protected User addUser(long companyId, long defaultUserId, String firstName, String lastName, String externalReferenceCode) throws PortalException {
+		String emailAddress = String.format("%s.%s@liferay.com", firstName, lastName);
+
+		User user = userLocalService.addUser(
+			defaultUserId, companyId, true, null, null, true, null, emailAddress, 0, null, LocaleUtil.getDefault(),
+			firstName, null, lastName, -1, -1, true, 1, 1, 1977, null, null, null, null, null, false, null);
+
+		if (Validator.isNotNull(externalReferenceCode)) {
+			user.setExternalReferenceCode(externalReferenceCode);
+
+			userLocalService.updateUser(user);
+		}
+
+		return user;
 	}
 
 	protected ServiceContext getDefaultServiceContext(long companyId) throws PortalException {
