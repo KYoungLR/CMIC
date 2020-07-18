@@ -62,6 +62,24 @@ import java.rmi.RemoteException;
  */
 public class CMICAccountEntryServiceSoap {
 
+	public static com.churchmutual.core.model.CMICAccountEntryDisplay
+			getCMICAccountEntryDisplay(String cmicAccountEntryId)
+		throws RemoteException {
+
+		try {
+			com.churchmutual.core.model.CMICAccountEntryDisplay returnValue =
+				CMICAccountEntryServiceUtil.getCMICAccountEntryDisplay(
+					cmicAccountEntryId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.churchmutual.core.model.CMICAccountEntryDisplaySoap[]
 			getCMICAccountEntryDisplays()
 		throws RemoteException {

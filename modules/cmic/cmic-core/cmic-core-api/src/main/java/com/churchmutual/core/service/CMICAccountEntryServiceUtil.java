@@ -43,6 +43,13 @@ public class CMICAccountEntryServiceUtil {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CMICAccountEntryServiceUtil} to access the cmic account entry remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICAccountEntryServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public static com.churchmutual.core.model.CMICAccountEntryDisplay
+			getCMICAccountEntryDisplay(String cmicAccountEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCMICAccountEntryDisplay(cmicAccountEntryId);
+	}
+
 	public static java.util.List
 		<com.churchmutual.core.model.CMICAccountEntryDisplay>
 				getCMICAccountEntryDisplays()

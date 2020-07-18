@@ -241,6 +241,11 @@ public interface CMICAccountEntryLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICAccountEntryDisplay getCMICAccountEntryDisplay(
+			String cmicAccountEntryId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(
 		List<String> cmicAccountEntryIds);
 

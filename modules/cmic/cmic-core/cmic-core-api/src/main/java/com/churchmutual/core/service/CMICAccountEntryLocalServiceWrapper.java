@@ -305,6 +305,15 @@ public class CMICAccountEntryLocalServiceWrapper
 	}
 
 	@Override
+	public com.churchmutual.core.model.CMICAccountEntryDisplay
+			getCMICAccountEntryDisplay(String cmicAccountEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicAccountEntryLocalService.getCMICAccountEntryDisplay(
+			cmicAccountEntryId);
+	}
+
+	@Override
 	public java.util.List<com.churchmutual.core.model.CMICAccountEntryDisplay>
 		getCMICAccountEntryDisplays(
 			java.util.List<String> cmicAccountEntryIds) {

@@ -53,6 +53,11 @@ public interface CMICAccountEntryService extends BaseService {
 	 * Never modify or reference this interface directly. Always use {@link CMICAccountEntryServiceUtil} to access the cmic account entry remote service. Add custom service methods to <code>com.churchmutual.core.service.impl.CMICAccountEntryServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICAccountEntryDisplay getCMICAccountEntryDisplay(
+			String cmicAccountEntryId)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays()
 		throws PortalException;
 

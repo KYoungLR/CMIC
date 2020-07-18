@@ -281,6 +281,13 @@ public class CMICAccountEntryLocalServiceUtil {
 		return getService().getCMICAccountEntry(cmicAccountEntryId);
 	}
 
+	public static com.churchmutual.core.model.CMICAccountEntryDisplay
+			getCMICAccountEntryDisplay(String cmicAccountEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCMICAccountEntryDisplay(cmicAccountEntryId);
+	}
+
 	public static java.util.List
 		<com.churchmutual.core.model.CMICAccountEntryDisplay>
 			getCMICAccountEntryDisplays(

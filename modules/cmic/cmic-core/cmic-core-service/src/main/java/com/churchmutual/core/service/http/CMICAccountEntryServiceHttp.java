@@ -52,6 +52,46 @@ import com.liferay.portal.kernel.util.MethodKey;
  */
 public class CMICAccountEntryServiceHttp {
 
+	public static com.churchmutual.core.model.CMICAccountEntryDisplay
+			getCMICAccountEntryDisplay(
+				HttpPrincipal httpPrincipal, String cmicAccountEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CMICAccountEntryServiceUtil.class, "getCMICAccountEntryDisplay",
+				_getCMICAccountEntryDisplayParameterTypes0);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, cmicAccountEntryId);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					e);
+			}
+
+			return (com.churchmutual.core.model.CMICAccountEntryDisplay)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	public static java.util.List
 		<com.churchmutual.core.model.CMICAccountEntryDisplay>
 				getCMICAccountEntryDisplays(HttpPrincipal httpPrincipal)
@@ -61,7 +101,7 @@ public class CMICAccountEntryServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CMICAccountEntryServiceUtil.class,
 				"getCMICAccountEntryDisplays",
-				_getCMICAccountEntryDisplaysParameterTypes0);
+				_getCMICAccountEntryDisplaysParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -95,7 +135,9 @@ public class CMICAccountEntryServiceHttp {
 	private static Log _log = LogFactoryUtil.getLog(
 		CMICAccountEntryServiceHttp.class);
 
+	private static final Class<?>[] _getCMICAccountEntryDisplayParameterTypes0 =
+		new Class[] {String.class};
 	private static final Class<?>[]
-		_getCMICAccountEntryDisplaysParameterTypes0 = new Class[] {};
+		_getCMICAccountEntryDisplaysParameterTypes1 = new Class[] {};
 
 }
