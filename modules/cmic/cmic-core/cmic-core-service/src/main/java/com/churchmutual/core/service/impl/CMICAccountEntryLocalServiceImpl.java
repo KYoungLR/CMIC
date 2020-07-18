@@ -115,8 +115,7 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 			policyWebService.getPolicyAccountSummariesByAccounts(new String[] {accountNumber});
 
 		if (!cmicPolicyAccountSummaryDTOs.isEmpty()) {
-			CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO = cmicPolicyAccountSummaryDTOs.get(
-				0);
+			CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO = cmicPolicyAccountSummaryDTOs.get(0);
 
 			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
 			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
@@ -206,7 +205,8 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 					"Account Entry %d is not related to an organization", cmicAccountEntry.getAccountEntryId()));
 		}
 
-		Organization organization = organizationLocalService.getOrganization(accountEntryOrganizationRel.getOrganizationId());
+		Organization organization = organizationLocalService.getOrganization(
+			accountEntryOrganizationRel.getOrganizationId());
 
 		return organization.getName();
 	}
@@ -249,9 +249,9 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	protected OrganizationLocalService organizationLocalService;
 
 	@Reference
-	protected ProducerWebService producerWebService;
+	protected PolicyWebService policyWebService;
 
 	@Reference
-	protected PolicyWebService policyWebService;
+	protected ProducerWebService producerWebService;
 
 }

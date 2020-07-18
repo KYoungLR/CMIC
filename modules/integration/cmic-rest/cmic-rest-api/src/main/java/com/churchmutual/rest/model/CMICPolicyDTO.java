@@ -21,11 +21,11 @@ public class CMICPolicyDTO extends CMICObjectDTO {
 		return _currentSequenceNumber;
 	}
 
-	public Date getPolicyEffectiveDate() {
+	public String getPolicyEffectiveDate() {
 		return _policyEffectiveDate;
 	}
 
-	public Date getPolicyExpirationDate() {
+	public String getPolicyExpirationDate() {
 		return _policyExpirationDate;
 	}
 
@@ -77,11 +77,11 @@ public class CMICPolicyDTO extends CMICObjectDTO {
 		_inForcePolicy = inForcePolicy;
 	}
 
-	public void setPolicyEffectiveDate(Date policyEffectiveDate) {
+	public void setPolicyEffectiveDate(String policyEffectiveDate) {
 		_policyEffectiveDate = policyEffectiveDate;
 	}
 
-	public void setPolicyExpirationDate(Date policyExpirationDate) {
+	public void setPolicyExpirationDate(String policyExpirationDate) {
 		_policyExpirationDate = policyExpirationDate;
 	}
 
@@ -103,8 +103,8 @@ public class CMICPolicyDTO extends CMICObjectDTO {
 	private boolean _expiredPolicy;
 	private boolean _futurePolicy;
 	private boolean _inForcePolicy;
-	private Date _policyEffectiveDate;
-	private Date _policyExpirationDate;
+	private String _policyEffectiveDate;
+	private String _policyExpirationDate;
 	private String _policyNumber;
 	private String _policyType;
 	private BigDecimal _totalBilledPremium;
