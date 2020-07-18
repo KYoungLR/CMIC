@@ -95,7 +95,7 @@ const AccountList = (props) => {
                       <ClayTable.Row
                         className="cursor-pointer"
                         key={i}
-                        onClick={() => Navigate(account.accountNumber)}
+                        onClick={() => Navigate(account.cmicAccountEntryId)}
                       >
                         <ClayTable.Cell>
                           <h5 className="font-weight-bold mb-0">{account.accountName}</h5>

@@ -108,10 +108,8 @@ export function Render(text) {
   );
 }
 
-export function Navigate(id) {
-  // TODO - pass account number
-
-  Liferay.Util.navigate('account-details');
+export function Navigate(cmicAccountEntryId) {
+  Liferay.Util.navigate('account-details?cmicAccountEntryId=' + cmicAccountEntryId);
 }
 
 function throwErr(msg) {

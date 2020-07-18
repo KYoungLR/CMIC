@@ -65,6 +65,7 @@ export const AccoutSearchFilter = (member, queryString) => {
   return (
     member.accountName.toLowerCase().includes(queryString) ||
     member.accountNumber.includes(queryString) ||
-    member.producerCode.includes(queryString)
+    member.producerCode.includes(queryString) ||
+    member.policyNumbers.includes(queryString)
   );
 };

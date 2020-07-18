@@ -6,10 +6,8 @@ import ClayTable from '@clayui/table';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import NumberFormat from 'react-number-format';
 
-const navigate = (e, id) => {
-  // TODO - pass account number
-
-  Liferay.Util.navigate('account-details');
+const Navigate = (cmicAccountEntryId) => {
+  Liferay.Util.navigate('account-details?cmicAccountEntryId=' + cmicAccountEntryId);
 }
 
 const spritemap = Liferay.ThemeDisplay.getPathThemeImages() + '/clay/icons.svg';
@@ -53,7 +51,7 @@ const AccountList = (props) => {
               <ClayTable.Row
                 key={index}
                 className="cursor-pointer"
-                onClick={(e) => navigate(e, account.accountNumber)}>
+                onClick={() => Navigate(account.cmicAccountEntryId)}>
                 <ClayTable.Cell>
                   <h5 className="font-weight-bold mb-0">{account.accountName}</h5>
                   <small className="text-muted">#{account.accountNumber}</small>
