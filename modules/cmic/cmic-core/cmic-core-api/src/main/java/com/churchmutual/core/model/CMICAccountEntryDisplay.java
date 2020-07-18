@@ -1,9 +1,16 @@
 package com.churchmutual.core.model;
 
 import com.churchmutual.core.service.CMICAccountEntryLocalServiceUtil;
+
+import com.churchmutual.core.service.CMICPolicyLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CMICAccountEntryDisplay {
 
@@ -20,11 +27,17 @@ public class CMICAccountEntryDisplay {
 		try {
 			_accountName = CMICAccountEntryLocalServiceUtil.getAccountEntryName(cmicAccountEntry);
 
+			List<CMICPolicyDisplay> cmicPolicyDisplays = CMICPolicyLocalServiceUtil.getPolicyDisplays(cmicAccountEntry.getCmicAccountEntryId());
+
+			List<String> policyNumbers = cmicPolicyDisplays.stream().map(cmicPolicyDisplay -> cmicPolicyDisplay.getPolicyNumber()).collect(Collectors.toList());
+
+			_policyNumbers = StringUtil.merge(policyNumbers, StringPool.COMMA);
+
 			_producerCode = CMICAccountEntryLocalServiceUtil.getProducerCode(cmicAccountEntry);
 			_producerName = CMICAccountEntryLocalServiceUtil.getOrganizationName(cmicAccountEntry);
 		}
-		catch(PortalException e) {
-			_log.error(e);
+		catch (PortalException pe) {
+			_log.error(pe);
 		}
 	}
 
@@ -60,6 +73,10 @@ public class CMICAccountEntryDisplay {
 		return _numInForcePolicies;
 	}
 
+	public String getPolicyNumbers() {
+		return _policyNumbers;
+	}
+
 	public String getProducerCode() {
 		return _producerCode;
 	}
@@ -82,6 +99,7 @@ public class CMICAccountEntryDisplay {
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;
+	private String _policyNumbers;
 	private String _producerCode;
 	private String _producerName;
 	private String _totalBilledPremium;
