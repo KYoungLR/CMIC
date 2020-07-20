@@ -216,10 +216,12 @@ public abstract class BaseSiteUpgradeProcess extends BaseAdminUpgradeProcess {
 	}
 
 	protected User addUser(
-			long companyId, long defaultUserId, String firstName, String lastName, String externalReferenceCode)
+			long companyId, long defaultUserId, String emailAddress, String firstName, String lastName, String externalReferenceCode)
 		throws PortalException {
 
-		String emailAddress = String.format("%s.%s@liferay.com", firstName, lastName);
+		if (Validator.isNull(emailAddress)) {
+			emailAddress = String.format("%s.%s@liferay.com", firstName, lastName);
+		}
 
 		User user = userLocalService.addUser(
 			defaultUserId, companyId, true, null, null, true, null, emailAddress, 0, null, LocaleUtil.getDefault(),
