@@ -102,10 +102,10 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 			expandoBridge.setAttribute(
 				ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
-				StringUtil.merge(recentAccountEntryIds, StringPool.COMMA));
+				StringUtil.merge(recentAccountEntryIds, StringPool.COMMA), false);
 		}
 		else {
-			expandoBridge.setAttribute(ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId);
+			expandoBridge.setAttribute(ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId, false);
 		}
 	}
 
@@ -309,7 +309,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		expandoBridge.setAttribute(
 			ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS,
-			StringUtil.merge(recentAccountEntryIds, StringPool.COMMA));
+			StringUtil.merge(recentAccountEntryIds, StringPool.COMMA), false);
 
 		return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(recentAccountEntryIds);
 	}
