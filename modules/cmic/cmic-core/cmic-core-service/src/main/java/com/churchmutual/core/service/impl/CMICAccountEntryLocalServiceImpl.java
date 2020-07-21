@@ -162,6 +162,14 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	}
 
 	@Override
+	public CMICAccountEntryDisplay getCMICAccountEntryDisplay(String cmicAccountEntryId) throws PortalException {
+		CMICAccountEntry cmicAccountEntry = cmicAccountEntryPersistence.findByPrimaryKey(
+			GetterUtil.getLong(cmicAccountEntryId));
+
+		return new CMICAccountEntryDisplay(cmicAccountEntry);
+	}
+
+	@Override
 	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays(List<String> cmicAccountEntryIds) {
 		List<CMICAccountEntryDisplay> cmicAccountEntryDisplays = new ArrayList<>();
 

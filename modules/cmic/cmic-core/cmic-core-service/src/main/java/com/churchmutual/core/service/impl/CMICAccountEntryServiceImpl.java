@@ -44,6 +44,11 @@ import org.osgi.service.component.annotations.Component;
 public class CMICAccountEntryServiceImpl extends CMICAccountEntryServiceBaseImpl {
 
 	@Override
+	public CMICAccountEntryDisplay getCMICAccountEntryDisplay(String cmicAccountEntryId) throws PortalException {
+		return cmicAccountEntryLocalService.getCMICAccountEntryDisplay(cmicAccountEntryId);
+	}
+
+	@Override
 	public List<CMICAccountEntryDisplay> getCMICAccountEntryDisplays() throws PortalException {
 		return cmicAccountEntryLocalService.getCMICAccountEntryDisplays(getUserId());
 	}
