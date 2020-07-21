@@ -125,7 +125,7 @@ export class AccountFilter extends React.Component {
         label: member.producerName,
         onClick: () => {
           this.toggleLabel({
-            langKey: 'producer-entity',
+            langKey: 'producer-org',
             ref: 'producerName',
             value: member.producerName,
           });
@@ -160,7 +160,7 @@ export class AccountFilter extends React.Component {
                   <ClayInput.GroupItem>
                     <DropDown
                       labels={this.state.labels}
-                      caption={Liferay.Language.get('producer-entity')}
+                      caption={Liferay.Language.get('producer-org')}
                       items={this.state.producerNameItems}
                     />
                   </ClayInput.GroupItem>
