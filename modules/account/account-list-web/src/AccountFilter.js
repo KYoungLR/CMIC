@@ -121,16 +121,20 @@ export class AccountFilter extends React.Component {
         }
       });
 
-      producerNameItems.push({
-        label: member.producerName,
-        onClick: () => {
-          this.toggleLabel({
-            langKey: 'producer-org',
-            ref: 'producerName',
-            value: member.producerName,
-          });
-        }
-      });
+      let hasProducer = producerNameItems.findIndex(item => item.label == member.producerName) != -1;
+
+      if (!hasProducer) {
+        producerNameItems.push({
+          label: member.producerName,
+          onClick: () => {
+            this.toggleLabel({
+              langKey: 'producer-org',
+              ref: 'producerName',
+              value: member.producerName,
+            });
+          }
+        });
+      }
     });
 
     this.setState({
