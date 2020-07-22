@@ -42,8 +42,6 @@ import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -105,7 +103,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				StringUtil.merge(recentAccountEntryIds, StringPool.COMMA), false);
 		}
 		else {
-			expandoBridge.setAttribute(ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId, false);
+			expandoBridge.setAttribute(
+				ExpandoConstants.RECENTLY_VIEWED_CMIC_ACCOUNT_ENTRY_IDS, cmicAccountEntryId, false);
 		}
 	}
 
@@ -480,6 +479,24 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 				}
 			}
 		}
+
+		int newUserAccountEntriesSize = newUserAccountEntries.size();
+
+		int i = 0;
+		int offset = _POLICY_ACCOUNT_SUMMARY_OFFSET;
+
+		do {
+			if (newUserAccountEntriesSize < (i + offset)) {
+				offset = newUserAccountEntriesSize - i + 1;
+			}
+
+			List<CMICAccountEntry> cmicAccountEntrySublist = newUserAccountEntries.subList(i, i + offset);
+
+			cmicAccountEntryLocalService.updateCMICAccountEntryDetails(cmicAccountEntrySublist);
+
+			i = i + _POLICY_ACCOUNT_SUMMARY_OFFSET;
+		}
+		while (i < newUserAccountEntriesSize);
 
 		// Compare the user's memberships for organizations and/or accounts, and if it's different, update
 
@@ -884,6 +901,8 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			throw new PortalException("Error: received invalid cmicUser information");
 		}
 	}
+
+	private static final int _POLICY_ACCOUNT_SUMMARY_OFFSET = 50;
 
 	private static final int _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
 

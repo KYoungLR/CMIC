@@ -111,25 +111,11 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 				accountEntry.getAccountEntryId(), cmicOrganization.getOrganizationId());
 		}
 
-		List<CMICPolicyAccountSummaryDTO> cmicPolicyAccountSummaryDTOs =
-			policyWebService.getPolicyAccountSummariesByAccounts(new String[] {accountNumber});
-
-		if (!cmicPolicyAccountSummaryDTOs.isEmpty()) {
-			CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO = cmicPolicyAccountSummaryDTOs.get(0);
-
-			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
-			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
-			cmicAccountEntry.setNumInForcePolicies(cmicPolicyAccountSummaryDTO.getNumInForcePolicies());
-			cmicAccountEntry.setTotalBilledPremium(
-				cmicPolicyAccountSummaryDTO.getTotalBilledPremium(
-				).toString());
-		}
-
 		return cmicAccountEntryPersistence.update(cmicAccountEntry);
 	}
 
 	@Override
-	public CMICAccountEntry fetchAccountEntry(String accountNumber, String companyNumber) {
+	public CMICAccountEntry fetchCMICAccountEntry(String accountNumber, String companyNumber) {
 		return cmicAccountEntryPersistence.fetchByAN_CN(accountNumber, companyNumber);
 	}
 
@@ -159,6 +145,11 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 	@Override
 	public List<CMICAccountEntry> getCMICAccountEntriesByUserIdOrderedByName(long userId, int start, int end) {
 		return cmicAccountEntryFinder.findByUserIdOrderedByName(userId, start, end);
+	}
+
+	@Override
+	public CMICAccountEntry getCMICAccountEntry(String accountNumber, String companyNumber) throws PortalException {
+		return cmicAccountEntryPersistence.findByAN_CN(accountNumber, companyNumber);
 	}
 
 	@Override
@@ -233,6 +224,33 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 		String agentNumber = cmicOrganization.getAgentNumber();
 
 		return divisionNumber + agentNumber;
+	}
+
+	@Override
+	public void updateCMICAccountEntryDetails(List<CMICAccountEntry> cmicAccountEntries) throws PortalException {
+		String[] accountNumbers = cmicAccountEntries.stream(
+		).map(
+			cmicAccountEntry -> cmicAccountEntry.getAccountNumber()
+		).toArray(
+			String[]::new
+		);
+
+		List<CMICPolicyAccountSummaryDTO> cmicPolicyAccountSummaryDTOs =
+			policyWebService.getPolicyAccountSummariesByAccounts(accountNumbers);
+
+		for (CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO : cmicPolicyAccountSummaryDTOs) {
+			CMICAccountEntry cmicAccountEntry = getCMICAccountEntry(
+				cmicPolicyAccountSummaryDTO.getAccountNumber(), cmicPolicyAccountSummaryDTO.getCompanyNumber());
+
+			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
+			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
+			cmicAccountEntry.setNumInForcePolicies(cmicPolicyAccountSummaryDTO.getNumInForcePolicies());
+			cmicAccountEntry.setTotalBilledPremium(
+				cmicPolicyAccountSummaryDTO.getTotalBilledPremium(
+				).toString());
+
+			cmicAccountEntryPersistence.update(cmicAccountEntry);
+		}
 	}
 
 	@Reference
