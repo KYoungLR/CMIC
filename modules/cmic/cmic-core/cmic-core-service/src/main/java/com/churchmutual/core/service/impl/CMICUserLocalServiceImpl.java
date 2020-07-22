@@ -480,24 +480,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			}
 		}
 
-		int newUserAccountEntriesSize = newUserAccountEntries.size();
-
-		int startIndex = 0;
-
-		do {
-			int endIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
-
-			if (newUserAccountEntriesSize < endIndex) {
-				endIndex = newUserAccountEntriesSize;
-			}
-
-			List<CMICAccountEntry> cmicAccountEntrySublist = newUserAccountEntries.subList(startIndex, endIndex);
-
-			cmicAccountEntryLocalService.updateCMICAccountEntryDetails(cmicAccountEntrySublist);
-
-			startIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
-		}
-		while (startIndex < newUserAccountEntriesSize);
+		cmicAccountEntryLocalService.updateCMICAccountEntryDetails(newUserAccountEntries);
 
 		// Compare the user's memberships for organizations and/or accounts, and if it's different, update
 
@@ -902,8 +885,6 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 			throw new PortalException("Error: received invalid cmicUser information");
 		}
 	}
-
-	private static final int _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE = 50;
 
 	private static final int _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
 

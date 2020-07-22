@@ -228,29 +228,24 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 	@Override
 	public void updateCMICAccountEntryDetails(List<CMICAccountEntry> cmicAccountEntries) throws PortalException {
-		String[] accountNumbers = cmicAccountEntries.stream(
-		).map(
-			cmicAccountEntry -> cmicAccountEntry.getAccountNumber()
-		).toArray(
-			String[]::new
-		);
+		int newUserAccountEntriesSize = cmicAccountEntries.size();
 
-		List<CMICPolicyAccountSummaryDTO> cmicPolicyAccountSummaryDTOs =
-			policyWebService.getPolicyAccountSummariesByAccounts(accountNumbers);
+		int startIndex = 0;
 
-		for (CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO : cmicPolicyAccountSummaryDTOs) {
-			CMICAccountEntry cmicAccountEntry = getCMICAccountEntry(
-				cmicPolicyAccountSummaryDTO.getAccountNumber(), cmicPolicyAccountSummaryDTO.getCompanyNumber());
+		do {
+			int endIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
 
-			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
-			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
-			cmicAccountEntry.setNumInForcePolicies(cmicPolicyAccountSummaryDTO.getNumInForcePolicies());
-			cmicAccountEntry.setTotalBilledPremium(
-				cmicPolicyAccountSummaryDTO.getTotalBilledPremium(
-				).toString());
+			if (newUserAccountEntriesSize < endIndex) {
+				endIndex = newUserAccountEntriesSize;
+			}
 
-			cmicAccountEntryPersistence.update(cmicAccountEntry);
+			List<CMICAccountEntry> cmicAccountEntrySublist = cmicAccountEntries.subList(startIndex, endIndex);
+
+			_updateCMICAccountEntryDetails(cmicAccountEntrySublist);
+
+			startIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
 		}
+		while (startIndex < newUserAccountEntriesSize);
 	}
 
 	@Reference
@@ -279,5 +274,33 @@ public class CMICAccountEntryLocalServiceImpl extends CMICAccountEntryLocalServi
 
 	@Reference
 	protected ProducerWebService producerWebService;
+
+	private void _updateCMICAccountEntryDetails(List<CMICAccountEntry> cmicAccountEntries) throws PortalException {
+		String[] accountNumbers = cmicAccountEntries.stream(
+		).map(
+			cmicAccountEntry -> cmicAccountEntry.getAccountNumber()
+		).toArray(
+			String[]::new
+		);
+
+		List<CMICPolicyAccountSummaryDTO> cmicPolicyAccountSummaryDTOs =
+			policyWebService.getPolicyAccountSummariesByAccounts(accountNumbers);
+
+		for (CMICPolicyAccountSummaryDTO cmicPolicyAccountSummaryDTO : cmicPolicyAccountSummaryDTOs) {
+			CMICAccountEntry cmicAccountEntry = getCMICAccountEntry(
+				cmicPolicyAccountSummaryDTO.getAccountNumber(), cmicPolicyAccountSummaryDTO.getCompanyNumber());
+
+			cmicAccountEntry.setNumExpiredPolicies(cmicPolicyAccountSummaryDTO.getNumExpiredPolicies());
+			cmicAccountEntry.setNumFuturePolicies(cmicPolicyAccountSummaryDTO.getNumFuturePolicies());
+			cmicAccountEntry.setNumInForcePolicies(cmicPolicyAccountSummaryDTO.getNumInForcePolicies());
+			cmicAccountEntry.setTotalBilledPremium(
+				cmicPolicyAccountSummaryDTO.getTotalBilledPremium(
+				).toString());
+
+			cmicAccountEntryPersistence.update(cmicAccountEntry);
+		}
+	}
+
+	private static final int _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE = 50;
 
 }
