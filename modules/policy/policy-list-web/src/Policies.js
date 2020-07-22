@@ -93,7 +93,7 @@ class Policies extends React.Component {
   getPolicies() {
     let errCallback = () => this.displayErrorMessage('error.unable-to-retrieve-list-of-policies')
 
-    let policyListCallback = (policies) =>
+    let policyListCallback = (policies) => {
       this.setState((prevState) => ({
         account: {
           ...prevState.account,
@@ -101,6 +101,9 @@ class Policies extends React.Component {
         },
         isLoading: false
       }));
+
+      this.addRecentlyViewedCMICAccountEntryId();
+    }
 
     Liferay.Service(
       '/cmic.cmicpolicy/get-policy-displays',
@@ -110,6 +113,16 @@ class Policies extends React.Component {
       policyListCallback,
       errCallback
     );
+  }
+
+  addRecentlyViewedCMICAccountEntryId() {
+    Liferay.Service(
+      '/cmic.cmicuser/add-recently-viewed-cmic-account-entry-id',
+      {
+        cmicAccountEntryId: this.getCMICAccountEntryId()
+      }
+    );
+
   }
 
   render() {
