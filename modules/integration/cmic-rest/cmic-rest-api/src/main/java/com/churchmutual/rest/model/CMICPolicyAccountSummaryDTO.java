@@ -1,5 +1,7 @@
 package com.churchmutual.rest.model;
 
+import com.liferay.portal.kernel.util.Validator;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,8 +14,8 @@ public class CMICPolicyAccountSummaryDTO extends CMICObjectDTO {
 	}
 
 	public String getCompanyNumber() {
-		if (_companyNumber == null) {
-			return "1";
+		if (Validator.isBlank(_companyNumber)) {
+			return DEFAULT_COMPANY_NUMBER;
 		}
 
 		return _companyNumber;
