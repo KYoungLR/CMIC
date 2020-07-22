@@ -482,21 +482,22 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 
 		int newUserAccountEntriesSize = newUserAccountEntries.size();
 
-		int i = 0;
-		int offset = _POLICY_ACCOUNT_SUMMARY_OFFSET;
+		int startIndex = 0;
 
 		do {
-			if (newUserAccountEntriesSize < (i + offset)) {
-				offset = newUserAccountEntriesSize - i + 1;
+			int endIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
+
+			if (newUserAccountEntriesSize < endIndex) {
+				endIndex = newUserAccountEntriesSize;
 			}
 
-			List<CMICAccountEntry> cmicAccountEntrySublist = newUserAccountEntries.subList(i, i + offset);
+			List<CMICAccountEntry> cmicAccountEntrySublist = newUserAccountEntries.subList(startIndex, endIndex);
 
 			cmicAccountEntryLocalService.updateCMICAccountEntryDetails(cmicAccountEntrySublist);
 
-			i = i + _POLICY_ACCOUNT_SUMMARY_OFFSET;
+			startIndex = startIndex + _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE;
 		}
-		while (i < newUserAccountEntriesSize);
+		while (startIndex < newUserAccountEntriesSize);
 
 		// Compare the user's memberships for organizations and/or accounts, and if it's different, update
 
@@ -902,7 +903,7 @@ public class CMICUserLocalServiceImpl extends CMICUserLocalServiceBaseImpl {
 		}
 	}
 
-	private static final int _POLICY_ACCOUNT_SUMMARY_OFFSET = 50;
+	private static final int _UPDATE_ACCOUNT_ENTRY_BATCH_SIZE = 50;
 
 	private static final int _RECENT_ACCOUNT_ENTRIES_DISPLAY_COUNT = 5;
 
