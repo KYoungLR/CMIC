@@ -11,6 +11,14 @@ public class CMICPolicyAccountSummaryDTO extends CMICObjectDTO {
 		return _accountNumber;
 	}
 
+	public String getCompanyNumber() {
+		if (_companyNumber == null) {
+			return "1";
+		}
+
+		return _companyNumber;
+	}
+
 	public int getNumExpiredPolicies() {
 		return _numExpiredPolicies;
 	}
@@ -31,6 +39,10 @@ public class CMICPolicyAccountSummaryDTO extends CMICObjectDTO {
 		_accountNumber = accountNumber;
 	}
 
+	public void setCompanyNumber(String companyNumber) {
+		_companyNumber = companyNumber;
+	}
+
 	public void setNumExpiredPolicies(int numExpiredPolicies) {
 		_numExpiredPolicies = numExpiredPolicies;
 	}
@@ -48,6 +60,7 @@ public class CMICPolicyAccountSummaryDTO extends CMICObjectDTO {
 	}
 
 	private String _accountNumber;
+	private String _companyNumber;
 	private int _numExpiredPolicies;
 	private int _numFuturePolicies;
 	private int _numInForcePolicies;
