@@ -187,11 +187,11 @@ public interface CMICAccountEntryLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICAccountEntry fetchAccountEntry(
-		String accountNumber, String companyNumber);
+	public CMICAccountEntry fetchCMICAccountEntry(long cmicAccountEntryId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CMICAccountEntry fetchCMICAccountEntry(long cmicAccountEntryId);
+	public CMICAccountEntry fetchCMICAccountEntry(
+		String accountNumber, String companyNumber);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public String getAccountEntryName(CMICAccountEntry cmicAccountEntry)
@@ -241,6 +241,11 @@ public interface CMICAccountEntryLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CMICAccountEntry getCMICAccountEntry(
+			String accountNumber, String companyNumber)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CMICAccountEntryDisplay getCMICAccountEntryDisplay(
 			String cmicAccountEntryId)
 		throws PortalException;
@@ -285,5 +290,9 @@ public interface CMICAccountEntryLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public CMICAccountEntry updateCMICAccountEntry(
 		CMICAccountEntry cmicAccountEntry);
+
+	public void updateCMICAccountEntryDetails(
+			List<CMICAccountEntry> cmicAccountEntries)
+		throws PortalException;
 
 }

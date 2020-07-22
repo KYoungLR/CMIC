@@ -212,19 +212,19 @@ public class CMICAccountEntryLocalServiceWrapper
 	}
 
 	@Override
-	public com.churchmutual.core.model.CMICAccountEntry fetchAccountEntry(
-		String accountNumber, String companyNumber) {
-
-		return _cmicAccountEntryLocalService.fetchAccountEntry(
-			accountNumber, companyNumber);
-	}
-
-	@Override
 	public com.churchmutual.core.model.CMICAccountEntry fetchCMICAccountEntry(
 		long cmicAccountEntryId) {
 
 		return _cmicAccountEntryLocalService.fetchCMICAccountEntry(
 			cmicAccountEntryId);
+	}
+
+	@Override
+	public com.churchmutual.core.model.CMICAccountEntry fetchCMICAccountEntry(
+		String accountNumber, String companyNumber) {
+
+		return _cmicAccountEntryLocalService.fetchCMICAccountEntry(
+			accountNumber, companyNumber);
 	}
 
 	@Override
@@ -302,6 +302,15 @@ public class CMICAccountEntryLocalServiceWrapper
 
 		return _cmicAccountEntryLocalService.getCMICAccountEntry(
 			cmicAccountEntryId);
+	}
+
+	@Override
+	public com.churchmutual.core.model.CMICAccountEntry getCMICAccountEntry(
+			String accountNumber, String companyNumber)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cmicAccountEntryLocalService.getCMICAccountEntry(
+			accountNumber, companyNumber);
 	}
 
 	@Override
@@ -385,6 +394,16 @@ public class CMICAccountEntryLocalServiceWrapper
 
 		return _cmicAccountEntryLocalService.updateCMICAccountEntry(
 			cmicAccountEntry);
+	}
+
+	@Override
+	public void updateCMICAccountEntryDetails(
+			java.util.List<com.churchmutual.core.model.CMICAccountEntry>
+				cmicAccountEntries)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_cmicAccountEntryLocalService.updateCMICAccountEntryDetails(
+			cmicAccountEntries);
 	}
 
 	@Override
